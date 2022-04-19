@@ -1,0 +1,37 @@
+package com.ssafy.blahblah.db.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+public class Wordbook extends BaseEntity{
+    @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private User user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "word",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Word> words = new ArrayList<>();
+
+    @Builder
+    public Wordbook(String title, LocalDateTime createdAt, User user) {
+        this.title = title;
+        this.createdAt = createdAt;
+        this.user = user;
+    }
+}
