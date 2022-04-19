@@ -1,0 +1,42 @@
+import { Grid, Image } from "semantic-ui-react";
+
+export default function WordNote() {
+  return (
+    <>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={3} />
+          <Grid.Column width={10}>
+            <Image
+              className="centered"
+              src="/images/characters.PNG"
+              alt="meltingPot image"
+            ></Image>
+            <Grid centered>
+              <Grid.Row>
+                <h1>Title:</h1>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column width={6}>
+                  <h1>Word</h1>
+                  <p>water</p>
+                  <p>red</p>
+                  <p>book</p>
+                  <p>look</p>
+                </Grid.Column>
+                <Grid.Column width={10}>
+                  <h1>Mean</h1>
+                  <p>물</p>
+                  <p>빨간색</p>
+                  <p>책</p>
+                  <p>보다</p>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Grid.Column>
+          <Grid.Column width={3} />
+        </Grid.Row>
+      </Grid>
+    </>
+  );
+}
