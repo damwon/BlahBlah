@@ -10,8 +10,8 @@ export default function QnA() {
             <Grid.Row>
               <Image
                 className="centered"
-                src="/images/meltingPot.PNG"
-                alt="meltingPot image"
+                src="/images/notice.PNG"
+                alt="notice2 image"
               ></Image>
             </Grid.Row>
             <br></br>
