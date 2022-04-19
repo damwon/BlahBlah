@@ -40,8 +40,16 @@ export default function QnaWrite() {
             <Grid.Row centered>
               <div>
                 <br></br>
-                <Button content="취소" negative />
-                <Button content="작성" primary />
+                <Button
+                  style={{ width: "120px", margin: "20px" }}
+                  content="취소"
+                  negative
+                />
+                <Button
+                  style={{ width: "120px", margin: "20px" }}
+                  content="작성"
+                  primary
+                />
               </div>
             </Grid.Row>
           </Grid>
