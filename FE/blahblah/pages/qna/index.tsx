@@ -42,12 +42,6 @@ export default function QnA() {
           <Grid.Column width={2} />
         </Grid.Row>
       </Grid>
-
-      <style jsx>{`
-        centered {
-          margin: 0 auto;
-        }
-      `}</style>
     </>
   );
 }
