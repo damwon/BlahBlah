@@ -1,11 +1,3 @@
 .asd {
-  text-align: center;
-  color: red;
-  z-index: 9999999999999;
-  font-weight: 800;
-  font-size: medium;
-  vertical-align:middle;
-  display: flex;
-  justify-content: center;
-  
+  margin: auto !important;
 }
