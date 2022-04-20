@@ -1,12 +1,13 @@
-import { Grid, Image, Button } from "semantic-ui-react";
+import { Grid, Button } from "@mui/material";
+import { Image } from "react-bootstrap";
 import { useRouter } from "next/router";
 export default function Note() {
   const router = useRouter();
   return (
-    <Grid>
-      <Grid.Row centered>
-        <Grid.Column width={2} />
-        <Grid.Column width={12}>
+    <Grid container spacing={3}>
+      <Grid item xs>
+        <Grid item xs={2} />
+        <Grid item xs={8}>
           <div className="lb-wrap">
             <div className="lb-image">
               <Image
@@ -38,26 +39,21 @@ export default function Note() {
             </div>
           </div>
           <Grid>
-            <Grid.Row centered>
-              <div>
-                <Button negative style={{ margin: "20px" }}>
-                  삭제
-                </Button>
-                <Button
-                  primary
-                  style={{ margin: "20px" }}
-                  onClick={() => {
-                    router.push(`/note/edit`);
-                  }}
-                >
-                  수정
-                </Button>
-              </div>
-            </Grid.Row>
+            <div>
+              <Button>삭제</Button>
+              <Button
+                style={{ margin: "20px" }}
+                onClick={() => {
+                  router.push(`/note/edit`);
+                }}
+              >
+                수정
+              </Button>
+            </div>
           </Grid>
-        </Grid.Column>
-        <Grid.Column width={2} />
-      </Grid.Row>
+        </Grid>
+        <Grid xs={2} />
+      </Grid>
 
       <style jsx>
         {`

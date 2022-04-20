@@ -1,10 +1,13 @@
-import { Grid, Image, Button, Input } from "semantic-ui-react";
+// import { Grid, Image, Button, Input } from "semantic-ui-react";
+import { Grid, Button, Input } from "@mui/material";
+import { Image } from "react-bootstrap";
+
 export default function Edit() {
   return (
-    <Grid>
-      <Grid.Row centered>
-        <Grid.Column width={2} />
-        <Grid.Column width={12}>
+    <Grid container spacing={3}>
+      <Grid item xs>
+        <Grid item xs={2} />
+        <Grid item xs={8}>
           <div className="lb-wrap">
             <div className="lb-image">
               <Image
@@ -47,20 +50,14 @@ export default function Edit() {
             </div>
           </div>
           <Grid>
-            <Grid.Row centered>
-              <div>
-                <Button secondary style={{ margin: "20px" }}>
-                  취소
-                </Button>
-                <Button primary style={{ margin: "20px" }}>
-                  확인
-                </Button>
-              </div>
-            </Grid.Row>
+            <div>
+              <Button>확인</Button>
+              <Button disabled>취소</Button>
+            </div>
           </Grid>
-        </Grid.Column>
-        <Grid.Column width={2} />
-      </Grid.Row>
+        </Grid>
+        <Grid item xs={2} />
+      </Grid>
 
       <style jsx>
         {`

@@ -1,61 +1,29 @@
-import { Grid, Image, Button, Form, TextArea } from "semantic-ui-react";
-
+import { Grid, Button } from "@mui/material";
+import { Image } from "react-bootstrap";
 export default function QnaWrite() {
   return (
-    <Grid centered>
-      <Grid.Row>
-        <Grid.Column width={2} />
-        <Grid.Column width={12}>
-          <Image
-            className="centered"
-            src="/images/notice.PNG"
-            alt="notice2 image"
-          ></Image>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={3} />
-              <Grid.Column width={2}>
-                <h3>제목</h3>
-              </Grid.Column>
-              <Grid.Column width={7}>
-                <Form>
-                  <TextArea placeholder="제목을 입력해주세요." />
-                </Form>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column width={3} />
-              <Grid.Column width={2}>
-                <h3>제목</h3>
-              </Grid.Column>
-              <Grid.Column width={7}>
-                <Form>
-                  <TextArea
-                    placeholder="문의 내용을 작성해주세요"
-                    style={{ minHeight: 300 }}
-                  />
-                </Form>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row centered>
-              <div>
-                <br></br>
-                <Button
-                  style={{ width: "120px", margin: "20px" }}
-                  content="취소"
-                  negative
-                />
-                <Button
-                  style={{ width: "120px", margin: "20px" }}
-                  content="작성"
-                  primary
-                />
-              </div>
-            </Grid.Row>
-          </Grid>
-        </Grid.Column>
-        <Grid.Column width={2} />
-      </Grid.Row>
+    <Grid container spacing={3}>
+      <Grid xs={2} />
+      <Grid xs={8}>
+        <Image
+          className="centered"
+          src="/images/notice.PNG"
+          alt="notice2 image"
+        ></Image>
+        <h3>제목</h3>
+        <textarea placeholder="제목을 입력해주세요." />
+        <h3>제목</h3>
+        <textarea
+          placeholder="문의 내용을 작성해주세요"
+          style={{ minHeight: 300 }}
+        />
+        <div>
+          <br></br>
+          <Button>취소</Button>
+          <Button>작성</Button>
+        </div>
+        <Grid item xs={2} />
+      </Grid>
       <style jsx>
         {`
           .test {
