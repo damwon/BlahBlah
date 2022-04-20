@@ -1,6 +1,10 @@
 package com.ssafy.blahblah.db.entity;
 
-import lombok.*;
+import io.swagger.annotations.Info;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -8,15 +12,15 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "word")
 @NoArgsConstructor
-public class Word extends BaseEntity{
+@Table(name = "memo")
+public class Memo extends BaseEntity{
 
     @Column(nullable = false)
-    private String word;
+    private String title;
 
-    @Column(nullable = false)
-    private String meaning;
+    @Column
+    private String content;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -28,19 +32,13 @@ public class Word extends BaseEntity{
     @JoinColumn(name="user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name="wordbook_id", nullable = false)
-    private Wordbook wordbook;
-
     @Builder
-    public Word(String word,String meaning,LocalDateTime createdAt,LocalDateTime updatedAt, User user,Wordbook wordbook) {
-        this.word = word;
-        this.meaning = meaning;
+    public Memo(String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt, User user){
+        this.title = title;
+        this.content = content;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.user = user;
-        this.wordbook = wordbook;
+
     }
-
-
 }

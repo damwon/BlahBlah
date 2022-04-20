@@ -16,6 +16,7 @@ public class WordListRes {
 
     public WordListRes(Wordbook entity){
         List<Word> words = entity.getWords();
+//        this.words = words;
         List<WordRes> myWords = new ArrayList<>();
         words.forEach(word -> {
             myWords.add(new WordRes(word));

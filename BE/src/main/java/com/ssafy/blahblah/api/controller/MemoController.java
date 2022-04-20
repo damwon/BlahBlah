@@ -1,13 +1,13 @@
 package com.ssafy.blahblah.api.controller;
 
-import com.ssafy.blahblah.api.request.WordbookReq;
-import com.ssafy.blahblah.api.response.WordListRes;
-import com.ssafy.blahblah.api.response.WordbookListRes;
+import com.ssafy.blahblah.api.request.MemoReq;
+import com.ssafy.blahblah.api.response.MemoDetailRes;
+import com.ssafy.blahblah.api.response.MemoListRes;
 import com.ssafy.blahblah.api.service.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
+import com.ssafy.blahblah.db.entity.Memo;
 import com.ssafy.blahblah.db.entity.User;
-import com.ssafy.blahblah.db.entity.Wordbook;
-import com.ssafy.blahblah.db.repository.WordbookRepository;
+import com.ssafy.blahblah.db.repository.MemoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,85 +23,82 @@ import java.util.stream.Collectors;
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
-@RequestMapping("api/v1/wordbook")
-public class WordbookContorller {
-
-    @Autowired
-    WordbookRepository wordbookRepository;
+@RequestMapping("api/v1/memo")
+public class MemoController {
 
     @Autowired
     UserService userService;
 
+    @Autowired
+    MemoRepository memoRepository;
+
     @GetMapping
-    public ResponseEntity list( Authentication authentication) {
+    public ResponseEntity list(Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
-        List<Wordbook> wordbookList = wordbookRepository.findByUser(user);
-        if (wordbookList == null || wordbookList.size() == 0) {
+        List<Memo> memoList = memoRepository.findByUser(user);
+        if (memoList == null || memoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
-        List<WordbookListRes> dto = wordbookList.stream().map(WordbookListRes::fromEntity).collect(Collectors.toList());
+        List<MemoListRes> dto = memoList.stream().map(MemoListRes::fromEntity).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
-    // findby외래키로 찾을지 findbyWordbookId로 찾아서 DTO로 커스터마이징할지 뭐가 더 효율적일까?
-    @GetMapping("/{wordbookId}")
-    public ResponseEntity wordlist(Authentication authentication, @PathVariable Long wordbookId){
+    @GetMapping("/{memoId}")
+    public ResponseEntity detail(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
-        Optional<Wordbook> optionalWordbook = wordbookRepository.findById(wordbookId);
-        if(optionalWordbook.isEmpty()) {
+        Optional<Memo> option = memoRepository.findById(memoId);
+        if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        Wordbook wordbook = optionalWordbook.get();
-        System.out.println(wordbook.getWords());
-
-        return ResponseEntity.status(HttpStatus.OK).body(new WordListRes(wordbook));
-
+        Memo memo = option.get();
+        return ResponseEntity.status(HttpStatus.OK).body(new MemoDetailRes(memo));
 
     }
 
     @PostMapping
-    public ResponseEntity wordbookPost(Authentication authentication, @RequestBody WordbookReq wordbookReq) {
+    public ResponseEntity memoPost(Authentication authentication, @RequestBody MemoReq memoReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
-        wordbookRepository.save(Wordbook.builder()
-                .title(wordbookReq.getTitle())
+        memoRepository.save(Memo.builder()
+                .title(memoReq.getTitle())
+                .content(memoReq.getContent())
                 .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
                 .user(user)
                 .build());
         return new ResponseEntity(HttpStatus.OK);
 
     }
 
-    @PutMapping("/{wordbookId}")
-    public ResponseEntity wordbookUpdate(Authentication authentication,@PathVariable Long wordbookId, @RequestBody WordbookReq wordbookReq) {
+    @PutMapping("/{memoId}")
+    public ResponseEntity wordbookUpdate(Authentication authentication, @PathVariable Long memoId, @RequestBody MemoReq memoReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
-        Optional<Wordbook> option = wordbookRepository.findById(wordbookId);
+        Optional<Memo> option = memoRepository.findById(memoId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        Wordbook wordbook = option.get();
-        wordbook.setTitle(wordbookReq.getTitle());
-        wordbookRepository.save(wordbook);
+        Memo memo = option.get();
+        memo.setTitle(memoReq.getTitle());
+        memo.setContent(memoReq.getContent());
+        memo.setUpdatedAt(LocalDateTime.now());
+        memoRepository.save(memo);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{wordbookId}")
-    public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long wordbookId) {
+
+    @DeleteMapping("/{memoId}")
+    public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
-        wordbookRepository.deleteById(wordbookId);
+        memoRepository.deleteById(memoId);
         return new ResponseEntity(HttpStatus.OK);
     }
-
-
-
-
 }
