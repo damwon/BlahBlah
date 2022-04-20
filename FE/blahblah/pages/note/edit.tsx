@@ -1,7 +1,5 @@
-import { Grid, Image, Button } from "semantic-ui-react";
-import { useRouter } from "next/router";
-export default function Note() {
-  const router = useRouter();
+import { Grid, Image, Button, Input } from "semantic-ui-react";
+export default function Edit() {
   return (
     <Grid>
       <Grid.Row centered>
@@ -16,7 +14,11 @@ export default function Note() {
               ></Image>
             </div>
             <div className="lb-text">
-              <h2>Title: my Note</h2>
+              <input
+                className="my-title"
+                style={{ minWidth: "15vw", minHeight: "5vh" }}
+                placeholder="Title: My Note 1"
+              ></input>
             </div>
           </div>
 
@@ -29,28 +31,29 @@ export default function Note() {
               ></Image>
             </div>
             <div className="lb-text">
-              <h3>
-                내용 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용
+              <textarea
+                autoFocus
+                style={{
+                  minWidth: "13vw",
+                  minHeight: "30vh",
+                  maxHeight: "30vh",
+                }}
+                className="clean-textarea"
+                placeholder="내용 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용
                 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용 적는중
                 어떻게 나오려나 내용 적는중 어떻게 나오려나내용 적는중 어떻게
-                나오려나내용 적는중 어떻게 나오려나
-              </h3>
+                나오려나내용 적는중 어떻게 나오려나"
+              ></textarea>
             </div>
           </div>
           <Grid>
             <Grid.Row centered>
               <div>
-                <Button negative style={{ margin: "20px" }}>
-                  삭제
+                <Button secondary style={{ margin: "20px" }}>
+                  취소
                 </Button>
-                <Button
-                  primary
-                  style={{ margin: "20px" }}
-                  onClick={() => {
-                    router.push(`/note/edit`);
-                  }}
-                >
-                  수정
+                <Button primary style={{ margin: "20px" }}>
+                  확인
                 </Button>
               </div>
             </Grid.Row>
@@ -68,6 +71,7 @@ export default function Note() {
           }
           .lb-text {
             padding: 5px 10px;
+            text-align: center;
             z-index: 1;
             position: absolute;
             top: 50%;
@@ -78,13 +82,27 @@ export default function Note() {
             width: 100%;
             vertical-align: middle;
           }
-          h2 {
-            font-size: 1.5vw;
+          .clean-textarea {
+            border: none;
+            resize: none;
+            font-size: min(1vw, 1.5vh);
+            font-weight: 500;
             color: rgb(97, 17, 70);
           }
-          h3 {
+          .clean-textarea::placeholder {
             font-size: min(1vw, 1.5vh);
+            font-weight: 500;
             color: rgb(97, 17, 70);
+          }
+          .my-title::placeholder {
+            color: rgb(97, 17, 70);
+            font-weight: 500;
+            font-size: 1.2vw;
+          }
+          .my-title {
+            color: rgb(97, 17, 70);
+            font-weight: 500;
+            font-size: 1.2vw;
           }
         `}
       </style>
