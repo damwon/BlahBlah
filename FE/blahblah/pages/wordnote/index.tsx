@@ -1,4 +1,5 @@
-import { Grid, Image, Button } from "semantic-ui-react";
+import { Grid, Image } from "semantic-ui-react";
+import Button from "@material-ui/core/Button";
 import WordWrite from "../../component/study/wordWrite";
 export default function WordNote() {
   return (

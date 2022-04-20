@@ -24,13 +24,7 @@ export default function WordWrite() {
           <Icon name="checkmark" /> 작성
         </Button>
       </Modal.Actions>
-      <style jsx>
-        {`
-          .my-modal {
-            margin: auto !important;
-          }
-        `}
-      </style>
+      <style jsx>{``}</style>
     </Modal>
   );
 }

@@ -1,7 +1,6 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import "bootstrap/dist/css/bootstrap.min.css";
 export default function userNav() {
   return (
     <>
