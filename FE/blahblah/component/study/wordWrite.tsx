@@ -5,6 +5,7 @@ export default function WordWrite() {
   const [open, setOpen] = useState(false);
   return (
     <Modal
+      className="my-modal"
       closeIcon
       open={open}
       trigger={<Button primary>단어 추가</Button>}
@@ -23,6 +24,13 @@ export default function WordWrite() {
           <Icon name="checkmark" /> 작성
         </Button>
       </Modal.Actions>
+      <style jsx>
+        {`
+          .my-modal {
+            margin: auto !important;
+          }
+        `}
+      </style>
     </Modal>
   );
 }
