@@ -8,7 +8,7 @@ export default function VoiceRecordIcon() {
       name="microphone"
       link
       onClick={() => {
-        console.log("녹음버튼 눌림");
+        alert("녹음버튼 눌림");
       }}
     />
   );
