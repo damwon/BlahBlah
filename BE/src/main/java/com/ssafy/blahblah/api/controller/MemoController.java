@@ -50,12 +50,17 @@ public class MemoController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
+
         Optional<Memo> option = memoRepository.findById(memoId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Memo memo = option.get();
-        return ResponseEntity.status(HttpStatus.OK).body(new MemoDetailRes(memo));
+        if (memo.getUser().equals(user)) {
+            return ResponseEntity.status(HttpStatus.OK).body(new MemoDetailRes(memo));
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 메모가 아닙니다.");
+
 
     }
 
