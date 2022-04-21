@@ -8,43 +8,90 @@ export default function WordNote() {
   const handleShow = () => setShow(true);
   return (
     <>
-      <Image
-        className="centered"
-        src="/images/characters.PNG"
-        alt="meltingPot image"
-      ></Image>
+      <Grid
+        spacing={3}
+        container
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Grid item xs={2} />
+        <Grid item xs={8}>
+          <img
+            src="/images/characters.PNG"
+            alt="characters image"
+            className="img-fluid"
+            width="100%"
+          ></img>
+          <h1 className="cent">Title:</h1>
+          <Grid
+            spacing={2}
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item xs={4}>
+              <div className="cent">
+                <h1>Word</h1>
+                <p>water</p>
+                <p>red</p>
+                <p>book</p>
+                <p>look</p>
+              </div>
+            </Grid>
+            <Grid item xs={4}>
+              <div className="cent">
+                <h1>Mean</h1>
+                <p>물</p>
+                <p>빨간색</p>
+                <p>책</p>
+                <p>보다</p>
+              </div>
+            </Grid>
+          </Grid>
 
-      <h1>Title:</h1>
-      <h1>Word</h1>
-      <p>water</p>
-      <p>red</p>
-      <p>book</p>
-      <p>look</p>
-      <h1>Mean</h1>
-      <p>물</p>
-      <p>빨간색</p>
-      <p>책</p>
-      <p>보다</p>
+          <Grid container spacing={3}>
+            <Grid item xs={5} />
+            <Grid item xs={2}>
+              <Button
+                variant="primary"
+                onClick={handleShow}
+                className="mar-auto"
+              >
+                Launch demo modal
+              </Button>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={2} />
+      </Grid>
 
-      <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>추가할 단어를 입력해보세요!</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Woohoo, reading this text in a modal!</Modal.Body>
+        <Modal.Body>seunghwan 천재</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Close
+            취소
           </Button>
           <Button variant="primary" onClick={handleClose}>
-            Save Changes
+            저장
           </Button>
         </Modal.Footer>
       </Modal>
 
-      <style jsx>{``}</style>
+      <style jsx>
+        {`
+          .cent {
+            text-align: center;
+          }
+          .mar-auto {
+            margin-left: auto;
+          }
+        `}
+      </style>
     </>
   );
 }
