@@ -3,79 +3,133 @@ import { useState } from "react";
 import WordNote from "../wordnote";
 import Note from "../note";
 import ChatList from "../../component/chat/chatList";
-import { Button, TextField, IconButton, Box } from "@mui/material";
-import MicIcon from "@mui/icons-material/Mic";
+import { Button, TextField, IconButton, Box, Typography } from "@mui/material";
+import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
-import CallIcon from "@mui/icons-material/Call";
+import ChatTabs from "../../component/chat/chatTabs";
+import SendIcon from "@mui/icons-material/Send";
 
 export default function Chat() {
-  const [messageList, setMessageList] = useState<string[]>([]);
+  const dummyMessageList = [
+    {
+      username: "Geuntae",
+      message: "Hello?",
+    },
+    {
+      username: "me",
+      message: "Hello!",
+    },
+  ];
+  const [messageList, setMessageList] = useState<any[]>(dummyMessageList);
   const [message, setMessage] = useState<string>("");
   const handleMessage = (e: any) => {
     setMessage(e.target.value);
   };
   const handleMessageList = () => {
-    setMessageList([...messageList, message]);
+    setMessageList([...messageList, { username: "me", message: message }]);
     setMessage("");
-  };
-
-  // 채팅 리스트 토글
-  const [isChatListOpen, setIsChatListOpen] = useState<boolean>(false);
-  const handleToggleChatList = () => {
-    setIsChatListOpen(!isChatListOpen);
   };
 
   return (
     <Box
       style={{
-        height: "100%",
+        height: "90vh",
         marginTop: "20px",
         display: "flex",
         justifyContent: "space-between",
       }}
     >
       <Box>
-        <Button onClick={handleToggleChatList}>채팅목록 열리는 버튼</Button>
-        {isChatListOpen ? <ChatList /> : null}
+        <ChatList />
       </Box>
       <Box
-        style={{
+        sx={{
           display: "flex",
+          border: "1px solid black",
           flexDirection: "column",
           justifyContent: "space-between",
           alignItems: "center",
+          width: "50%",
         }}
       >
-        <Box>
-          <IconButton
-            onClick={() => {
-              alert("영상통화 버튼 눌림.");
-            }}
-          >
-            <VideocamIcon />
-          </IconButton>
-          <IconButton
-            onClick={() => {
-              alert("음성통화 버튼 눌림.");
-            }}
-          >
-            <CallIcon />
-          </IconButton>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            padding: 3,
+            borderBottom: "1px solid black",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography>username: 종준</Typography>
+          <Box>
+            <IconButton
+              onClick={() => {
+                alert("영상통화 버튼 눌림.");
+              }}
+            >
+              <VideocamIcon sx={{ color: "black" }} />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                alert("신고 버튼 눌림.");
+              }}
+            >
+              <ReportIcon color="warning" />
+            </IconButton>
+          </Box>
         </Box>
-
-        <Box>
+        <Box
+          sx={{
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           {messageList &&
             messageList.map((item, index) => {
-              return (
-                <Box key={index}>
-                  <p>{item}</p>
-                </Box>
-              );
+              if (item.username === "me") {
+                return (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      padding: 3,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "end",
+                    }}
+                    key={index}
+                  >
+                    <Typography>
+                      {item.username}: {item.message}
+                    </Typography>
+                  </Box>
+                );
+              } else {
+                return (
+                  <Box
+                    sx={{
+                      width: "100%",
+                      padding: 3,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "start",
+                    }}
+                    key={index}
+                  >
+                    <Typography>
+                      {item.username}: {item.message}
+                    </Typography>
+                  </Box>
+                );
+              }
             })}
-          <p></p>
         </Box>
         <Box>
           <TextField
+            sx={{ width: "500px" }}
             value={message}
             placeholder="Type your message."
             onChange={handleMessage}
@@ -84,15 +138,14 @@ export default function Chat() {
                 handleMessageList();
               }
             }}
+            variant="standard"
           />
-          <Button style={{ width: "100px" }} onClick={handleMessageList}>
-            전송
-          </Button>
+          <IconButton onClick={handleMessageList}>
+            <SendIcon color="primary" />
+          </IconButton>
         </Box>
       </Box>
-      {/* <div style={{ textAlign: "center", width: "20%" }}>
-        <Tab panes={panes} />
-      </div> */}
+      <ChatTabs />
     </Box>
   );
 }
