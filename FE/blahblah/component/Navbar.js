@@ -50,7 +50,13 @@ export default function userNav() {
       </div>
       <style jsx>{`
       .nav{
+        // heigth:100px:
+        // overflow: hidden;
         margin-top:15px;
+        margin-bottom:30px;
+        // position:fixed;
+        // top:0;
+        background-color:white;
       }
         .main{
           color:black;
