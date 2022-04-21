@@ -33,7 +33,7 @@ public class MemoController {
     MemoRepository memoRepository;
 
     @GetMapping
-    public ResponseEntity list(Authentication authentication) {
+    public ResponseEntity memoList(Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
@@ -46,7 +46,7 @@ public class MemoController {
     }
 
     @GetMapping("/{memoId}")
-    public ResponseEntity detail(Authentication authentication, @PathVariable Long memoId) {
+    public ResponseEntity memoDetail(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
@@ -76,7 +76,7 @@ public class MemoController {
     }
 
     @PutMapping("/{memoId}")
-    public ResponseEntity wordbookUpdate(Authentication authentication, @PathVariable Long memoId, @RequestBody MemoReq memoReq) {
+    public ResponseEntity memoUpdate(Authentication authentication, @PathVariable Long memoId, @RequestBody MemoReq memoReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
@@ -94,7 +94,7 @@ public class MemoController {
 
 
     @DeleteMapping("/{memoId}")
-    public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long memoId) {
+    public ResponseEntity memoDelete(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByUserId(userId);
