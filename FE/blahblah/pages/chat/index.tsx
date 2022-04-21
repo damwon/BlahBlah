@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useState } from "react";
-import { Input, Button, List, Tab, Icon } from "semantic-ui-react";
+// import { Input, Button, List, Tab, Icon } from "semantic-ui-react";
 import VoiceRecordIcon from "../../component/chat/voiceRecord";
 import WordNote from "../wordnote";
 import Note from "../note";
@@ -18,42 +18,42 @@ export default function Chat() {
   };
 
   // 오른쪽 탭
-  const panes = [
-    {
-      menuItem: "첨삭",
-      render: () => (
-        <Tab.Pane style={{ height: "80vh" }}>Tab 1 Content</Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "번역",
-      render: () => (
-        <Tab.Pane style={{ height: "80vh" }}>Tab 2 Content</Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "사전",
-      render: () => (
-        <Tab.Pane style={{ height: "80vh" }}>Tab 3 Content</Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "단어장",
-      render: () => (
-        <Tab.Pane style={{ height: "80vh" }}>
-          <WordNote />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "메모",
-      render: () => (
-        <Tab.Pane style={{ height: "80vh" }}>
-          <Note />
-        </Tab.Pane>
-      ),
-    },
-  ];
+  // const panes = [
+  //   {
+  //     menuItem: "첨삭",
+  //     render: () => (
+  //       <Tab.Pane style={{ height: "80vh" }}>Tab 1 Content</Tab.Pane>
+  //     ),
+  //   },
+  //   {
+  //     menuItem: "번역",
+  //     render: () => (
+  //       <Tab.Pane style={{ height: "80vh" }}>Tab 2 Content</Tab.Pane>
+  //     ),
+  //   },
+  //   {
+  //     menuItem: "사전",
+  //     render: () => (
+  //       <Tab.Pane style={{ height: "80vh" }}>Tab 3 Content</Tab.Pane>
+  //     ),
+  //   },
+  //   {
+  //     menuItem: "단어장",
+  //     render: () => (
+  //       <Tab.Pane style={{ height: "80vh" }}>
+  //         <WordNote />
+  //       </Tab.Pane>
+  //     ),
+  //   },
+  //   {
+  //     menuItem: "메모",
+  //     render: () => (
+  //       <Tab.Pane style={{ height: "80vh" }}>
+  //         <Note />
+  //       </Tab.Pane>
+  //     ),
+  //   },
+  // ];
 
   // 채팅 리스트 토글
   const [isChatListOpen, setIsChatListOpen] = useState<boolean>(false);
@@ -70,7 +70,7 @@ export default function Chat() {
         justifyContent: "space-between",
       }}
     >
-      <div>
+      {/* <div>
         <Button onClick={handleToggleChatList}>채팅목록 열리는 버튼</Button>
         {isChatListOpen ? <ChatList /> : null}
       </div>
@@ -129,7 +129,7 @@ export default function Chat() {
       </div>
       <div style={{ textAlign: "center", width: "20%" }}>
         <Tab panes={panes} />
-      </div>
+      </div> */}
     </div>
   );
 }
