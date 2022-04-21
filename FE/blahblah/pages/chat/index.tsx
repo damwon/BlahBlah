@@ -1,10 +1,12 @@
 /* eslint-disable */
 import { useState } from "react";
-// import { Input, Button, List, Tab, Icon } from "semantic-ui-react";
-import VoiceRecordIcon from "../../component/chat/voiceRecord";
 import WordNote from "../wordnote";
 import Note from "../note";
 import ChatList from "../../component/chat/chatList";
+import { Button, TextField, IconButton, Box } from "@mui/material";
+import MicIcon from "@mui/icons-material/Mic";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import CallIcon from "@mui/icons-material/Call";
 
 export default function Chat() {
   const [messageList, setMessageList] = useState<string[]>([]);
@@ -17,44 +19,6 @@ export default function Chat() {
     setMessage("");
   };
 
-  // 오른쪽 탭
-  // const panes = [
-  //   {
-  //     menuItem: "첨삭",
-  //     render: () => (
-  //       <Tab.Pane style={{ height: "80vh" }}>Tab 1 Content</Tab.Pane>
-  //     ),
-  //   },
-  //   {
-  //     menuItem: "번역",
-  //     render: () => (
-  //       <Tab.Pane style={{ height: "80vh" }}>Tab 2 Content</Tab.Pane>
-  //     ),
-  //   },
-  //   {
-  //     menuItem: "사전",
-  //     render: () => (
-  //       <Tab.Pane style={{ height: "80vh" }}>Tab 3 Content</Tab.Pane>
-  //     ),
-  //   },
-  //   {
-  //     menuItem: "단어장",
-  //     render: () => (
-  //       <Tab.Pane style={{ height: "80vh" }}>
-  //         <WordNote />
-  //       </Tab.Pane>
-  //     ),
-  //   },
-  //   {
-  //     menuItem: "메모",
-  //     render: () => (
-  //       <Tab.Pane style={{ height: "80vh" }}>
-  //         <Note />
-  //       </Tab.Pane>
-  //     ),
-  //   },
-  // ];
-
   // 채팅 리스트 토글
   const [isChatListOpen, setIsChatListOpen] = useState<boolean>(false);
   const handleToggleChatList = () => {
@@ -62,7 +26,7 @@ export default function Chat() {
   };
 
   return (
-    <div
+    <Box
       style={{
         height: "100%",
         marginTop: "20px",
@@ -70,11 +34,11 @@ export default function Chat() {
         justifyContent: "space-between",
       }}
     >
-      {/* <div>
+      <Box>
         <Button onClick={handleToggleChatList}>채팅목록 열리는 버튼</Button>
         {isChatListOpen ? <ChatList /> : null}
-      </div>
-      <div
+      </Box>
+      <Box
         style={{
           display: "flex",
           flexDirection: "column",
@@ -82,37 +46,36 @@ export default function Chat() {
           alignItems: "center",
         }}
       >
-        <div>
-          <Icon
-            name="video"
-            link
+        <Box>
+          <IconButton
             onClick={() => {
               alert("영상통화 버튼 눌림.");
             }}
-          />
-          <Icon
-            name="call"
-            link
+          >
+            <VideocamIcon />
+          </IconButton>
+          <IconButton
             onClick={() => {
               alert("음성통화 버튼 눌림.");
             }}
-          />
-        </div>
+          >
+            <CallIcon />
+          </IconButton>
+        </Box>
 
-        <div>
+        <Box>
           {messageList &&
             messageList.map((item, index) => {
               return (
-                <div key={index}>
+                <Box key={index}>
                   <p>{item}</p>
-                </div>
+                </Box>
               );
             })}
           <p></p>
-        </div>
-        <div>
-          <Input
-            icon={<VoiceRecordIcon />}
+        </Box>
+        <Box>
+          <TextField
             value={message}
             placeholder="Type your message."
             onChange={handleMessage}
@@ -125,11 +88,11 @@ export default function Chat() {
           <Button style={{ width: "100px" }} onClick={handleMessageList}>
             전송
           </Button>
-        </div>
-      </div>
-      <div style={{ textAlign: "center", width: "20%" }}>
+        </Box>
+      </Box>
+      {/* <div style={{ textAlign: "center", width: "20%" }}>
         <Tab panes={panes} />
       </div> */}
-    </div>
+    </Box>
   );
 }
