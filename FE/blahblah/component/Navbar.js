@@ -5,18 +5,12 @@ export default function userNav() {
   return (
     <>
       {/* 테스트 */}
-      <Navbar bg="dark" variant="dark">
-        <Container>
-          <Link href="/">
-            <a className="navmenu">&nbsp;blahblah메인 &nbsp;</a>
+      <div>
+      <Link href="/">
+            <a className="navmenu">&nbsp;메인 &nbsp;</a>
           </Link>
-          {/* <Navbar.Brand href="/user">user처음페이지</Navbar.Brand> */}
-          <Nav className="me-auto">
-            <Link href="/user">
-              <a className="navmenu">&nbsp;User작업 &nbsp;</a>
-            </Link>
             <Link href="/chat">
-              <a className="navmenu">&nbsp;채팅방 &nbsp;</a>
+              <a className="navmenu">&nbsp;채팅 &nbsp;</a>
             </Link>
             <Link href="/wordnote">
               <a className="navmenu">&nbsp;워드노트 &nbsp;</a>
@@ -36,16 +30,29 @@ export default function userNav() {
             <Link href="/note">
               <a className="navmenu">&nbsp;노트 &nbsp;</a>
             </Link>
-          </Nav>
-        </Container>
-      </Navbar>
+            <Link href="/user/friends">
+ <a className="navmenu">&nbsp;친구목록 &nbsp;</a>
+  </Link>
+  <Link href="/user/login">
+ <a className="navmenu">&nbsp;로그인 &nbsp;</a>
+  </Link>
+  <Link href="/user/mypage">
+ <a className="navmenu">&nbsp;마이페이지 &nbsp;</a>
+  </Link>
+  <Link href="/user/signup">
+ <a className="navmenu">&nbsp;가입 &nbsp;</a>
+  </Link>
+  <Link href="/user/updatecheck">
+ <a className="navmenu">&nbsp;회원수정 &nbsp;</a>
+  </Link>
+      </div>
       <style jsx>{`
         .navmenu {
-          color: white;
+          color: black;
           text-decoration-line: none;
           display: inline-block;
           margin: 0px;
-          font-size: 24px;
+          font-size: 12px;
         }
       `}</style>
     </>
