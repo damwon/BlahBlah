@@ -1,51 +1,49 @@
-import { Grid, Image } from "semantic-ui-react";
-import Button from "@material-ui/core/Button";
-import WordWrite from "../../component/study/wordWrite";
+import { Grid } from "@mui/material";
+import { Image, Button, Modal } from "react-bootstrap";
+import { useState } from "react";
 export default function WordNote() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <>
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={2} />
-          <Grid.Column width={12}>
-            <Image
-              className="centered"
-              src="/images/characters.PNG"
-              alt="meltingPot image"
-            ></Image>
-            <Grid centered>
-              <Grid.Row>
-                <h1>Title:</h1>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={4} />
-                <Grid.Column width={6}>
-                  <h1>Word</h1>
-                  <p>water</p>
-                  <p>red</p>
-                  <p>book</p>
-                  <p>look</p>
-                </Grid.Column>
-                <Grid.Column width={6}>
-                  <h1>Mean</h1>
-                  <p>물</p>
-                  <p>빨간색</p>
-                  <p>책</p>
-                  <p>보다</p>
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row>
-                <Grid.Column width={8} />
-                <Grid.Column width={6}>
-                  <WordWrite></WordWrite>
-                </Grid.Column>
-                <Grid.Column width={2} />
-              </Grid.Row>
-            </Grid>
-          </Grid.Column>
-          <Grid.Column width={2} />
-        </Grid.Row>
-      </Grid>
+      <Image
+        className="centered"
+        src="/images/characters.PNG"
+        alt="meltingPot image"
+      ></Image>
+
+      <h1>Title:</h1>
+      <h1>Word</h1>
+      <p>water</p>
+      <p>red</p>
+      <p>book</p>
+      <p>look</p>
+      <h1>Mean</h1>
+      <p>물</p>
+      <p>빨간색</p>
+      <p>책</p>
+      <p>보다</p>
+
+      <Button variant="primary" onClick={handleShow}>
+        Launch demo modal
+      </Button>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, reading this text in a modal!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       <style jsx>{``}</style>
     </>
   );

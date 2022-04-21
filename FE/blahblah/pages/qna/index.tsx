@@ -1,46 +1,34 @@
-import { Grid, Image, Button, Pagination } from "semantic-ui-react";
+import { Grid, Button } from "@mui/material";
+import { Image } from "react-bootstrap";
 
 export default function QnA() {
   return (
     <>
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={2} />
-          <Grid.Column width={12}>
-            <Grid.Row>
-              <Image
-                className="centered"
-                src="/images/notice.PNG"
-                alt="notice2 image"
-              ></Image>
-            </Grid.Row>
+      <Grid container spacing={3}>
+        <Grid item xs>
+          <Grid item xs={2} />
+          <Grid item xs={8}>
+            <Image
+              className="centered"
+              src="/images/notice.PNG"
+              alt="notice2 image"
+            ></Image>
             <br></br>
             <br></br>
-            <Grid centered>
-              <Grid.Row>
-                <Grid.Column width={12}></Grid.Column>
-                <Grid.Column width={4}>
-                  <Button basic>문의하기</Button>
-                </Grid.Column>
-              </Grid.Row>
+            <Grid item spacing={2}>
+              <Grid item xs>
+                <Grid item xs={4}></Grid>
+                <Grid item xs={8}>
+                  <Button>문의하기</Button>
+                </Grid>
+              </Grid>
 
-              <div>
-                <Pagination
-                  boundaryRange={0}
-                  ellipsisItem={null}
-                  firstItem={null}
-                  lastItem={null}
-                  siblingRange={2}
-                  totalPages={5}
-                  // onClick={}
-                  activePage={1}
-                />
-              </div>
+              <div></div>
             </Grid>
-          </Grid.Column>
+          </Grid>
 
-          <Grid.Column width={2} />
-        </Grid.Row>
+          <Grid item xs={2} />
+        </Grid>
       </Grid>
     </>
   );

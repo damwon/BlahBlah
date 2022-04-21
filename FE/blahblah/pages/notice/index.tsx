@@ -1,44 +1,36 @@
-import { Grid, Image, Pagination } from "semantic-ui-react";
+// import { Grid, Image, Pagination } from "semantic-ui-react";
+import { Grid } from "@mui/material";
+import { Image } from "react-bootstrap";
 export default function Notice() {
   return (
-    <Grid>
-      <Grid.Row>
-        <Grid.Column width={4} />
-        <Grid.Column width={8}>
+    <Grid container spacing={3}>
+      <Grid item xs>
+        <Grid item xs={2} />
+        <Grid item xs={8}>
           <Image
             className="centered"
             src="/images/notice2.PNG"
             alt="notice image"
           ></Image>
           <br></br>
-          <Grid centered>
-            <Grid.Row>
+          <Grid container spacing={3}>
+            <Grid item xs>
               <hr></hr>
-              <Grid.Column width={3} className="text-center text-bold">
+              <Grid item xs={3} className="text-center text-bold">
                 <p>번호</p>
-              </Grid.Column>
-              <Grid.Column width={10} className="text-center text-bold">
+              </Grid>
+              <Grid item xs={6} className="text-center text-bold">
                 <p>제목</p>
-              </Grid.Column>
-              <Grid.Column width={3} className="text-center text-bold">
+              </Grid>
+              <Grid item xs={3} className="text-center text-bold">
                 <p>등록일</p>
-              </Grid.Column>
+              </Grid>
               <hr></hr>
-            </Grid.Row>
-            <Pagination
-              boundaryRange={0}
-              ellipsisItem={null}
-              firstItem={null}
-              lastItem={null}
-              siblingRange={2}
-              totalPages={5}
-              // onClick={}
-              activePage={1}
-            />
+            </Grid>
           </Grid>
-        </Grid.Column>
-        <Grid.Column width={4} />
-      </Grid.Row>
+        </Grid>
+        <Grid item xs={2} />
+      </Grid>
       <style jsx>
         {`
           .text-center {
