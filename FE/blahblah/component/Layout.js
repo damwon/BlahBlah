@@ -3,8 +3,14 @@ import { Container,Row,Col } from 'react-bootstrap';
 export default function Layout( {children}){
 
   return <>
-  <NavBar></NavBar>
-  <div>{children}</div>
+  <Container>
+    <Row>
+<Col><NavBar></NavBar></Col>
+    </Row>
+    <Row>
+<Col><div>{children}</div></Col>
+    </Row>
+  </Container>
   {/* <Container>
   <Row>
     <Col sm={1} xs={1}></Col>
