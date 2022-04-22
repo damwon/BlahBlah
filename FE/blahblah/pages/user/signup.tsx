@@ -140,7 +140,9 @@ export default function Signup() {
     // first,second,gen,age,profile
 
     // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
-    if(password.length>=6&&password===pwcheck && first.length!==0 &&second.length!==0
+    // 여기 체크나 더하기~!
+    if(password.length>=6&&password===pwcheck 
+      && first.length!==0 &&second.length!==0
       &&gen.length!==0&&age.length!==0&&profile.length!==0){
       alert('가입완료')
     }else{
