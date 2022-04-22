@@ -6,11 +6,15 @@ export default function userNav() {
     <>
       {/* 테스트 */}
       <div className="nav">
+      <div className="navright">
       <Link href="/">
-            <a className="main">
-              <img src="logo/blbl.png" height={30}></img>
+            <a className="mainnav">
+              BlahBlah
+              {/* <img src="logo/blbl.png" height={30}></img> */}
               </a>
           </Link>
+      </div>
+            <div className="navright">
             <Link href="/chat">
               <a className="navmenu">&nbsp;채팅 &nbsp;</a>
             </Link>
@@ -47,30 +51,31 @@ export default function userNav() {
   <Link href="/user/updatecheck">
  <a className="navmenu">&nbsp;회원수정 &nbsp;</a>
   </Link>
+            </div>
       </div>
       <style jsx>{`
       .nav{
-        // heigth:100px:
-        // overflow: hidden;
+ 
         margin-top:15px;
         margin-bottom:30px;
-        // position:fixed;
-        // top:0;
         background-color:white;
       }
-        .main{
-          color:black;
-          font-size;24px;
+        .mainnav{
+          color:#00ccb1;
+          font-size:36px;
+          font-weight:bold;
           text-decoration-line: none;
           display:inline-block;
+          
         }
         .navmenu {
           color: black;
           text-decoration-line: none;
-          display: inline-block;
-          margin: 0px;
+          display: inline;
+          align-items:center;
           font-size: 16px;
           font-weight:bold;
+          margin-bottom:0;
         }
         .navmenu:hover{
           color:#00ccb1;
