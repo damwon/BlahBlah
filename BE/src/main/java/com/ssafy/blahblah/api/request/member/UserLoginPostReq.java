@@ -1,4 +1,4 @@
-package com.ssafy.blahblah.api.request;
+package com.ssafy.blahblah.api.request.member;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

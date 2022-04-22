@@ -1,7 +1,6 @@
 package com.ssafy.blahblah.common.auth;
 
 
-import com.ssafy.blahblah.api.service.UserService;
 import com.ssafy.blahblah.db.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -2,7 +2,7 @@ package com.ssafy.blahblah.common.auth;
 
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.util.JwtTokenUtil;
 import com.ssafy.blahblah.common.util.ResponseBodyWriteUtil;
 import com.ssafy.blahblah.db.entity.User;

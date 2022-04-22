@@ -1,8 +1,8 @@
-package com.ssafy.blahblah.api.controller;
+package com.ssafy.blahblah.api.controller.member;
 
-import com.ssafy.blahblah.api.request.UserLoginPostReq;
-import com.ssafy.blahblah.api.response.UserLoginPostRes;
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.request.member.UserLoginPostReq;
+import com.ssafy.blahblah.api.response.member.UserLoginPostRes;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.common.util.JwtTokenUtil;
 import com.ssafy.blahblah.db.entity.User;

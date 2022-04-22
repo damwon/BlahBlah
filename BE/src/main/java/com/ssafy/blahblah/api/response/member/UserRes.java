@@ -1,6 +1,7 @@
-package com.ssafy.blahblah.api.response;
+package com.ssafy.blahblah.api.response.member;
 
-import com.ssafy.blahblah.db.entity.User;
+
+import com.ssafy.homeland.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

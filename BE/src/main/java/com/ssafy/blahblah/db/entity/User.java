@@ -4,7 +4,10 @@ package com.ssafy.blahblah.db.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * 유저 모델 정의.
@@ -19,52 +22,56 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long user_id = null;
-
-    @Column(nullable = false)
-    private String address;
+    Long id = null;
 
     @Column(nullable = false)
     private String name;
 
-    @column
+    @Column(nullable = false)
     private int gender;
 
-    @column
+    @Column(nullable = false)
     private int age;
 
-    @column
+    @Column(nullable = false)
     private String email;
 
     @Column
     private String description;
 
     @Column
-    private String profile_img;
+    private String profileImg;
 
-    @column
+    @Column(nullable = false)
     private int authority;
 
-    @column
-    private int reported_cnt;
+    @ColumnDefault("0")
+    private int reportedCnt;
 
-    @column
-    private LocalDateTime created_at;
+    @Column(nullable = false)
+    private LocalDateTime expiredAt;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @Column(nullable = false)
+    String password;
 
     @Builder
-    public User(Long user_id, String address, String name, int gender, int age, String email, String description, String profile_img, int authority, int reported_cnt,  LocalDateTime created_at) {
-
-        this.user_id = user_id;
-        this.address = address;
+    public User(String name, int gender, int age, String email, String description, String profileImg,
+                int authority, int reportedCnt, LocalDateTime  expiredAt, LocalDateTime createdAt, String password) {
         this.name = name;
         this.gender = gender;
         this.age = age;
         this.email = email;
         this.description = description;
-        this.profile_img = profile_img;
+        this.profileImg = profileImg;
         this.authority = authority;
-        this.reported_cnt = reported_cnt;
-        this.created_at = created_at;
-
+        this.reportedCnt = reportedCnt;
+        this.expiredAt = expiredAt;
+        this.createdAt = createdAt;
+        this.password = password;
     }
 }

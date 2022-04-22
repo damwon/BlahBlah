@@ -1,6 +1,8 @@
-package com.ssafy.blahblah.api.response;
+package com.ssafy.blahblah.api.response.member;
 
-import com.ssafy.blahblah.common.model.response.BaseResponseBody;
+
+
+import com.ssafy.homeland.common.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
