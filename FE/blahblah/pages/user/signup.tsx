@@ -58,16 +58,20 @@ export default function Signup() {
   };
   // 성별
   const [gen,setGen] = useState("")
-  const gens =[
-    {key:1, value:"남자"},
-      {key:2, value:"여자"},
+  const gens =['남자','여자'
+    // {key:1, value:"남자"},
+    //   {key:2, value:"여자"},
 
   ]
   const onGenHanlder=(e:any)=>{
     setGen(e.currentTarget.value)
   }
   // 나이
-  const [age,setAge] = useState('')
+  const [age,setAge] = useState(0)
+  const ages = []
+  for(var i=0;i<101;i++){
+    ages.push(i)
+  }
   const onAgeHanlder=(e:any)=>{
     setAge(e.currentTarget.value)
   }
@@ -175,24 +179,14 @@ export default function Signup() {
           <Col><h1>회원가입</h1>
           {/* const [result,setResult] = useState(false) */}
          
-            이메일
-            {inputEmail}
-            비번
-            {password}
-            비번체크
-            {pwcheck}
-            추가정보
-            {first}
-            {second}
-            {third}
-            {gen}
-            {age}
-            {profile}
+            
+            
+            
             <div className='logdiv'>
               {/* <Form></Form> */}
               {/* 이놈 제거! */}
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>이메일주소</Form.Label>
+                  <Form.Label>이메일주소 {inputEmail}</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
                   <button  onClick={onClickEmailCheck}>
                   이메일 중복체크
@@ -201,11 +195,11 @@ export default function Signup() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>패스워드</Form.Label>
+                  <Form.Label>패스워드 {password}</Form.Label>
                   <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>패스워드확인-
+                  <Form.Label>패스워드확인 {pwcheck}-
                   {
               password===pwcheck && password.length >=6
               ?<>비밀번호가 같습니다.</>
@@ -217,13 +211,24 @@ export default function Signup() {
                 </Form.Group>
                 
                 <Form.Label>- 추가정보 -</Form.Label> 
+                {gen}
 <Form.Select aria-label="Default select example"
 onChange={onGenHanlder} value={gen}>
-  <option>성별</option>
+  <option>성별 </option>
   {gens.map((item, index)=>(
-			<option key={item.key} value={item.key}>{item.value}</option>
+			<option key={index} value={item}>{item}</option>
 		))}
 </Form.Select>
+{age}
+<Form.Select aria-label="Default select example"
+onChange={onAgeHanlder} value={gen}>
+  <option>나이 </option>
+  {ages.map((item, index)=>(
+			<option key={index} value={item}>{item}</option>
+		))}
+</Form.Select>
+
+
 
 
 <Form.Label>모국어 {first} </Form.Label>
@@ -307,7 +312,7 @@ onChange={onGenHanlder} value={gen}>
 			<option key={item.key} value={item.key}>{item.value}</option>
 		))}
     </select> */}
-<Form.Label>자기소개</Form.Label>
+<Form.Label>자기소개 {profile}</Form.Label>
 <InputGroup>
     {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
     <FormControl placeholder='10자이상 입력해주세요' as="textarea" aria-label="With textarea" onChange={handleProfile}/>
