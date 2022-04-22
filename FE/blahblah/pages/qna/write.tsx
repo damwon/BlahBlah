@@ -5,11 +5,12 @@ export default function QnaWrite() {
     <Grid container spacing={3}>
       <Grid xs={2} />
       <Grid xs={8}>
-        <Image
-          className="centered"
+        <img
           src="/images/notice.PNG"
           alt="notice2 image"
-        ></Image>
+          className="img-fluid"
+          width="100%"
+        ></img>
         <h3>제목</h3>
         <textarea placeholder="제목을 입력해주세요." />
         <h3>제목</h3>
