@@ -1,5 +1,5 @@
 import { Grid, Pagination } from "@mui/material";
-
+import Image from "next/image";
 export default function Study() {
   return (
     <>
@@ -12,12 +12,18 @@ export default function Study() {
       >
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <img
+          <Image
+            src="/images/study.PNG"
+            alt="study image"
+            width="100%"
+            height="100%"
+          />
+          {/* <img
             src="/images/study.PNG"
             className="img-fluid"
             alt="study image"
             width="100%"
-          ></img>
+          ></img> */}
           <Grid
             spacing={3}
             container

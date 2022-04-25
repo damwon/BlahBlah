@@ -1,15 +1,22 @@
 import { Grid, Pagination } from "@mui/material";
+import Image from "next/image";
 export default function Notice() {
   return (
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
-        <img
+        <Image
+          src="/images/notice2.PNG"
+          alt="notice image"
+          width="100%"
+          height="100%"
+        />
+        {/* <img
           src="/images/notice2.PNG"
           alt="notice image"
           className="img-fluid"
           width="100%"
-        ></img>
+        ></img> */}
         <br></br>
         <Grid container spacing={3}>
           <hr></hr>
