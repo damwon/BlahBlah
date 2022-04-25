@@ -1,6 +1,4 @@
 /* eslint-disable */
-import UserNav from '../../component/user/userNav'
-
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
 import { useState } from "react";
@@ -50,9 +48,9 @@ export default function Login() {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>이메일주소</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
-                  <Form.Text className="text-muted">
+                  {/* <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
-                  </Form.Text>
+                  </Form.Text> */}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
