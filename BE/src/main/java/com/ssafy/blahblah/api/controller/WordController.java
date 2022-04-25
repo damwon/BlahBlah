@@ -1,7 +1,7 @@
 package com.ssafy.blahblah.api.controller;
 
 import com.ssafy.blahblah.api.request.WordReq;
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.entity.Word;
@@ -37,7 +37,7 @@ public class WordController {
     public ResponseEntity wordPost(Authentication authentication,@PathVariable Long wordbookId, @RequestBody WordReq wordReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         Optional<Wordbook> option = wordbookRepository.findById(wordbookId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -60,7 +60,7 @@ public class WordController {
     public ResponseEntity wordbookUpdate(Authentication authentication,@PathVariable Long wordId, @RequestBody WordReq wordReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         Optional<Word> option = wordRepository.findById(wordId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -77,7 +77,7 @@ public class WordController {
     public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long wordId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         wordRepository.deleteById(wordId);
         return new ResponseEntity(HttpStatus.OK);
     }

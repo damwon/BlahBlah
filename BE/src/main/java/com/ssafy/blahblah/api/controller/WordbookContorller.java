@@ -3,7 +3,7 @@ package com.ssafy.blahblah.api.controller;
 import com.ssafy.blahblah.api.request.WordbookReq;
 import com.ssafy.blahblah.api.response.WordListRes;
 import com.ssafy.blahblah.api.response.WordbookListRes;
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.entity.Wordbook;
@@ -36,7 +36,7 @@ public class WordbookContorller {
     public ResponseEntity list( Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         List<Wordbook> wordbookList = wordbookRepository.findByUser(user);
         if (wordbookList == null || wordbookList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -50,7 +50,7 @@ public class WordbookContorller {
     public ResponseEntity wordlist(Authentication authentication, @PathVariable Long wordbookId){
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         Optional<Wordbook> optionalWordbook = wordbookRepository.findById(wordbookId);
         if(optionalWordbook.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -67,7 +67,7 @@ public class WordbookContorller {
     public ResponseEntity wordbookPost(Authentication authentication, @RequestBody WordbookReq wordbookReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         wordbookRepository.save(Wordbook.builder()
                 .title(wordbookReq.getTitle())
                 .createdAt(LocalDateTime.now())
@@ -81,7 +81,7 @@ public class WordbookContorller {
     public ResponseEntity wordbookUpdate(Authentication authentication,@PathVariable Long wordbookId, @RequestBody WordbookReq wordbookReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         Optional<Wordbook> option = wordbookRepository.findById(wordbookId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -96,7 +96,7 @@ public class WordbookContorller {
     public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long wordbookId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         wordbookRepository.deleteById(wordbookId);
         return new ResponseEntity(HttpStatus.OK);
     }
