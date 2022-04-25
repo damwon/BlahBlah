@@ -1,16 +1,16 @@
-import NavBar from "./NavBar";
+import NavBar from "./Navbar";
 import { Container,Row,Col } from 'react-bootstrap';
 export default function Layout( {children}){
 
   return <>
-  <Container>
-    <Row>
-<Col><NavBar></NavBar></Col>
-    </Row>
- 
-  </Container>
+    <Container>
+        <Row>
+      <Col>
+        <NavBar/>
+      </Col>
+        </Row>
+  
+    </Container>
   <div>{children}</div>
-  
-  
   </>
 }
