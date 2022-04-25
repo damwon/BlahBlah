@@ -1,4 +1,3 @@
-import UserNav from '../../component/user/userNav'
 
 export default function User() {
   return (
