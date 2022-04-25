@@ -3,10 +3,10 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
 import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from 'next/router'
 
 export default function Login() {
-  
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const handleEmail = (event: any) => {
@@ -21,13 +21,14 @@ export default function Login() {
   const onClickLogin = (event: any) => {
     event.preventDefault();
     axios
-      .post(``, {
-        email: email,
-        password: password,
+      .post(`https://blahblah.community:8443/api/auth/login`, {
+        'email': email,
+        'password': password,
       })
       .then((res) => {
         localStorage.setItem("jwt", res.data.accessToken);
         console.log(res)
+        router.push("/")
       })
       .catch((err) => {
         console.log(err)
