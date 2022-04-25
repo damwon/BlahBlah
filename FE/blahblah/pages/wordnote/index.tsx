@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 export default function WordNote() {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -21,15 +20,10 @@ export default function WordNote() {
           <Image
             src="/images/characters.PNG"
             alt="characters image"
-            width="100%"
-            height="100%"
+            width="240"
+            height="40"
+            layout="responsive"
           />
-          {/* <img
-            src="/images/characters.PNG"
-            alt="characters image"
-            className="img-fluid"
-            width="100%"
-          ></img> */}
           <h1 className="cent">Title:</h1>
           <Grid
             spacing={2}
@@ -66,7 +60,7 @@ export default function WordNote() {
                 onClick={handleShow}
                 className="mar-auto"
               >
-                Launch demo modal
+                단어 추가하기
               </Button>
             </Grid>
           </Grid>
