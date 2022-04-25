@@ -1,0 +1,47 @@
+import { Grid, Pagination } from "@mui/material";
+export default function Notice() {
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={2} />
+      <Grid item xs={8}>
+        <img
+          src="/images/notice2.PNG"
+          alt="notice image"
+          className="img-fluid"
+          width="100%"
+        ></img>
+        <br></br>
+        <Grid container spacing={3}>
+          <hr></hr>
+          <Grid item xs={3} className="text-center text-bold">
+            <p>번호</p>
+          </Grid>
+          <Grid item xs={6} className="text-center text-bold">
+            <p>제목</p>
+          </Grid>
+          <Grid item xs={3} className="text-center text-bold">
+            <p>등록일</p>
+          </Grid>
+          <div className="m">
+            <Pagination count={10} variant="outlined" shape="rounded" />
+          </div>
+        </Grid>
+        <Grid item xs={2} />
+      </Grid>
+      <style jsx>
+        {`
+          .text-center {
+            text-align: center;
+          }
+          p {
+            font-size: medium;
+            font-weight: 800;
+          }
+          .m {
+            margin: 0 auto;
+          }
+        `}
+      </style>
+    </Grid>
+  );
+}
