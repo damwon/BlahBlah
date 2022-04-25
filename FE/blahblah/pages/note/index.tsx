@@ -12,15 +12,10 @@ export default function Note() {
             <Image
               src="/images/noteTitle.png"
               alt="noteTitle image"
-              width="100%"
-              height="100%"
+              width="200"
+              height="40"
+              layout="responsive"
             />
-            {/* <img
-              src="/images/noteTitle.png"
-              alt="noteTitle image"
-              className="img-fluid"
-              width="100%"
-            ></img> */}
           </div>
           <div className="lb-text">
             <h2>Title: my Note</h2>
@@ -32,15 +27,10 @@ export default function Note() {
             <Image
               src="/images/note.jpg"
               alt="note image"
-              width="100%"
-              height="100%"
+              width="80"
+              height="100"
+              layout="responsive"
             />
-            {/* <img
-              src="/images/note.jpg"
-              alt="note image"
-              className="img-fluid"
-              width="100%"
-            ></img> */}
           </div>
           <div className="lb-text">
             <h3>
@@ -52,17 +42,22 @@ export default function Note() {
           </div>
         </div>
         <Grid container spacing={3}>
-          <Grid item xs={4} />
+          <Grid item xs={5} />
           <Grid item xs={4}>
             <Button className="mar" variant="contained" disabled>
-              Disabled
+              취소
             </Button>
-            <Button className="mar" variant="contained">
-              Contained
+            <Button
+              className="mar"
+              variant="contained"
+              onClick={() => {
+                router.push(`/note/edit`);
+              }}
+            >
+              수정
             </Button>
           </Grid>
         </Grid>
-        <Grid item xs={2} />
       </Grid>
 
       <style jsx>

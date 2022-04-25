@@ -8,15 +8,10 @@ export default function QnaWrite() {
         <Image
           src="/images/notice.PNG"
           alt="notice2 image"
-          width="100%"
-          height="100%"
+          width="200"
+          height="40"
+          layout="responsive"
         />
-        {/* <img
-          src="/images/notice.PNG"
-          alt="notice2 image"
-          className="img-fluid"
-          width="100%"
-        ></img> */}
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <h3 className="text-center">제목</h3>

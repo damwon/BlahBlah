@@ -1,7 +1,8 @@
 import { Grid, Button, Pagination } from "@mui/material";
 import Image from "next/image";
-
+import { useRouter } from "next/router";
 export default function QnA() {
+  const router = useRouter();
   return (
     <>
       <Grid container spacing={3}>
@@ -10,21 +11,24 @@ export default function QnA() {
           <Image
             src="/images/notice.PNG"
             alt="notice2 image"
-            width="100%"
-            height="100%"
+            width="200"
+            height="40"
+            layout="responsive"
           />
-          {/* <img
-            src="/images/notice.PNG"
-            alt="notice2 image"
-            className="img-fluid"
-            width="100%"
-          ></img> */}
           <br></br>
           <br></br>
           <Grid container spacing={2}>
             <Grid item xs={9}></Grid>
             <Grid item xs={3}>
-              <Button>문의하기</Button>
+              <Button
+                className="mar"
+                variant="contained"
+                onClick={() => {
+                  router.push(`/qna/write`);
+                }}
+              >
+                문의하기
+              </Button>
             </Grid>
             <div className="m">
               <Pagination count={10} variant="outlined" shape="rounded" />
