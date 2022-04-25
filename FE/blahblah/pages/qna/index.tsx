@@ -1,4 +1,4 @@
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Pagination } from "@mui/material";
 import { Image } from "react-bootstrap";
 
 export default function QnA() {
@@ -20,11 +20,21 @@ export default function QnA() {
             <Grid item xs={3}>
               <Button>문의하기</Button>
             </Grid>
+            <div className="m">
+              <Pagination count={10} variant="outlined" shape="rounded" />
+            </div>
           </Grid>
 
           <Grid item xs={2} />
         </Grid>
       </Grid>
+      <style jsx>
+        {`
+          .m {
+            margin: 0 auto;
+          }
+        `}
+      </style>
     </>
   );
 }

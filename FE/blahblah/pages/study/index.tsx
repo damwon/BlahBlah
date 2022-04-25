@@ -1,5 +1,4 @@
-import { Grid } from "@mui/material";
-import { Pagination } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 
 export default function Study() {
   return (
