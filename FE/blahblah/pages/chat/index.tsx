@@ -3,7 +3,18 @@ import { useState } from "react";
 import WordNote from "../wordnote";
 import Note from "../note";
 import ChatList from "../../component/chat/chatList";
-import { Button, TextField, IconButton, Box, Typography } from "@mui/material";
+import {
+  Button,
+  TextField,
+  IconButton,
+  Box,
+  Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ChatTabs from "../../component/chat/chatTabs";
@@ -50,6 +61,15 @@ export default function Chat() {
     } else {
       alert("메시지를 입력해주세요.");
     }
+  };
+  // recorder dialog 열고 닫기
+  const [openRecorder, setOpenRecorder] = useState(false);
+  const handleClickOpen = () => {
+    setOpenRecorder(true);
+  };
+
+  const handleClose = () => {
+    setOpenRecorder(false);
   };
 
   return (
@@ -174,16 +194,22 @@ export default function Chat() {
           <IconButton onClick={handleMessageList}>
             <SendIcon color="primary" />
           </IconButton>
-          <IconButton
-            onClick={() => {
-              alert("녹음버튼 눌림");
-            }}
-          >
+          <IconButton onClick={handleClickOpen}>
             <MicIcon sx={{ color: "black" }} />
           </IconButton>
-        </Box>
-        <Box>
-          <VoiceRecorder />
+          <Dialog open={openRecorder} onClose={handleClose}>
+            <DialogTitle>음성 녹음</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                녹음을 하시려면 녹음 시작하기를 누르세요
+              </DialogContentText>
+              <VoiceRecorder />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              <Button onClick={handleClose}>Subscribe</Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Box>
       <ChatTabs />

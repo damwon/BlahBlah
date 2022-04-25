@@ -1,58 +1,65 @@
 import { Grid, Button, Input } from "@mui/material";
-import { Image } from "react-bootstrap";
+import Image from "next/image";
 
 export default function Edit() {
   return (
     <Grid container spacing={3}>
-      <Grid item xs>
-        <Grid item xs={2} />
-        <Grid item xs={8}>
-          <div className="lb-wrap">
-            <div className="lb-image">
-              <Image
-                className="centered lb-image"
-                src="/images/noteTitle.png"
-                alt="noteTitle image"
-              ></Image>
-            </div>
-            <div className="lb-text">
-              <input
-                className="my-title"
-                style={{ minWidth: "15vw", minHeight: "5vh" }}
-                placeholder="Title: My Note 1"
-              ></input>
-            </div>
+      <Grid item xs={2} />
+      <Grid item xs={8}>
+        <div className="lb-wrap">
+          <div className="lb-image">
+            <Image
+              src="/images/noteTitle.png"
+              alt="noteTitle image"
+              width="200"
+              height="40"
+              layout="responsive"
+            ></Image>
           </div>
+          <div className="lb-text">
+            <input
+              className="my-title"
+              style={{ minWidth: "15vw", minHeight: "5vh" }}
+              placeholder="Title: My Note 1"
+            ></input>
+          </div>
+        </div>
 
-          <div className="lb-wrap">
-            <div className="lb-image">
-              <Image
-                className="centered"
-                src="/images/note.jpg"
-                alt="note image"
-              ></Image>
-            </div>
-            <div className="lb-text">
-              <textarea
-                autoFocus
-                style={{
-                  minWidth: "13vw",
-                  minHeight: "30vh",
-                  maxHeight: "30vh",
-                }}
-                className="clean-textarea"
-                placeholder="내용 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용
+        <div className="lb-wrap">
+          <div className="lb-image">
+            <Image
+              src="/images/note.jpg"
+              alt="note image"
+              width="80"
+              height="100"
+              layout="responsive"
+            ></Image>
+          </div>
+          <div className="lb-text">
+            <textarea
+              autoFocus
+              style={{
+                minWidth: "13vw",
+                minHeight: "30vh",
+                maxHeight: "30vh",
+              }}
+              className="clean-textarea"
+              placeholder="내용 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용
                 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용 적는중
                 어떻게 나오려나 내용 적는중 어떻게 나오려나내용 적는중 어떻게
                 나오려나내용 적는중 어떻게 나오려나"
-              ></textarea>
-            </div>
+            ></textarea>
           </div>
-          <Grid>
-            <div>
-              <Button>확인</Button>
-              <Button disabled>취소</Button>
-            </div>
+        </div>
+        <Grid container spacing={3}>
+          <Grid item xs={5} />
+          <Grid item xs={4}>
+            <Button className="mar" variant="contained" disabled>
+              취소
+            </Button>
+            <Button className="mar" variant="contained">
+              수정 완료
+            </Button>
           </Grid>
         </Grid>
         <Grid item xs={2} />

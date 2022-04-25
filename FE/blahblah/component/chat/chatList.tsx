@@ -35,7 +35,13 @@ export default function ChatList() {
             <ListItemAvatar>
               <AccountCircleIcon fontSize="large" />
             </ListItemAvatar>
-            <ListItemText primary={item.name} />
+            <ListItemText
+              primary={item.name}
+              sx={{ cursor: "pointer" }}
+              onClick={() => {
+                alert(`${item.name} 눌림!`);
+              }}
+            />
           </ListItem>
         );
       })}

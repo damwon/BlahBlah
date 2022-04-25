@@ -8,15 +8,10 @@ export default function Notice() {
         <Image
           src="/images/notice2.PNG"
           alt="notice image"
-          width="100%"
-          height="100%"
+          width="240"
+          height="40"
+          layout="responsive"
         />
-        {/* <img
-          src="/images/notice2.PNG"
-          alt="notice image"
-          className="img-fluid"
-          width="100%"
-        ></img> */}
         <br></br>
         <Grid container spacing={3}>
           <hr></hr>
