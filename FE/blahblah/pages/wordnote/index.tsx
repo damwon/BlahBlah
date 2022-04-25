@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 export default function WordNote() {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
