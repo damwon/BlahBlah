@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Container,Row,Col,ListGroup,Figure } from 'react-bootstrap';
-
+import axios from "axios";
 export default function Mypage() {
   return (
     <>

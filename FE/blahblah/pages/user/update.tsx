@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { Container,Row,Col } from 'react-bootstrap';
-
+import axios from "axios";
 export default function Update() {
   return (
     <>
