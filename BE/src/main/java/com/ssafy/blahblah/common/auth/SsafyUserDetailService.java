@@ -1,7 +1,7 @@
 package com.ssafy.blahblah.common.auth;
 
 
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.db.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,8 +19,8 @@ public class SsafyUserDetailService implements UserDetailsService{
 	UserService userService;
 	
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    		User user = userService.getUserByUserId(username);
+    public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
+    		User user = userService.getUserByEmail(userEmail);
     		if(user != null) {
     			SsafyUserDetails userDetails = new SsafyUserDetails(user);
     			return userDetails;

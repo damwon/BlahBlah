@@ -97,6 +97,12 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok:1.18.20")
 	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.3.1'
 
+	// smtp
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 tasks.named('test') {
