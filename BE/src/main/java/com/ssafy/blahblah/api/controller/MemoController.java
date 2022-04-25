@@ -3,7 +3,7 @@ package com.ssafy.blahblah.api.controller;
 import com.ssafy.blahblah.api.request.MemoReq;
 import com.ssafy.blahblah.api.response.MemoDetailRes;
 import com.ssafy.blahblah.api.response.MemoListRes;
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Memo;
 import com.ssafy.blahblah.db.entity.User;
@@ -36,7 +36,7 @@ public class MemoController {
     public ResponseEntity memoList(Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         List<Memo> memoList = memoRepository.findByUser(user);
         if (memoList == null || memoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -49,7 +49,7 @@ public class MemoController {
     public ResponseEntity memoDetail(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
 
         Optional<Memo> option = memoRepository.findById(memoId);
         if (option.isEmpty()) {
@@ -68,7 +68,7 @@ public class MemoController {
     public ResponseEntity memoPost(Authentication authentication, @RequestBody MemoReq memoReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         memoRepository.save(Memo.builder()
                 .title(memoReq.getTitle())
                 .content(memoReq.getContent())
@@ -84,7 +84,7 @@ public class MemoController {
     public ResponseEntity memoUpdate(Authentication authentication, @PathVariable Long memoId, @RequestBody MemoReq memoReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         Optional<Memo> option = memoRepository.findById(memoId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -102,7 +102,7 @@ public class MemoController {
     public ResponseEntity memoDelete(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         memoRepository.deleteById(memoId);
         return new ResponseEntity(HttpStatus.OK);
     }

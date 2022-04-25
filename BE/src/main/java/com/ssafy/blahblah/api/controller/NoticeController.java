@@ -2,7 +2,7 @@ package com.ssafy.blahblah.api.controller;
 import com.ssafy.blahblah.api.request.NoticeReq;
 import com.ssafy.blahblah.api.response.NoticeDetailRes;
 import com.ssafy.blahblah.api.response.NoticeListRes;
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Notice;
 import com.ssafy.blahblah.db.entity.User;
@@ -56,7 +56,7 @@ public class NoticeController {
     public ResponseEntity noticePost(Authentication authentication, @RequestBody NoticeReq noticeReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
             noticeRepository.save(Notice.builder()
                     .title(noticeReq.getTitle())
@@ -74,7 +74,7 @@ public class NoticeController {
     public ResponseEntity noticeUpdate(Authentication authentication, @PathVariable Long noticeId, @RequestBody NoticeReq noticeReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
             Optional<Notice> option = noticeRepository.findById(noticeId);
             if (option.isEmpty()) {
@@ -97,7 +97,7 @@ public class NoticeController {
     public ResponseEntity noticeDelete(Authentication authentication, @PathVariable Long noticeId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
             noticeRepository.deleteById(noticeId);
             return new ResponseEntity(HttpStatus.OK);

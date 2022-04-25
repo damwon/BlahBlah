@@ -4,7 +4,7 @@ import com.ssafy.blahblah.api.request.MyQnaReq;
 import com.ssafy.blahblah.api.request.QnaAnswerReq;
 import com.ssafy.blahblah.api.response.MyQnaDetailRes;
 import com.ssafy.blahblah.api.response.MyQnaListRes;
-import com.ssafy.blahblah.api.service.UserService;
+import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Qna;
 import com.ssafy.blahblah.db.entity.User;
@@ -37,7 +37,7 @@ public class QnaController {
     public ResponseEntity myQnaList(Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         List<Qna> qnaList = qnaRepository.findByUser(user);
         if (qnaList == null || qnaList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -51,7 +51,7 @@ public class QnaController {
     public ResponseEntity myQnaDetail(Authentication authentication, @PathVariable Long qnaId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         Optional<Qna> option = qnaRepository.findById(qnaId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
@@ -68,7 +68,7 @@ public class QnaController {
     public ResponseEntity myQnaPost(Authentication authentication, @RequestBody MyQnaReq qnaReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         qnaRepository.save(Qna.builder()
                 .title(qnaReq.getTitle())
                 .content(qnaReq.getContent())
@@ -84,7 +84,7 @@ public class QnaController {
     public ResponseEntity myQnaDelete(Authentication authentication, @PathVariable Long qnaId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         qnaRepository.deleteById(qnaId);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -93,7 +93,7 @@ public class QnaController {
     public ResponseEntity qnaList(Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         if (user.getAuthority().equals("admin")) {
             List<Qna> qnaList = qnaRepository.findAll();
             if (qnaList == null || qnaList.size() == 0) {
@@ -109,7 +109,7 @@ public class QnaController {
     public ResponseEntity qnaDetail(Authentication authentication, @PathVariable Long qnaId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         if (user.getAuthority().equals("admin")) {
             Optional<Qna> option = qnaRepository.findById(qnaId);
             if (option.isEmpty()) {
@@ -125,7 +125,7 @@ public class QnaController {
     public ResponseEntity answer(Authentication authentication, @PathVariable long qnaId, @RequestBody QnaAnswerReq qnaAnswerReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
             Optional<Qna> option = qnaRepository.findById(qnaId);
             if (option.isEmpty()) {
@@ -144,7 +144,7 @@ public class QnaController {
     public ResponseEntity answerDelete(Authentication authentication,@PathVariable Long qnaId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
-        User user = userService.getUserByUserId(userId);
+        User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
             Optional<Qna> option = qnaRepository.findById(qnaId);
             if (option.isEmpty()) {
