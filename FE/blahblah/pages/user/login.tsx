@@ -26,10 +26,12 @@ export default function Login() {
         password: password,
       })
       .then((res) => {
+        localStorage.setItem("jwt", res.data.accessToken);
         console.log(res)
       })
       .catch((err) => {
         console.log(err)
+        // alert 오류출력
 
       });
   };
@@ -57,16 +59,21 @@ export default function Login() {
                   <Form.Label>패스워드</Form.Label>
                   <Form.Control type="password" placeholder="Password" onChange={handlePassword} />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" label="Check me out" />
-                </Form.Group>
-                <button type="submit" onClick={() => { console.log('hihi') }}>
+                </Form.Group> */}
+                <button type="submit" onClick={onClickLogin}>
                   로그인
                 </button>
 
                 <button  >
                   <Link href="/user/signup">
                     <a className="link">회원가입 </a>
+                  </Link>
+                </button>
+                <button  >
+                  <Link href="/user/findpass">
+                    <a className="link">비밀번호찾기 </a>
                   </Link>
                 </button>
                 {/* <Button variant="primary" type="submit">
