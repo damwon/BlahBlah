@@ -1,5 +1,6 @@
 package com.ssafy.blahblah.db.entity;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -11,7 +12,9 @@ import javax.persistence.Entity;
 /**
  * 유저 모델 정의.
  */
+
 @Entity
+@NoArgsConstructor
 @Getter
 @Setter
 public class User extends BaseEntity{
