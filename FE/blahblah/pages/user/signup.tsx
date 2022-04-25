@@ -1,3 +1,4 @@
+/* eslint-disable */
 import UserNav from '../../component/user/userNav'
 import { useRouter } from "next/router";
 import { Form, Button, Container, Row, Col,InputGroup,FormControl } from 'react-bootstrap';
@@ -14,6 +15,9 @@ export default function Signup() {
   const [inputEmail, setInputEmail] = useState("");
   // 이메일 중복체크
   const [isEmailOnly, setIsEmailOnly] = useState(false);
+  // 이메일 중복체크후 이메일 인증버튼 나오게
+  const [EmailCheck,setEmailCheck] = useState(false)
+  // 그리고 이메일창 onchange
 
   // 비밀번호
   const [password, setPassword] = useState("")
@@ -126,6 +130,8 @@ export default function Signup() {
 
   const onSubmit = (event:any)=>{
 
+//
+//
 // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
 
     // alert('hihi')
@@ -143,7 +149,7 @@ export default function Signup() {
     // 여기 체크나 더하기~!
     if(password.length>=6&&password===pwcheck 
       && first.length!==0 &&second.length!==0
-      &&gen.length!==0&&age.length!==0&&profile.length!==0){
+      &&gen.length!==0&&age==0&&profile.length!==0){
       alert('가입완료')
     }else{
       alert('빈칸이있음')
