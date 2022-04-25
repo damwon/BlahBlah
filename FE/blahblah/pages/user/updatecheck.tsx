@@ -1,4 +1,4 @@
-import UserNav from '../../component/user/userNav'
+/* eslint-disable */
 
 export default function UpdateCheck() {
   return (

@@ -1,5 +1,6 @@
 import { Grid, Button } from "@mui/material";
 import { useRouter } from "next/router";
+import Image from "next/image";
 export default function Note() {
   const router = useRouter();
   return (
@@ -8,12 +9,18 @@ export default function Note() {
       <Grid item xs={8}>
         <div className="lb-wrap">
           <div className="lb-image">
-            <img
+            <Image
+              src="/images/noteTitle.png"
+              alt="noteTitle image"
+              width="100%"
+              height="100%"
+            />
+            {/* <img
               src="/images/noteTitle.png"
               alt="noteTitle image"
               className="img-fluid"
               width="100%"
-            ></img>
+            ></img> */}
           </div>
           <div className="lb-text">
             <h2>Title: my Note</h2>
@@ -22,12 +29,18 @@ export default function Note() {
 
         <div className="lb-wrap">
           <div className="lb-image">
-            <img
+            <Image
+              src="/images/note.jpg"
+              alt="note image"
+              width="100%"
+              height="100%"
+            />
+            {/* <img
               src="/images/note.jpg"
               alt="note image"
               className="img-fluid"
               width="100%"
-            ></img>
+            ></img> */}
           </div>
           <div className="lb-text">
             <h3>
@@ -49,7 +62,7 @@ export default function Note() {
             </Button>
           </Grid>
         </Grid>
-        <Grid xs={2} />
+        <Grid item xs={2} />
       </Grid>
 
       <style jsx>

@@ -1,20 +1,27 @@
 import { Grid, Button } from "@mui/material";
+import Image from "next/image";
 export default function QnaWrite() {
   return (
     <Grid container spacing={3}>
-      <Grid xs={2} />
-      <Grid xs={8}>
-        <img
+      <Grid item xs={2} />
+      <Grid item xs={8}>
+        <Image
+          src="/images/notice.PNG"
+          alt="notice2 image"
+          width="100%"
+          height="100%"
+        />
+        {/* <img
           src="/images/notice.PNG"
           alt="notice2 image"
           className="img-fluid"
           width="100%"
-        ></img>
+        ></img> */}
         <Grid container spacing={2}>
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <h3 className="text-center">제목</h3>
           </Grid>
-          <Grid xs={9}>
+          <Grid item xs={9}>
             <textarea
               placeholder="제목을 입력해주세요."
               style={{ width: "80%" }}
@@ -23,10 +30,10 @@ export default function QnaWrite() {
         </Grid>
         <br></br>
         <Grid container spacing={2}>
-          <Grid xs={3}>
+          <Grid item xs={3}>
             <h3 className="text-center">문의 내용</h3>
           </Grid>
-          <Grid xs={9}>
+          <Grid item xs={9}>
             <textarea
               placeholder="문의 내용을 작성해주세요"
               style={{ minHeight: 300, width: "80%" }}
@@ -36,8 +43,8 @@ export default function QnaWrite() {
         <br></br>
         <br></br>
         <Grid container spacing={2}>
-          <Grid xs={5}></Grid>
-          <Grid xs={7}>
+          <Grid item xs={5}></Grid>
+          <Grid item xs={7}>
             <Button variant="contained" disabled>
               취소
             </Button>

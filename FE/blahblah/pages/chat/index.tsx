@@ -9,7 +9,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import ChatTabs from "../../component/chat/chatTabs";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
-import VoiceRecorder from "../../component/recorder/recorder";
+// import VoiceRecorder from "../../component/recorder/recorder";
 
 export default function Chat() {
   const dummyMessageList = [
@@ -182,9 +182,9 @@ export default function Chat() {
             <MicIcon sx={{ color: "black" }} />
           </IconButton>
         </Box>
-        <Box>
+        {/* <Box>
           <VoiceRecorder />
-        </Box>
+        </Box> */}
       </Box>
       <ChatTabs />
     </Box>

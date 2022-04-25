@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
-import { Image, Button, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import { useState } from "react";
+import Image from "next/image";
 export default function WordNote() {
   const [show, setShow] = useState(false);
 
@@ -17,12 +18,18 @@ export default function WordNote() {
       >
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <img
+          <Image
+            src="/images/characters.PNG"
+            alt="characters image"
+            width="100%"
+            height="100%"
+          />
+          {/* <img
             src="/images/characters.PNG"
             alt="characters image"
             className="img-fluid"
             width="100%"
-          ></img>
+          ></img> */}
           <h1 className="cent">Title:</h1>
           <Grid
             spacing={2}
