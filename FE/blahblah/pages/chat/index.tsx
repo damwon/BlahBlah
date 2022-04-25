@@ -8,6 +8,8 @@ import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ChatTabs from "../../component/chat/chatTabs";
 import SendIcon from "@mui/icons-material/Send";
+import MicIcon from "@mui/icons-material/Mic";
+import VoiceRecorder from "../../component/recorder/recorder";
 
 export default function Chat() {
   const dummyMessageList = [
@@ -19,6 +21,22 @@ export default function Chat() {
       username: "me",
       message: "Hello!",
     },
+    {
+      username: "Geuntae",
+      message: "Nice to meet you!",
+    },
+    {
+      username: "Geuntae",
+      message: "What do you do?",
+    },
+    {
+      username: "me",
+      message: "I am a frontend developer!",
+    },
+    {
+      username: "Geuntae",
+      message: "That's cool!",
+    },
   ];
   const [messageList, setMessageList] = useState<any[]>(dummyMessageList);
   const [message, setMessage] = useState<string>("");
@@ -26,14 +44,18 @@ export default function Chat() {
     setMessage(e.target.value);
   };
   const handleMessageList = () => {
-    setMessageList([...messageList, { username: "me", message: message }]);
-    setMessage("");
+    if (message) {
+      setMessageList([...messageList, { username: "me", message: message }]);
+      setMessage("");
+    } else {
+      alert("메시지를 입력해주세요.");
+    }
   };
 
   return (
     <Box
       style={{
-        height: "90vh",
+        height: "80vh",
         marginTop: "20px",
         display: "flex",
         justifyContent: "space-between",
@@ -127,7 +149,16 @@ export default function Chat() {
               }
             })}
         </Box>
-        <Box>
+        <Box
+          sx={{
+            borderTop: "1px solid black",
+            width: "100%",
+            height: "15%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <TextField
             sx={{ width: "500px" }}
             value={message}
@@ -143,6 +174,16 @@ export default function Chat() {
           <IconButton onClick={handleMessageList}>
             <SendIcon color="primary" />
           </IconButton>
+          <IconButton
+            onClick={() => {
+              alert("녹음버튼 눌림");
+            }}
+          >
+            <MicIcon sx={{ color: "black" }} />
+          </IconButton>
+        </Box>
+        <Box>
+          <VoiceRecorder />
         </Box>
       </Box>
       <ChatTabs />

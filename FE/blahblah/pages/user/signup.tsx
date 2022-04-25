@@ -1,3 +1,4 @@
+/* eslint-disable */
 import UserNav from '../../component/user/userNav'
 import { useRouter } from "next/router";
 import { Form, Button, Container, Row, Col,InputGroup,FormControl } from 'react-bootstrap';
@@ -14,6 +15,9 @@ export default function Signup() {
   const [inputEmail, setInputEmail] = useState("");
   // 이메일 중복체크
   const [isEmailOnly, setIsEmailOnly] = useState(false);
+  // 이메일 중복체크후 이메일 인증버튼 나오게
+  const [EmailCheck,setEmailCheck] = useState(false)
+  // 그리고 이메일창 onchange
 
   // 비밀번호
   const [password, setPassword] = useState("")
@@ -25,54 +29,56 @@ export default function Signup() {
     event.preventDefault();
     setInputEmail(event.target.value);
   };
-  // 주사용언어
-  const [first,setFirst] = useState("")
-  const firsts =[
-    {key:1, value:"한국어"},
-      {key:2, value:"영어"},
-      {key:3, value:"일본어"},
-      {key:4, value:"중국어"},
-      {key:5, value:"스페인어"},
-  ]
-  const onFirstHanlder=(e:any)=>{
-    setFirst(e.currentTarget.value)
-  }
-  // 배우고싶은언어
-  const [second,setSecond] = useState("")
-  const seconds =[
-    {key:1, value:"한국어"},
-      {key:2, value:"영어"},
-      {key:3, value:"일본어"},
-      {key:4, value:"중국어"},
-      {key:5, value:"스페인어"},
-  ]
-  const onSecondHanlder=(e:any)=>{
-    setSecond(e.currentTarget.value)
-  }
+  // 모국어
+  const [first,setFirst] = useState([])
+  const handleFirst = (input: any) => {
+    var array:any = [...first]
+    // console.log(array.includes(input))
+    if (array.includes(input)===false && array.length <=1){
+      array.push(input)
+    }
+    
+    setFirst(array);
+  };
+  // 구사언어
+  const [second,setSecond] = useState([])
+  const handleSecond = (input: any) => {
+    var array:any = [...second]
+    if (array.includes(input)===false && array.length <=2){
+      array.push(input)
+    }
+    
+    setSecond(array);
+  };
+  // 학습언어
+  const [third,setThird] = useState([])
+  const handleThird = (input: any) => {
+    var array:any = [...third]
+    if (array.includes(input)===false && array.length <=3){
+      array.push(input)
+    }
+    
+    setThird(array);
+  };
   // 성별
   const [gen,setGen] = useState("")
-  const gens =[
-    {key:1, value:"남자"},
-      {key:2, value:"여자"},
+  const gens =['남자','여자'
+    // {key:1, value:"남자"},
+    //   {key:2, value:"여자"},
 
   ]
   const onGenHanlder=(e:any)=>{
     setGen(e.currentTarget.value)
   }
   // 나이
-  const [age,setAge] = useState("")
-  // const [Content, setContent] = useState();
+  const [age,setAge] = useState(0)
+  const ages = []
+  for(var i=0;i<101;i++){
+    ages.push(i)
+  }
   const onAgeHanlder=(e:any)=>{
     setAge(e.currentTarget.value)
   }
-  const ages =[
-    {key:1, value:"10대"},
-      {key:2, value:"20대"},
-      {key:3, value:"30대"},
-      {key:4, value:"40대"},
-      {key:5, value:"50대"},
-  ]
-
   // 프로필
   const [profile,setProfile] = useState("")
   const handleProfile = (e:any)=>{
@@ -124,6 +130,8 @@ export default function Signup() {
 
   const onSubmit = (event:any)=>{
 
+//
+//
 // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
 
     // alert('hihi')
@@ -138,8 +146,10 @@ export default function Signup() {
     // first,second,gen,age,profile
 
     // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
-    if(password.length>=6&&password===pwcheck && first.length!==0 &&second.length!==0
-      &&gen.length!==0&&age.length!==0&&profile.length!==0){
+    // 여기 체크나 더하기~!
+    if(password.length>=6&&password===pwcheck 
+      && first.length!==0 &&second.length!==0
+      &&gen.length!==0&&age==0&&profile.length!==0){
       alert('가입완료')
     }else{
       alert('빈칸이있음')
@@ -177,38 +187,27 @@ export default function Signup() {
           <Col><h1>회원가입</h1>
           {/* const [result,setResult] = useState(false) */}
          
-            이메일
-            {inputEmail}
-            비번
-            {password}
-            비번체크
-            {pwcheck}
-            추가정보
-            {first}
-            {second}
-            {gen}
-            {age}
-            {profile}
+            
+            
+            
             <div className='logdiv'>
               {/* <Form></Form> */}
               {/* 이놈 제거! */}
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>이메일주소</Form.Label>
+                  <Form.Label>이메일주소 {inputEmail}</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
                   <button  onClick={onClickEmailCheck}>
                   이메일 중복체크
                 </button>
-                  {/* <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                  </Form.Text> */}
+                  
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>패스워드</Form.Label>
-                  <Form.Control type="password" placeholder="Password" onChange={handlePassword} />
+                  <Form.Label>패스워드 {password}</Form.Label>
+                  <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>패스워드확인-
+                  <Form.Label>패스워드확인 {pwcheck}-
                   {
               password===pwcheck && password.length >=6
               ?<>비밀번호가 같습니다.</>
@@ -216,52 +215,115 @@ export default function Signup() {
             }
 
                   </Form.Label>
-                  <Form.Control type="password" placeholder="Password" onChange={handlePwcheck} />
+                  <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} />
                 </Form.Group>
                 
-                <Form.Label>추가정보</Form.Label>
-                {/* <select onChange={onFirstHanlder} value={first}>
-		{firsts.map((item, index)=>(
-			<option key={item.key} value={item.key}>{item.value}</option>
-		))}
-    </select> */}
-  <Form.Select aria-label="Default select example"
-  onChange={onFirstHanlder} value={first}>
-  <option>주사용언어</option>
-  {firsts.map((item, index)=>(
-			<option key={item.key} value={item.key}>{item.value}</option>
-		))}
-</Form.Select>
-<Form.Select aria-label="Default select example"
-onChange={onSecondHanlder} value={second}>
-  <option>배우고싶은언어</option>
-  {seconds.map((item, index)=>(
-			<option key={item.key} value={item.key}>{item.value}</option>
-		))}
-</Form.Select>
+                <Form.Label>- 추가정보 -</Form.Label> 
+                {gen}
 <Form.Select aria-label="Default select example"
 onChange={onGenHanlder} value={gen}>
-  <option>성별</option>
+  <option>성별 </option>
   {gens.map((item, index)=>(
-			<option key={item.key} value={item.key}>{item.value}</option>
+			<option key={index} value={item}>{item}</option>
 		))}
 </Form.Select>
-<Form.Select aria-label="Default select example" 
-onChange={onAgeHanlder} value={age}>
-  <option>나이</option>
+{age}
+<Form.Select aria-label="Default select example"
+onChange={onAgeHanlder} value={gen}>
+  <option>나이 </option>
   {ages.map((item, index)=>(
-			<option key={item.key} value={item.key}>{item.value}</option>
+			<option key={index} value={item}>{item}</option>
 		))}
 </Form.Select>
+
+
+
+
+<Form.Label>모국어 {first} </Form.Label>
+    <div>
+    {/* <button onClick={()=>{
+      var newArray:any = [...first]
+      newArray.push('Korean')
+      setFirst(newArray)
+    }}>Korean</button> */}
+    <button onClick={()=>{
+      handleFirst('Korean')
+    }}>Korean</button>
+    <button onClick={()=>{
+      handleFirst('English')
+    }}>English</button>
+    <button onClick={()=>{
+      handleFirst('Japanese')
+    }}>Japanese</button>
+    <button onClick={()=>{
+      handleFirst('Chinese')
+    }}>Chinese</button>
+    <button onClick={()=>{
+      handleFirst('Spanish')
+    }}>Spanish</button>
+    <button onClick={()=>{
+      var newarr:any = []
+      setFirst(newarr)
+    }}>retry</button>
+    </div>
+    <Form.Label>구사언어 {second}</Form.Label>
+    <div>
+    <button onClick={()=>{
+      handleSecond('Korean')
+    }}>Korean</button>
+    <button onClick={()=>{
+      handleSecond('English')
+    }}>English</button>
+    <button onClick={()=>{
+      handleSecond('Japanese')
+    }}>Japanese</button>
+    <button onClick={()=>{
+      handleSecond('Chinese')
+    }}>Chinese</button>
+    <button onClick={()=>{
+      handleSecond('Spanish')
+    }}>Spanish</button>
+    <button onClick={()=>{
+      var newarr:any = []
+      setSecond(newarr)
+    }}>retry</button>
+    </div>
+    <Form.Label>학습언어 {third}</Form.Label>
+    <div>
+    <button onClick={()=>{
+      handleThird('Korean')
+    }}>Korean</button>
+    <button onClick={()=>{
+      handleThird('English')
+    }}>English</button>
+    <button onClick={()=>{
+      handleThird('Japanese')
+    }}>Japanese</button>
+    <button onClick={()=>{
+      handleThird('Chinese')
+    }}>Chinese</button>
+    <button onClick={()=>{
+      handleThird('Spanish')
+    }}>Spanish</button>
+    <button onClick={()=>{
+      var newarr:any = []
+      setThird(newarr)
+    }}>retry</button>
+    </div>
+
+
+      
+   
+  
 {/* <select onChange={onChangeHanlder} value={Content}>
 		{Options.map((item, index)=>(
 			<option key={item.key} value={item.key}>{item.value}</option>
 		))}
     </select> */}
-<Form.Label>자기소개</Form.Label>
+<Form.Label>자기소개 {profile}</Form.Label>
 <InputGroup>
     {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
-    <FormControl as="textarea" aria-label="With textarea" onChange={handleProfile}/>
+    <FormControl placeholder='10자이상 입력해주세요' as="textarea" aria-label="With textarea" onChange={handleProfile}/>
   </InputGroup>
 
                 
