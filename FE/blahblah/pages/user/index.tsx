@@ -1,29 +1,34 @@
 import { Container,Row,Col } from 'react-bootstrap';
+import { useEffect,useState } from "react";
 import axios from "axios";
 export default function User() {
-  const test = (event: any) => {
-     axios({
-      url: `https://blahblah.community:8443/api/auth/login`,
-      method: "post",
-      data: {
-        'email': 'kimssafy@ssafy.com',
-        'password': 'ssafy',
-      },
-    })
-      .then((res) => {
-        console.log(res)
-        localStorage.setItem("jwt", res.data.accessToken);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const [test,setTest] = useState(false)
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    console.log('로그인후 메인페이지에서 jwt읽기')
+    console.log(localStorage.getItem("jwt"))
+    if (token) {
+      setTest(true)
+    }
+  }, []);
 
+  const onLogout = (event:any) => {
+    event.preventDefault();
+    setTest(false);
+    localStorage.removeItem("jwt");
+    console.log(localStorage.getItem("key"))
+    // history.push("/login");
   };
+
   return (
     <>
       
-      <h1>UserIndex테스트페이지2232233</h1>
-      <button onClick={test}>테스트</button>
+      {
+    test===true
+    ?<>로그인상태</>
+    :<>비로그인상태</>
+  }
+  <button onClick={onLogout}>로그아웃</button>
     </>
   )
 }

@@ -28,7 +28,7 @@ export default function Login() {
       .then((res) => {
         localStorage.setItem("jwt", res.data.accessToken);
         console.log(res)
-        router.push("/")
+        router.push("/user")
       })
       .catch((err) => {
         console.log(err)
