@@ -1,5 +1,4 @@
 /* eslint-disable */
-import UserNav from '../../component/user/userNav'
 import { useRouter } from "next/router";
 import { Form, Button, Container, Row, Col,InputGroup,FormControl } from 'react-bootstrap';
 import axios from "axios";
@@ -17,18 +16,22 @@ export default function Signup() {
   const [isEmailOnly, setIsEmailOnly] = useState(false);
   // 이메일 중복체크후 이메일 인증버튼 나오게
   const [EmailCheck,setEmailCheck] = useState(false)
-  // 그리고 이메일창 onchange
+  // 그리고 이메일창 onchange 있으면 둘다 초기화
+   // 이메일 입력부분
+   const handleEmail = (event: any) => {
+    event.preventDefault();
+    setInputEmail(event.target.value);
+    // 이메일중복체크, 이메일인증 초기화
+    setIsEmailOnly(false)
+    setEmailCheck(false)
+  };
 
   // 비밀번호
   const [password, setPassword] = useState("")
   const [pwcheck,setPwcheck] = useState("")
   const [pwsame,setPwsame] = useState(false)
 
-  // 이메일 입력부분
-  const handleEmail = (event: any) => {
-    event.preventDefault();
-    setInputEmail(event.target.value);
-  };
+ 
   // 모국어
   const [first,setFirst] = useState([])
   const handleFirst = (input: any) => {
@@ -103,6 +106,7 @@ export default function Signup() {
         .then(function (response) {
           if (response.status === 200) {
             setIsEmailOnly((prevState) => true);
+            setEmailCheck((prevState)=> true)
           }
         })
         // 중복되는 경우, 다시 중복검사 + 알림(이미 사용중인 이메일)
@@ -196,9 +200,16 @@ export default function Signup() {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>이메일주소 {inputEmail}</Form.Label>
                   <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
-                  <button  onClick={onClickEmailCheck}>
+                  <button  onClick={onClickEmailCheck} >
                   이메일 중복체크
                 </button>
+                { EmailCheck === true
+                  ? <><button>
+                  이메일 인증
+                </button>
+                  </>
+                  :null
+                }
                   
                 </Form.Group>
 
