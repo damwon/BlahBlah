@@ -2,14 +2,14 @@ package com.ssafy.blahblah.api.response.member;
 
 
 
-import com.ssafy.homeland.common.model.response.BaseResponseBody;
+import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 유저 로그인 API ([POST] /api/v1/auth) 요청에 대한 응답값 정의.
+ * 유저 로그인 API ([POST] /api/auth) 요청에 대한 응답값 정의.
  */
 @Getter
 @Setter

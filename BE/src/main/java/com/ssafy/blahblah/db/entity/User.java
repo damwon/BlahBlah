@@ -18,60 +18,56 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class User {
+public class User extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id = null;
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
-    private int gender;
+    private Integer gender;
 
     @Column(nullable = false)
-    private int age;
-
-    @Column(nullable = false)
-    private String email;
+    private Integer age;
 
     @Column
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private String profileImg;
 
     @Column(nullable = false)
-    private int authority;
+    private String authority;
 
     @ColumnDefault("0")
-    private int reportedCnt;
-
-    @Column(nullable = false)
-    private LocalDateTime expiredAt;
+    private Integer reportedCnt;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private LocalDateTime expiredAt;
+
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
-    String password;
+    private String password;
 
     @Builder
-    public User(String name, int gender, int age, String email, String description, String profileImg,
-                int authority, int reportedCnt, LocalDateTime  expiredAt, LocalDateTime createdAt, String password) {
+    public User(String name, Integer gender, Integer age, String email, String description, String profileImg,
+                String authority, Integer reportedCnt, LocalDateTime expiredAt, LocalDateTime createdAt, String password) {
+        this.email = email;
         this.name = name;
         this.gender = gender;
         this.age = age;
-        this.email = email;
         this.description = description;
         this.profileImg = profileImg;
         this.authority = authority;
         this.reportedCnt = reportedCnt;
-        this.expiredAt = expiredAt;
         this.createdAt = createdAt;
+        this.expiredAt = expiredAt;
         this.password = password;
     }
 }

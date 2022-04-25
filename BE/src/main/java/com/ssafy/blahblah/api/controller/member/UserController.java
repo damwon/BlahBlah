@@ -9,7 +9,6 @@ import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.common.util.RedisUtil;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.UserRepository;
-import com.ssafy.blahblah.db.repository.UserRepositorySupport;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ import java.util.*;
 @Api(value = "유저 API", tags = {"User"})
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/user")
 public class UserController {
 
 	@Autowired
@@ -37,9 +36,6 @@ public class UserController {
 
 	@Autowired
 	UserRepository userRepository;
-
-	@Autowired
-	UserRepositorySupport userRepositorySupport;
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -50,18 +46,23 @@ public class UserController {
 	@Autowired
 	RedisUtil redisUtil;
 
-	@PostMapping()
+	@PostMapping("/signup")
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
 			@ApiResponse(code = 401, message = "인증 실패"),
 			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 409, message = "유효하지않은 값"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<? extends BaseResponseBody> register(
-			@RequestBody @ApiParam(value="회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
+	public ResponseEntity<? extends BaseResponseBody> signup(
+			@ApiParam(value="회원가입 정보", required = true)
+			@RequestBody UserRegisterPostReq registerInfo) {
 
 		User user = userService.createUser(registerInfo);
+		if(user == null) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "InvalidValue"));
+		}
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
@@ -81,12 +82,11 @@ public class UserController {
 		 * 엑세스 토큰이 잘못된 경우 401 에러({"error" : "SignatureVerificationException", :"message: " The Token's Signature resulted invalid when verified using the Algorithm: HmacSHA512"}) 발생
 		 */
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
+		String email = userDetails.getUsername();
+		User user = userService.getUserByEmail(email);
 		UserInfoRes userInfoRes = new UserInfoRes(user);
 
 		return new ResponseEntity<>(userInfoRes,HttpStatus.OK);
-
 	}
 
 
@@ -99,15 +99,18 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PutMapping("/edit")
-	public ResponseEntity editUserInfo(@ApiIgnore Authentication authentication, @ApiParam(value="회원정보 수정 데이터", required = true) @RequestBody UserEditInfoReq userEditPutReq) {
+	public ResponseEntity editUserInfo(
+			@ApiIgnore Authentication authentication,
+			@ApiParam(value="회원정보 수정 데이터", required = true)
+			@RequestBody UserEditInfoReq userEditPutReq) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
-		user.setNickname(userEditPutReq.getNickname());
-		user.setEmail(userEditPutReq.getEmail());
+		String email = userDetails.getUsername();
+		User user = userService.getUserByEmail(email);
+		user.setName(userEditPutReq.getName());
+		user.setDescription(userEditPutReq.getDescription());
+		user.setProfileImg(userEditPutReq.getProfileImg());
 		userRepository.save(user);
 		return new ResponseEntity(HttpStatus.OK);
-
 	}
 
 	@ApiOperation(value = "비밀번호 수정", notes = "로그인한 회원 본인의 정보 중 비밀번호를 수정한다.")
@@ -118,10 +121,13 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PutMapping("/edit-password")
-	public ResponseEntity editPassword(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value="새로운 비밀번호", required = true) UserEditPwReq userEditPasswordReq) {
+	public ResponseEntity editPassword(
+			@ApiIgnore Authentication authentication,
+			@ApiParam(value="새로운 비밀번호", required = true)
+			@RequestBody UserEditPwReq userEditPasswordReq) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
+		String email = userDetails.getUsername();
+		User user = userService.getUserByEmail(email);
 		user.setPassword(passwordEncoder.encode(userEditPasswordReq.getPassword()));
 		userRepository.save(user);
 		return new ResponseEntity(HttpStatus.OK);
@@ -139,8 +145,8 @@ public class UserController {
 	@PostMapping("/find-password")
 	public ResponseEntity findPassword(@RequestBody @ApiParam(value="유저 확인용 정보", required = true) UserFindPwReq userFindPwReq) {
 
-		String userId  = userFindPwReq.getId();
-		Optional<User> user_tmp = userRepositorySupport.findUserByUserId(userId);
+		String email  = userFindPwReq.getEmail();
+		Optional<User> user_tmp = userRepository.findByEmail(email);
 		if (user_tmp.isEmpty()) {
 			return new ResponseEntity<>("id-error",HttpStatus.NOT_FOUND);
 		}
@@ -148,20 +154,15 @@ public class UserController {
 			User user = user_tmp.get();
 			if (user.getEmail().equals(userFindPwReq.getEmail())) {
 				UUID uuid = UUID.randomUUID();
-				redisUtil.setDataExpire(uuid.toString(),user.getUserId(), 60 * 30L);
-				String CHANGE_PASSWORD_LINK = "https://i6c202.p.ssafy.io/find-password/";
+				redisUtil.setDataExpire(uuid.toString(),user.getEmail(), 60 * 30L);
+				String CHANGE_PASSWORD_LINK = "https://i6c203.p.ssafy.io/find-password/";
 				emailService.sendMail(user.getEmail(),"사용자 비밀번호 안내 메일",CHANGE_PASSWORD_LINK+uuid.toString());
 				return new ResponseEntity(HttpStatus.OK);
 			} else {
 				return new ResponseEntity<>("email-error",HttpStatus.NOT_FOUND);
 			}
 		}
-
-		//User user = userRepositorySupport.findUserByUserId(userFindPwReq.getId()).get();
-
-
 	}
-
 
 	@ApiOperation(value = "비밀번호 찾기 후 수정", notes = "비밀번호를 잊은 사용자가 이메일 인증을 통해 비밀번호를 변경한다.")
 	@ApiResponses({
@@ -172,32 +173,15 @@ public class UserController {
 	})
 	@ApiImplicitParam(name="key", value = "UUID", required = true)
 	@PutMapping("/password/{key}")
-	public ResponseEntity changePassword(@PathVariable String key, @RequestBody @ApiParam(value="유저의 새로운 비밀번호", required = true) UserChangePwReq userChangePwReq){
-		String memberId = redisUtil.getData(key);
-		User user = userRepositorySupport.findUserByUserId(memberId).get();
+	public ResponseEntity changePassword(
+			@PathVariable String key,
+			@ApiParam(value="유저의 새로운 비밀번호", required = true)
+			@RequestBody UserChangePwReq userChangePwReq){
+		String email = redisUtil.getData(key);
+		User user = userService.getUserByEmail(email);
 		user.setPassword(passwordEncoder.encode(userChangePwReq.getPassword()));
 		userRepository.save(user);
 		return new ResponseEntity(HttpStatus.OK);
-	}
-
-	@ApiOperation(value = "아이디 중복 체크", notes = "중복되는 아이디가 있는 지 체크한다")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code=409, message = "중복되는 아이디 존재"),
-			@ApiResponse(code = 500, message = "서버 오류")
-	})
-	@PostMapping("/duplicate-check-id")
-	public ResponseEntity duplicateCheckId(@RequestBody @ApiParam(value="체크할 아이디", required = true) Map<String,Object> body) {
-
-		String userId  = body.get("id").toString();
-		Optional<User> user = userRepositorySupport.findUserByUserId(userId);
-
-		if (user.isPresent()) {
-			return new ResponseEntity(HttpStatus.CONFLICT);
-		}
-		else {
-			return new ResponseEntity(HttpStatus.OK);
-		}
 	}
 
 	@ApiOperation(value = "이메일 중복 체크", notes = "중복되는 이메일이 있는 지 체크한다")
@@ -206,35 +190,10 @@ public class UserController {
 			@ApiResponse(code=409, message = "중복되는 이메일 존재"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	@PostMapping("/duplicate-check-email")
-	public ResponseEntity duplicateCheckEmail(@RequestBody @ApiParam(value="체크할 이메일", required = true) Map<String,Object> body) {
-
+	@PostMapping("/signup/duplicate-check-email")
+	public ResponseEntity duplicateCheckId(@RequestBody @ApiParam(value="체크할 이메일", required = true) Map<String,Object> body) {
 		String email  = body.get("email").toString();
 		Optional<User> user = userRepository.findByEmail(email);
-
-
-		if (user.isPresent()) {
-			return new ResponseEntity(HttpStatus.CONFLICT);
-		}
-		else {
-			return new ResponseEntity(HttpStatus.OK);
-		}
-	}
-
-
-
-	@ApiOperation(value = "닉네임 중복 체크", notes = "중복되는 닉네임이 있는 지 체크한다")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code=409, message = "중복되는 닉네임 존재"),
-			@ApiResponse(code = 500, message = "서버 오류")
-	})
-	@PostMapping("/duplicate-check-nickname")
-	public ResponseEntity duplicateCheckNickname(@RequestBody @ApiParam(value="체크할 닉네임", required = true) Map<String,Object> body) {
-
-		String nickname  = body.get("nickname").toString();
-		Optional<User> user = userRepository.findByNickname(nickname);
-
 
 		if (user.isPresent()) {
 			return new ResponseEntity(HttpStatus.CONFLICT);
@@ -254,8 +213,8 @@ public class UserController {
 	@GetMapping("/check-authority")
 	public String checkAuthority(@ApiIgnore Authentication authentication) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
+		String email = userDetails.getUsername();
+		User user = userService.getUserByEmail(email);
 		if (user.getAuthority().equals("user")) {
 			return "user";
 		} else {
