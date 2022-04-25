@@ -1,6 +1,4 @@
 /* eslint-disable */
-import UserNav from '../../component/user/userNav'
-
 export default function Friends() {
   return (
     <>
