@@ -1,17 +1,18 @@
 import { Grid, Button } from "@mui/material";
 import Image from "next/image";
-export default function QnaWrite() {
+export default function Write() {
   return (
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
         <Image
-          src="/images/notice.PNG"
-          alt="notice2 image"
+          src="/images/writeNotice.PNG"
+          alt="writeNotice image"
           width="200"
           height="40"
           layout="responsive"
         />
+        <br></br>
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <h3 className="text-center">제목</h3>
@@ -26,11 +27,11 @@ export default function QnaWrite() {
         <br></br>
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <h3 className="text-center">문의 내용</h3>
+            <h3 className="text-center">공지 내용</h3>
           </Grid>
           <Grid item xs={9}>
             <textarea
-              placeholder="문의 내용을 작성해주세요"
+              placeholder="공지사항 내용을 작성해주세요"
               style={{ minHeight: 300, width: "80%" }}
             />
           </Grid>

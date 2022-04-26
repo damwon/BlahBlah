@@ -51,19 +51,11 @@ export default function WordNote() {
               </div>
             </Grid>
           </Grid>
-
-          <Grid container spacing={3}>
-            <Grid item xs={5} />
-            <Grid item xs={2}>
-              <Button
-                variant="primary"
-                onClick={handleShow}
-                className="mar-auto"
-              >
-                단어 추가하기
-              </Button>
-            </Grid>
-          </Grid>
+          <div className="m">
+            <Button variant="primary" onClick={handleShow}>
+              단어 추가하기
+            </Button>
+          </div>
         </Grid>
         <Grid item xs={2} />
       </Grid>
@@ -88,8 +80,9 @@ export default function WordNote() {
           .cent {
             text-align: center;
           }
-          .mar-auto {
-            margin-left: auto;
+          .m {
+            width: 200px;
+            margin: 0 auto;
           }
         `}
       </style>
