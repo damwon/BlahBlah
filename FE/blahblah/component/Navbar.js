@@ -58,29 +58,25 @@ export default function userNav() {
             <Link href="/note">
               <a className="navmenu">&nbsp;노트 &nbsp;</a>
             </Link>
-            <Link href="/user/friends">
-            <a className="navmenu">&nbsp;친구 &nbsp;</a>
-              </Link>
               {
                 isLogin===false
                 ?<><Link href="/user/login">
-                <a className="navmenu">&nbsp;로긴&nbsp;</a>
-                  </Link></>
+                <a className="navmenu">&nbsp;로그인&nbsp;</a>
+                  </Link>
+              <Link href="/user/signup">
+                <a className="navmenu">&nbsp;회원가입 &nbsp;</a>
+                  </Link>
+                  </>
                 :<>
+                <Link href="/user/mypage">
+            <a className="navmenu">&nbsp;mypage &nbsp;</a>
+              </Link>
                 <a className="navmenu" onClick={onLogout}>&nbsp;로그아웃&nbsp;</a>
                   </>
               }
               
-              <Link href="/user/mypage">
-            <a className="navmenu">&nbsp;mypage &nbsp;</a>
-              </Link>
-              {
-                isLogin===false
-                ?<><Link href="/user/signup">
-                <a className="navmenu">&nbsp;가입 &nbsp;</a>
-                  </Link></>
-                :null
-              }             
+              
+                     
             </div>
       </div>
       <style jsx>{`
