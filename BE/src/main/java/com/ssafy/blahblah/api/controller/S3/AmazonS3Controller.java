@@ -28,8 +28,10 @@ public class AmazonS3Controller {
     @PostMapping("/image")
     @ApiOperation(value = "Amazon S3에 이미지 업로드", notes = "Amazon S3에 이미지 업로드 ")
     public ResponseEntity<List<String>> uploadImage(@ApiParam(value="img 파일들(여러 파일 업로드 가능)", required = true) @RequestPart(value="file",required = false) List<MultipartFile> multipartFile) {
-        return ResponseEntity.ok(awsS3Service.uploadImage(multipartFile));
+        return ResponseEntity.ok(awsS3Service.uploadImage(multipartFile, "sdsd"));
     }
+
+
 
     /**
      * Amazon S3에 이미지 업로드 된 파일을 삭제
@@ -38,7 +40,7 @@ public class AmazonS3Controller {
     @DeleteMapping("/image")
     @ApiOperation(value = "Amazon S3에 업로드 된 파일을 삭제", notes = "Amazon S3에 업로드된 이미지 삭제")
     public ResponseEntity<Void> deleteImage(@ApiParam(value="img 파일 하나 삭제", required = true) @RequestParam String fileName) {
-        awsS3Service.deleteImage(fileName);
+        awsS3Service.deleteImage(fileName,"asda");
         return ResponseEntity.ok(null);
     }
 }
