@@ -19,7 +19,7 @@ public class ChatController {
 
     private final ChatRoomService chatRoomService;
 
-    @PostMapping("/chat/create")
+    @PostMapping("/chat")
     public void createRoom(@RequestBody ChatRoomDTO chatRoomDTO){
         System.out.println("ChatController.createRoom");
         System.out.println("chatRoomDTO = " + chatRoomDTO.getUserId());
