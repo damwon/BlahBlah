@@ -80,6 +80,7 @@ public class MemoController {
 
     }
 
+    // user 사용하기
     @PutMapping("/{memoId}")
     public ResponseEntity memoUpdate(Authentication authentication, @PathVariable Long memoId, @RequestBody MemoReq memoReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
