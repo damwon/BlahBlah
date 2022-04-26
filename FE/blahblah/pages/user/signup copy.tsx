@@ -216,7 +216,7 @@ export default function Signup() {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>패스워드 {password}</Form.Label>
-                  <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} maxLength={10}/>
+                  <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} />
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>패스워드확인 {pwcheck}-
@@ -227,7 +227,7 @@ export default function Signup() {
             }
 
                   </Form.Label>
-                  <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} maxLength={10}/>
+                  <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} />
                 </Form.Group>
                 
                 <Form.Label>- 추가정보 -</Form.Label> 
@@ -348,8 +348,7 @@ onChange={handleProimg} value={proimg}>
 <Form.Label>자기소개 {profile}</Form.Label>
 <InputGroup>
     {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
-    <FormControl placeholder='10자이상 입력해주세요' as="textarea" 
-    aria-label="With textarea" onChange={handleProfile}/>
+    <FormControl placeholder='10자이상 입력해주세요' as="textarea" aria-label="With textarea" onChange={handleProfile}/>
   </InputGroup>
 
                 

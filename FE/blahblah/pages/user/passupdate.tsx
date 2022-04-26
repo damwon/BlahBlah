@@ -19,9 +19,11 @@ export default function PassUpdate() {
   const [passcheck,setPassCheck] = useState('')
   const handlePass = (e:any)=>{
     setPass(e.currentTarget.value)
+    
   }
   const handlePassCheck = (e:any)=>{
     setPassCheck(e.currentTarget.value)
+    
   }
 
   const onEditPassword = (event:any) => {
@@ -59,9 +61,9 @@ export default function PassUpdate() {
       
       <div style={{ width: '16rem',margin:'20px' }}>
       비밀번호{pass}
-      <input type="password" onChange={handlePass}></input>
+      <input type="password" onChange={handlePass} maxLength={10}></input>
       비밀번호 확인{passcheck}
-      <input type="password" onChange={handlePassCheck}></input>
+      <input type="password" onChange={handlePassCheck} maxLength={10}></input>
       </div>
 
       <button onClick={onEditPassword}>수정하기</button>
