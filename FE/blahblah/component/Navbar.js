@@ -1,7 +1,30 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useEffect,useState } from "react";
+
 export default function userNav() {
+
+  const router = useRouter()
+  const [isLogin,setIslogin] = useState(false)
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    console.log('로그인후 NavBar에서 jwt읽기')
+    // console.log(localStorage.getItem("jwt"))
+    if (token) {
+      setIslogin(true)
+    }
+  }, []);
+
+  const onLogout = (event) => {
+    event.preventDefault();
+    setIslogin(false);
+    localStorage.removeItem("jwt");
+    // location.reload()
+    // console.log(localStorage.getItem("key"))
+    router.push("/user/login")
+  };
+
   return (
     <>
       {/* 테스트 */}
@@ -36,21 +59,25 @@ export default function userNav() {
             <Link href="/note">
               <a className="navmenu">&nbsp;노트 &nbsp;</a>
             </Link>
-            <Link href="/user/friends">
- <a className="navmenu">&nbsp;친구 &nbsp;</a>
-  </Link>
-  <Link href="/user/login">
- <a className="navmenu">&nbsp;로긴 &nbsp;</a>
-  </Link>
-  <Link href="/user/mypage">
- <a className="navmenu">&nbsp;mypage &nbsp;</a>
-  </Link>
-  <Link href="/user/signup">
- <a className="navmenu">&nbsp;가입 &nbsp;</a>
-  </Link>
-  <Link href="/user/updatecheck">
- <a className="navmenu">&nbsp;회원수정 &nbsp;</a>
-  </Link>
+              {
+                isLogin===false
+                ?<><Link href="/user/login">
+                <a className="navmenu">&nbsp;로그인&nbsp;</a>
+                  </Link>
+              <Link href="/user/signup">
+                <a className="navmenu">&nbsp;회원가입 &nbsp;</a>
+                  </Link>
+                  </>
+                :<>
+                <Link href="/user/mypage">
+            <a className="navmenu">&nbsp;마이페이지 &nbsp;</a>
+              </Link>
+                <a className="navmenu" onClick={onLogout}>&nbsp;로그아웃&nbsp;</a>
+                  </>
+              }
+              
+              
+                     
             </div>
       </div>
       <style jsx>{`

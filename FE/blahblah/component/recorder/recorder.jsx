@@ -1,9 +1,16 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Button } from "@mui/material";
 
-const useRecorder = () => {
+function VoiceRecorder() {
+  // let [audioURL, isRecording, startRecording, stopRecording] = useRecorder();
   const [audioURL, setAudioURL] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const [recorder, setRecorder] = useState(null);
+
+  async function requestRecorder() {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    return new MediaRecorder(stream);
+  }
 
   useEffect(() => {
     // Lazily obtain recorder first time we're recording.
@@ -38,11 +45,18 @@ const useRecorder = () => {
     setIsRecording(false);
   };
 
-  return [audioURL, isRecording, startRecording, stopRecording];
-};
-
-async function requestRecorder() {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  return new MediaRecorder(stream);
+  return (
+    <>
+    {audioURL && <audio src={audioURL} controls controlsList="nodownload" />}
+      
+      <Button onClick={startRecording} disabled={isRecording}>
+        녹음 시작
+      </Button>
+      <Button onClick={stopRecording} disabled={!isRecording}>
+        녹음 중지
+      </Button>
+    </>
+  );
 }
-export default useRecorder;
+
+export default VoiceRecorder;

@@ -25,73 +25,7 @@ export default function Signup() {
     setIsEmailOnly(false)
     setEmailCheck(false)
   };
-
-  // 비밀번호
-  const [password, setPassword] = useState("")
-  const [pwcheck,setPwcheck] = useState("")
-  const [pwsame,setPwsame] = useState(false)
-
- 
-  // 모국어
-  const [first,setFirst] = useState([])
-  const handleFirst = (input: any) => {
-    var array:any = [...first]
-    // console.log(array.includes(input))
-    if (array.includes(input)===false && array.length <=1){
-      array.push(input)
-    }
-    
-    setFirst(array);
-  };
-  // 구사언어
-  const [second,setSecond] = useState([])
-  const handleSecond = (input: any) => {
-    var array:any = [...second]
-    if (array.includes(input)===false && array.length <=2){
-      array.push(input)
-    }
-    
-    setSecond(array);
-  };
-  // 학습언어
-  const [third,setThird] = useState([])
-  const handleThird = (input: any) => {
-    var array:any = [...third]
-    if (array.includes(input)===false && array.length <=3){
-      array.push(input)
-    }
-    
-    setThird(array);
-  };
-  // 성별
-  const [gen,setGen] = useState("")
-  const gens =['남자','여자'
-    // {key:1, value:"남자"},
-    //   {key:2, value:"여자"},
-
-  ]
-  const onGenHanlder=(e:any)=>{
-    setGen(e.currentTarget.value)
-  }
-  // 나이
-  const [age,setAge] = useState(0)
-  const ages = []
-  for(var i=0;i<101;i++){
-    ages.push(i)
-  }
-  const onAgeHanlder=(e:any)=>{
-    setAge(e.currentTarget.value)
-  }
-  // 프로필
-  const [profile,setProfile] = useState("")
-  const handleProfile = (e:any)=>{
-    setProfile(e.currentTarget.value)
-  }
-
-
-
-
-  // 이메일 중복체크
+    // 이메일 중복체크
   const onClickEmailCheck = () => {
     const email = inputEmail;
     const regEmail =
@@ -119,6 +53,73 @@ export default function Signup() {
       alert("이메일 형식이 아닙니다.");
     }
   };
+
+  // 비밀번호
+  const [password, setPassword] = useState("")
+  const [pwcheck,setPwcheck] = useState("")
+  const [pwsame,setPwsame] = useState(false)
+
+  // 언어종류
+  const languages = ['Korean','English','Japanese','Chinese','Spanish'
+  ,'a','b','c','....']
+  // 모국어
+  const [first,setFirst] = useState([])
+  const handleFirst = (e: any) => {
+    
+    var array:any = [...first]
+    // console.log(array.includes(input))
+    if (array.includes(e.currentTarget.value)===false && array.length <=1){
+      array.push(e.currentTarget.value)
+    }
+    
+    setFirst(array);
+  };
+  // 구사언어
+  const [second,setSecond] = useState([])
+  const handleSecond = (e: any) => {
+    var array:any = [...second]
+    if (array.includes(e.currentTarget.value)===false && array.length <=2){
+      array.push(e.currentTarget.value)
+    }
+    
+    setSecond(array);
+  };
+  // 학습언어
+  const [third,setThird] = useState([])
+  const handleThird = (e: any) => {
+    var array:any = [...third]
+    if (array.includes(e.currentTarget.value)===false && array.length <=3){
+      array.push(e.currentTarget.value)
+    }
+    
+    setThird(array);
+  };
+  // 성별
+  const [gen,setGen] = useState("")
+  const gens =['남자','여자']
+  const onGenHanlder=(e:any)=>{
+    setGen(e.currentTarget.value)
+  }
+  // 나이
+  const [age,setAge] = useState(0)
+  const ages = []
+  for(var i=0;i<101;i++){
+    ages.push(i)
+  }
+  const onAgeHanlder=(e:any)=>{
+    setAge(e.currentTarget.value)
+  }
+  // 프로필
+  const [profile,setProfile] = useState("")
+  const handleProfile = (e:any)=>{
+    setProfile(e.currentTarget.value)
+  }
+  // 프로필 이미지
+  const [proimg,setProimg] = useState('0')
+  const imgarr = ['0','1','2','3','4','5','6','7','8','9']
+  const handleProimg = (e:any)=>{
+    setProimg(e.currentTarget.value)
+  }
 
   // 비밀번호 입력부분
   const handlePassword = (event: any) => {
@@ -248,58 +249,67 @@ onChange={onAgeHanlder} value={gen}>
 </Form.Select>
 
 
+<hr/>
 
-
-<Form.Label>모국어 {first} </Form.Label>
-    <div>
-    {/* <button onClick={()=>{
-      var newArray:any = [...first]
-      newArray.push('Korean')
-      setFirst(newArray)
-    }}>Korean</button> */}
-    <button onClick={()=>{
-      handleFirst('Korean')
-    }}>Korean</button>
-    <button onClick={()=>{
-      handleFirst('English')
-    }}>English</button>
-    <button onClick={()=>{
-      handleFirst('Japanese')
-    }}>Japanese</button>
-    <button onClick={()=>{
-      handleFirst('Chinese')
-    }}>Chinese</button>
-    <button onClick={()=>{
-      handleFirst('Spanish')
-    }}>Spanish</button>
-    <button onClick={()=>{
+<Form.Label>모국어(2개까지) {first} </Form.Label>
+<Form.Select aria-label="Default select example"
+onChange={handleFirst} value={first}>
+  <option>언어선택 </option>
+  {languages.map((item, index)=>(
+			<option key={index} value={item}>{item}</option>
+		))}
+</Form.Select>
+<button onClick={()=>{
       var newarr:any = []
       setFirst(newarr)
     }}>retry</button>
-    </div>
-    <Form.Label>구사언어 {second}</Form.Label>
-    <div>
-    <button onClick={()=>{
-      handleSecond('Korean')
-    }}>Korean</button>
-    <button onClick={()=>{
-      handleSecond('English')
-    }}>English</button>
-    <button onClick={()=>{
-      handleSecond('Japanese')
-    }}>Japanese</button>
-    <button onClick={()=>{
-      handleSecond('Chinese')
-    }}>Chinese</button>
-    <button onClick={()=>{
-      handleSecond('Spanish')
-    }}>Spanish</button>
-    <button onClick={()=>{
+<hr/>
+    <Form.Label>구사언어(3개까지) {second}</Form.Label>
+    <Form.Select aria-label="Default select example"
+onChange={handleSecond} value={gen}>
+  <option>언어선택 </option>
+  {languages.map((item, index)=>(
+			<option key={index} value={item}>{item}</option>
+		))}
+</Form.Select>
+<button onClick={()=>{
       var newarr:any = []
       setSecond(newarr)
     }}>retry</button>
-    </div>
-    <Form.Label>학습언어 {third}</Form.Label>
+<hr/>
+    <Form.Label>학습언어(4개까지) {third}</Form.Label>
+    <Form.Select aria-label="Default select example"
+onChange={handleThird} value={gen}>
+  <option>언어선택 </option>
+  {languages.map((item, index)=>(
+			<option key={index} value={item}>{item}</option>
+		))}
+</Form.Select>
+<button onClick={()=>{
+      var newarr:any = []
+      setThird(newarr)
+    }}>retry</button>
+
+<hr/>
+    <Form.Label>프로필이미지 {proimg}</Form.Label>
+    <Form.Select aria-label="Default select example"
+onChange={handleProimg} value={gen}>
+  <option>이미지고르기 </option>
+  {imgarr.map((item, index)=>(
+			<option key={index} value={item}>{item}</option>
+		))}
+</Form.Select>
+<button onClick={()=>{
+      var newarr:any = []
+      setThird(newarr)
+    }}>retry</button>
+
+
+
+    
+
+
+    {/* <Form.Label>학습언어 {third}</Form.Label>
     <div>
     <button onClick={()=>{
       handleThird('Korean')
@@ -320,7 +330,7 @@ onChange={onAgeHanlder} value={gen}>
       var newarr:any = []
       setThird(newarr)
     }}>retry</button>
-    </div>
+    </div> */}
 
 
       
