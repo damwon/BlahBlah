@@ -33,8 +33,8 @@ export default function Signup() {
     // 이메일 형식, 중복 확인
     if (regEmail.test(email) === true) {
       axios
-        .post("이메일체크api", {
-          inputEmail: inputEmail,
+        .post("https://blahblah.community:8443/api/user/signup/duplicate-check-email", {
+          'email': inputEmail,
         })
         // 중복되지 않는 경우, 중복검사 확인
         .then(function (response) {
@@ -231,17 +231,19 @@ export default function Signup() {
                 </Form.Group>
                 
                 <Form.Label>- 추가정보 -</Form.Label> 
+
                 {gen}
 <Form.Select aria-label="Default select example"
-onChange={onGenHanlder} value={gen}>
+onChange={onGenHanlder} >
   <option>성별 </option>
   {gens.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>
 		))}
 </Form.Select>
+
 {age}
 <Form.Select aria-label="Default select example"
-onChange={onAgeHanlder} value={gen}>
+onChange={onAgeHanlder} >
   <option>나이 </option>
   {ages.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>
@@ -253,7 +255,7 @@ onChange={onAgeHanlder} value={gen}>
 
 <Form.Label>모국어(2개까지) {first} </Form.Label>
 <Form.Select aria-label="Default select example"
-onChange={handleFirst} value={first}>
+onChange={handleFirst} >
   <option>언어선택 </option>
   {languages.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>
@@ -266,7 +268,7 @@ onChange={handleFirst} value={first}>
 <hr/>
     <Form.Label>구사언어(3개까지) {second}</Form.Label>
     <Form.Select aria-label="Default select example"
-onChange={handleSecond} value={gen}>
+onChange={handleSecond} >
   <option>언어선택 </option>
   {languages.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>
@@ -279,7 +281,9 @@ onChange={handleSecond} value={gen}>
 <hr/>
     <Form.Label>학습언어(4개까지) {third}</Form.Label>
     <Form.Select aria-label="Default select example"
-onChange={handleThird} value={gen}>
+onChange={handleThird} 
+// value={third}
+>
   <option>언어선택 </option>
   {languages.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>
@@ -293,7 +297,7 @@ onChange={handleThird} value={gen}>
 <hr/>
     <Form.Label>프로필이미지 {proimg}</Form.Label>
     <Form.Select aria-label="Default select example"
-onChange={handleProimg} value={gen}>
+onChange={handleProimg} value={proimg}>
   <option>이미지고르기 </option>
   {imgarr.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>

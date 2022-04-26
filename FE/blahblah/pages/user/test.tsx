@@ -20,16 +20,50 @@ export default function Login() {
     console.log(error)  
   })
   };
+
+  const onClickLogin2 = (event: any) => {
+    event.preventDefault();
+    axios({
+      method:'post',
+      url:'https://blahblah.community:8443/api/user/signup/duplicate-check-email',
+      data: {
+        'email':'flykimjiwon22@gmail.com'
+      },
+    })
+    .then((result)=>{console.log('요청성공')
+    console.log(result)
+ 
+  })
+    .catch((error)=>{console.log('요청실패')
+    console.log(error)  
+  })
+  };
+
+
   return (
     <>
       
       <Container>
 
         <Row>
-          <Col></Col>
+          <Col>
+          
+
+
+<hr/>
+
+
+   
+    
+    
+          </Col>
           <Col>
                 <button type="submit" onClick={onClickLogin}>
-                  테스트
+                  테스트get
+                </button>
+
+                <button type="submit" onClick={onClickLogin2}>
+                  테스트post
                 </button>
 
                

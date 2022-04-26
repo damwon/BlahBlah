@@ -85,9 +85,13 @@ export default function Mypage() {
   <ListGroup.Item>나이:{profile.age}</ListGroup.Item>
   <ListGroup.Item>자기소개:{profile.description}</ListGroup.Item>
   <Button onClick={()=>{
-    router.push('/user/updatecheck')
+    router.push('/user/profileupdate')
   }}
-  style={{ marginBottom:'20px' }} variant="outline-dark">회원정보수정</Button>
+  style={{ marginBottom:'20px' }} variant="outline-dark">프로필수정</Button>
+  <Button onClick={()=>{
+    router.push('/user/passupdate')
+  }}
+  style={{ marginBottom:'20px' }} variant="outline-dark">비밀번호수정</Button>
 </ListGroup>
       </Col>
       <Col sm = {3} sx = {3}>
