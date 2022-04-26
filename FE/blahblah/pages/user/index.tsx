@@ -28,16 +28,16 @@ export default function User() {
       
       {
     isLogin===true
-    ?<>로그인상태</>
+    ?<>로그인성공</>
     :<>비로그인상태</>
   }
-  {
+  {/* {
     isLogin===true
     ?<><button onClick={onLogout}>로그아웃</button></>
     :<><button onClick={()=>{
       router.push("/user/login")
     }}>로그인하기</button></>
-  }
+  } */}
     </>
   )
 }
