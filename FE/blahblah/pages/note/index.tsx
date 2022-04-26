@@ -41,27 +41,28 @@ export default function Note() {
             </h3>
           </div>
         </div>
-        <Grid container spacing={3}>
-          <Grid item xs={5} />
-          <Grid item xs={4}>
-            <Button className="mar" variant="contained" disabled>
-              취소
-            </Button>
-            <Button
-              className="mar"
-              variant="contained"
-              onClick={() => {
-                router.push(`/note/edit`);
-              }}
-            >
-              수정
-            </Button>
-          </Grid>
-        </Grid>
+        <div className="m">
+          <Button className="mar" variant="contained" disabled>
+            취소
+          </Button>{" "}
+          <Button
+            className="mar"
+            variant="contained"
+            onClick={() => {
+              router.push(`/note/edit`);
+            }}
+          >
+            수정
+          </Button>
+        </div>
       </Grid>
 
       <style jsx>
         {`
+          .m {
+            width: 200px;
+            margin: 0 auto;
+          }
           .lb-wrap {
             width: 40%;
             margin: 10px auto;

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
-import { useState } from "react";
+import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
 
@@ -28,7 +28,10 @@ export default function Login() {
       .then((res) => {
         localStorage.setItem("jwt", res.data.accessToken);
         console.log(res)
-        router.push("/user")
+        location.reload()
+        // router.replace('/user')
+        // router.push("/user")
+        // 리다이렉트를하자
       })
       .catch((err) => {
         console.log(err)
@@ -36,6 +39,17 @@ export default function Login() {
 
       });
   };
+  // 로그인상태인데 로그인창오면 메인페이지로
+  const [isLogin,setIslogin] = useState(false)
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    console.log('로그인후 NavBar에서 jwt읽기')
+    // console.log(localStorage.getItem("jwt"))
+    if (token) {
+      setIslogin(true)
+      router.push("/user")
+    }
+  }, []);
   return (
     <>
       

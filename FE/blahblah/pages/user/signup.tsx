@@ -26,33 +26,33 @@ export default function Signup() {
     setEmailCheck(false)
   };
     // 이메일 중복체크
-    const onClickEmailCheck = () => {
-      const email = inputEmail;
-      const regEmail =
-        /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-      // 이메일 형식, 중복 확인
-      if (regEmail.test(email) === true) {
-        axios
-          .post("이메일체크api", {
-            inputEmail: inputEmail,
-          })
-          // 중복되지 않는 경우, 중복검사 확인
-          .then(function (response) {
-            if (response.status === 200) {
-              setIsEmailOnly((prevState) => true);
-              setEmailCheck((prevState)=> true)
-            }
-          })
-          // 중복되는 경우, 다시 중복검사 + 알림(이미 사용중인 이메일)
-          .catch(function (error) {
-            alert("이미 사용중인 이메일입니다.");
-            setIsEmailOnly((prevState) => false);
-          });
-        // 이메일 형식 X, 다시 중복검사 + 알림(메일 형식 아님)
-      } else {
-        alert("이메일 형식이 아닙니다.");
-      }
-    };
+  const onClickEmailCheck = () => {
+    const email = inputEmail;
+    const regEmail =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    // 이메일 형식, 중복 확인
+    if (regEmail.test(email) === true) {
+      axios
+        .post("이메일체크api", {
+          inputEmail: inputEmail,
+        })
+        // 중복되지 않는 경우, 중복검사 확인
+        .then(function (response) {
+          if (response.status === 200) {
+            setIsEmailOnly((prevState) => true);
+            setEmailCheck((prevState)=> true)
+          }
+        })
+        // 중복되는 경우, 다시 중복검사 + 알림(이미 사용중인 이메일)
+        .catch(function (error) {
+          alert("이미 사용중인 이메일입니다.");
+          setIsEmailOnly((prevState) => false);
+        });
+      // 이메일 형식 X, 다시 중복검사 + 알림(메일 형식 아님)
+    } else {
+      alert("이메일 형식이 아닙니다.");
+    }
+  };
 
   // 비밀번호
   const [password, setPassword] = useState("")
@@ -253,7 +253,7 @@ onChange={onAgeHanlder} value={gen}>
 
 <Form.Label>모국어(2개까지) {first} </Form.Label>
 <Form.Select aria-label="Default select example"
-onChange={handleFirst} value={gen}>
+onChange={handleFirst} value={first}>
   <option>언어선택 </option>
   {languages.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>

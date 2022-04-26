@@ -1,4 +1,4 @@
-import { Grid, Button, Input } from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import Image from "next/image";
 
 export default function Edit() {

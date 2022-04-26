@@ -3,7 +3,6 @@ import {
   Stack,
   Autocomplete,
   TextField,
-  Box,
   InputLabel,
   MenuItem,
   FormControl,
@@ -93,7 +92,7 @@ export default function Report() {
                   onChange={handleChange}
                 >
                   <MenuItem value={7}>7일 정지</MenuItem>
-                  <MenuItem value={20}>30일 정지</MenuItem>
+                  <MenuItem value={30}>30일 정지</MenuItem>
                   <MenuItem value={0}>영구 정지</MenuItem>
                 </Select>
               </FormControl>
