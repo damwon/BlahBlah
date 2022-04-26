@@ -253,7 +253,7 @@ onChange={onAgeHanlder} value={gen}>
 
 <Form.Label>모국어(2개까지) {first} </Form.Label>
 <Form.Select aria-label="Default select example"
-onChange={handleFirst} value={gen}>
+onChange={handleFirst} value={first}>
   <option>언어선택 </option>
   {languages.map((item, index)=>(
 			<option key={index} value={item}>{item}</option>
