@@ -74,12 +74,13 @@ export default function userNav() {
               <Link href="/user/mypage">
             <a className="navmenu">&nbsp;mypage &nbsp;</a>
               </Link>
-              <Link href="/user/signup">
-            <a className="navmenu">&nbsp;가입 &nbsp;</a>
-              </Link>
-              <Link href="/user/updatecheck">
-            <a className="navmenu">&nbsp;회원수정 &nbsp;</a>
-              </Link>
+              {
+                isLogin===false
+                ?<><Link href="/user/signup">
+                <a className="navmenu">&nbsp;가입 &nbsp;</a>
+                  </Link></>
+                :null
+              }             
             </div>
       </div>
       <style jsx>{`
