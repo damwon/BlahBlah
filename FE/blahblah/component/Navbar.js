@@ -20,6 +20,7 @@ export default function userNav() {
     event.preventDefault();
     setIslogin(false);
     localStorage.removeItem("jwt");
+    // location.reload()
     // console.log(localStorage.getItem("key"))
     router.push("/user/login")
   };
@@ -69,7 +70,7 @@ export default function userNav() {
                   </>
                 :<>
                 <Link href="/user/mypage">
-            <a className="navmenu">&nbsp;mypage &nbsp;</a>
+            <a className="navmenu">&nbsp;마이페이지 &nbsp;</a>
               </Link>
                 <a className="navmenu" onClick={onLogout}>&nbsp;로그아웃&nbsp;</a>
                   </>
