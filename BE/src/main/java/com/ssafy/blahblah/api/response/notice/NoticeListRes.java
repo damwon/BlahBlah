@@ -1,6 +1,5 @@
-package com.ssafy.blahblah.api.response;
+package com.ssafy.blahblah.api.response.notice;
 
-import com.ssafy.blahblah.db.entity.Memo;
 import com.ssafy.blahblah.db.entity.Notice;
 import lombok.*;
 

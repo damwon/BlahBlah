@@ -1,8 +1,8 @@
-package com.ssafy.blahblah.api.controller;
+package com.ssafy.blahblah.api.controller.study;
 
-import com.ssafy.blahblah.api.request.WordbookReq;
-import com.ssafy.blahblah.api.response.WordListRes;
-import com.ssafy.blahblah.api.response.WordbookListRes;
+import com.ssafy.blahblah.api.request.study.WordbookReq;
+import com.ssafy.blahblah.api.response.study.WordListRes;
+import com.ssafy.blahblah.api.response.study.WordbookListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
-@RequestMapping("api/v1/wordbook")
+@RequestMapping("/api/wordbook")
 public class WordbookContorller {
 
     @Autowired
@@ -77,6 +77,7 @@ public class WordbookContorller {
 
     }
 
+    // user 사용하기
     @PutMapping("/{wordbookId}")
     public ResponseEntity wordbookUpdate(Authentication authentication,@PathVariable Long wordbookId, @RequestBody WordbookReq wordbookReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
@@ -92,6 +93,8 @@ public class WordbookContorller {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+
+    // user 사용하기
     @DeleteMapping("/{wordbookId}")
     public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long wordbookId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();

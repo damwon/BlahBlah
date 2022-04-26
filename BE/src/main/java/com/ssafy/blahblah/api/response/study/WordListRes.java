@@ -1,4 +1,4 @@
-package com.ssafy.blahblah.api.response;
+package com.ssafy.blahblah.api.response.study;
 
 import com.ssafy.blahblah.db.entity.Word;
 import com.ssafy.blahblah.db.entity.Wordbook;

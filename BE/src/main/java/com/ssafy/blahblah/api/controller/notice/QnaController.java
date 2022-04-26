@@ -1,10 +1,11 @@
-package com.ssafy.blahblah.api.controller;
+package com.ssafy.blahblah.api.controller.notice;
 
-import com.ssafy.blahblah.api.request.MyQnaReq;
-import com.ssafy.blahblah.api.request.QnaAnswerReq;
-import com.ssafy.blahblah.api.response.MyQnaDetailRes;
-import com.ssafy.blahblah.api.response.MyQnaListRes;
+import com.ssafy.blahblah.api.request.notice.MyQnaReq;
+import com.ssafy.blahblah.api.request.notice.QnaAnswerReq;
+import com.ssafy.blahblah.api.response.notice.MyQnaDetailRes;
+import com.ssafy.blahblah.api.response.notice.MyQnaListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
+import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Qna;
 import com.ssafy.blahblah.db.entity.User;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
-@RequestMapping("api/v1/qna")
+@RequestMapping("/api/qna")
 public class QnaController {
 
     @Autowired
@@ -32,6 +33,9 @@ public class QnaController {
 
     @Autowired
     QnaRepository qnaRepository;
+
+    @Autowired
+    AwsS3Service awsS3Service;
 
     @GetMapping
     public ResponseEntity myQnaList(Authentication authentication) {
@@ -69,6 +73,7 @@ public class QnaController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
+//        List<String> image = awsS3Service.uploadImage(multipartFile);
         qnaRepository.save(Qna.builder()
                 .title(qnaReq.getTitle())
                 .content(qnaReq.getContent())
@@ -80,6 +85,7 @@ public class QnaController {
 
     }
 
+    // user 사용하기
     @DeleteMapping("/{qnaId}")
     public ResponseEntity myQnaDelete(Authentication authentication, @PathVariable Long qnaId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
@@ -140,7 +146,7 @@ public class QnaController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자가 아닙니다");
     }
 
-    @DeleteMapping("admin/{qnaId}")
+    @PutMapping("admin/{qnaId}")
     public ResponseEntity answerDelete(Authentication authentication,@PathVariable Long qnaId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();

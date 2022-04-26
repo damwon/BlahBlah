@@ -1,7 +1,7 @@
-package com.ssafy.blahblah.api.controller;
-import com.ssafy.blahblah.api.request.NoticeReq;
-import com.ssafy.blahblah.api.response.NoticeDetailRes;
-import com.ssafy.blahblah.api.response.NoticeListRes;
+package com.ssafy.blahblah.api.controller.notice;
+import com.ssafy.blahblah.api.request.notice.NoticeReq;
+import com.ssafy.blahblah.api.response.notice.NoticeDetailRes;
+import com.ssafy.blahblah.api.response.notice.NoticeListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Notice;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
-@RequestMapping("api/v1/notice")
+@RequestMapping("/api/notice")
 public class NoticeController {
 
     @Autowired

@@ -1,6 +1,6 @@
-package com.ssafy.blahblah.api.controller;
+package com.ssafy.blahblah.api.controller.study;
 
-import com.ssafy.blahblah.api.request.WordReq;
+import com.ssafy.blahblah.api.request.study.WordReq;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
-@RequestMapping("api/v1/word")
+@RequestMapping("/api/word")
 public class WordController {
 
     @Autowired
@@ -56,6 +56,7 @@ public class WordController {
     }
 
 
+    // user 사용하기
     @PutMapping("/{wordId}")
     public ResponseEntity wordbookUpdate(Authentication authentication,@PathVariable Long wordId, @RequestBody WordReq wordReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
@@ -73,6 +74,7 @@ public class WordController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // user 사용하기
     @DeleteMapping("/{wordId}")
     public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long wordId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();

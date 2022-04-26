@@ -1,7 +1,6 @@
-package com.ssafy.blahblah.api.response;
+package com.ssafy.blahblah.api.response.study;
 
 import com.ssafy.blahblah.db.entity.Memo;
-import com.ssafy.blahblah.db.entity.Wordbook;
 import lombok.*;
 
 import java.time.LocalDateTime;

@@ -1,8 +1,8 @@
-package com.ssafy.blahblah.api.controller;
+package com.ssafy.blahblah.api.controller.study;
 
-import com.ssafy.blahblah.api.request.MemoReq;
-import com.ssafy.blahblah.api.response.MemoDetailRes;
-import com.ssafy.blahblah.api.response.MemoListRes;
+import com.ssafy.blahblah.api.request.study.MemoReq;
+import com.ssafy.blahblah.api.response.study.MemoDetailRes;
+import com.ssafy.blahblah.api.response.study.MemoListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Memo;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
-@RequestMapping("api/v1/memo")
+@RequestMapping("/api/memo")
 public class MemoController {
 
     @Autowired
@@ -98,6 +98,7 @@ public class MemoController {
     }
 
 
+    // user 쓰기
     @DeleteMapping("/{memoId}")
     public ResponseEntity memoDelete(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();

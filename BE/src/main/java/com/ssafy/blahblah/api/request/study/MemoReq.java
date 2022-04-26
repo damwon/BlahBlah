@@ -1,11 +1,12 @@
-package com.ssafy.blahblah.api.request;
+package com.ssafy.blahblah.api.request.study;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class NoticeReq {
+public class MemoReq {
+
     String title;
     String content;
 }
