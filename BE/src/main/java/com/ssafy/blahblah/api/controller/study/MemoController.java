@@ -10,6 +10,7 @@ import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.MemoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -33,11 +34,11 @@ public class MemoController {
     MemoRepository memoRepository;
 
     @GetMapping
-    public ResponseEntity memoList(Authentication authentication) {
+    public ResponseEntity memoList(Authentication authentication, Pageable pageable) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        List<Memo> memoList = memoRepository.findByUser(user);
+        List<Memo> memoList = memoRepository.findByUser(user,pageable).getContent();
         if (memoList == null || memoList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -99,7 +100,7 @@ public class MemoController {
     }
 
 
-    // user 쓰기
+    // user 사용하기
     @DeleteMapping("/{memoId}")
     public ResponseEntity memoDelete(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
