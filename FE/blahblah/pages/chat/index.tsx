@@ -1,41 +1,21 @@
 /* eslint-disable */
 import { useState, useRef, useEffect } from "react";
-import WordNote from "../wordnote";
-import Note from "../note";
 import ChatList from "../../component/chat/chatList";
-import {
-  styled,
-  Button,
-  TextField,
-  IconButton,
-  Box,
-  Typography,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from "@mui/material";
+import { styled, TextField, IconButton, Box, Typography } from "@mui/material";
 import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ChatTabs from "../../component/chat/chatTabs";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
-import VoiceRecorder from "../../component/recorder/recorder";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import RecorderDialog from "../../component/recorder/recoderDialog";
+import ChatBoxOfOther from "../../component/chat/chatBoxOfOther";
+import CorrectMessage from "../../component/chat/correctMessage";
 
 const ChatTypographyByMe = styled(Typography)({
-  borderRadius: "10px",
-  padding: "10px",
+  borderRadius: "20px",
+  padding: "10px 20px",
   backgroundColor: "skyblue",
   color: "white",
-  fontWeight: 500,
-});
-
-const ChatTypographyByOther = styled(Typography)({
-  borderRadius: "10px",
-  padding: "10px",
-  backgroundColor: "beige",
   fontWeight: 500,
 });
 
@@ -45,17 +25,6 @@ const ChatBox = styled(Box)({
   width: "100%",
   display: "flex",
   flexDirection: "column",
-  // "&::-webkit-scrollbar": {
-  //   display: "none",
-  // },
-});
-
-const ChatIconButton = styled(IconButton)({
-  opacity: 0,
-  transition: "300ms linear",
-  "&:hover": {
-    opacity: 1,
-  },
 });
 
 export default function Chat() {
@@ -113,13 +82,17 @@ export default function Chat() {
   };
   // recorder dialog 열고 닫기
   const [openRecorder, setOpenRecorder] = useState(false);
-  const handleClickOpen = () => {
+  const handleClickOpenRecorder = () => {
     setOpenRecorder(true);
   };
 
   const handleClose = () => {
     setOpenRecorder(false);
   };
+
+  const [chatname, setChatname] = useState("Geuntae");
+
+  const [correctMessage, setCorrectMessage] = useState("");
 
   return (
     <>
@@ -132,7 +105,7 @@ export default function Chat() {
         }}
       >
         <Box>
-          <ChatList />
+          <ChatList setChatname={setChatname} />
         </Box>
         <Box
           sx={{
@@ -154,7 +127,7 @@ export default function Chat() {
               justifyContent: "space-between",
             }}
           >
-            <Typography>username: 종준</Typography>
+            <Typography>username: {chatname}</Typography>
             <Box>
               <IconButton
                 onClick={() => {
@@ -187,30 +160,16 @@ export default function Chat() {
                       }}
                       key={index}
                     >
-                      <ChatTypographyByMe>
-                        {item.username}: {item.message}
-                      </ChatTypographyByMe>
+                      <ChatTypographyByMe>{item.message}</ChatTypographyByMe>
                     </Box>
                   );
                 } else {
                   return (
-                    <Box
-                      sx={{
-                        width: "100%",
-                        padding: 2,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "start",
-                      }}
+                    <ChatBoxOfOther
                       key={index}
-                    >
-                      <ChatTypographyByOther>
-                        {item.username}: {item.message}
-                      </ChatTypographyByOther>
-                      <ChatIconButton>
-                        <MoreHorizIcon />
-                      </ChatIconButton>
-                    </Box>
+                      message={item.message}
+                      setCorrectMessage={setCorrectMessage}
+                    />
                   );
                 }
               })}
@@ -221,41 +180,43 @@ export default function Chat() {
               width: "100%",
               height: "15%",
               display: "flex",
+              flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            <TextField
-              sx={{ width: "500px" }}
-              value={message}
-              placeholder="Type your message."
-              onChange={handleMessage}
-              onKeyPress={(e: any) => {
-                if (e.key === "Enter") {
-                  handleMessageList();
-                }
-              }}
-              variant="standard"
+            {correctMessage && (
+              <CorrectMessage
+                correctMessage={correctMessage}
+                setCorrectMessage={setCorrectMessage}
+              />
+            )}
+            <Box>
+              <TextField
+                sx={{ width: "30vw" }}
+                value={message}
+                placeholder="Type your message."
+                onChange={handleMessage}
+                onKeyPress={(e: any) => {
+                  if (e.key === "Enter") {
+                    handleMessageList();
+                  }
+                }}
+                variant="standard"
+              />
+              <IconButton onClick={handleMessageList}>
+                <SendIcon color="primary" />
+              </IconButton>
+              <IconButton onClick={handleClickOpenRecorder}>
+                <MicIcon sx={{ color: "black" }} />
+              </IconButton>
+            </Box>
+
+            <RecorderDialog
+              openRecorder={openRecorder}
+              setOpenRecorder={setOpenRecorder}
+              handleClose={handleClose}
             />
-            <IconButton onClick={handleMessageList}>
-              <SendIcon color="primary" />
-            </IconButton>
-            <IconButton onClick={handleClickOpen}>
-              <MicIcon sx={{ color: "black" }} />
-            </IconButton>
-            <Dialog open={openRecorder} onClose={handleClose}>
-              <DialogTitle>음성 녹음</DialogTitle>
-              <DialogContent>
-                <DialogContentText>
-                  녹음을 하시려면 녹음 시작하기를 누르세요
-                </DialogContentText>
-                <VoiceRecorder />
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleClose}>Subscribe</Button>
-              </DialogActions>
-            </Dialog>
           </Box>
         </Box>
         <ChatTabs />
