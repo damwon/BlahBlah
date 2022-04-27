@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class MyQnaDetailRes {
+    Long id;
     String title;
     String content;
     LocalDateTime createdAt;
@@ -16,6 +17,7 @@ public class MyQnaDetailRes {
     String answer;
 
     public MyQnaDetailRes(Qna qna) {
+        this.id = qna.getId();
         this.title = qna.getTitle();
         this.content = qna.getContent();
         this.createdAt = qna.getCreatedAt();

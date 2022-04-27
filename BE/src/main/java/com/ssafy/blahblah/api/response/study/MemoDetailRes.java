@@ -10,12 +10,14 @@ import java.time.LocalDateTime;
 @Setter
 public class MemoDetailRes {
 
+    Long id;
     String title;
     String content;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
 
     public MemoDetailRes(Memo memo) {
+        this.id = memo.getId();
         this.title = memo.getTitle();
         this.content = memo.getContent();
         this.createdAt = memo.getCreatedAt();

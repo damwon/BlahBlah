@@ -6,10 +6,14 @@ import com.ssafy.blahblah.api.response.study.WordbookListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
+import com.ssafy.blahblah.db.entity.Word;
 import com.ssafy.blahblah.db.entity.Wordbook;
+import com.ssafy.blahblah.db.repository.WordRepository;
 import com.ssafy.blahblah.db.repository.WordbookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,14 +34,17 @@ public class WordbookContorller {
     WordbookRepository wordbookRepository;
 
     @Autowired
+    WordRepository wordRepository;
+
+    @Autowired
     UserService userService;
 
     @GetMapping
-    public ResponseEntity list( Authentication authentication) {
+    public ResponseEntity list( Authentication authentication,Pageable pageable) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        List<Wordbook> wordbookList = wordbookRepository.findByUser(user);
+        List<Wordbook> wordbookList = wordbookRepository.findByUser(user,pageable).getContent();
         if (wordbookList == null || wordbookList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -47,7 +54,7 @@ public class WordbookContorller {
 
     // findby외래키로 찾을지 findbyWordbookId로 찾아서 DTO로 커스터마이징할지 뭐가 더 효율적일까?
     @GetMapping("/{wordbookId}")
-    public ResponseEntity wordlist(Authentication authentication, @PathVariable Long wordbookId){
+    public ResponseEntity wordlist(Authentication authentication, @PathVariable Long wordbookId, Pageable pageable){
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
@@ -56,9 +63,11 @@ public class WordbookContorller {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Wordbook wordbook = optionalWordbook.get();
-        System.out.println(wordbook.getWords());
+        List<Word> words = wordRepository.findByWordbook(wordbook, pageable).getContent();
+        List<WordListRes> dto = words.stream().map(WordListRes::fromEntity).collect(Collectors.toList());
 
-        return ResponseEntity.status(HttpStatus.OK).body(new WordListRes(wordbook));
+
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
 
 
     }

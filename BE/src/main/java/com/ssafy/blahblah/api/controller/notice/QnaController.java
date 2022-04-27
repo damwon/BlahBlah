@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -67,15 +68,16 @@ public class QnaController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 1:1 문의가 아닙니다.");
     }
 
-//    이미지 업로드 하기!
+
     @PostMapping
     public ResponseEntity myQnaPost(Authentication authentication, @RequestBody MyQnaReq qnaReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-//        List<String> image = awsS3Service.uploadImage(multipartFile);
+//        String imgString = awsS3Service.uploadImage(multipartFile, "qna").get(0);
         qnaRepository.save(Qna.builder()
                 .title(qnaReq.getTitle())
+//                .imgUrl(imgString)
                 .content(qnaReq.getContent())
                 .createdAt(LocalDateTime.now())
                 .user(user)
