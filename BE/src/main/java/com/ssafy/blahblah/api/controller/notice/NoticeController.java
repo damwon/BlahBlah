@@ -9,6 +9,7 @@ import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.NoticeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -32,8 +33,8 @@ public class NoticeController {
     NoticeRepository noticeRepository;
 
     @GetMapping
-    public ResponseEntity noticeList() {
-        List<Notice> noticeList = noticeRepository.findAll();
+    public ResponseEntity noticeList(Pageable pageable) {
+        List<Notice> noticeList = noticeRepository.findAll(pageable).getContent();
         if (noticeList == null || noticeList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
