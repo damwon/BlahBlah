@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-export default function ChatList() {
+export default function ChatList(props: any) {
   const userData = [
     {
       name: "Geuntae",
@@ -39,7 +39,7 @@ export default function ChatList() {
               primary={item.name}
               sx={{ cursor: "pointer" }}
               onClick={() => {
-                alert(`${item.name} 눌림!`);
+                props.setChatname(item.name);
               }}
             />
           </ListItem>
