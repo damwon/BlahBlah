@@ -1,7 +1,67 @@
 import { Grid, Button } from "@mui/material";
+import { useRouter } from "next/router";
 import Image from "next/image";
-
+import allAxios from "../../../lib/allAxios";
+import { useState, useEffect } from "react";
 export default function Edit() {
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const router = useRouter();
+  const id = Number(router.query.id);
+  useEffect(() => {
+    if (String(id) != "NaN") {
+      allAxios
+        .get(`/memo/${id}`, {
+          headers: setToken(),
+        })
+        .then((res) => {
+          setTitle(res.data.title);
+          const tmpContent = res.data.content;
+          if (tmpContent != null) {
+            setContent(tmpContent);
+          } else {
+            setContent("내용을 작성해주세요");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [id]);
+
+  const titleChange = (e: any) => {
+    const val = e.target.value;
+    setTitle(val);
+  };
+  const contentChange = (e: any) => {
+    const val = e.target.value;
+    setContent(val);
+  };
+
+  const edit = () => {
+    allAxios
+      .put(
+        `/memo/${id}`,
+        {
+          content: content,
+          title: title,
+        },
+        { headers: setToken() }
+      )
+      .then(() => {
+        router.push(`/note/${id}`);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={2} />
@@ -9,6 +69,7 @@ export default function Edit() {
         <div className="lb-wrap">
           <div className="lb-image">
             <Image
+              priority
               src="/images/noteTitle.png"
               alt="noteTitle image"
               width="200"
@@ -18,9 +79,11 @@ export default function Edit() {
           </div>
           <div className="lb-text">
             <input
+              type="text"
               className="my-title"
               style={{ minWidth: "15vw", minHeight: "5vh" }}
-              placeholder="Title: My Note 1"
+              value={title}
+              onChange={titleChange}
             ></input>
           </div>
         </div>
@@ -28,6 +91,7 @@ export default function Edit() {
         <div className="lb-wrap">
           <div className="lb-image">
             <Image
+              priority
               src="/images/note.jpg"
               alt="note image"
               width="80"
@@ -44,10 +108,8 @@ export default function Edit() {
                 maxHeight: "30vh",
               }}
               className="clean-textarea"
-              placeholder="내용 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용
-                적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용 적는중
-                어떻게 나오려나 내용 적는중 어떻게 나오려나내용 적는중 어떻게
-                나오려나내용 적는중 어떻게 나오려나"
+              value={content}
+              onChange={contentChange}
             ></textarea>
           </div>
         </div>
@@ -57,7 +119,7 @@ export default function Edit() {
             <Button className="mar" variant="contained" disabled>
               취소
             </Button>
-            <Button className="mar" variant="contained">
+            <Button className="mar" variant="contained" onClick={edit}>
               수정 완료
             </Button>
           </Grid>

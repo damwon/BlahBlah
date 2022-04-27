@@ -21,7 +21,6 @@ export default function QnA() {
             <Grid item xs={9}></Grid>
             <Grid item xs={3}>
               <Button
-                className="mar"
                 variant="contained"
                 onClick={() => {
                   router.push(`/qna/write`);

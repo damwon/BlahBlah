@@ -2,10 +2,43 @@ import { Grid, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import allAxios from "../../lib/allAxios";
+import allAxios from "../../../lib/allAxios";
+
 export default function Note() {
   const router = useRouter();
   const id = Number(router.query.id);
+
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  useEffect(() => {
+    if (String(id) != "NaN") {
+      allAxios
+        .get(`/memo/${id}`, {
+          headers: setToken(),
+        })
+        .then((res) => {
+          setTitle(res.data.title);
+          const tmpContent = res.data.content;
+          if (tmpContent != null) {
+            setContent(tmpContent);
+          } else {
+            setContent("내용을 작성해주세요");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [id]);
   return (
     <Grid container spacing={3}>
       <Grid item xs={2} />
@@ -13,6 +46,7 @@ export default function Note() {
         <div className="lb-wrap">
           <div className="lb-image">
             <Image
+              priority
               src="/images/noteTitle.png"
               alt="noteTitle image"
               width="200"
@@ -21,13 +55,14 @@ export default function Note() {
             />
           </div>
           <div className="lb-text">
-            <h2>Title: my Note</h2>
+            <h2>{title}</h2>
           </div>
         </div>
 
         <div className="lb-wrap">
           <div className="lb-image">
             <Image
+              priority
               src="/images/note.jpg"
               alt="note image"
               width="80"
@@ -36,12 +71,7 @@ export default function Note() {
             />
           </div>
           <div className="lb-text">
-            <h3>
-              내용 적는중 어떻게 나오려나내용 적는중 어떻게 나오려나내용 적는중
-              어떻게 나오려나내용 적는중 어떻게 나오려나내용 적는중 어떻게
-              나오려나 내용 적는중 어떻게 나오려나내용 적는중 어떻게
-              나오려나내용 적는중 어떻게 나오려나
-            </h3>
+            <h3>{content}</h3>
           </div>
         </div>
         <div className="m">

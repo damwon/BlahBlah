@@ -14,7 +14,7 @@ import { Button, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import allAxios from "../../lib/allAxios";
+import allAxios from "../../../lib/allAxios";
 export default function WordNote() {
   const [show, setShow] = useState(false);
   const handleClose = () => {
