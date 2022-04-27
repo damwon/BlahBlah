@@ -1,7 +1,6 @@
 package com.ssafy.blahblahchat.service;
 
 
-import com.ssafy.blahblahchat.Msg;
 import com.ssafy.blahblahchat.entity.Message;
 import com.ssafy.blahblahchat.entity.TestMsg;
 import lombok.AllArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

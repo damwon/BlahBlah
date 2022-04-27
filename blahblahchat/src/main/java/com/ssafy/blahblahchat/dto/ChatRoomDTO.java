@@ -12,4 +12,6 @@ import java.util.UUID;
 public class ChatRoomDTO {
     private long userId;
     private long opponentId;
+    private String roomId;
+    private String opponentName;
 }

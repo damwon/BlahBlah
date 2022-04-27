@@ -4,8 +4,10 @@ package com.ssafy.blahblahchat.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +32,17 @@ public class ChatList {
     private String roomName;
 
     @Column
-    private String lastRead;
+    private String lastMsg;
+
+    @Column
+    private LocalDateTime last_msg_date;
+
+    @Column
+    private LocalDateTime last_read_date;
+
+    @Column
+    private int unread;
+
+
 
 }

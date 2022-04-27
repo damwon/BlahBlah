@@ -14,8 +14,10 @@ public class Message {
 
     @Id
     String id;
+    String type;//text,image,voice
     String senderId;
     String receiverId;
+    String receiverName;
     String content;
     String roomId;
     LocalDateTime createdAt;

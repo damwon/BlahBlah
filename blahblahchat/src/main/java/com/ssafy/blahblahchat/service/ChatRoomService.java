@@ -3,6 +3,7 @@ package com.ssafy.blahblahchat.service;
 
 import com.ssafy.blahblahchat.dto.ChatRoomDTO;
 import com.ssafy.blahblahchat.entity.ChatList;
+import com.ssafy.blahblahchat.entity.TestMsg;
 import com.ssafy.blahblahchat.repository.ChatRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class ChatRoomService {
                     .userId(chatRoomDTO.getUserId())
                     .opponentId(chatRoomDTO.getOpponentId())
                     .roomId(UUID.randomUUID().toString())
-                    .roomName(chatRoomDTO.getUserId()+"roomname")
+                    .roomName(chatRoomDTO.getOpponentName())
                     .build();
 
             chatRoomRepository.createChat(chatList);
@@ -43,6 +44,29 @@ public class ChatRoomService {
         return chatRoomRepository.findChatListByUserId(userId);
     }
 
+    public void updateList(long userId,long opponentId,String opponentName, TestMsg testMsg) {
 
+        System.out.println("ChatRoomService.updateList");
 
+        if("No Result".equals(findChatRoom(userId, opponentId))){
+            final ChatList chatList = ChatList.builder()
+                    .userId(userId)
+                    .opponentId(opponentId)
+                    .roomId(UUID.randomUUID().toString())
+                    .roomName(opponentName)
+                    .build();
+            chatRoomRepository.createChat(chatList);
+        }else{
+            System.out.println("create room fail, room already exist");
+        }
+
+        chatRoomRepository.updateChatList(userId,opponentId,testMsg);
+
+    }
+
+    public void updateLastRead(long userId,long opponentId) {
+        System.out.println("ChatRoomService.updateLastRead");
+        chatRoomRepository.updateLastRead(userId,opponentId);
+
+    }
 }
