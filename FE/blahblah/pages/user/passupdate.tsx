@@ -28,21 +28,25 @@ export default function PassUpdate() {
 
   const onEditPassword = (event:any) => {
     event.preventDefault();
-    axios({
-      url: `https://blahblah.community:8443/api/user/edit-password`,
-      method: "put",
-      headers: setToken(),
-      data: {
-        'password': pass,
-      },
-    })
-      .then((res) => {
-        console.log(res)
-        router.push('/user/mypage')
+    if(pass.length>=6){
+      axios({
+        url: `https://blahblah.community:8443/api/user/edit-password`,
+        method: "put",
+        headers: setToken(),
+        data: {
+          'password': pass,
+        },
       })
-      .catch((err) => {
-        console.log(err);
-      });
+        .then((res) => {
+          console.log(res)
+          router.push('/user/mypage')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }else{
+      alert('비밀번호 6자이상써줘!')
+    }
   };
 
 

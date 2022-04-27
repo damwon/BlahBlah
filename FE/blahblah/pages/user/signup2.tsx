@@ -14,8 +14,7 @@ export default function Signup() {
   const [inputEmail, setInputEmail] = useState("");
   // 이메일 중복체크
   const [isEmailOnly, setIsEmailOnly] = useState(false);
-  // 이메일 중복체크후 이메일 인증버튼 나오게
-  const [EmailCheck,setEmailCheck] = useState(false)
+  
   // 그리고 이메일창 onchange 있으면 둘다 초기화
    // 이메일 입력부분
    const handleEmail = (event: any) => {
@@ -23,7 +22,7 @@ export default function Signup() {
     setInputEmail(event.target.value);
     // 이메일중복체크, 이메일인증 초기화
     setIsEmailOnly(false)
-    setEmailCheck(false)
+    
   };
     // 이메일 중복체크
   const onClickEmailCheck = () => {
@@ -39,8 +38,10 @@ export default function Signup() {
         // 중복되지 않는 경우, 중복검사 확인
         .then(function (response) {
           if (response.status === 200) {
+            alert('이메일 써도댐')
+            console.log('가느안이메일')
             setIsEmailOnly((prevState) => true);
-            setEmailCheck((prevState)=> true)
+            
           }
         })
         // 중복되는 경우, 다시 중복검사 + 알림(이미 사용중인 이메일)
@@ -54,49 +55,21 @@ export default function Signup() {
     }
   };
 
+  // 이름
+  const [name,setName]= useState('')
+  const handleName = (event: any) => {
+    event.preventDefault();
+    setName(event.target.value);
+  };
+
   // 비밀번호
   const [password, setPassword] = useState("")
   const [pwcheck,setPwcheck] = useState("")
   const [pwsame,setPwsame] = useState(false)
-
-  // 언어종류
-  const languages = ['Korean','English','Japanese','Chinese','Spanish'
-  ,'a','b','c','....']
-  // 모국어
-  const [first,setFirst] = useState([])
-  const handleFirst = (e: any) => {
-    
-    var array:any = [...first]
-    // console.log(array.includes(input))
-    if (array.includes(e.currentTarget.value)===false && array.length <=1){
-      array.push(e.currentTarget.value)
-    }
-    
-    setFirst(array);
-  };
-  // 구사언어
-  const [second,setSecond] = useState([])
-  const handleSecond = (e: any) => {
-    var array:any = [...second]
-    if (array.includes(e.currentTarget.value)===false && array.length <=2){
-      array.push(e.currentTarget.value)
-    }
-    
-    setSecond(array);
-  };
-  // 학습언어
-  const [third,setThird] = useState([])
-  const handleThird = (e: any) => {
-    var array:any = [...third]
-    if (array.includes(e.currentTarget.value)===false && array.length <=3){
-      array.push(e.currentTarget.value)
-    }
-    
-    setThird(array);
-  };
+  
   // 성별
   const [gen,setGen] = useState("")
-  const gens =['남자','여자']
+  const gens =['0','1']
   const onGenHanlder=(e:any)=>{
     setGen(e.currentTarget.value)
   }
@@ -135,48 +108,38 @@ export default function Signup() {
 
   const onSubmit = (event:any)=>{
 
-//
-//
-// 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
 
-    // alert('hihi')
-    // 1.이메일중복체크 위에서완료, true체크
-    // 2.비밀번호 같은지체크
-    // 3.추가정보 빈칸 아닌지체크
-    // 4.자기소개 빈칸 아닌지체크
-    // 5.제출
-    // if(isEmailOnly===true){
-    //   alert('이메일오케이')
-    // }
-    // first,second,gen,age,profile
-
-    // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
-    // 여기 체크나 더하기~!
     if(password.length>=6&&password===pwcheck 
-      && first.length!==0 &&second.length!==0
-      &&gen.length!==0&&age==0&&profile.length!==0){
+      &&gen.length!==0&&age!==0&&profile.length!==0){
       alert('가입완료')
+      axios({
+        url: `https://blahblah.community:8443/api/user/signup`,
+        method: "post",
+        data: {
+          "email": inputEmail,
+          "name": name,
+          "gender": gen,
+          "age": age,
+          "description": profile,
+          "profileImg": proimg,
+          "password": password,   
+        },
+      })
+        .then((res) => {
+          console.log(res)
+          console.log('가입됨')
+          Router.push({
+            pathname: "/",
+          });
+        })
+        .catch((err) => {
+          console.log('가입안됨')
+          console.log(err);
+        });
     }else{
       alert('빈칸이있음')
     }
-
-    // axios({
-    //   url: `회원가입api주소`,
-    //   method: "post",
-    //   data: {
-    //     email: inputEmail,
-    //     password: password,
-    //   },
-    // })
-    //   .then((res) => {
-    //     console.log(res)
-    //     Router.push({
-    //       pathname: "/",
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    
   }
 
   
@@ -204,13 +167,11 @@ export default function Signup() {
                   <button  onClick={onClickEmailCheck} >
                   이메일 중복체크
                 </button>
-                { EmailCheck === true
-                  ? <><button>
-                  이메일 인증
-                </button>
-                  </>
-                  :null
-                }
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>이름{name}</Form.Label>
+                  <Form.Control type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20}/>
+                  
+                </Form.Group>
                   
                 </Form.Group>
 
@@ -253,48 +214,6 @@ onChange={onAgeHanlder} >
 
 <hr/>
 
-<Form.Label>모국어(2개까지) {first} </Form.Label>
-<Form.Select aria-label="Default select example"
-onChange={handleFirst} >
-  <option>언어선택 </option>
-  {languages.map((item, index)=>(
-			<option key={index} value={item}>{item}</option>
-		))}
-</Form.Select>
-<button onClick={()=>{
-      var newarr:any = []
-      setFirst(newarr)
-    }}>retry</button>
-<hr/>
-    <Form.Label>구사언어(3개까지) {second}</Form.Label>
-    <Form.Select aria-label="Default select example"
-onChange={handleSecond} >
-  <option>언어선택 </option>
-  {languages.map((item, index)=>(
-			<option key={index} value={item}>{item}</option>
-		))}
-</Form.Select>
-<button onClick={()=>{
-      var newarr:any = []
-      setSecond(newarr)
-    }}>retry</button>
-<hr/>
-    <Form.Label>학습언어(4개까지) {third}</Form.Label>
-    <Form.Select aria-label="Default select example"
-onChange={handleThird} 
-// value={third}
->
-  <option>언어선택 </option>
-  {languages.map((item, index)=>(
-			<option key={index} value={item}>{item}</option>
-		))}
-</Form.Select>
-<button onClick={()=>{
-      var newarr:any = []
-      setThird(newarr)
-    }}>retry</button>
-
-<hr/>
     <Form.Label>프로필이미지 {proimg}</Form.Label>
     <Form.Select aria-label="Default select example"
 onChange={handleProimg} value={proimg}>
@@ -303,51 +222,14 @@ onChange={handleProimg} value={proimg}>
 			<option key={index} value={item}>{item}</option>
 		))}
 </Form.Select>
-<button onClick={()=>{
-      var newarr:any = []
-      setThird(newarr)
-    }}>retry</button>
 
-
-
-    
-
-
-    {/* <Form.Label>학습언어 {third}</Form.Label>
-    <div>
-    <button onClick={()=>{
-      handleThird('Korean')
-    }}>Korean</button>
-    <button onClick={()=>{
-      handleThird('English')
-    }}>English</button>
-    <button onClick={()=>{
-      handleThird('Japanese')
-    }}>Japanese</button>
-    <button onClick={()=>{
-      handleThird('Chinese')
-    }}>Chinese</button>
-    <button onClick={()=>{
-      handleThird('Spanish')
-    }}>Spanish</button>
-    <button onClick={()=>{
-      var newarr:any = []
-      setThird(newarr)
-    }}>retry</button>
-    </div> */}
 
 
       
    
   
-{/* <select onChange={onChangeHanlder} value={Content}>
-		{Options.map((item, index)=>(
-			<option key={item.key} value={item.key}>{item.value}</option>
-		))}
-    </select> */}
 <Form.Label>자기소개 {profile}</Form.Label>
 <InputGroup>
-    {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
     <FormControl placeholder='10자이상 입력해주세요' as="textarea" aria-label="With textarea" onChange={handleProfile}/>
   </InputGroup>
 
@@ -355,9 +237,7 @@ onChange={handleProimg} value={proimg}>
                 <button type="submit" onClick={onSubmit}>
                   가입
                 </button>
-                {/* <Button variant="primary" type="submit" >
-                  로그인
-                </Button> */}
+                
               
             </div></Col>
           <Col></Col>

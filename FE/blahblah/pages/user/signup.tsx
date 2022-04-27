@@ -53,6 +53,12 @@ export default function Signup() {
       alert("이메일 형식이 아닙니다.");
     }
   };
+  // 이름
+  const [name,setName]= useState('')
+  const handleName = (event: any) => {
+    event.preventDefault();
+    setName(event.target.value);
+  };
 
   // 비밀번호
   const [password, setPassword] = useState("")
@@ -154,14 +160,14 @@ export default function Signup() {
     // 여기 체크나 더하기~!
     if(password.length>=6&&password===pwcheck 
       && first.length!==0 &&second.length!==0
-      &&gen.length!==0&&age==0&&profile.length!==0){
+      &&gen.length!==0&&age==0&&profile.length!==0&&name.length!==0){
       alert('가입완료')
     }else{
       alert('빈칸이있음')
     }
 
     // axios({
-    //   url: `회원가입api주소`,
+    //   url: `https://blahblah.community:8443/api/user/signup`,
     //   method: "post",
     //   data: {
     //     email: inputEmail,
@@ -211,6 +217,12 @@ export default function Signup() {
                   </>
                   :null
                 }
+                  
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="formBasicEmail">
+                  <Form.Label>이름{name}</Form.Label>
+                  <Form.Control type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20}/>
                   
                 </Form.Group>
 
