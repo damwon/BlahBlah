@@ -12,6 +12,7 @@ import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.QnaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,11 +40,11 @@ public class QnaController {
     AwsS3Service awsS3Service;
 
     @GetMapping
-    public ResponseEntity myQnaList(Authentication authentication) {
+    public ResponseEntity myQnaList(Authentication authentication, Pageable pageable) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        List<Qna> qnaList = qnaRepository.findByUser(user);
+        List<Qna> qnaList = qnaRepository.findByUser(user,pageable).getContent();
         if (qnaList == null || qnaList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -98,12 +99,12 @@ public class QnaController {
     }
 
     @GetMapping("/admin")
-    public ResponseEntity qnaList(Authentication authentication) {
+    public ResponseEntity qnaList(Authentication authentication, Pageable pageable) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         if (user.getAuthority().equals("admin")) {
-            List<Qna> qnaList = qnaRepository.findAll();
+            List<Qna> qnaList = qnaRepository.findAll(pageable).getContent();
             if (qnaList == null || qnaList.size() == 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(null);
             }
