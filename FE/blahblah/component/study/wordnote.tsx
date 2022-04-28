@@ -31,6 +31,12 @@ export default function Wordnote() {
     return config;
   };
 
+  // pagination
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   const writeWordTitle = () => {
     if (wordTitle === "") {
       alert("단어장 제목을 입력해주세요");
@@ -56,17 +62,17 @@ export default function Wordnote() {
   };
 
   // list불러오기
-  const [file, setFile]: any = useState([{}, {}, {}]);
+  const [file, setFile]: any = useState();
   useEffect(() => {
     allAxios
-      .get(`/wordbook?size=5&page=1`, { headers: setToken() })
+      .get(`/wordbook?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
         setFile(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [page]);
 
   // wordlist 지우기
   const lstDelete = (num: number, title: string) => {
@@ -80,6 +86,45 @@ export default function Wordnote() {
         console.log(err);
       });
   };
+
+  // wordlist 이름 변경
+  const [changeShow, setChangeShow] = useState(false);
+  const changeClose = () => setChangeShow(false);
+  const changeOpen = (d: any) => {
+    setChangeShow(true);
+    setTitle(d.title);
+    setChangeIdx(d.id);
+  };
+  const [title, setTitle] = useState();
+  const [changeIdx, setChangeIdx] = useState(1);
+  const titleChange = (e: any) => {
+    const val = e.target.value;
+    setTitle(val);
+  };
+  const titleChangeClick = () => {
+    if (title === "") {
+      alert("단어장 제목을 입력해주세요");
+    } else {
+      allAxios
+        .put(
+          `/wordbook/${changeIdx}`,
+          {
+            title: title,
+          },
+          {
+            headers: setToken(),
+          }
+        )
+        .then(() => {
+          changeClose();
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   const [dense, setDense] = useState(false);
   return (
     <>
@@ -106,7 +151,7 @@ export default function Wordnote() {
                 <ListItemAvatar
                   style={{ cursor: "pointer" }}
                   onClick={() => {
-                    router.push(`/wordnote/${d.id}`);
+                    changeOpen(d);
                   }}
                 >
                   <Avatar>
@@ -126,8 +171,17 @@ export default function Wordnote() {
       </List>
 
       <div className="m">
-        <Pagination count={5} variant="outlined" shape="rounded" />
+        <div className="m" style={{ width: "400px" }}>
+          <Pagination
+            count={10}
+            variant="outlined"
+            shape="rounded"
+            page={page}
+            onChange={handleChange}
+          />
+        </div>
       </div>
+      <br></br>
       <div className="mar-btn">
         <Button
           variant="contained"
@@ -140,7 +194,7 @@ export default function Wordnote() {
         </Button>
       </div>
 
-      {/* modal */}
+      {/* 단어장 추가 modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>단어장 제목을 입력해주세요.</Modal.Title>
@@ -169,6 +223,32 @@ export default function Wordnote() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      {/* 단어장 이름 변경 modal */}
+      <Modal show={changeShow} onHide={changeClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>단어장 제목을 수정해주세요.</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Grid spacing={2} container>
+            <Grid item xs={2}>
+              <h4>제목</h4>
+            </Grid>
+            <Grid item xs={10}>
+              <input value={title} onChange={titleChange}></input>
+            </Grid>
+          </Grid>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="contained" color="error" onClick={changeClose}>
+            취소
+          </Button>
+          <div style={{ width: "10px" }}></div>
+          <Button variant="contained" onClick={titleChangeClick}>
+            수정
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <style jsx>
         {`
           .cent {
@@ -180,7 +260,7 @@ export default function Wordnote() {
           }
           .mar-btn {
             width: 150px;
-            margin-right: 20px;
+            margin-right: 50px;
             margin-left: auto;
           }
         `}

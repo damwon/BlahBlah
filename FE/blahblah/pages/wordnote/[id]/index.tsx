@@ -17,30 +17,46 @@ import Image from "next/image";
 import allAxios from "../../../lib/allAxios";
 export default function WordNote() {
   const [show, setShow] = useState(false);
+  const write = () => {
+    if (word === "") {
+      alert("단어를 입력해주세요");
+    } else if (mean === "") {
+      alert("뜻을 입력해주세요");
+    } else {
+      allAxios
+        .post(
+          `word/${id}`,
+          {
+            meaning: mean,
+            word: word,
+          },
+          {
+            headers: setToken(),
+          }
+        )
+        .then((res) => {
+          setShow(false);
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
   const handleClose = () => {
-    allAxios
-      .post(
-        `word/${id}`,
-        {
-          meaning: mean,
-          word: word,
-        },
-        {
-          headers: setToken(),
-        }
-      )
-      .then((res) => {
-        setShow(false);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setShow(false);
   };
 
   const handleShow = () => {
     setShow(true);
     setWord(""), setMean("");
+  };
+
+  // pagination
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   const router = useRouter();
@@ -57,36 +73,36 @@ export default function WordNote() {
   useEffect(() => {
     if (String(id) != "NaN") {
       allAxios
-        .get(`/wordbook/${id}?size=5&page=1`, {
+        .get(`/wordbook/${id}?size=16&page=${page}`, {
           headers: setToken(),
         })
         .then((res) => {
-          console.log(res.data);
-          setWords(res.data.words);
+          setWords(res.data);
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }, [id]);
-
-  const wordDelete = () => {
-    allAxios
-      .delete(`/wrod/${id}`, {
-        headers: setToken(),
-      })
-      .then((res) => {
-        setWords(res.data.words);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  }, [id, page]);
 
   const [word, setWord] = useState("");
   const [mean, setMean] = useState("");
   const [dense, setDense] = useState(false);
+
+  const delWord = (d: any) => {
+    allAxios
+      .delete(`word/${d.id}`, {
+        headers: setToken(),
+      })
+      .then((res) => {
+        alert("단어가 삭제되었습니다.");
+        window.location.reload();
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <>
       <Grid
@@ -96,75 +112,77 @@ export default function WordNote() {
         justifyContent="center"
         alignItems="center"
       >
-        <Grid item xs={2} />
-        <Grid item xs={8}>
+        <Grid item xs={1} />
+        <Grid item xs={10}>
           <Image
             priority
             src="/images/characters.PNG"
             alt="characters image"
-            width="240"
+            width="280"
             height="40"
             layout="responsive"
           />
           <h1 className="cent">Title:</h1>
           <List dense={dense}>
-            {words &&
-              words.map((d: any, i: number) => {
-                return (
-                  <ListItem
-                    style={{ width: "300px", margin: "0 auto" }}
-                    key={i}
-                    secondaryAction={
-                      <IconButton
-                        onClick={() => {
-                          console.log(d);
-                        }}
-                        edge="end"
-                        aria-label="delete"
+            <Grid container spacing={4}>
+              {words &&
+                words.map((d: any, i: number) => {
+                  return (
+                    <Grid item xs={3} key={i}>
+                      <ListItem
+                        style={{ width: "250px", margin: "0 auto" }}
+                        secondaryAction={
+                          <IconButton
+                            onClick={() => {
+                              delWord(d);
+                            }}
+                            edge="end"
+                            aria-label="delete"
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        }
                       >
-                        <DeleteIcon />
-                      </IconButton>
-                    }
-                  >
-                    <ListItemAvatar>
-                      <Avatar>
-                        <LibraryBooks />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={d.word} secondary={d.meaning} />
-                  </ListItem>
-                );
-              })}
+                        <ListItemAvatar>
+                          <Avatar>
+                            <LibraryBooks />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={d.word} secondary={d.meaning} />
+                      </ListItem>
+                    </Grid>
+                  );
+                })}
+            </Grid>
           </List>
-          {/* <Grid
-            spacing={2}
-            container
-            direction="row"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item xs={4}>
-              <div className="cent">
-                <h1>Word</h1>
-              </div>
-            </Grid>
-            <Grid item xs={4}>
-              <div className="cent">
-                <h1>Mean</h1>
-                <p>물</p>
-                <p>빨간색</p>
-                <p>책</p>
-                <p>보다</p>
-              </div>
-            </Grid>
-          </Grid> */}
-          <div className="m">
+          {words &&
+            words.length === 0 &&
+            [0].map((d: any, i: number) => {
+              return (
+                <h1 key={i} style={{ width: "500px", margin: "auto" }}>
+                  새 단어를 입력해주세요!
+                </h1>
+              );
+            })}
+
+          <br></br>
+          <div className="m" style={{ width: "140px" }}>
             <Button variant="primary" onClick={handleShow}>
               단어 추가하기
             </Button>
           </div>
+          <br></br>
+          <div className="m" style={{ width: "400px" }}>
+            <Pagination
+              count={10}
+              variant="outlined"
+              shape="rounded"
+              page={page}
+              onChange={handleChange}
+            />
+          </div>
         </Grid>
-        <Grid item xs={2} />
+        <Grid item xs={1} />
       </Grid>
 
       <Modal show={show} onHide={handleClose}>
@@ -188,7 +206,7 @@ export default function WordNote() {
                 onChange={(e) => {
                   setWord(e.target.value);
                 }}
-                style={{ minHeight: "100px" }}
+                style={{ minHeight: "60px" }}
                 className="clean-textarea"
                 placeholder="word"
               ></textarea>
@@ -200,7 +218,7 @@ export default function WordNote() {
                 onChange={(e) => {
                   setMean(e.target.value);
                 }}
-                style={{ minHeight: "100px" }}
+                style={{ minHeight: "60px" }}
                 className="clean-textarea"
                 placeholder="mean"
               ></textarea>
@@ -211,7 +229,7 @@ export default function WordNote() {
           <Button variant="secondary" onClick={handleClose}>
             취소
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={write}>
             저장
           </Button>
         </Modal.Footer>
@@ -223,7 +241,6 @@ export default function WordNote() {
             text-align: center;
           }
           .m {
-            width: 200px;
             margin: 0 auto;
           }
         `}
