@@ -1,6 +1,7 @@
 package com.ssafy.blahblah.api.controller.notice;
 import com.ssafy.blahblah.api.request.notice.NoticeReq;
 import com.ssafy.blahblah.api.response.notice.NoticeDetailRes;
+import com.ssafy.blahblah.api.response.notice.NoticeListPageRes;
 import com.ssafy.blahblah.api.response.notice.NoticeListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
@@ -9,6 +10,7 @@ import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.NoticeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +36,12 @@ public class NoticeController {
 
     @GetMapping
     public ResponseEntity noticeList(Pageable pageable) {
-        List<Notice> noticeList = noticeRepository.findAll(pageable).getContent();
-        if (noticeList == null || noticeList.size() == 0) {
+        Page<Notice> noticeList = noticeRepository.findAll(pageable);
+        if (noticeList == null || noticeList.getContent().size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
-        List<NoticeListRes> dto = noticeList.stream().map(NoticeListRes::fromEntity).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new NoticeListPageRes(noticeList));
     }
 
     @GetMapping("/{noticeId}")

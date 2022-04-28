@@ -17,6 +17,7 @@ public class WordListRes {
     private String word;
     private String meaning;
     private LocalDateTime createdAt;
+//    private int totalPages;
 
     public static WordListRes fromEntity(Word word) {
         return WordListRes.builder()
@@ -24,6 +25,7 @@ public class WordListRes {
                 .word(word.getWord())
                 .meaning(word.getMeaning())
                 .createdAt(word.getCreatedAt())
+
                 .build();
     }
 
