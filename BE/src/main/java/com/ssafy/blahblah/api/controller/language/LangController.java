@@ -56,6 +56,6 @@ public class LangController {
 		if(language == null) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "InvalidValue"));
 		}
-		return new ResponseEntity(language, HttpStatus.OK);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "언어 정보 저장 성공"));
 	}
 }

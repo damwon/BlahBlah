@@ -24,8 +24,8 @@ public class LanguageServiceImpl implements LanguageService {
 	public Language createLanguage(String code, String Langimg, String engName) {
 		Language lang = new Language();
 		lang.setCode(code);
-		lang.setCode(Langimg);
-		lang.setCode(engName);
+		lang.setLangImg(Langimg);
+		lang.setEngName(engName);
 		return languageRepository.save(lang);
 	}
 
