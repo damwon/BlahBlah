@@ -74,10 +74,11 @@ export default function ProfileUpdate() {
     <>
       <Container>
         <Row>
+          <Col></Col>
           <Col>
-            <h1>회원정보수정 진행</h1>
+            <h1>회원정보수정</h1>
             {des}
-            <div style={{ width: '16rem', margin: '20px' }}>자기소개 - {profile.description}
+            <div style={{ width: '16rem', margin: '20px' }}>자기소개{profile.description}
               {/* <input onChange={handleDes}></input> */}
               <textarea onChange={handleDes} id="story" name="story"
                 rows={5} cols={33}>
@@ -86,10 +87,10 @@ export default function ProfileUpdate() {
             </div>
             {name}
             <div style={{ width: '16rem', margin: '20px' }}>
-              이름 - {profile.name}
+              이름
               <input onChange={handleName} maxLength={20}></input>
             </div>
-            {proimg}
+            {/* {proimg} */}
             <div style={{ width: '16rem', margin: '20px' }}>
               프로필이미지 - {profile.profileImg}
               <Form.Select aria-label="Default select example"
@@ -100,11 +101,18 @@ export default function ProfileUpdate() {
                 ))}
               </Form.Select>
             </div>
-            <button onClick={onEdit}>수정하기</button>
+            <Button onClick={onEdit}
+              style={{ marginBottom: '20px' }} variant="outline-dark">수정하기</Button>
+            <Button onClick={() => {
+              router.push('/user/mypage')
+            }}
+              style={{ marginBottom: '20px' }} variant="outline-dark">마이페이지 돌아가기</Button>
+            {/* <button onClick={onEdit}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')
-            }}>마이페이지 돌아가기</button>
+            }}>마이페이지 돌아가기</button> */}
           </Col>
+          <Col></Col>
         </Row>
 
       </Container>

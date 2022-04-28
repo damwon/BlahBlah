@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, ListGroup } from 'react-bootstrap';
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -55,6 +55,7 @@ export default function PassUpdate() {
     <>
       <Container>
         <Row>
+          <Col></Col>
           <Col>
             <h1>비밀번호변경</h1>
             {
@@ -67,14 +68,20 @@ export default function PassUpdate() {
               비밀번호{pass}
               <input type="password" onChange={handlePass} maxLength={15}></input>
               비밀번호 확인{passcheck}
-              <input type="password" onChange={handlePassCheck} maxLength={15}></input>
+              <input type="password" onChange={handlePassCheck} maxLength={1}></input>
             </div>
 
             <button onClick={onEditPassword}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')
-            }}>마이페이지 돌아가기</button>
+            }}>마이페이지</button>
           </Col>
+          <Col>
+            {/* <ListGroup variant="flush">
+              <ListGroup.Item></ListGroup.Item>
+            </ListGroup> */}
+          </Col>
+
         </Row>
 
       </Container>
