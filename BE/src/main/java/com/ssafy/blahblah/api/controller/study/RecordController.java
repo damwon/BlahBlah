@@ -1,4 +1,4 @@
-//package com.ssafy.blahblah.api.controller.study;
-//
-//public class RecordController {
-//}
+package com.ssafy.blahblah.api.controller.study;
+
+public class RecordController {
+}
