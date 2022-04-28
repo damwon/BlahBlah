@@ -17,7 +17,6 @@ public class WordListRes {
     private String word;
     private String meaning;
     private LocalDateTime createdAt;
-//    private int totalPages;
 
     public static WordListRes fromEntity(Word word) {
         return WordListRes.builder()
@@ -29,17 +28,7 @@ public class WordListRes {
                 .build();
     }
 
-//    private List<WordRes> words;
-//
-//    public WordListRes(Wordbook entity){
-//        List<Word> words = entity.getWords();
-////        this.words = words;
-//        List<WordRes> myWords = new ArrayList<>();
-//        words.forEach(word -> {
-//            myWords.add(new WordRes(word));
-//        });
-//        this.words = myWords;
-//    }
+
 
 
 }

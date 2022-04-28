@@ -3,7 +3,6 @@ package com.ssafy.blahblah.api.controller.study;
 import com.ssafy.blahblah.api.request.study.MemoReq;
 import com.ssafy.blahblah.api.response.study.MemoDetailRes;
 import com.ssafy.blahblah.api.response.study.MemoListPageRes;
-import com.ssafy.blahblah.api.response.study.MemoListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Memo;
