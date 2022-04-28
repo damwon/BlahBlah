@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
 
@@ -40,7 +40,7 @@ export default function Login() {
       });
   };
   // 로그인상태인데 로그인창오면 메인페이지로
-  const [isLogin,setIslogin] = useState(false)
+  const [isLogin, setIslogin] = useState(false)
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     console.log('로그인후 NavBar에서 jwt읽기')
@@ -52,7 +52,7 @@ export default function Login() {
   }, []);
   return (
     <>
-      
+
       <Container>
 
         <Row>
@@ -77,7 +77,17 @@ export default function Login() {
                 {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" label="Check me out" />
                 </Form.Group> */}
-                <button type="submit" onClick={onClickLogin}>
+                <Button onClick={onClickLogin}
+                  style={{ marginBottom: '20px' }} variant="outline-dark">로그인</Button>
+                <Button onClick={() => {
+                  router.push('/user/signup')
+                }}
+                  style={{ marginBottom: '20px' }} variant="outline-dark">회원가입</Button>
+                <Button onClick={() => {
+                  router.push('/user/findpass')
+                }}
+                  style={{ marginBottom: '20px' }} variant="outline-dark">비밀번호찾기</Button>
+                {/* <button type="submit" onClick={onClickLogin}>
                   로그인
                 </button>
 
@@ -90,7 +100,7 @@ export default function Login() {
                   <Link href="/user/findpass">
                     <a className="link">비밀번호찾기 </a>
                   </Link>
-                </button>
+                </button> */}
                 {/* <Button variant="primary" type="submit">
                   로그인
                 </Button> */}
