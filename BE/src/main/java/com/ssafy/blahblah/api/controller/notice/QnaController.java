@@ -3,6 +3,7 @@ package com.ssafy.blahblah.api.controller.notice;
 import com.ssafy.blahblah.api.request.notice.MyQnaReq;
 import com.ssafy.blahblah.api.request.notice.QnaAnswerReq;
 import com.ssafy.blahblah.api.response.notice.MyQnaDetailRes;
+import com.ssafy.blahblah.api.response.notice.MyQnaListPageRes;
 import com.ssafy.blahblah.api.response.notice.MyQnaListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
@@ -12,6 +13,7 @@ import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.QnaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,12 +46,11 @@ public class QnaController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        List<Qna> qnaList = qnaRepository.findByUser(user,pageable).getContent();
-        if (qnaList == null || qnaList.size() == 0) {
+        Page<Qna> qnaList = qnaRepository.findByUser(user,pageable);
+        if (qnaList == null || qnaList.getContent().size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
-        List<MyQnaListRes> dto = qnaList.stream().map(MyQnaListRes::fromEntity).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(new MyQnaListPageRes(qnaList));
 
     }
 
@@ -104,12 +105,11 @@ public class QnaController {
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         if (user.getAuthority().equals("admin")) {
-            List<Qna> qnaList = qnaRepository.findAll(pageable).getContent();
-            if (qnaList == null || qnaList.size() == 0) {
+            Page<Qna> qnaList = qnaRepository.findAll(pageable);
+            if (qnaList == null || qnaList.getContent().size() == 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(null);
             }
-            List<MyQnaListRes> dto = qnaList.stream().map(MyQnaListRes::fromEntity).collect(Collectors.toList());
-            return ResponseEntity.status(HttpStatus.OK).body(dto);
+            return ResponseEntity.status(HttpStatus.OK).body(new MyQnaListPageRes(qnaList));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자가 아닙니다");
     }

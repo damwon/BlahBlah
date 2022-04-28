@@ -2,6 +2,7 @@ package com.ssafy.blahblah.api.controller.study;
 
 import com.ssafy.blahblah.api.request.study.MemoReq;
 import com.ssafy.blahblah.api.response.study.MemoDetailRes;
+import com.ssafy.blahblah.api.response.study.MemoListPageRes;
 import com.ssafy.blahblah.api.response.study.MemoListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
@@ -10,6 +11,7 @@ import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.MemoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +40,11 @@ public class MemoController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        List<Memo> memoList = memoRepository.findByUser(user,pageable).getContent();
-        if (memoList == null || memoList.size() == 0) {
+        Page<Memo> memoList = memoRepository.findByUser(user,pageable);
+        if (memoList == null || memoList.getContent().size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
-        List<MemoListRes> dto = memoList.stream().map(MemoListRes::fromEntity).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        return ResponseEntity.status(HttpStatus.OK).body(new MemoListPageRes(memoList));
     }
 
     @GetMapping("/{memoId}")
