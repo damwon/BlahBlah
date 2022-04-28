@@ -75,7 +75,14 @@ export default function Note() {
           </div>
         </div>
         <div className="m">
-          <Button className="mar" variant="contained" disabled>
+          <Button
+            className="mar"
+            variant="contained"
+            color="error"
+            onClick={() => {
+              router.push(`/study`);
+            }}
+          >
             취소
           </Button>{" "}
           <Button

@@ -77,6 +77,7 @@ export default function Recordnote() {
       <div className="m">
         <Pagination count={5} variant="outlined" shape="rounded" />
       </div>
+      <br></br>
       <div className="mar-btn">
         <Button
           variant="contained"
@@ -128,7 +129,7 @@ export default function Recordnote() {
           }
           .mar-btn {
             width: 150px;
-            margin-right: 20px;
+            margin-right: 60px;
             margin-left: auto;
           }
         `}

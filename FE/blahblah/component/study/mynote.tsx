@@ -29,6 +29,12 @@ export default function Mynote() {
     return config;
   };
 
+  // pagination
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   const writeNoteTitle = () => {
     if (noteTitle === "") {
       alert("메모장 제목을 입력해주세요");
@@ -56,14 +62,14 @@ export default function Mynote() {
   const [file, setFile]: any = useState([{}, {}, {}]);
   useEffect(() => {
     allAxios
-      .get(`/memo`, { headers: setToken() })
+      .get(`/memo?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
         setFile(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [page]);
 
   // wordlist 지우기
   const lstDelete = (num: number, title: string) => {
@@ -77,7 +83,43 @@ export default function Mynote() {
         console.log(err);
       });
   };
-
+  // notelist 이름 변경
+  const [changeShow, setChangeShow] = useState(false);
+  const changeClose = () => setChangeShow(false);
+  const changeOpen = (d: any) => {
+    setChangeShow(true);
+    setTitle(d.title);
+    setChangeIdx(d.id);
+  };
+  const [title, setTitle] = useState();
+  const [changeIdx, setChangeIdx] = useState(1);
+  const titleChange = (e: any) => {
+    const val = e.target.value;
+    setTitle(val);
+  };
+  const titleChangeClick = () => {
+    if (title === "") {
+      alert("메모장 제목을 입력해주세요");
+    } else {
+      allAxios
+        .put(
+          `/memo/${changeIdx}`,
+          {
+            title: title,
+          },
+          {
+            headers: setToken(),
+          }
+        )
+        .then(() => {
+          changeClose();
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
   const [dense, setDense] = useState(false);
   return (
     <>
@@ -93,7 +135,6 @@ export default function Mynote() {
                       edge="end"
                       aria-label="delete"
                       onClick={() => {
-                        console.log(d);
                         lstDelete(d.id, d.title);
                       }}
                     >
@@ -104,7 +145,7 @@ export default function Mynote() {
                   <ListItemAvatar
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                      router.push(`/note/${d.id}`);
+                      changeOpen(d);
                     }}
                   >
                     <Avatar>
@@ -124,8 +165,17 @@ export default function Mynote() {
           : null}
       </List>
       <div className="m">
-        <Pagination count={5} variant="outlined" shape="rounded" />
+        <div className="m" style={{ width: "400px" }}>
+          <Pagination
+            count={10}
+            variant="outlined"
+            shape="rounded"
+            page={page}
+            onChange={handleChange}
+          />
+        </div>
       </div>
+      <br></br>
       <div className="mar-btn">
         <Button
           variant="contained"
@@ -140,7 +190,7 @@ export default function Mynote() {
       {/* modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>단어장 제목을 입력해주세요.</Modal.Title>
+          <Modal.Title>메모장 제목을 입력해주세요.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
@@ -166,6 +216,31 @@ export default function Mynote() {
           </Button>
         </Modal.Footer>
       </Modal>
+      {/* 메모장 이름 변경 modal */}
+      <Modal show={changeShow} onHide={changeClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>메모장 제목을 수정해주세요.</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Grid spacing={2} container>
+            <Grid item xs={2}>
+              <h4>제목</h4>
+            </Grid>
+            <Grid item xs={10}>
+              <input value={title} onChange={titleChange}></input>
+            </Grid>
+          </Grid>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="contained" color="error" onClick={changeClose}>
+            취소
+          </Button>
+          <div style={{ width: "10px" }}></div>
+          <Button variant="contained" onClick={titleChangeClick}>
+            수정
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <style jsx>
         {`
           .cent {
@@ -177,7 +252,7 @@ export default function Mynote() {
           }
           .mar-btn {
             width: 150px;
-            margin-right: 20px;
+            margin-right: 50px;
             margin-left: auto;
           }
         `}
