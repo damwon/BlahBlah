@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "chat_list")
-public class ChatList {
+public class ChatMeta {
 
 
     @Id

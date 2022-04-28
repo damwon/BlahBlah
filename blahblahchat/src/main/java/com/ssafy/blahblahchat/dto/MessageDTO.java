@@ -8,10 +8,13 @@ import lombok.NoArgsConstructor;
 
 public class MessageDTO {
 
+    private String type;
     private String senderId;
     private String senderName;
     private String receiverId;
     private String receiverName;
+    private String roomId;
     private String content;
+
 
 }

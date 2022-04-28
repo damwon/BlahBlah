@@ -1,12 +1,11 @@
 package com.ssafy.blahblahchat.repository;
 
 
-import com.ssafy.blahblahchat.dto.ChatRoomDTO;
-import com.ssafy.blahblahchat.entity.ChatList;
-import com.ssafy.blahblahchat.entity.TestMsg;
+import com.ssafy.blahblahchat.entity.ChatMeta;
+import com.ssafy.blahblahchat.entity.Message;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -14,44 +13,45 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Repository
-public class ChatRoomRepository {
+@Log4j2
+public class ChatRepository {
 
     @PersistenceContext
     EntityManager em;
 
-    public long createChat(ChatList chatList){
-        System.out.println("ChatRoomRepository.createChat");
+    public long createChat(ChatMeta chatList){
+        log.info("ChatRoomRepository.createChat");
         em.persist(chatList);
         return chatList.getId();
     }
 
     public String findChat(long userId, long opponentId){
-
+        log.info("ChatRepository.findChat");
         try {
-            ChatList chat = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatList.class)
+            ChatMeta chat = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatMeta.class)
                     .setParameter("userId", userId)
                     .setParameter("opponentId", opponentId)
                     .getSingleResult();
-            System.out.println(chat.getRoomId()+" room userId: "+userId+"opponentId: "+opponentId);
             return chat.getRoomId();
         } catch (NoResultException e){
                 return "No Result";
         }
     }
 
-    public String updateChatList(long userId, long opponentId, TestMsg testMsg){
+    public String updateChatList(long userId, long opponentId, Message message){
+        System.out.println("ChatRepository.updateChatList");
         try {
-            ChatList target = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatList.class)
+            ChatMeta target = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatMeta.class)
                     .setParameter("userId", userId)
                     .setParameter("opponentId", opponentId)
                     .getSingleResult();
-            target.setLast_msg_date(testMsg.getCreatedAt());
-            int lastMagLength=testMsg.getContent().length();
+            target.setLast_msg_date(message.getCreatedAt());
+            int lastMagLength=message.getContent().length();
             if(lastMagLength>20)
-                target.setLastMsg(testMsg.getContent().substring(0,18));
+                target.setLastMsg(message.getContent().substring(0,18));
             else
-                target.setLastMsg(testMsg.getContent());
-            if(userId!=Long.parseLong(testMsg.getSenderId()))
+                target.setLastMsg(message.getContent());
+            if(userId!=Long.parseLong(message.getSenderId()))
                 target.setUnread(target.getUnread()+1);
             else
                 target.setUnread(0);
@@ -62,8 +62,9 @@ public class ChatRoomRepository {
     }
 
     public String updateLastRead(long userId, long opponentId){
+        System.out.println("ChatRepository.updateLastRead");
         try {
-            ChatList target = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatList.class)
+            ChatMeta target = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatMeta.class)
                     .setParameter("userId", userId)
                     .setParameter("opponentId", opponentId)
                     .getSingleResult();
@@ -76,9 +77,10 @@ public class ChatRoomRepository {
     }
 
 
-    public List<ChatList> findChatListByUserId(long userId){
+    public List<ChatMeta> findChatListByUserId(long userId){
+        System.out.println("ChatRepository.findChatListByUserId");
         try {
-            List<ChatList> chatList = em.createQuery("select c from chat_list c where c.userId=:userId ", ChatList.class)
+            List<ChatMeta> chatList = em.createQuery("select c from chat_list c where c.userId=:userId ", ChatMeta.class)
                     .setParameter("userId", userId)
                     .getResultList();
             return chatList;

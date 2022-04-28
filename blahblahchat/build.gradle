@@ -74,7 +74,8 @@ dependencies {
 	implementation("org.apache.commons:commons-lang3:3.9")
 
 
-
+	//구글번역
+	implementation 'com.google.cloud:google-cloud-translate:2.1.12'
 
 	implementation("com.google.guava:guava:29.0-jre")
 	annotationProcessor("com.google.guava:guava:29.0-jre")

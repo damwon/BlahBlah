@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 
-@Document(collection="chat")
+@Document(collection="message")
 @Data
 public class Message {
 
@@ -16,6 +16,7 @@ public class Message {
     String id;
     String type;//text,image,voice
     String senderId;
+    String senderName;
     String receiverId;
     String receiverName;
     String content;
