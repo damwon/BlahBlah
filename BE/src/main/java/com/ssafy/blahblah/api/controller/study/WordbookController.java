@@ -2,9 +2,7 @@ package com.ssafy.blahblah.api.controller.study;
 
 import com.ssafy.blahblah.api.request.study.WordbookReq;
 import com.ssafy.blahblah.api.response.study.WordListPageRes;
-import com.ssafy.blahblah.api.response.study.WordListRes;
 import com.ssafy.blahblah.api.response.study.WordbookListPageRes;
-import com.ssafy.blahblah.api.response.study.WordbookListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
@@ -13,7 +11,6 @@ import com.ssafy.blahblah.db.entity.Wordbook;
 import com.ssafy.blahblah.db.repository.WordRepository;
 import com.ssafy.blahblah.db.repository.WordbookRepository;
 import lombok.AllArgsConstructor;
-import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,13 +21,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
 @CrossOrigin("*")
 @RequestMapping("/api/wordbook")
-public class WordbookContorller {
+public class WordbookController {
 
     @Autowired
     WordbookRepository wordbookRepository;
