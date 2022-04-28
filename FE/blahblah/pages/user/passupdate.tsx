@@ -61,20 +61,30 @@ export default function PassUpdate() {
             {
               pass === passcheck && pass.length >= 1
                 ? <>비밀번호가 같습니다.</>
-                : <>비밀번호가 다릅니다.</>
+                : null
+            }
+            {
+              pass !== passcheck && pass.length >= 1 && passcheck.length >= 1
+                ? <>비밀번호가 다릅니다.</>
+                : null
             }
 
             <div style={{ width: '16rem', margin: '20px' }}>
-              비밀번호{pass}
+              <label>비밀번호</label>
               <input type="password" onChange={handlePass} maxLength={15}></input>
-              비밀번호 확인{passcheck}
-              <input type="password" onChange={handlePassCheck} maxLength={1}></input>
+              <label>비번확인</label>
+              <input type="password" onChange={handlePassCheck} maxLength={15}></input>
             </div>
-
-            <button onClick={onEditPassword}>수정하기</button>
+            <Button onClick={onEditPassword}
+              style={{ marginBottom: '20px' }} variant="outline-dark">수정하기</Button>
+            <Button onClick={() => {
+              router.push('/user/mypage')
+            }}
+              style={{ marginBottom: '20px' }} variant="outline-dark">마이페이지 돌아가기</Button>
+            {/* <button onClick={onEditPassword}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')
-            }}>마이페이지</button>
+            }}>마이페이지</button> */}
           </Col>
           <Col>
             {/* <ListGroup variant="flush">
