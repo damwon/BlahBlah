@@ -10,6 +10,11 @@ import MicIcon from "@mui/icons-material/Mic";
 import RecorderDialog from "../../component/recorder/recoderDialog";
 import ChatBoxOfOther from "../../component/chat/chatBoxOfOther";
 import CorrectMessage from "../../component/chat/correctMessage";
+// chat websocket
+import { Stomp } from "@stomp/stompjs";
+import SockJS from "sockjs-client";
+// axios
+import axios from "axios";
 
 const ChatTypographyByMe = styled(Typography)({
   borderRadius: "20px",
@@ -27,7 +32,132 @@ const ChatBox = styled(Box)({
   flexDirection: "column",
 });
 
+let stompClient: any = null;
+
 export default function Chat() {
+  // 유저 정보 가져오기
+  const [userData, setUserData] = useState<any>(null);
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+  const getProfile = async () => {
+    axios({
+      url: "https://blahblah.community:8443/api/user/me",
+      method: "get",
+      headers: setToken(),
+    }).then((res) => {
+      setUserData(res.data);
+      console.log(res.data);
+    });
+  };
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  // 채팅 웹소켓 연결
+
+  const connect = () => {
+    let socket = new SockJS("https://blahblah.community:8080/chat-websocket");
+
+    stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function (frame: any) {
+      console.log("Connected:" + frame);
+      stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
+        console.log(msg);
+        updateLastRead();
+        list();
+      });
+      // 채팅 목록 가져오기
+      stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
+        console.log(msg.body);
+        let tmpMsg = JSON.parse(msg.body);
+        setChattingList(tmpMsg);
+      });
+      // 채팅 히스토리 가져오기
+      getChatHistory();
+
+      list();
+    });
+  };
+
+  const [chattingList, setChattingList] = useState<any[]>([]);
+
+  const updateLastRead = () => {
+    console.log("list");
+    stompClient.send(
+      "chat/read/" + userData.id + "/" + 1,
+      {},
+      JSON.stringify({})
+    );
+  };
+
+  const list = () => {
+    console.log("list");
+    stompClient.send("/chat/list/" + userData.id, {}, JSON.stringify({}));
+  };
+
+  const getChatHistory = () => {
+    console.log("히스토리");
+    stompClient.send(
+      "/chat/history/" +
+        userData.id +
+        "/" +
+        "7a819932-4ed4-425f-b66a-05209a4c0a05",
+      {},
+      JSON.stringify({})
+    );
+  };
+
+  const sendMsg = () => {
+    if (stompClient) {
+      stompClient.send(
+        "/chat/send/" + 1 + "/to-other",
+        {},
+        JSON.stringify({
+          type: "text",
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
+          receiverId: 1,
+          receiverName: "김싸피",
+          content: message,
+        })
+      );
+
+      stompClient.send(
+        "/chat/send/" + userData.id + "/to-me",
+        {},
+        JSON.stringify({
+          type: "text",
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
+          receiverId: 1,
+          receiverName: "김싸피",
+          content: message,
+        })
+      );
+    } else {
+      alert("stompclient null상태");
+    }
+  };
+
+  useEffect(() => {
+    if (userData) {
+      connect();
+    }
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
+  }, [userData]);
+
   const dummyMessageList = [
     {
       username: "Geuntae",
@@ -74,7 +204,8 @@ export default function Chat() {
 
   const handleMessageList = () => {
     if (message) {
-      setMessageList([...messageList, { username: "me", message: message }]);
+      sendMsg();
+      // setMessageList([...messageList, { username: "me", message: message }]);
       setMessage("");
     } else {
       alert("메시지를 입력해주세요.");
@@ -104,9 +235,12 @@ export default function Chat() {
           justifyContent: "space-between",
         }}
       >
-        <Box>
-          <ChatList setChatname={setChatname} />
-        </Box>
+        {chattingList && (
+          <Box>
+            <ChatList chattingList={chattingList} setChatname={setChatname} />
+          </Box>
+        )}
+
         <Box
           sx={{
             display: "flex",
@@ -138,7 +272,7 @@ export default function Chat() {
               </IconButton>
               <IconButton
                 onClick={() => {
-                  alert("신고 버튼 눌림.");
+                  alert("신고 버튼 눌림");
                 }}
               >
                 <ReportIcon color="warning" />
