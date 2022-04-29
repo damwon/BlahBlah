@@ -13,7 +13,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Layout>
       <style jsx global>
         {`
-          a {
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+          body{
+            font-family: 'Noto Sans KR', sans-serif;
+          }
+        a {
             color: black;
           }
         `}

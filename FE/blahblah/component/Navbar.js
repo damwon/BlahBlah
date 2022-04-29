@@ -85,6 +85,7 @@ export default function userNav() {
       </div>
       <style jsx>{`
       .nav{
+        
  
         margin-top:15px;
         margin-bottom:30px;
@@ -92,7 +93,7 @@ export default function userNav() {
       }
         .mainnav{
           color:#00ccb1;
-          font-size:36px;
+          font-size:32px;
           font-weight:bold;
           text-decoration-line: none;
           display:inline-block;
@@ -104,7 +105,7 @@ export default function userNav() {
           display: inline;
           align-items:center;
           font-size: 16px;
-          font-weight:bold;
+          // font-weight:bold;
           margin-bottom:0;
         }
         .navmenu:hover{
