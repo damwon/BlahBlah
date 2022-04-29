@@ -1,8 +1,11 @@
 import { Grid, Button } from "@mui/material";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Image from "next/image";
+import allAxios from "../../lib/allAxios";
 export default function Note() {
   const router = useRouter();
+  const id = Number(router.query.id);
   return (
     <Grid container spacing={3}>
       <Grid item xs={2} />
@@ -12,15 +15,10 @@ export default function Note() {
             <Image
               src="/images/noteTitle.png"
               alt="noteTitle image"
-              width="100%"
-              height="100%"
+              width="200"
+              height="40"
+              layout="responsive"
             />
-            {/* <img
-              src="/images/noteTitle.png"
-              alt="noteTitle image"
-              className="img-fluid"
-              width="100%"
-            ></img> */}
           </div>
           <div className="lb-text">
             <h2>Title: my Note</h2>
@@ -32,15 +30,10 @@ export default function Note() {
             <Image
               src="/images/note.jpg"
               alt="note image"
-              width="100%"
-              height="100%"
+              width="80"
+              height="100"
+              layout="responsive"
             />
-            {/* <img
-              src="/images/note.jpg"
-              alt="note image"
-              className="img-fluid"
-              width="100%"
-            ></img> */}
           </div>
           <div className="lb-text">
             <h3>
@@ -51,22 +44,28 @@ export default function Note() {
             </h3>
           </div>
         </div>
-        <Grid container spacing={3}>
-          <Grid item xs={4} />
-          <Grid item xs={4}>
-            <Button className="mar" variant="contained" disabled>
-              Disabled
-            </Button>
-            <Button className="mar" variant="contained">
-              Contained
-            </Button>
-          </Grid>
-        </Grid>
-        <Grid item xs={2} />
+        <div className="m">
+          <Button className="mar" variant="contained" disabled>
+            취소
+          </Button>{" "}
+          <Button
+            className="mar"
+            variant="contained"
+            onClick={() => {
+              router.push(`/note/${id}/edit/`);
+            }}
+          >
+            수정
+          </Button>
+        </div>
       </Grid>
 
       <style jsx>
         {`
+          .m {
+            width: 200px;
+            margin: 0 auto;
+          }
           .lb-wrap {
             width: 40%;
             margin: 10px auto;
