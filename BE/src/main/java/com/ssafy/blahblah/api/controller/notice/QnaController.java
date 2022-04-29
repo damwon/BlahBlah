@@ -144,6 +144,7 @@ public class QnaController {
             qna.setAnswer(qnaAnswerReq.getAnswer());
             qna.setAnsCheck(1);
             qnaRepository.save(qna);
+            return new ResponseEntity<>(HttpStatus.OK);
 
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자가 아닙니다");
@@ -163,6 +164,7 @@ public class QnaController {
             qna.setAnswer(null);
             qna.setAnsCheck(0);
             qnaRepository.save(qna);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자가 아닙니다");
     }
