@@ -116,7 +116,7 @@ export default function Edit() {
         <Grid container spacing={3}>
           <Grid item xs={5} />
           <Grid item xs={4}>
-            <Button className="mar" variant="contained" disabled>
+            <Button className="mar" variant="contained" color="error">
               취소
             </Button>
             <Button className="mar" variant="contained" onClick={edit}>

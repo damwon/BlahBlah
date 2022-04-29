@@ -1,6 +1,36 @@
-import { Grid, Pagination } from "@mui/material";
+import { Grid, Pagination, Button } from "@mui/material";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import allAxios from "../../../lib/allAxios";
 export default function Answer() {
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+  const router = useRouter();
+  const [page, setPage] = useState(1);
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+  const [total, setTotal] = useState(1);
+  const [qna, setQna]: any = useState();
+  useEffect(() => {
+    allAxios
+      .get(`qna/admin?size=5&page=${page}`, { headers: setToken() })
+      .then((res) => {
+        console.log(res);
+        setQna(res.data.myQnaListRes);
+        setTotal(res.data.totalPages);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <>
       <Grid spacing={3} container direction="row">
@@ -14,9 +44,56 @@ export default function Answer() {
             layout="responsive"
             priority
           />
+          <br></br>
+          <br></br>
+          <Grid container spacing={3}>
+            <hr
+              style={{
+                width: "100vw",
+                height: "3px",
+              }}
+            ></hr>
+          </Grid>
+          {qna &&
+            qna.map((d: any, i: number) => {
+              return (
+                <Grid
+                  container
+                  spacing={3}
+                  key={i}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    router.push(`/admin/answer/${d.id}`);
+                  }}
+                >
+                  <Grid item xs={2}>
+                    <Button
+                      style={{ width: 100 }}
+                      variant="contained"
+                      color={d.ansCheck === 0 ? "error" : "primary"}
+                    >
+                      {d.ansCheck === 0 ? "답변 대기" : "답변 완료"}
+                    </Button>
+                  </Grid>
+                  <Grid item xs={7}>
+                    <h5>{d.title}</h5>
+                  </Grid>
+                  <Grid item xs={3} style={{ textAlign: "center" }}>
+                    {d.createdAt.substr(0, 10)}
+                  </Grid>
+                  <hr style={{ width: "100vw" }}></hr>
+                </Grid>
+              );
+            })}
 
-          <div className="m">
-            <Pagination count={10} variant="outlined" shape="rounded" />
+          <div className="m" style={{ width: 400 }}>
+            <Pagination
+              count={total}
+              variant="outlined"
+              shape="rounded"
+              page={page}
+              onChange={handleChange}
+            />
           </div>
         </Grid>
         <Grid item xs={2} />
