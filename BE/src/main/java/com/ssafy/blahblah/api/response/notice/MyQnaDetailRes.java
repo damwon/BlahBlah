@@ -15,6 +15,7 @@ public class MyQnaDetailRes {
     LocalDateTime createdAt;
     String imgUrl;
     String answer;
+    String userName;
 
     public MyQnaDetailRes(Qna qna) {
         this.id = qna.getId();
@@ -23,5 +24,6 @@ public class MyQnaDetailRes {
         this.createdAt = qna.getCreatedAt();
         this.imgUrl = qna.getImgUrl();
         this.answer = qna.getAnswer();
+        this.userName = qna.getUser().getName();
     }
 }
