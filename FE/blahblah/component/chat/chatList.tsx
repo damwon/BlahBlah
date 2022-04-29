@@ -9,42 +9,20 @@ import {
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function ChatList(props: any) {
-  const userData = [
-    {
-      name: "Geuntae",
-      selected: true,
-    },
-    {
-      name: "Jaehyeon",
-      selected: false,
-    },
-    {
-      name: "Seongkeon",
-      selected: false,
-    },
-    {
-      name: "Jiwon",
-      selected: false,
-    },
-    {
-      name: "Seunghwan",
-      selected: false,
-    },
-  ];
   return (
     <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
       <ListSubheader>채팅 리스트</ListSubheader>
-      {userData.map((item, index) => {
+      {props.chattingList.map((item: any, index: any) => {
         return (
-          <ListItem selected={item.selected} key={index}>
+          <ListItem key={index}>
             <ListItemAvatar>
               <AccountCircleIcon fontSize="large" />
             </ListItemAvatar>
             <ListItemText
-              primary={item.name}
+              primary={item.roomName}
               sx={{ cursor: "pointer" }}
               onClick={() => {
-                props.setChatname(item.name);
+                props.setChatname(item.roomName);
               }}
             />
           </ListItem>

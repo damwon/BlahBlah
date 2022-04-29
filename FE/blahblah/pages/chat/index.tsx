@@ -7,6 +7,7 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import ChatTabs from "../../component/chat/chatTabs";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 import RecorderDialog from "../../component/recorder/recoderDialog";
 import ChatBoxOfOther from "../../component/chat/chatBoxOfOther";
 import CorrectMessage from "../../component/chat/correctMessage";
@@ -44,7 +45,7 @@ export default function Chat() {
     };
     return config;
   };
-  const getProfile = async () => {
+  const getProfile = () => {
     axios({
       url: "https://blahblah.community:8443/api/user/me",
       method: "get",
@@ -58,6 +59,7 @@ export default function Chat() {
     getProfile();
   }, []);
 
+  const [chatHistory, setChatHistory] = useState<any[]>([]);
   // 채팅 웹소켓 연결
 
   const connect = () => {
@@ -68,9 +70,11 @@ export default function Chat() {
     stompClient.connect({}, function (frame: any) {
       console.log("Connected:" + frame);
       stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
-        console.log(msg);
         updateLastRead();
         list();
+        let tmpChat = JSON.parse(msg.body);
+        console.log(tmpChat);
+        setChatHistory((prev) => [...prev, tmpChat]);
       });
       // 채팅 목록 가져오기
       stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
@@ -78,14 +82,27 @@ export default function Chat() {
         let tmpMsg = JSON.parse(msg.body);
         setChattingList(tmpMsg);
       });
-      // 채팅 히스토리 가져오기
-      getChatHistory();
 
       list();
     });
   };
-
+  // 채팅 목록
   const [chattingList, setChattingList] = useState<any[]>([]);
+
+  // 채팅 히스토리
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: "https://blahblah.community:8080/message/7a819932-4ed4-425f-b66a-05209a4c0a05",
+    }).then((res) => {
+      console.log(res);
+      setChatHistory(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    console.log(chatHistory);
+  }, [chatHistory]);
 
   const updateLastRead = () => {
     console.log("list");
@@ -99,18 +116,6 @@ export default function Chat() {
   const list = () => {
     console.log("list");
     stompClient.send("/chat/list/" + userData.id, {}, JSON.stringify({}));
-  };
-
-  const getChatHistory = () => {
-    console.log("히스토리");
-    stompClient.send(
-      "/chat/history/" +
-        userData.id +
-        "/" +
-        "7a819932-4ed4-425f-b66a-05209a4c0a05",
-      {},
-      JSON.stringify({})
-    );
   };
 
   const sendMsg = () => {
@@ -142,8 +147,6 @@ export default function Chat() {
           content: message,
         })
       );
-    } else {
-      alert("stompclient null상태");
     }
   };
 
@@ -158,33 +161,6 @@ export default function Chat() {
     };
   }, [userData]);
 
-  const dummyMessageList = [
-    {
-      username: "Geuntae",
-      message: "Hello?",
-    },
-    {
-      username: "me",
-      message: "Hello!",
-    },
-    {
-      username: "Geuntae",
-      message: "Nice to meet you!",
-    },
-    {
-      username: "Geuntae",
-      message: "What do you do?",
-    },
-    {
-      username: "me",
-      message: "I am a frontend developer!",
-    },
-    {
-      username: "Geuntae",
-      message: "That's cool!",
-    },
-  ];
-  const [messageList, setMessageList] = useState<any[]>(dummyMessageList);
   const [message, setMessage] = useState<string>("");
   const handleMessage = (e: any) => {
     setMessage(e.target.value);
@@ -200,12 +176,11 @@ export default function Chat() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [message]);
+  });
 
   const handleMessageList = () => {
     if (message) {
       sendMsg();
-      // setMessageList([...messageList, { username: "me", message: message }]);
       setMessage("");
     } else {
       alert("메시지를 입력해주세요.");
@@ -280,9 +255,10 @@ export default function Chat() {
             </Box>
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
-            {messageList &&
-              messageList.map((item, index) => {
-                if (item.username === "me") {
+            {chatHistory &&
+              userData &&
+              chatHistory.map((item, index) => {
+                if (item.senderId == userData.id) {
                   return (
                     <Box
                       sx={{
@@ -294,14 +270,14 @@ export default function Chat() {
                       }}
                       key={index}
                     >
-                      <ChatTypographyByMe>{item.message}</ChatTypographyByMe>
+                      <ChatTypographyByMe>{item.content}</ChatTypographyByMe>
                     </Box>
                   );
                 } else {
                   return (
                     <ChatBoxOfOther
                       key={index}
-                      message={item.message}
+                      message={item.content}
                       setCorrectMessage={setCorrectMessage}
                     />
                   );
@@ -343,6 +319,15 @@ export default function Chat() {
               </IconButton>
               <IconButton onClick={handleClickOpenRecorder}>
                 <MicIcon sx={{ color: "black" }} />
+              </IconButton>
+              <IconButton
+                onClick={() => {
+                  alert("첨부파일 버튼 눌림");
+                }}
+              >
+                <AttachFileIcon
+                  sx={{ color: "black", transform: "rotate(45deg)" }}
+                />
               </IconButton>
             </Box>
 
