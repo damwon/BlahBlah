@@ -59,12 +59,14 @@ export default function Mynote() {
     }
   };
   // list불러오기
-  const [file, setFile]: any = useState([{}, {}, {}]);
+  const [total, setTotal] = useState(1);
+  const [file, setFile]: any = useState();
   useEffect(() => {
     allAxios
       .get(`/memo?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
-        setFile(res.data);
+        setFile(res.data.memoListRes);
+        setTotal(res.data.totalPages);
       })
       .catch((err) => {
         console.log(err);
@@ -167,7 +169,7 @@ export default function Mynote() {
       <div className="m">
         <div className="m" style={{ width: "400px" }}>
           <Pagination
-            count={10}
+            count={total}
             variant="outlined"
             shape="rounded"
             page={page}

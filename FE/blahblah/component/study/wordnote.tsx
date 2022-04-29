@@ -62,12 +62,14 @@ export default function Wordnote() {
   };
 
   // list불러오기
+  const [total, setTotal] = useState(1);
   const [file, setFile]: any = useState();
   useEffect(() => {
     allAxios
       .get(`/wordbook?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
-        setFile(res.data);
+        setFile(res.data.wordbookListRes);
+        setTotal(res.data.totalPages);
       })
       .catch((err) => {
         console.log(err);
@@ -173,7 +175,7 @@ export default function Wordnote() {
       <div className="m">
         <div className="m" style={{ width: "400px" }}>
           <Pagination
-            count={10}
+            count={total}
             variant="outlined"
             shape="rounded"
             page={page}

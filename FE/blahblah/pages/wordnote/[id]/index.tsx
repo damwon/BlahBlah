@@ -69,6 +69,7 @@ export default function WordNote() {
     return config;
   };
 
+  const [total, setTotal] = useState(1);
   const [words, setWords]: any = useState();
   useEffect(() => {
     if (String(id) != "NaN") {
@@ -77,7 +78,9 @@ export default function WordNote() {
           headers: setToken(),
         })
         .then((res) => {
-          setWords(res.data);
+          console.log(res.data);
+          setWords(res.data.wordListRes);
+          setTotal(res.data.totalPages);
         })
         .catch((err) => {
           console.log(err);
@@ -174,7 +177,7 @@ export default function WordNote() {
           <br></br>
           <div className="m" style={{ width: "400px" }}>
             <Pagination
-              count={10}
+              count={total}
               variant="outlined"
               shape="rounded"
               page={page}

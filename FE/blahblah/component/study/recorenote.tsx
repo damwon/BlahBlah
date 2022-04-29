@@ -52,6 +52,7 @@ export default function Recordnote() {
   };
 
   // list불러오기
+  const [total, setTotal] = useState(1);
   const [file, setFile]: any = useState([{}, {}, {}]);
   useEffect(() => {
     allAxios
@@ -65,6 +66,7 @@ export default function Recordnote() {
       .get(`/wordbook`, { headers: setToken() })
       .then((res) => {
         setFile(res.data);
+        setTotal(res.data.totalPages);
       })
       .catch((err) => {
         console.log(err);
