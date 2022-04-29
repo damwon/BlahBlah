@@ -1,10 +1,16 @@
 import { useEffect,useState } from "react";
+import { Container,Row,Col } from 'react-bootstrap';
+
 export default function Home() {
 
   
 
   return <>
-  <h1>블라블라 메인페이지</h1>
+  <Container>
+    <Row>
+      <Col>블라메인</Col>
+    </Row>
+  </Container>
 
   
 
