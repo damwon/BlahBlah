@@ -41,6 +41,9 @@ export default function userNav() {
             <Link href="/main">
               <a className="navmenu">블라 메이트 찾기</a>
             </Link>
+            <Link href="/feed">
+              <a className="navmenu">피드</a>
+            </Link>
             <Link href="/chat">
               <a className="navmenu">채팅</a>
             </Link>
