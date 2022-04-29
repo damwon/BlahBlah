@@ -29,7 +29,7 @@ export default function userNav() {
     <>
       {/* 테스트 */}
       <div className="nav">
-      <div className="navright">
+      <div>
       <Link href="/">
             <a className="mainnav">
               BlahBlah
@@ -38,44 +38,50 @@ export default function userNav() {
           </Link>
       </div>
             <div className="navright">
+            <Link href="/main">
+              <a className="navmenu">블라 메이트 찾기</a>
+            </Link>
+            <Link href="/feed">
+              <a className="navmenu">피드</a>
+            </Link>
             <Link href="/chat">
-              <a className="navmenu">&nbsp;채팅 &nbsp;</a>
+              <a className="navmenu">채팅</a>
             </Link>
             <Link href="/wordnote">
-              <a className="navmenu">&nbsp;워드 &nbsp;</a>
+              <a className="navmenu">워드</a>
             </Link>
             <Link href="/study">
-              <a className="navmenu">&nbsp;스터디 &nbsp;</a>
+              <a className="navmenu">스터디</a>
             </Link>
             <Link href="/qna">
-              <a className="navmenu">&nbsp;QnA &nbsp;</a>
+              <a className="navmenu">QnA</a>
             </Link>
             <Link href="/qna/write">
-              <a className="navmenu">&nbsp;Qna작성 &nbsp;</a>
+              <a className="navmenu">Qna작성</a>
             </Link>
             <Link href="/notice">
-              <a className="navmenu">&nbsp;공지 &nbsp;</a>
+              <a className="navmenu">공지</a>
             </Link>
             <Link href="/note">
-              <a className="navmenu">&nbsp;노트 &nbsp;</a>
+              <a className="navmenu">노트</a>
             </Link>
               {
                 isLogin===false
                 ?<><Link href="/user/login">
-                <a className="navmenu">&nbsp;로그인&nbsp;</a>
+                <a className="navmenu">로그인</a>
                   </Link>
               <Link href="/user/signup">
-                <a className="navmenu">&nbsp;가입(미완) &nbsp;</a>
+                <a className="navmenu">가입(미완)</a>
                   </Link>
                   <Link href="/user/signup2">
-                <a className="navmenu">&nbsp;가입(됨) &nbsp;</a>
+                <a className="navmenu">가입(됨)</a>
                   </Link>
                   </>
                 :<>
                 <Link href="/user/mypage">
-            <a className="navmenu">&nbsp;마이페이지 &nbsp;</a>
+            <a className="navmenu">마이페이지</a>
               </Link>
-                <a className="navmenu" onClick={onLogout}>&nbsp;로그아웃&nbsp;</a>
+                <a className="navmenu" onClick={onLogout}>로그아웃</a>
                   </>
               }
               
@@ -85,14 +91,15 @@ export default function userNav() {
       </div>
       <style jsx>{`
       .nav{
+        
  
-        margin-top:15px;
-        margin-bottom:30px;
+        margin-top:10px;
+        margin-bottom:20px;
         background-color:white;
       }
         .mainnav{
           color:#00ccb1;
-          font-size:36px;
+          font-size:32px;
           font-weight:bold;
           text-decoration-line: none;
           display:inline-block;
@@ -104,11 +111,16 @@ export default function userNav() {
           display: inline;
           align-items:center;
           font-size: 16px;
-          font-weight:bold;
-          margin-bottom:0;
+          // font-weight:bold;
+          margin:10px;
         }
         .navmenu:hover{
           color:#00ccb1;
+        }
+        .navright{
+          margin-left:30px;
+          margin-top:auto;
+          margin-bottom:auto;
         }
       `}</style>
     </>

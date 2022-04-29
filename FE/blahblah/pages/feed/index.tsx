@@ -6,7 +6,7 @@ export default function Index() {
     <>
     <Container>
     <Row>
-      <Col>블라메이트</Col>
+      <Col>피드</Col>
     </Row>
   </Container>
     </>

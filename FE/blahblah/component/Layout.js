@@ -11,6 +11,7 @@ export default function Layout( {children}){
         </Row>
   
     </Container>
+    {/* <hr></hr> */}
   <div>{children}</div>
   </>
 }

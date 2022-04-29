@@ -1,10 +1,36 @@
-import { useEffect,useState } from "react";
+import { Container,Row,Col,Carousel } from 'react-bootstrap';
+
 export default function Home() {
 
   
 
   return <>
-  <h1>블라블라 메인페이지</h1>
+  <Container>
+    <Row>
+      <Col>
+      <Carousel>
+  <Carousel.Item>
+    <img
+      className="d-block w-100"
+      src="main/2.png"
+      alt="First slide"
+    />
+    
+  </Carousel.Item>
+  <Carousel.Item>
+    <img
+      className="d-block w-100"
+      src="main/1.png"
+      alt="Second slide"
+    />
+
+    
+  </Carousel.Item>
+  
+</Carousel>
+      </Col>
+    </Row>
+  </Container>
 
   
 
