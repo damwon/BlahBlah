@@ -30,11 +30,16 @@ public class AwsS3Service {
 
 	private final AmazonS3 amazonS3;
 
-	public List<String> uploadImage(List<MultipartFile> multipartFile) {
+	public List<String> uploadImage(List<MultipartFile> multipartFile, String path) {
 		List<String> fileNameList = new ArrayList<>();
 		multipartFile.forEach(file -> {
-			String fileName = createFileName(file.getOriginalFilename());
-			String filePath = bucket + "/calligraphyImages";
+			String fileName = "";
+			if(path.equals("language")) {
+				fileName = file.getOriginalFilename();
+			} else {
+				fileName = createFileName(file.getOriginalFilename());
+			}
+			String filePath = bucket + "/" + path;
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentLength(file.getSize());
 			objectMetadata.setContentType(file.getContentType());
@@ -51,8 +56,8 @@ public class AwsS3Service {
 		return fileNameList;
 	}
 
-	public void deleteImage(String fileName) {
-		String filePath = bucket + "/calligraphyImages";
+	public void deleteImage(String fileName, String path) {
+		String filePath = bucket + "/" + path;
 		amazonS3.deleteObject(new DeleteObjectRequest(filePath, fileName));
 	}
 
@@ -66,26 +71,5 @@ public class AwsS3Service {
 		} catch (StringIndexOutOfBoundsException e) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
 		}
-	}
-
-	public List<String> uploadProfileImage(List<MultipartFile> multipartFile) {
-		List<String> fileNameList = new ArrayList<>();
-		multipartFile.forEach(file -> {
-			String fileName = createFileName(file.getOriginalFilename());
-			String filePath = bucket + "/profileImages";
-			ObjectMetadata objectMetadata = new ObjectMetadata();
-			objectMetadata.setContentLength(file.getSize());
-			objectMetadata.setContentType(file.getContentType());
-
-			try(InputStream inputStream = file.getInputStream()) {
-				amazonS3.putObject(new PutObjectRequest(filePath, fileName, inputStream, objectMetadata)
-						.withCannedAcl(CannedAccessControlList.PublicRead));
-			} catch(IOException e) {
-				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
-			}
-
-			fileNameList.add(fileName);
-		});
-		return fileNameList;
 	}
 }

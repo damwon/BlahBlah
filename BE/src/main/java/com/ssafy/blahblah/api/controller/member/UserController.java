@@ -137,8 +137,6 @@ public class UserController {
 	@ApiOperation(value = "비밀번호 찾기 안내 메일 전송", notes = "비밀번호를 잊은 사용자에게 비밀번호 찾기 안내 메일을 전송한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code = 401, message = "엑세스 토큰 값이 틀림"),
-			@ApiResponse(code = 403, message = "엑세스 토큰이 없이 요청"),
 			@ApiResponse(code = 404, message = "사용자를 찾을 수 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
