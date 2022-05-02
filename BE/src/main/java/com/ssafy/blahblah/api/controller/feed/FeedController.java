@@ -38,7 +38,10 @@ public class FeedController {
 
     @GetMapping
     public ResponseEntity listForAll(Authentication authentication){
-        List<Feed> feedList = feedRepository.findByOpenTrue();
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userId = userDetails.getUsername();
+        User user = userService.getUserByEmail(userId);
+        List<Feed> feedList = feedRepository.findByUserOrOpenTrue(user);
         if (feedList == null || feedList.size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
