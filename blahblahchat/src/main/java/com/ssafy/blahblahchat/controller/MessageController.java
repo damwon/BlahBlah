@@ -15,10 +15,11 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
+@CrossOrigin("*")
 public class MessageController {
 
-    @Autowired
-    MessageService messageService;
+
+    private final MessageService messageService;
 
     @PostMapping("/message")
     public Message sendMessage(@RequestBody MessageDTO messageDTO){

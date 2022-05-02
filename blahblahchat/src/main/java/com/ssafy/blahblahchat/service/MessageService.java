@@ -4,6 +4,7 @@ package com.ssafy.blahblahchat.service;
 import com.ssafy.blahblahchat.dto.MessageDTO;
 import com.ssafy.blahblahchat.entity.Message;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,11 +15,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MessageService {
 
-    @Autowired
-    MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
 
     public Message saveMessage(MessageDTO messageDTO){
@@ -35,7 +35,7 @@ public class MessageService {
         Criteria criteria = new Criteria("roomId");
         criteria.is(roomId);
         Query query=new Query(criteria);
-        return mongoTemplate.find(query,Message.class,"chat");
+        return mongoTemplate.find(query,Message.class,"message");
     }
 
     //유저 아이디로 보내거나 받은 메시지를 모두 찾음
@@ -45,7 +45,7 @@ public class MessageService {
         criteria.orOperator(Criteria.where("senderId").is(userId),Criteria.where("receiverId").is(userId));
         Query query=new Query(criteria);
         System.out.println(query.toString());
-        return mongoTemplate.find(query,Message.class,"chat");
+        return mongoTemplate.find(query,Message.class,"message");
     }
 
     public Message tranDTO(MessageDTO messageDTO){

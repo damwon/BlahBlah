@@ -1,30 +1,35 @@
 package com.ssafy.blahblahchat.controller;
 
-
-import com.google.cloud.translate.Translate;
-import com.google.cloud.translate.TranslateOptions;
-import com.google.cloud.translate.Translation;
+import com.ssafy.blahblahchat.dto.TransDTO;
+import com.ssafy.blahblahchat.entity.SupportedLanguageTrans;
 import com.ssafy.blahblahchat.service.TranslateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Log4j2
 @RequiredArgsConstructor
-@RequestMapping("/api")
 public class TranslateController {
 
     private final TranslateService translateService;
 
-    @GetMapping("/trans")
-    public String trans(@RequestParam String text){
+    @PostMapping("/api/trans")
+    public String trans(@RequestBody TransDTO transDTO){
+        return translateService.translateText(transDTO.getText(),transDTO.getTargetLanguage());
+    }
 
-        translateService.translateText(text);
-        return "aa";
+    @GetMapping("/api/supportedLanguage/{targetLan}")
+    public List<SupportedLanguageTrans> getSupportedLanguage(@PathVariable String targetLan){
+        return translateService.getSupportedLanguageByTargetLanguage(targetLan);
+    }
+
+    @GetMapping("/api/supportedLanguage/initDB")
+    public String getSupportedLanguage(){
+        translateService.initDataBase();
+        return "success";
     }
 
 }

@@ -5,6 +5,7 @@ import com.ssafy.blahblahchat.dto.ChatMetaDTO;
 import com.ssafy.blahblahchat.entity.ChatMeta;
 import com.ssafy.blahblahchat.entity.Message;
 import com.ssafy.blahblahchat.repository.ChatRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,10 @@ import java.util.UUID;
 @Transactional
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class ChatService {
 
-    @Autowired
-    ChatRepository chatRepository;
+    private final ChatRepository chatRepository;
 
     public void createChatRoom(ChatMetaDTO chatMetaDTO){
 

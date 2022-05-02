@@ -77,6 +77,11 @@ dependencies {
 	//구글번역
 	implementation 'com.google.cloud:google-cloud-translate:2.1.12'
 
+	//TTS
+	implementation platform('com.google.cloud:libraries-bom:25.1.0')
+	implementation 'com.google.cloud:google-cloud-texttospeech'
+
+
 	implementation("com.google.guava:guava:29.0-jre")
 	annotationProcessor("com.google.guava:guava:29.0-jre")
 
