@@ -1,4 +1,4 @@
-package com.ssafy.blahblah.api.response.member;
+package com.ssafy.blahblahchat.api.response.member;
 
 import com.ssafy.blahblah.db.entity.User;
 import io.swagger.annotations.ApiModel;

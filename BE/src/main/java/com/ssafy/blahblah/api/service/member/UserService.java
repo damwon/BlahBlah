@@ -1,4 +1,4 @@
-package com.ssafy.blahblah.api.service.member;
+package com.ssafy.blahblahchat.api.service.member;
 
 
 import com.ssafy.blahblah.api.request.member.UserRegisterPostReq;

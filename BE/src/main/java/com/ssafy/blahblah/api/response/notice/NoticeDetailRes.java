@@ -1,4 +1,4 @@
-package com.ssafy.blahblah.api.response.notice;
+package com.ssafy.blahblahchat.api.response.notice;
 
 import com.ssafy.blahblah.db.entity.Memo;
 import com.ssafy.blahblah.db.entity.Notice;

@@ -1,4 +1,4 @@
-package com.ssafy.blahblah.api.response.study;
+package com.ssafy.blahblahchat.api.response.study;
 
 import com.ssafy.blahblah.db.entity.Memo;
 import lombok.Getter;

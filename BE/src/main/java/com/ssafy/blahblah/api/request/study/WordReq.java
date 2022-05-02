@@ -1,4 +1,4 @@
-package com.ssafy.blahblah.api.request.study;
+package com.ssafy.blahblahchat.api.request.study;
 
 import lombok.Getter;
 import lombok.Setter;
