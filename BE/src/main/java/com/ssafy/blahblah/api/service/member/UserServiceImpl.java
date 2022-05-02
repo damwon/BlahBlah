@@ -1,13 +1,15 @@
 package com.ssafy.blahblah.api.service.member;
 
-import com.ssafy.blahblah.api.request.member.UserRegisterPostReq;
+import com.ssafy.blahblah.api.request.member.UserInfoPostReq;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -22,7 +24,7 @@ public class UserServiceImpl implements UserService {
 	PasswordEncoder passwordEncoder;
 	
 	@Override
-	public User createUser(UserRegisterPostReq userRegisterInfo) {
+	public User createUser(UserInfoPostReq userRegisterInfo) {
 		User user = new User();
 		String email = userRegisterInfo.getEmail();
 		if (email.isBlank()) {
@@ -72,5 +74,10 @@ public class UserServiceImpl implements UserService {
 		 //디비에 유저 정보 조회 (email을 통한 조회).
 		User user = userRepository.findByEmail(email).get();
 		return user;
+	}
+
+	@Override
+	public List<User> getUserTable() {
+		return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 	}
 }
