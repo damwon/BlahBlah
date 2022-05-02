@@ -71,21 +71,21 @@ export default function WordNote() {
 
   const [total, setTotal] = useState(1);
   const [words, setWords]: any = useState();
-  useEffect(() => {
-    if (String(id) != "NaN") {
-      allAxios
-        .get(`/wordbook/${id}?size=16&page=${page}`, {
-          headers: setToken(),
-        })
-        .then((res) => {
-          setWords(res.data.wordListRes);
-          setTotal(res.data.totalPages);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }, [id, page]);
+  // useEffect(() => {
+  //   if (String(id) != "NaN") {
+  //     allAxios
+  //       .get(`/wordbook/${id}?size=16&page=${page}`, {
+  //         headers: setToken(),
+  //       })
+  //       .then((res) => {
+  //         setWords(res.data.wordListRes);
+  //         setTotal(res.data.totalPages);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //       });
+  //   }
+  // }, [id, page]);
 
   const [word, setWord] = useState("");
   const [mean, setMean] = useState("");
@@ -118,9 +118,9 @@ export default function WordNote() {
         <Grid item xs={10}>
           <Image
             priority
-            src="/images/characters.PNG"
-            alt="characters image"
-            width="280"
+            src="/images/recording.PNG"
+            alt="recording image"
+            width="200"
             height="40"
             layout="responsive"
           />

@@ -26,7 +26,6 @@ export default function QnaInfo() {
       allAxios
         .get(`/qna/${id}`, { headers: setToken() })
         .then((res) => {
-          console.log(res);
           const ans = res.data.answer;
           if (ans) {
             setAns(1);
@@ -87,9 +86,9 @@ export default function QnaInfo() {
             </Button>
           </Grid>
           <Grid item xs={7}>
-            <h4>{title}</h4>
+            <h5>{title}</h5>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={3} style={{ textAlign: "center" }}>
             {time}
           </Grid>
           <hr style={{ width: "100vw" }}></hr>
