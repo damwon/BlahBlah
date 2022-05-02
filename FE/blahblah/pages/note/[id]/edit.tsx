@@ -116,7 +116,14 @@ export default function Edit() {
         <Grid container spacing={3}>
           <Grid item xs={5} />
           <Grid item xs={4}>
-            <Button className="mar" variant="contained" color="error">
+            <Button
+              className="mar"
+              variant="contained"
+              color="error"
+              onClick={() => {
+                router.push(`/note/${id}`);
+              }}
+            >
               취소
             </Button>
             <Button className="mar" variant="contained" onClick={edit}>
