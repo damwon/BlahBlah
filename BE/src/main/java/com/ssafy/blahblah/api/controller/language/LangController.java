@@ -58,4 +58,15 @@ public class LangController {
 		}
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "언어 정보 저장 성공"));
 	}
+
+	@GetMapping("/")
+	@ApiOperation(value = "등록된 언어 테이블", notes = "언어 코드, 이미지, 영문명을 리스트로 반환한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> getLanguage() {
+		List<Language> languages = languageService.getLanguageTable();
+		return new ResponseEntity(languages,HttpStatus.OK);
+	}
 }
