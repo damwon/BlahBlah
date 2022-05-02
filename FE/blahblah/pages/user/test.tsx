@@ -10,11 +10,12 @@ export default function Login() {
     event.preventDefault();
     axios({
       method:'get',
-      url:`https://blahblah.community:8443/api/user/me`,
+      url:`https://blahblah.community:8443/api/user/`,
     })
     .then((result)=>{
      console.log('get요청성공')
      console.log(result)
+     console.log(result.data)
   })
     .catch((error)=>{console.log('요청실패')
     console.log(error)  
