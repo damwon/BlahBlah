@@ -12,7 +12,7 @@ export default function Home() {
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src="main/2.png"
+      src="main/test.png"
       alt="First slide"
     />
     
@@ -21,6 +21,15 @@ export default function Home() {
     <img
       className="d-block w-100"
       src="main/1.png"
+      alt="Second slide"
+    />
+
+    
+  </Carousel.Item>
+  <Carousel.Item>
+    <img
+      className="d-block w-100"
+      src="main/2.png"
       alt="Second slide"
     />
 
