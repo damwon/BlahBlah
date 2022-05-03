@@ -27,7 +27,7 @@ export default function Regist() {
       method: "put",
       // headers: setToken(),
       data: {
-        "password":"1234"
+        "password":pass
       },
     })
       .then((res) => {
@@ -54,7 +54,7 @@ export default function Regist() {
           </Col>
           <Col>
           <h1>비밀번호 수정</h1>
-          넘어온 key값{id}
+          {/* 넘어온 key값{id} */}
           {
               pass === passcheck && pass.length >= 1
                 ? <>비밀번호가 같습니다.</>

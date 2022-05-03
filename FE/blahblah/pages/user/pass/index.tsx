@@ -59,9 +59,12 @@ export default function Regist() {
         
           </Col>
           <Col>
-          <h1>비밀번호 찾기 메일 전송</h1>
+          <h1>비밀번호 찾기</h1>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>이메일주소 {inputEmail}</Form.Label>
+                <Form.Label>
+                  {/* 이메일주소  */}
+                  {/* {inputEmail} */}
+                  </Form.Label>
                 <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
                 <Button onClick={onClickEmailCheck}
                   style={{ marginTop: '5px' }} variant="outline-dark">이메일 보내기</Button>
