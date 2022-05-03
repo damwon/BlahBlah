@@ -1,28 +1,34 @@
 package com.ssafy.blahblah.api.response.study;
 
 import com.ssafy.blahblah.db.entity.Word;
-import com.ssafy.blahblah.db.entity.Wordbook;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
 public class WordListRes {
 
-    private List<WordRes> words;
+    private Long id;
+    private String word;
+    private String meaning;
+    private LocalDateTime createdAt;
 
-    public WordListRes(Wordbook entity){
-        List<Word> words = entity.getWords();
-//        this.words = words;
-        List<WordRes> myWords = new ArrayList<>();
-        words.forEach(word -> {
-            myWords.add(new WordRes(word));
-        });
-        this.words = myWords;
+    public static WordListRes fromEntity(Word word) {
+        return WordListRes.builder()
+                .id(word.getId())
+                .word(word.getWord())
+                .meaning(word.getMeaning())
+                .createdAt(word.getCreatedAt())
+
+                .build();
     }
+
+
 
 
 }

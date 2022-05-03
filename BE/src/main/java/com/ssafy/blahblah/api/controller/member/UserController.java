@@ -2,6 +2,8 @@ package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.request.member.*;
 import com.ssafy.blahblah.api.response.member.UserInfoRes;
+import com.ssafy.blahblah.api.service.language.LangInfoService;
+import com.ssafy.blahblah.api.service.language.LanguageService;
 import com.ssafy.blahblah.api.service.member.EmailService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
@@ -10,7 +12,6 @@ import com.ssafy.blahblah.common.util.RedisUtil;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.UserRepository;
 import io.swagger.annotations.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -31,20 +32,41 @@ import java.util.*;
 @RequestMapping("/api/user")
 public class UserController {
 
-	@Autowired
-	UserService userService;
+	private final UserService userService;
 
-	@Autowired
-	UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-	@Autowired
-	EmailService emailService;
+	private final EmailService emailService;
 
-	@Autowired
-	RedisUtil redisUtil;
+	private final RedisUtil redisUtil;
+
+	private final LanguageService languageService;
+
+	private final LangInfoService langInfoService;
+
+	public UserController(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RedisUtil redisUtil, LanguageService languageService, LangInfoService langInfoService) {
+		this.userService = userService;
+		this.userRepository = userRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.emailService = emailService;
+		this.redisUtil = redisUtil;
+		this.languageService = languageService;
+		this.langInfoService = langInfoService;
+	}
+
+	@GetMapping("/")
+	@ApiOperation(value = "등록된 유저 테이블", notes = "유저 정보를 리스트로 반환한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity getUser() {
+		List<User> users = userService.getUserTable();
+		return new ResponseEntity(users,HttpStatus.OK);
+	}
+
 
 	@PostMapping("/signup")
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
@@ -59,13 +81,69 @@ public class UserController {
 			@ApiParam(value="회원가입 정보", required = true)
 			@RequestBody UserRegisterPostReq registerInfo) {
 
-		User user = userService.createUser(registerInfo);
-		if(user == null) {
-			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "InvalidValue"));
-		}
+		System.out.println(registerInfo.getList());
+		Object langInfo = registerInfo.getList().get(0);
+		System.out.println(langInfo);
+//		System.out.println(langInfo.);
+		UserInfoPostReq userInfoPostReq = new UserInfoPostReq();
+		userInfoPostReq.setEmail(registerInfo.getEmail());
+		userInfoPostReq.setName(registerInfo.getName());
+		userInfoPostReq.setGender(registerInfo.getGender());
+		userInfoPostReq.setAge(registerInfo.getAge());
+		userInfoPostReq.setDescription(registerInfo.getDescription());
+		userInfoPostReq.setProfileImg(registerInfo.getProfileImg());
+		userInfoPostReq.setPassword(registerInfo.getPassword());
+
+		User user = userService.createUser(userInfoPostReq);
+//
+//		ArrayList list = registerInfo.getList();
+//		int listSize = list.size();
+//		if(user == null) {
+//			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "InvalidValue"));
+//		} else {
+//			long userId = user.getId();
+//			for (int i=0; i<listSize; i++) {
+//				long langId = languageService.getLanguageByCode(list.get(i).get("code"));
+//			}
+//			String code = userLangPostReq.getCode();
+//			long langId = languageService.getLanguageByCode(code).getId();
+//			Integer level = userLangPostReq.getLevel();
+//			LangInfo lang = langInfoService.createLangInfo(userId, langId, level);
+//		}
+
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	@ApiOperation(value = "인증 메일 전송", notes = "회원가입 하려는 사용자에게 인증 메일을 전송한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@PostMapping("/checkemail")
+	public ResponseEntity checkEmail(@RequestBody @ApiParam(value="유저 아이디(이메일)", required = true) @RequestPart(value="email",required = false) String userEmail) {
+		UUID uuid = UUID.randomUUID();
+		redisUtil.setDataExpire(uuid.toString(), userEmail, 60 * 30L);
+		String CHECK_EMAIL_LINK = "https://blahblah.community/user/email/";
+		emailService.sendMail(userEmail,"사용자 인증 메일",CHECK_EMAIL_LINK+uuid.toString());
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "이메일 인증 완료", notes = "사용자가 인증 메일을 확인한지 체크한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@GetMapping("/authemail/{key}")
+	public ResponseEntity authEmail(@ApiParam(value="인증 key값", required = true) @PathVariable String key) {
+		String email = redisUtil.getData(key);
+
+		if (email == null) {
+			return new ResponseEntity<>("email-auth-error",HttpStatus.NOT_FOUND);
+		}
+		else {
+			return new ResponseEntity<>(email, HttpStatus.OK);
+		}
+	}
 
 	@GetMapping("/me")
 	@ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
@@ -88,8 +166,6 @@ public class UserController {
 
 		return new ResponseEntity<>(userInfoRes,HttpStatus.OK);
 	}
-
-
 
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보 중 닉네임과 이메일을 수정한다.")
 	@ApiResponses({
@@ -137,8 +213,6 @@ public class UserController {
 	@ApiOperation(value = "비밀번호 찾기 안내 메일 전송", notes = "비밀번호를 잊은 사용자에게 비밀번호 찾기 안내 메일을 전송한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code = 401, message = "엑세스 토큰 값이 틀림"),
-			@ApiResponse(code = 403, message = "엑세스 토큰이 없이 요청"),
 			@ApiResponse(code = 404, message = "사용자를 찾을 수 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
@@ -155,7 +229,7 @@ public class UserController {
 			if (user.getEmail().equals(userFindPwReq.getEmail())) {
 				UUID uuid = UUID.randomUUID();
 				redisUtil.setDataExpire(uuid.toString(),user.getEmail(), 60 * 30L);
-				String CHANGE_PASSWORD_LINK = "https://i6c203.p.ssafy.io/find-password/";
+				String CHANGE_PASSWORD_LINK = "https://blahblah.community/user/pass/";
 				emailService.sendMail(user.getEmail(),"사용자 비밀번호 안내 메일",CHANGE_PASSWORD_LINK+uuid.toString());
 				return new ResponseEntity(HttpStatus.OK);
 			} else {
@@ -220,5 +294,21 @@ public class UserController {
 		} else {
 			return "admin";
 		}
+	}
+
+	@PostMapping("/profile")
+	@ApiOperation(value = "프로필 이미지 등록", notes = "프로필 이미지를 등록한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 409, message = "유효하지않은 값"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> registLanguage(
+			@ApiParam(value="프로필 이미지", required = true)
+			@RequestPart(value="file",required = false) List<MultipartFile> multipartFile {
+
+		String imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
+
+		return new ResponseEntity(imgString, HttpStatus.OK);
 	}
 }
