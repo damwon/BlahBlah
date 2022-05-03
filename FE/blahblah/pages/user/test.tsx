@@ -26,7 +26,7 @@ export default function Login() {
     event.preventDefault();
     axios({
       method:'post',
-      url:'https://blahblah.community:8443/api/user/signup/duplicate-check-email',
+      url:'https://blahblah.community:8443/api/user/checkemail',
       data: {
         'email':'flykimjiwon22@gmail.com'
       },
