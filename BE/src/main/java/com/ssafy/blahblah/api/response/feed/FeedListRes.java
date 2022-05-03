@@ -1,6 +1,4 @@
 package com.ssafy.blahblah.api.response.feed;
-
-import com.ssafy.blahblah.db.entity.Comment;
 import com.ssafy.blahblah.db.entity.Feed;
 import lombok.*;
 
@@ -19,6 +17,7 @@ public class FeedListRes {
     private String imgUrl;
     private String userName;
     private Boolean open;
+    private int likeCount;
     private List<CommentListRes> comments;
 
     public static FeedListRes fromEntity(Feed feed) {
@@ -28,6 +27,7 @@ public class FeedListRes {
                 .imgUrl(feed.getImgUrl())
                 .open(feed.getOpen())
                 .userName(feed.getUser().getName())
+                .likeCount(feed.getLikeCount())
                 .comments(feed.getComments().stream().map(CommentListRes::fromEntity).collect(Collectors.toList()))
                 .build();
     }

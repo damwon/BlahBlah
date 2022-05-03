@@ -34,6 +34,9 @@ public class Feed extends BaseEntity{
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private int likeCount;
+
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     private User user;
@@ -42,14 +45,19 @@ public class Feed extends BaseEntity{
     @OneToMany(mappedBy = "feed",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "feed",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Heart> hearts = new ArrayList<>();
+
     @Builder
-    public Feed(String content,Boolean open, LocalDateTime createdAt, LocalDateTime updatedAt, String imgUrl, User user){
+    public Feed(String content,Boolean open, LocalDateTime createdAt, LocalDateTime updatedAt, String imgUrl, User user, int likeCount){
         this.content = content;
         this.open = open;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.user = user;
         this.imgUrl = imgUrl;
+        this.likeCount = likeCount;
 
     }
 }

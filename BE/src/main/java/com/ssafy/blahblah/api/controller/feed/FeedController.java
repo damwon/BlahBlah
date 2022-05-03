@@ -75,6 +75,7 @@ public class FeedController {
         feedRepository.save(Feed.builder()
                 .content(feedPostReq.getContent())
                 .open(feedPostReq.getOpen())
+                .likeCount(0)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .user(user)
@@ -95,7 +96,7 @@ public class FeedController {
         User user = userService.getUserByEmail(userId);
         Optional<Feed> option = feedRepository.findById(feedId);
         if(option.isEmpty()) {
-            return null;
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Feed feed = option.get();
         if(feed.getUser().equals(user)){
