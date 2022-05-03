@@ -1,5 +1,6 @@
-import { Container,Row,Col,Carousel } from 'react-bootstrap';
-
+import { Container,Row,Col,Carousel,Card,Button } from 'react-bootstrap';
+import Carou from '../component/main/Carou'
+import CardComponent from '../component/main/CardComponent'
 export default function Home() {
 
   
@@ -8,40 +9,24 @@ export default function Home() {
   <Container>
     <Row>
       <Col>
-      <Carousel>
-  {/* <Carousel.Item>
-    <img
-      className="d-block w-100"
-      src="main/test.png"
-      alt="First slide"
-    />
-    
-  </Carousel.Item> */}
-  <Carousel.Item>
-    <img
-      className="d-block w-100"
-      src="main/1.png"
-      alt="Second slide"
-    />
-
-    
-  </Carousel.Item>
-  <Carousel.Item>
-    <img
-      className="d-block w-100"
-      src="main/2.png"
-      alt="Second slide"
-    />
-
-    
-  </Carousel.Item>
-  
-</Carousel>
+      <Carou></Carou>
       </Col>
     </Row>
+    <Row>
+    <div className="carddiv">
+    <CardComponent></CardComponent>
+    </div>
+    </Row>
+    
   </Container>
 
-  
+  <style jsx>{`
+        
+        .carddiv{
+          margin:20px;
+        }
+
+      `}</style>
 
   </>
 }

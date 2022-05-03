@@ -90,10 +90,10 @@ export default function Login() {
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>이메일주소</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
+                  <Form.Control onKeyUp={handleKeyPress} type="email" placeholder="Enter email" onChange={handleEmail} />
                   {/* <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
-                  </Form.Text> */}
+                  </Form.Text> */}s
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
