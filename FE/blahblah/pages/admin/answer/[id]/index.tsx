@@ -96,9 +96,9 @@ export default function AnswerDetail() {
             </Button>
           </Grid>
           <Grid item xs={7}>
-            <h4>{title}</h4>
+            <h5>{title}</h5>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={3} style={{ textAlign: "center" }}>
             {time}
           </Grid>
           <hr style={{ width: "100vw" }}></hr>
@@ -129,7 +129,7 @@ export default function AnswerDetail() {
           <Button
             variant="contained"
             onClick={() => {
-              router.push(`/qna`);
+              router.push(`/admin/answer`);
             }}
           >
             목록
