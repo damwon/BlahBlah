@@ -88,9 +88,9 @@ export default function Regist() {
         
           </Col>
           <Col>
-          <h1>이메일 인증보낼곳</h1>
+          <h1>회원가입 이메일인증</h1>
           <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>이메일주소 {inputEmail}</Form.Label>
+                {/* <Form.Label>이메일주소 {inputEmail}</Form.Label> */}
                 <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
                 <Button onClick={onClickEmailCheck}
                   style={{ marginTop: '5px' }} variant="outline-dark">이메일 중복체크</Button>

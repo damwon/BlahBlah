@@ -70,12 +70,12 @@ export default function userNav() {
                 ?<><Link href="/user/login">
                 <a className="navmenu">로그인</a>
                   </Link>
-              <Link href="/user/signup">
-                <a className="navmenu">가입(미완)</a>
+              <Link href="/user/email">
+                <a className="navmenu">가입</a>
                   </Link>
-                  <Link href="/user/signup2">
+                  {/* <Link href="/user/signup2">
                 <a className="navmenu">가입(됨)</a>
-                  </Link>
+                  </Link> */}
                   </>
                 :<>
                 <Link href="/user/mypage">

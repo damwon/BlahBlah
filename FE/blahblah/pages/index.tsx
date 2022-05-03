@@ -9,14 +9,14 @@ export default function Home() {
     <Row>
       <Col>
       <Carousel>
-  <Carousel.Item>
+  {/* <Carousel.Item>
     <img
       className="d-block w-100"
       src="main/test.png"
       alt="First slide"
     />
     
-  </Carousel.Item>
+  </Carousel.Item> */}
   <Carousel.Item>
     <img
       className="d-block w-100"

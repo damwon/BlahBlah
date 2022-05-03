@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
+import { Email } from '@mui/icons-material';
 
 export default function EmailCheck() {
   const router = useRouter();
@@ -53,7 +54,16 @@ export default function EmailCheck() {
           {
             isCheck
             ?<>이메일인증 요청성공
-            <button>회원가입넘어가기</button>
+            <button onClick={()=>{
+              router.push(
+                {
+                  pathname: "/user/signup",
+                  query: {
+                    email:key,
+                  },
+                },
+                `/user/signup`)
+            }}>회원가입넘어가기</button>
             </>
             :<>이메일인증 요청실패</>
           }

@@ -18,6 +18,31 @@ export default function Login() {
     event.preventDefault();
     setPassword(event.target.value);
   };
+
+  const handleKeyPress = (event:any) => {
+    if(event.key === 'Enter') {
+      event.preventDefault();
+    axios
+      .post(`https://blahblah.community:8443/api/auth/login`, {
+        'email': email,
+        'password': password,
+      })
+      .then((res) => {
+        localStorage.setItem("jwt", res.data.accessToken);
+        console.log(res)
+        location.reload()
+        // router.replace('/user')
+        // router.push("/user")
+        // 리다이렉트를하자
+      })
+      .catch((err) => {
+        console.log(err)
+        alert('제대로 입력해')
+        // alert 오류출력
+
+      });
+    }
+  }
   const onClickLogin = (event: any) => {
     event.preventDefault();
     axios
@@ -35,6 +60,7 @@ export default function Login() {
       })
       .catch((err) => {
         console.log(err)
+        alert('제대로 입력해')
         // alert 오류출력
 
       });
@@ -58,8 +84,8 @@ export default function Login() {
         <Row>
           <Col></Col>
           <Col><h1>로그인</h1>
-            {email}
-            {password}
+            {/* {email}
+            {password} */}
             <div className='logdiv'>
               <Form>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -72,7 +98,7 @@ export default function Login() {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>패스워드</Form.Label>
-                  <Form.Control type="password" placeholder="Password" onChange={handlePassword} />
+                  <Form.Control onKeyUp={handleKeyPress} type="password" placeholder="Password" onChange={handlePassword} />
                 </Form.Group>
                 {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" label="Check me out" />
@@ -80,11 +106,11 @@ export default function Login() {
                 <Button onClick={onClickLogin}
                   style={{ marginBottom: '20px' }} variant="outline-dark">로그인</Button>
                 <Button onClick={() => {
-                  router.push('/user/signup')
+                  router.push('/user/email')
                 }}
                   style={{ marginBottom: '20px' }} variant="outline-dark">회원가입</Button>
                 <Button onClick={() => {
-                  router.push('/user/findpass')
+                  router.push('/user/pass')
                 }}
                   style={{ marginBottom: '20px' }} variant="outline-dark">비밀번호찾기</Button>
                 {/* <button type="submit" onClick={onClickLogin}>
