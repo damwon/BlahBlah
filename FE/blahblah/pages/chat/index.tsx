@@ -1,7 +1,19 @@
 /* eslint-disable */
 import { useState, useRef, useEffect } from "react";
 import ChatList from "../../component/chat/chatList";
-import { styled, TextField, IconButton, Box, Typography } from "@mui/material";
+import {
+  styled,
+  TextField,
+  IconButton,
+  Box,
+  Typography,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  SelectChangeEvent,
+  MenuItem,
+} from "@mui/material";
 import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import ChatTabs from "../../component/chat/chatTabs";
@@ -64,7 +76,7 @@ export default function Chat() {
 
   const connect = () => {
     let socket = new SockJS("https://blahblah.community:8080/chat-websocket");
-
+    const token = localStorage.getItem("jwt");
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame: any) {
@@ -77,10 +89,11 @@ export default function Chat() {
         setChatHistory((prev) => [...prev, tmpChat]);
       });
       // 채팅 목록 가져오기
-      stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
+      stompClient.subscribe("/topic/list", function (msg: any) {
         console.log(msg.body);
         let tmpMsg = JSON.parse(msg.body);
         setChattingList(tmpMsg);
+        setChatname(tmpMsg[0].roomName);
       });
 
       list();
@@ -100,10 +113,6 @@ export default function Chat() {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(chatHistory);
-  }, [chatHistory]);
-
   const updateLastRead = () => {
     console.log("list");
     stompClient.send(
@@ -115,7 +124,16 @@ export default function Chat() {
 
   const list = () => {
     console.log("list");
-    stompClient.send("/chat/list/" + userData.id, {}, JSON.stringify({}));
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      stompClient.send(
+        "/chat/list",
+        {
+          Authorization: `Bearer ${token}`,
+        },
+        JSON.stringify({})
+      );
+    }
   };
 
   const sendMsg = () => {
@@ -186,6 +204,7 @@ export default function Chat() {
       alert("메시지를 입력해주세요.");
     }
   };
+
   // recorder dialog 열고 닫기
   const [openRecorder, setOpenRecorder] = useState(false);
   const handleClickOpenRecorder = () => {
@@ -196,9 +215,44 @@ export default function Chat() {
     setOpenRecorder(false);
   };
 
-  const [chatname, setChatname] = useState("Geuntae");
-
+  const [chatname, setChatname] = useState("");
+  // 채팅 첨삭
   const [correctMessage, setCorrectMessage] = useState("");
+
+  // 채팅 번역
+  const [translateMessage, setTranslateMessage] = useState("");
+  const [translatedMessage, setTranslatedMessage] = useState("");
+  const [languageList, setLanguageList] = useState([]);
+  const handleTranslate = () => {
+    axios({
+      method: "post",
+      url: "https://blahblah.community:8080/api/trans",
+      data: {
+        text: translateMessage,
+        targetLanguage: targetLanguage,
+      },
+    }).then((res) => {
+      console.log(res.data);
+      setTranslatedMessage(res.data);
+    });
+  };
+
+  const getLanguageList = () => {
+    axios({
+      method: "get",
+      url: "https://blahblah.community:8080/api/supportedLanguage/en",
+    }).then((res) => {
+      setLanguageList(res.data);
+    });
+  };
+  const [targetLanguage, setTargetLanguage] = useState("");
+  const handleSelectLanguage = (e: SelectChangeEvent) => {
+    setTargetLanguage(e.target.value);
+  };
+
+  useEffect(() => {
+    getLanguageList();
+  }, []);
 
   return (
     <>
@@ -220,6 +274,7 @@ export default function Chat() {
           sx={{
             display: "flex",
             border: "1px solid black",
+            borderRadius: "10px",
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "center",
@@ -279,6 +334,7 @@ export default function Chat() {
                       key={index}
                       message={item.content}
                       setCorrectMessage={setCorrectMessage}
+                      setTranslateMessage={setTranslateMessage}
                     />
                   );
                 }
@@ -300,6 +356,33 @@ export default function Chat() {
                 correctMessage={correctMessage}
                 setCorrectMessage={setCorrectMessage}
               />
+            )}
+            {translateMessage && languageList && (
+              <Box sx={{ display: "flex" }}>
+                <Typography>{translateMessage}</Typography>
+                <Box sx={{ minWidth: 120 }}>
+                  <FormControl fullWidth>
+                    <InputLabel>Language</InputLabel>
+                    <Select
+                      label="언어"
+                      onChange={handleSelectLanguage}
+                      value={targetLanguage}
+                    >
+                      {languageList.map((item: any, index) => {
+                        return (
+                          <MenuItem key={index} value={item.code}>
+                            {item.label}
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Button onClick={handleTranslate}>Translate!</Button>
+                {translatedMessage && (
+                  <Typography>{translatedMessage}</Typography>
+                )}
+              </Box>
             )}
             <Box>
               <TextField

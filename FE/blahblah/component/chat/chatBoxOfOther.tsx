@@ -61,6 +61,7 @@ export default function ChatBoxOfOther(props: any) {
         <MenuItem
           onClick={() => {
             handleClose();
+            props.setTranslateMessage(props.message);
           }}
         >
           Translate
