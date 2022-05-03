@@ -123,7 +123,7 @@ public class UserController {
 	public ResponseEntity checkEmail(@RequestBody @ApiParam(value="유저 아이디(이메일)", required = true) @RequestPart(value="email",required = false) String userEmail) {
 		UUID uuid = UUID.randomUUID();
 		redisUtil.setDataExpire(uuid.toString(), userEmail, 60 * 30L);
-		String CHECK_EMAIL_LINK = "https://blahblah.community/checkemail/";
+		String CHECK_EMAIL_LINK = "https://blahblah.community/user/email/";
 		emailService.sendMail(userEmail,"사용자 인증 메일",CHECK_EMAIL_LINK+uuid.toString());
 		return new ResponseEntity(HttpStatus.OK);
 	}
@@ -229,7 +229,7 @@ public class UserController {
 			if (user.getEmail().equals(userFindPwReq.getEmail())) {
 				UUID uuid = UUID.randomUUID();
 				redisUtil.setDataExpire(uuid.toString(),user.getEmail(), 60 * 30L);
-				String CHANGE_PASSWORD_LINK = "https://blahblah.community/find-password/";
+				String CHANGE_PASSWORD_LINK = "https://blahblah.community/user/pass/";
 				emailService.sendMail(user.getEmail(),"사용자 비밀번호 안내 메일",CHANGE_PASSWORD_LINK+uuid.toString());
 				return new ResponseEntity(HttpStatus.OK);
 			} else {
@@ -294,5 +294,21 @@ public class UserController {
 		} else {
 			return "admin";
 		}
+	}
+
+	@PostMapping("/profile")
+	@ApiOperation(value = "프로필 이미지 등록", notes = "프로필 이미지를 등록한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 409, message = "유효하지않은 값"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> registLanguage(
+			@ApiParam(value="프로필 이미지", required = true)
+			@RequestPart(value="file",required = false) List<MultipartFile> multipartFile {
+
+		String imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
+
+		return new ResponseEntity(imgString, HttpStatus.OK);
 	}
 }
