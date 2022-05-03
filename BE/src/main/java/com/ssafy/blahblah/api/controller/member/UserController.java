@@ -120,7 +120,8 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PostMapping("/checkemail")
-	public ResponseEntity checkEmail(@RequestBody @ApiParam(value="유저 아이디(이메일)", required = true) @RequestPart(value="email",required = false) String userEmail) {
+	public ResponseEntity checkEmail(@RequestBody @ApiParam(value="유저 아이디(이메일)", required = true) UserAuthEmailReq userAuthEmailReq) {
+		String userEmail = userAuthEmailReq.getEmail();
 		UUID uuid = UUID.randomUUID();
 		redisUtil.setDataExpire(uuid.toString(), userEmail, 60 * 30L);
 		String CHECK_EMAIL_LINK = "https://blahblah.community/user/email/";
@@ -294,21 +295,5 @@ public class UserController {
 		} else {
 			return "admin";
 		}
-	}
-
-	@PostMapping("/profile")
-	@ApiOperation(value = "프로필 이미지 등록", notes = "프로필 이미지를 등록한다.")
-	@ApiResponses({
-			@ApiResponse(code = 200, message = "성공"),
-			@ApiResponse(code = 409, message = "유효하지않은 값"),
-			@ApiResponse(code = 500, message = "서버 오류")
-	})
-	public ResponseEntity<? extends BaseResponseBody> registLanguage(
-			@ApiParam(value="프로필 이미지", required = true)
-			@RequestPart(value="file",required = false) List<MultipartFile> multipartFile {
-
-		String imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
-
-		return new ResponseEntity(imgString, HttpStatus.OK);
 	}
 }
