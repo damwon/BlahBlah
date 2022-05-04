@@ -6,8 +6,10 @@ import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Feed;
+import com.ssafy.blahblah.db.entity.Follow;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.FeedRepository;
+import com.ssafy.blahblah.db.repository.FollowRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,23 +39,50 @@ public class FeedController {
     @Autowired
     AwsS3Service awsS3Service;
 
+    @Autowired
+    FollowRepository followRepository;
+
     @GetMapping
     public ResponseEntity listForAll(Authentication authentication){
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        List<Feed> feedList = feedRepository.findByUserOrOpenTrue(user);
-        if (feedList == null || feedList.size() == 0) {
-            return ResponseEntity.status(HttpStatus.OK).body(null);
-        }
+        List<Feed> allFeeds = new ArrayList<>();
 
-        List<FeedListRes> dto = feedList.stream().map(FeedListRes::fromEntity).collect(Collectors.toList());
+        List<Feed> feedList = feedRepository.findByUserOrOpenTrue(user);
+        allFeeds.addAll(feedList);
+        List<Follow> follows = followRepository.findAllByFromUser(user);
+        follows.forEach(follow -> {
+            if(followRepository.findByToUserAndFromUser(user,follow.getToUser()).isPresent()){
+                List<Feed> feeds = feedRepository.findByUserAndOpenFalse(follow.getToUser());
+                allFeeds.addAll(feeds);
+            }
+
+        });
+        List<FeedListRes> dto = allFeeds.stream().map(FeedListRes::fromEntity).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     @GetMapping("/friends")
     public ResponseEntity listForFriends(Authentication authentication) {
-        return new ResponseEntity(HttpStatus.OK);
+
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        String userId = userDetails.getUsername();
+        User user = userService.getUserByEmail(userId);
+        List<Follow> follows = followRepository.findAllByFromUser(user);
+        List<Feed> myFeeds = feedRepository.findAllByUser(user);
+        List<Feed> allFeeds = new ArrayList<>();
+        follows.forEach(follow -> {
+            if(followRepository.findByToUserAndFromUser(user,follow.getToUser()).isPresent()){
+                List<Feed> feeds = feedRepository.findAllByUser(follow.getToUser());
+                allFeeds.addAll(feeds);
+            }
+
+        });
+        allFeeds.addAll(myFeeds);
+        List<FeedListRes> dto = allFeeds.stream().map(FeedListRes::fromEntity).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
+
     }
 
 
