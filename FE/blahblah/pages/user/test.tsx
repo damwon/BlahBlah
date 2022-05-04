@@ -82,13 +82,13 @@ export default function Login() {
 
     const formData = new FormData();
     const info:any = {
-      "email":"nb5sdf555@ssafy.com",
+      "email":"xxxdsdssddf555@ssafy.com",
       "name":"맛점",
-      "gender":0,
-      "age":37,
+      "gender":'5',
+      "age":'37',
       "description":"테스계정입니다.",
       "password":"ssafy",
-      "list" : [{"code":"kor", "level":3}, {"code":"en", "level":4}, {"code":"chi", "level":5}]
+      "list" : [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}]
   }
     
     formData.append('file',file)

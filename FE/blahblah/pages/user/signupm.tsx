@@ -3,8 +3,11 @@ import { useRouter } from "next/router";
 import { Form, Button, Container, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
 import axios from "axios";
 import { useState } from "react";
+import lang2 from '../../component/user/Lang'
 
 export default function Signup() {
+  const lang:any = lang2
+  
   const Router = useRouter();
   const { query } = useRouter();
   const [email,setEmail] = useState(query.email)
@@ -25,45 +28,73 @@ export default function Signup() {
   const [pwsame, setPwsame] = useState(false)
 
   // 언어종류
-  const languages = ['Korean', 'English', 'Japanese', 'Chinese', 'Spanish'
-    , 'a', 'b', 'c', '....']
+  const languages = Object.keys(lang)
+  // const languages = ['Korean', 'English', 'Japanese', 'Chinese', 'Spanish'
+  //   , 'a', 'b', 'c', '....']
   // 모국어
   const [first, setFirst] = useState([])
+  const [firstob,setFirstob] = useState([])
   const handleFirst = (e: any) => {
 
     var array: any = [...first]
-    // console.log(array.includes(input))
-    if (array.includes(e.currentTarget.value) === false && array.length <= 1) {
+    var ob:any=[...firstob]
+    
+    if (array.includes(e.currentTarget.value) === false && array.length <= 1 &&ob.length<=1) {
       array.push(e.currentTarget.value)
+      // let key = e.currentTarget.value
+      let key = e.currentTarget.value
+      ob.push({"code":lang[key], "level":'1'})
     }
-
+    // console.log(lname)
+    setFirstob(ob)
     setFirst(array);
+    console.log(first)
+    console.log(firstob)
   };
   // 구사언어
   const [second, setSecond] = useState([])
+  const [secondob,setSecondob] = useState([])
   const handleSecond = (e: any) => {
     var array: any = [...second]
-    if (array.includes(e.currentTarget.value) === false && array.length <= 2) {
-      array.push(e.currentTarget.value)
-    }
+    var ob:any = [...secondob]
 
+    if (array.includes(e.currentTarget.value) === false && array.length <= 2&&ob.length<=2) {
+      array.push(e.currentTarget.value)
+      let key = e.currentTarget.value
+      ob.push({"code":lang[key], "level":'4'})
+    }
     setSecond(array);
+    setSecondob(ob)
+    console.log(second)
+    console.log(secondob)
   };
   // 학습언어
   const [third, setThird] = useState([])
+  const [thirdob,setThirdob] = useState([])
   const handleThird = (e: any) => {
     var array: any = [...third]
-    if (array.includes(e.currentTarget.value) === false && array.length <= 3) {
-      array.push(e.currentTarget.value)
-    }
+    var ob:any = [...thirdob]
 
+    if (array.includes(e.currentTarget.value) === false && array.length <= 3&&ob.length<=3) {
+      array.push(e.currentTarget.value)
+      let key = e.currentTarget.value
+      ob.push({"code":lang[key], "level":'5'})
+    }
     setThird(array);
+    setThirdob(ob)
+    console.log(third)
+    console.log(thirdob)
   };
   // 성별
   const [gen, setGen] = useState("")
   const gens = ['남자', '여자']
   const onGenHanlder = (e: any) => {
-    setGen(e.currentTarget.value)
+    if(e.currentTarget.value==='남자'){
+      setGen('0')
+    }else{
+      setGen('1')
+    }
+    // setGen(e.currentTarget.value)
   }
   // 나이
   const [age, setAge] = useState(0)
@@ -96,22 +127,44 @@ export default function Signup() {
     setPwcheck(event.target.value)
   }
 
+  // 프로필 이미지
+  const [file,setFilfe] = useState<any>()
+  const onChangeImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+    
+    
+    if(e.target.files){
+      const uploadFile = e.target.files[0]
+      formData.append('file',uploadFile)
+      setFilfe(uploadFile)
+      console.log(uploadFile)
+      console.log('===useState===')
+      console.log(file)
+    }
+  }
+
 
 
   const onSubmit = (event: any) => {
     event.preventDefault();
     const formData = new FormData();
-    // formData.append('code',code)
-    // formData.append('file',file)
-    // any로 바꾸니까 되네용..? 휴우!! file속성 안줘도 되네
-    // formData.append('engName',name)
-    if (password.length >= 6 && password === pwcheck
-      && first.length !== 0 && second.length !== 0
-      && gen.length !== 0 && age == 0 && profile.length !== 0 && name.length !== 0) {
-      alert('가입완료')
-    } else {
-      alert('빈칸이있음')
-    }
+    const newarr = [
+      ...firstob,
+      ...secondob,
+      ...thirdob
+    ]
+    const info:any = {
+      "email":email,
+      "name":name,
+      "gender":gen,
+      "age":age,
+      "description":profile,
+      "password":password,
+      "list" : newarr,
+  }
+    formData.append('file',file)
+    formData.append('info',new Blob([JSON.stringify(info)],{type:"application/json"}))
 
     axios({
       url: `https://blahblah.community:8443/api/user/signup`,
@@ -134,6 +187,7 @@ export default function Signup() {
         console.log(err);
         console.log('가입실패')
       });
+    
   }
 
 
@@ -146,7 +200,7 @@ export default function Signup() {
 
         <Row>
           <Col></Col>
-          <Col><h1>회원가입</h1>
+          <Col><h1>회원가입 {lang['English']}</h1>
           {email}
           {/* 이거 이메일 빈녀석이면 예외처리 */}
             {/* const [result,setResult] = useState(false) */}
@@ -183,6 +237,7 @@ export default function Signup() {
               <Form.Label>- 추가정보 -</Form.Label>
 
               {gen}
+              
               <Form.Select aria-label="Default select example"
                 onChange={onGenHanlder} >
                 <option>성별 </option>
@@ -214,6 +269,7 @@ export default function Signup() {
               <Button onClick={() => {
                 var newarr: any = []
                 setFirst(newarr)
+                setFirstob(newarr)
               }}
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
              
@@ -229,6 +285,7 @@ export default function Signup() {
               <Button onClick={() => {
                 var newarr: any = []
                 setSecond(newarr)
+                setSecondob(newarr)
               }}
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
              
@@ -246,11 +303,17 @@ export default function Signup() {
               <Button onClick={() => {
                 var newarr: any = []
                 setThird(newarr)
+                setThirdob(newarr)
               }}
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
         
               <hr />
-              <Form.Label>프로필이미지 {proimg}</Form.Label>
+              <h3>프로필이미지</h3>
+              <form>
+  <label htmlFor="profile-upload" />
+  <input type="file" id="profile-upload" accept="image/*" onChange={onChangeImg}/>
+</form>
+              {/* <Form.Label>프로필이미지 {proimg}</Form.Label>
               <Form.Select aria-label="Default select example"
                 onChange={handleProimg} value={proimg}>
                 <option>이미지고르기 </option>
@@ -261,7 +324,24 @@ export default function Signup() {
               <Button onClick={() => {
                 setProimg('0')
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
+
+<Button onClick={() => {
+                console.log(first)
+                console.log(firstob)
+                console.log(second)
+                console.log(secondob)
+                console.log(third)
+                console.log(thirdob)
+                const newarr = [
+                  ...firstob,
+                  ...secondob,
+                  ...thirdob
+                ]
+                console.log(newarr)
+
+              }}
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
            
 
 

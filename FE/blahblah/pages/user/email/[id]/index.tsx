@@ -57,12 +57,12 @@ export default function EmailCheck() {
             <button onClick={()=>{
               router.push(
                 {
-                  pathname: "/user/signup",
+                  pathname: "/user/signupm",
                   query: {
                     email:key,
                   },
                 },
-                `/user/signup`)
+                `/user/signupm`)
             }}>회원가입넘어가기</button>
             </>
             :<>이메일인증 요청실패</>
