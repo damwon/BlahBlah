@@ -6,6 +6,7 @@ import com.ssafy.blahblah.api.service.language.LangInfoService;
 import com.ssafy.blahblah.api.service.language.LanguageService;
 import com.ssafy.blahblah.api.service.member.EmailService;
 import com.ssafy.blahblah.api.service.member.UserService;
+import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.common.util.RedisUtil;
@@ -46,7 +47,9 @@ public class UserController {
 
 	private final LangInfoService langInfoService;
 
-	public UserController(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RedisUtil redisUtil, LanguageService languageService, LangInfoService langInfoService) {
+	private final AwsS3Service awsS3Service;
+
+	public UserController(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RedisUtil redisUtil, LanguageService languageService, LangInfoService langInfoService, AwsS3Service awsS3Service) {
 		this.userService = userService;
 		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
@@ -54,6 +57,7 @@ public class UserController {
 		this.redisUtil = redisUtil;
 		this.languageService = languageService;
 		this.langInfoService = langInfoService;
+		this.awsS3Service = awsS3Service;
 	}
 
 	@GetMapping("/")
@@ -73,7 +77,7 @@ public class UserController {
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
 			@ApiResponse(code = 401, message = "인증 실패"),
-			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 404, message = "이미 가입한 이메일"),
 			@ApiResponse(code = 409, message = "유효하지않은 값"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
@@ -81,35 +85,37 @@ public class UserController {
 			@ApiParam(value="회원가입 정보", required = true)
 			@RequestBody UserRegisterPostReq registerInfo) {
 
-		System.out.println(registerInfo.getList());
-		Object langInfo = registerInfo.getList().get(0);
-		System.out.println(langInfo);
-//		System.out.println(langInfo.);
+		User isUser = userService.getUserByEmail(registerInfo.getEmail());
+		if (isUser != null) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(404, "duplicatedEmail"));
+		}
+		
 		UserInfoPostReq userInfoPostReq = new UserInfoPostReq();
 		userInfoPostReq.setEmail(registerInfo.getEmail());
 		userInfoPostReq.setName(registerInfo.getName());
 		userInfoPostReq.setGender(registerInfo.getGender());
 		userInfoPostReq.setAge(registerInfo.getAge());
 		userInfoPostReq.setDescription(registerInfo.getDescription());
-		userInfoPostReq.setProfileImg(registerInfo.getProfileImg());
+		String imgString = awsS3Service.uploadImage(registerInfo.getProfileImg(), "profile").get(0);
+		userInfoPostReq.setProfileImg(imgString);
 		userInfoPostReq.setPassword(registerInfo.getPassword());
 
 		User user = userService.createUser(userInfoPostReq);
-//
-//		ArrayList list = registerInfo.getList();
-//		int listSize = list.size();
-//		if(user == null) {
-//			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "InvalidValue"));
-//		} else {
-//			long userId = user.getId();
-//			for (int i=0; i<listSize; i++) {
-//				long langId = languageService.getLanguageByCode(list.get(i).get("code"));
-//			}
-//			String code = userLangPostReq.getCode();
-//			long langId = languageService.getLanguageByCode(code).getId();
-//			Integer level = userLangPostReq.getLevel();
-//			LangInfo lang = langInfoService.createLangInfo(userId, langId, level);
-//		}
+
+		if(user == null) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "InvalidValue"));
+		} else {
+			long userId = user.getId();
+
+			UserLangPostReq userLangPostReq = new UserLangPostReq();
+
+			for(UserLangPostReq item: registerInfo.getList()) {
+				long langId = languageService.getLanguageByCode(item.getCode()).getId();
+				Integer level = item.getLevel();
+				userLangPostReq.setLevel(item.getLevel());
+				langInfoService.createLangInfo(userId, langId, level);
+			}
+		}
 
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
