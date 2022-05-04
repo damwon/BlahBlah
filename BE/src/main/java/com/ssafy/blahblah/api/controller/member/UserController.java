@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.*;
@@ -83,20 +84,23 @@ public class UserController {
 	})
 	public ResponseEntity<? extends BaseResponseBody> signup(
 			@ApiParam(value="회원가입 정보", required = true)
-			@RequestBody UserRegisterPostReq registerInfo) {
-
-		User isUser = userService.getUserByEmail(registerInfo.getEmail());
-		if (isUser != null) {
+			@RequestPart("info") UserRegisterPostReq registerInfo,
+			@RequestPart(value="file",required = false) List<MultipartFile> multipartFile) {
+		Optional<User> isUser = userService.isUserByEmail(registerInfo.getEmail());
+		if (isUser.isPresent()) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(404, "duplicatedEmail"));
 		}
-		
+
 		UserInfoPostReq userInfoPostReq = new UserInfoPostReq();
 		userInfoPostReq.setEmail(registerInfo.getEmail());
 		userInfoPostReq.setName(registerInfo.getName());
 		userInfoPostReq.setGender(registerInfo.getGender());
 		userInfoPostReq.setAge(registerInfo.getAge());
 		userInfoPostReq.setDescription(registerInfo.getDescription());
-		String imgString = awsS3Service.uploadImage(registerInfo.getProfileImg(), "profile").get(0);
+		String imgString = "profile_default.png";
+		if (multipartFile != null ) {
+			imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
+		}
 		userInfoPostReq.setProfileImg(imgString);
 		userInfoPostReq.setPassword(registerInfo.getPassword());
 
