@@ -6,53 +6,12 @@ import { useState } from "react";
 
 export default function Signup() {
   const Router = useRouter();
+  const { query } = useRouter();
+  const [email,setEmail] = useState(query.email)
 
   // 가입결과 테스트
-  // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
   const [result, setResult] = useState(false)
-  // 이메일
-  const [inputEmail, setInputEmail] = useState("");
-  // 이메일 중복체크
-  const [isEmailOnly, setIsEmailOnly] = useState(false);
-  // 이메일 중복체크후 이메일 인증버튼 나오게
-  const [EmailCheck, setEmailCheck] = useState(false)
-  // 그리고 이메일창 onchange 있으면 둘다 초기화
-  // 이메일 입력부분
-  const handleEmail = (event: any) => {
-    event.preventDefault();
-    setInputEmail(event.target.value);
-    // 이메일중복체크, 이메일인증 초기화
-    setIsEmailOnly(false)
-    setEmailCheck(false)
-  };
-  // 이메일 중복체크
-  const onClickEmailCheck = () => {
-    const email = inputEmail;
-    const regEmail =
-      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
-    // 이메일 형식, 중복 확인
-    if (regEmail.test(email) === true) {
-      axios
-        .post("https://blahblah.community:8443/api/user/signup/duplicate-check-email", {
-          'email': inputEmail,
-        })
-        // 중복되지 않는 경우, 중복검사 확인
-        .then(function (response) {
-          if (response.status === 200) {
-            setIsEmailOnly((prevState) => true);
-            setEmailCheck((prevState) => true)
-          }
-        })
-        // 중복되는 경우, 다시 중복검사 + 알림(이미 사용중인 이메일)
-        .catch(function (error) {
-          alert("이미 사용중인 이메일입니다.");
-          setIsEmailOnly((prevState) => false);
-        });
-      // 이메일 형식 X, 다시 중복검사 + 알림(메일 형식 아님)
-    } else {
-      alert("이메일 형식이 아닙니다.");
-    }
-  };
+  
   // 이름
   const [name, setName] = useState('')
   const handleName = (event: any) => {
@@ -141,23 +100,7 @@ export default function Signup() {
 
   const onSubmit = (event: any) => {
 
-    //
-    //
-    // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
-
-    // alert('hihi')
-    // 1.이메일중복체크 위에서완료, true체크
-    // 2.비밀번호 같은지체크
-    // 3.추가정보 빈칸 아닌지체크
-    // 4.자기소개 빈칸 아닌지체크
-    // 5.제출
-    // if(isEmailOnly===true){
-    //   alert('이메일오케이')
-    // }
-    // first,second,gen,age,profile
-
-    // 이메일은 1)이메일이맞는지, 2)이메일이 맞으면 중복체크까지
-    // 여기 체크나 더하기~!
+    
     if (password.length >= 6 && password === pwcheck
       && first.length !== 0 && second.length !== 0
       && gen.length !== 0 && age == 0 && profile.length !== 0 && name.length !== 0) {
@@ -196,22 +139,21 @@ export default function Signup() {
         <Row>
           <Col></Col>
           <Col><h1>회원가입</h1>
+          {email}
+          {/* 이거 이메일 빈녀석이면 예외처리 */}
             {/* const [result,setResult] = useState(false) */}
 
 
 
 
             <div className='logdiv'>
-              {/* <Form></Form> */}
-              {/* 이놈 제거! */}
-              <Form.Group className="mb-3" controlId="formBasicEmail">
+              
+              {/* <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>이메일주소 {inputEmail}</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
                 <Button onClick={onClickEmailCheck}
                   style={{ marginTop: '5px' }} variant="outline-dark">이메일 중복체크</Button>
-                {/* <button  onClick={onClickEmailCheck} >
-                  이메일 중복체크
-                </button> */}
+                
                 {EmailCheck === true
                   ? <><Button
                     style={{ marginTop: '5px' }} variant="outline-dark">이메일 인증</Button>
@@ -219,7 +161,7 @@ export default function Signup() {
                   : null
                 }
 
-              </Form.Group>
+              </Form.Group> */}
 
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>이름{name}</Form.Label>
