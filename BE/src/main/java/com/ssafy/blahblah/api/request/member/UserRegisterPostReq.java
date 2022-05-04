@@ -28,8 +28,6 @@ public class UserRegisterPostReq {
 		Integer age;
 		@ApiModelProperty(name="유저 description", example="your_description")
 		String description;
-		@ApiModelProperty(name="유저 profileImg", example="your_profileImg")
-		List<MultipartFile> profileImg;
 		@ApiModelProperty(name="유저 Password", example="your_password")
 		String password;
 

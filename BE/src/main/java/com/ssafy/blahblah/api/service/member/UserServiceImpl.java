@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -22,7 +23,14 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
+	@Override
+	public Optional<User> isUserByEmail(String email) {
+		Optional<User> user = userRepository.findByEmail(email);
+		return user;
+	}
+
+
 	@Override
 	public User createUser(UserInfoPostReq userRegisterInfo) {
 		User user = new User();
