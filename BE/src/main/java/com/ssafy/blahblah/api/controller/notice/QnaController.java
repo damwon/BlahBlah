@@ -4,7 +4,6 @@ import com.ssafy.blahblah.api.request.notice.MyQnaReq;
 import com.ssafy.blahblah.api.request.notice.QnaAnswerReq;
 import com.ssafy.blahblah.api.response.notice.MyQnaDetailRes;
 import com.ssafy.blahblah.api.response.notice.MyQnaListPageRes;
-import com.ssafy.blahblah.api.response.notice.MyQnaListRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
