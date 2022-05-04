@@ -23,7 +23,6 @@ export default function QnA() {
     allAxios
       .get(`/qna?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
-        console.log(res.data);
         setLst(res.data.myQnaListRes);
         setTotal(res.data.totalPages);
       })
@@ -41,7 +40,7 @@ export default function QnA() {
             priority
             src="/images/notice.PNG"
             alt="notice2 image"
-            width="240"
+            width="200"
             height="40"
             layout="responsive"
           />

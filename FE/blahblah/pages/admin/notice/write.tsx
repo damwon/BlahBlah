@@ -44,9 +44,10 @@ export default function Write() {
       <Grid item xs={2} />
       <Grid item xs={8}>
         <Image
+          priority
           src="/images/writeNotice.PNG"
           alt="writeNotice image"
-          width="200"
+          width="220"
           height="40"
           layout="responsive"
         />

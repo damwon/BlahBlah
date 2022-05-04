@@ -40,7 +40,7 @@ export default function Notice() {
           priority
           src="/images/notice2.PNG"
           alt="notice image"
-          width="240"
+          width="200"
           height="40"
           layout="responsive"
         />
@@ -73,7 +73,6 @@ export default function Notice() {
         </Grid>
         {notices &&
           notices.map((d: any, i: number) => {
-            console.log(d);
             return (
               <Grid
                 container

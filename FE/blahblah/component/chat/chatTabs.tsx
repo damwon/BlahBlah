@@ -4,7 +4,7 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Note from "../../pages/note";
-import WordNote from "../../pages/wordnote";
+import WordNote from "../../pages/wordnote/index";
 
 interface TabPanelProps {
   children?: React.ReactNode;

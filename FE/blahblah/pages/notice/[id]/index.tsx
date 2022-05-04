@@ -22,7 +22,6 @@ export default function QnaInfo() {
       allAxios
         .get(`/notice/${id}`, { headers: setToken() })
         .then((res) => {
-          console.log(res);
           setTitle(res.data.title);
           setContent(res.data.content);
           setTime(res.data.createdAt.substr(0, 10));
@@ -39,8 +38,8 @@ export default function QnaInfo() {
       <Grid item xs={8}>
         <Image
           priority
-          src="/images/notice.PNG"
-          alt="notice2 image"
+          src="/images/notice2.PNG"
+          alt="notice image"
           width="200"
           height="40"
           layout="responsive"
@@ -87,7 +86,7 @@ export default function QnaInfo() {
           <Button
             variant="contained"
             onClick={() => {
-              router.push(`/qna`);
+              router.push(`/notice`);
             }}
           >
             목록

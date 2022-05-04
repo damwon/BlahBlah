@@ -64,7 +64,7 @@ export default function Admin() {
           <p
             style={{ cursor: "pointer" }}
             onClick={() => {
-              router.push("/admin/notice");
+              router.push("/notice");
             }}
           >
             4. 공지사항 리스트
