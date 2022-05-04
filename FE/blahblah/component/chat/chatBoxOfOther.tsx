@@ -7,6 +7,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import React, { useState } from "react";
+import Image from "react-bootstrap/Image";
 
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
@@ -45,7 +46,19 @@ export default function ChatBoxOfOther(props: any) {
         justifyContent: "start",
       }}
     >
-      <ChatTypographyByOther>{props.message}</ChatTypographyByOther>
+      {props.type === "text" && (
+        <ChatTypographyByOther>{props.message}</ChatTypographyByOther>
+      )}
+      {props.type === "audio" && (
+        <audio src={props.message} controls controlsList="nodownload" />
+      )}
+      {props.type === "image" && (
+        <Image
+          src={props.message}
+          alt="image"
+          style={{ width: "200px", height: "200px" }}
+        />
+      )}
       <ChatIconButton onClick={handleClick}>
         <MoreHorizIcon />
       </ChatIconButton>

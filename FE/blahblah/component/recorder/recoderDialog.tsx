@@ -10,17 +10,20 @@ import VoiceRecorder from "./recorder";
 
 export default function RecorderDialog(props: any) {
   return (
-    <Dialog open={props.openRecorder} onClose={props.handleClose}>
+    <Dialog open={props.openRecorder} onClose={props.handleCloseRecorder}>
       <DialogTitle>음성 녹음</DialogTitle>
       <DialogContent>
         <DialogContentText>
           녹음을 하시려면 녹음 시작하기를 누르세요
         </DialogContentText>
-        <VoiceRecorder />
+        <VoiceRecorder
+          setVoiceUrl={props.setVoiceUrl}
+          sendAudio={props.sendAudio}
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleClose}>Cancel</Button>
-        <Button onClick={props.handleClose}>Subscribe</Button>
+        <Button onClick={props.handleCloseRecorder}>Cancel</Button>
+        <Button onClick={props.handleCloseRecorder}>Subscribe</Button>
       </DialogActions>
     </Dialog>
   );

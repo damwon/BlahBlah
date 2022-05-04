@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { useState, useRef, useEffect } from "react";
 import ChatList from "../../component/chat/chatList";
+import Image from "react-bootstrap/Image";
 import {
   styled,
   TextField,
@@ -21,6 +22,7 @@ import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import RecorderDialog from "../../component/recorder/recoderDialog";
+import ImageDialog from "../../component/imageModal/imageDialog";
 import ChatBoxOfOther from "../../component/chat/chatBoxOfOther";
 import CorrectMessage from "../../component/chat/correctMessage";
 // chat websocket
@@ -36,6 +38,8 @@ const ChatTypographyByMe = styled(Typography)({
   color: "white",
   fontWeight: 500,
 });
+
+const ChatAudioByMe = styled("audio")({});
 
 const ChatBox = styled(Box)({
   overflowY: "auto",
@@ -89,7 +93,7 @@ export default function Chat() {
         setChatHistory((prev) => [...prev, tmpChat]);
       });
       // 채팅 목록 가져오기
-      stompClient.subscribe("/topic/list", function (msg: any) {
+      stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
         console.log(msg.body);
         let tmpMsg = JSON.parse(msg.body);
         setChattingList(tmpMsg);
@@ -106,18 +110,23 @@ export default function Chat() {
   useEffect(() => {
     axios({
       method: "get",
-      url: "https://blahblah.community:8080/message/7a819932-4ed4-425f-b66a-05209a4c0a05",
-    }).then((res) => {
-      console.log(res);
-      setChatHistory(res.data);
-    });
+      url: "https://blahblah.community:8080/api/message/7a819932-4ed4-425f-b66a-05209a4c0a05",
+    })
+      .then((res) => {
+        console.log(res);
+        setChatHistory(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   const updateLastRead = () => {
     console.log("list");
+    const token = localStorage.getItem("jwt");
     stompClient.send(
-      "chat/read/" + userData.id + "/" + 1,
-      {},
+      "chat/read/" + 1,
+      { Authorization: `Bearer ${token}` },
       JSON.stringify({})
     );
   };
@@ -136,11 +145,13 @@ export default function Chat() {
     }
   };
 
+  // 텍스트 채팅 보내기
   const sendMsg = () => {
+    const token = localStorage.getItem("jwt");
     if (stompClient) {
       stompClient.send(
         "/chat/send/" + 1 + "/to-other",
-        {},
+        { Authorization: `Bearer ${token}` },
         JSON.stringify({
           type: "text",
           senderId: userData.id,
@@ -153,8 +164,8 @@ export default function Chat() {
       );
 
       stompClient.send(
-        "/chat/send/" + userData.id + "/to-me",
-        {},
+        "/chat/send/to-me",
+        { Authorization: `Bearer ${token}` },
         JSON.stringify({
           type: "text",
           senderId: userData.id,
@@ -211,7 +222,7 @@ export default function Chat() {
     setOpenRecorder(true);
   };
 
-  const handleClose = () => {
+  const handleCloseRecorder = () => {
     setOpenRecorder(false);
   };
 
@@ -231,19 +242,27 @@ export default function Chat() {
         text: translateMessage,
         targetLanguage: targetLanguage,
       },
-    }).then((res) => {
-      console.log(res.data);
-      setTranslatedMessage(res.data);
-    });
+    })
+      .then((res) => {
+        console.log(res.data);
+        setTranslatedMessage(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const getLanguageList = () => {
     axios({
       method: "get",
-      url: "https://blahblah.community:8080/api/supportedLanguage/en",
-    }).then((res) => {
-      setLanguageList(res.data);
-    });
+      url: "https://blahblah.community:8080/api/supportedLanguage/ko",
+    })
+      .then((res) => {
+        setLanguageList(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
   const [targetLanguage, setTargetLanguage] = useState("");
   const handleSelectLanguage = (e: SelectChangeEvent) => {
@@ -253,6 +272,83 @@ export default function Chat() {
   useEffect(() => {
     getLanguageList();
   }, []);
+
+  const [voiceUrl, setVoiceUrl] = useState();
+  const sendAudio = () => {
+    const token = localStorage.getItem("jwt");
+    if (stompClient) {
+      stompClient.send(
+        "/chat/send/" + 1 + "/to-other",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: "audio",
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
+          receiverId: 1,
+          receiverName: "김싸피",
+          content: voiceUrl,
+        })
+      );
+
+      stompClient.send(
+        "/chat/send/to-me",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: "audio",
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
+          receiverId: 1,
+          receiverName: "김싸피",
+          content: voiceUrl,
+        })
+      );
+    }
+  };
+
+  const sendImage = (imageUrl: any) => {
+    const token = localStorage.getItem("jwt");
+    if (stompClient) {
+      stompClient.send(
+        "/chat/send/" + 1 + "/to-other",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: "image",
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
+          receiverId: 1,
+          receiverName: "김싸피",
+          content: imageUrl,
+        })
+      );
+
+      stompClient.send(
+        "/chat/send/to-me",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: "image",
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
+          receiverId: 1,
+          receiverName: "김싸피",
+          content: imageUrl,
+        })
+      );
+    }
+  };
+
+  // 이미지 dialog 열고 닫기
+  const [openImageDialog, setOpenImageDialog] = useState(false);
+  const handleClickOpenImageDialog = () => {
+    setOpenImageDialog(true);
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog(false);
+  };
 
   return (
     <>
@@ -325,13 +421,29 @@ export default function Chat() {
                       }}
                       key={index}
                     >
-                      <ChatTypographyByMe>{item.content}</ChatTypographyByMe>
+                      {item.type === "text" && (
+                        <ChatTypographyByMe>{item.content}</ChatTypographyByMe>
+                      )}
+                      {item.type === "audio" && (
+                        <audio
+                          src={item.content}
+                          controls
+                          controlsList="nodownload"
+                        />
+                      )}
+                      {item.type === "image" && (
+                        <Image
+                          src={item.content}
+                          style={{ width: "200px", height: "200px" }}
+                        />
+                      )}
                     </Box>
                   );
                 } else {
                   return (
                     <ChatBoxOfOther
                       key={index}
+                      type={item.type}
                       message={item.content}
                       setCorrectMessage={setCorrectMessage}
                       setTranslateMessage={setTranslateMessage}
@@ -403,21 +515,24 @@ export default function Chat() {
               <IconButton onClick={handleClickOpenRecorder}>
                 <MicIcon sx={{ color: "black" }} />
               </IconButton>
-              <IconButton
-                onClick={() => {
-                  alert("첨부파일 버튼 눌림");
-                }}
-              >
+              <IconButton onClick={handleClickOpenImageDialog}>
                 <AttachFileIcon
                   sx={{ color: "black", transform: "rotate(45deg)" }}
                 />
               </IconButton>
             </Box>
-
             <RecorderDialog
               openRecorder={openRecorder}
               setOpenRecorder={setOpenRecorder}
-              handleClose={handleClose}
+              handleCloseRecorder={handleCloseRecorder}
+              setVoiceUrl={setVoiceUrl}
+              sendAudio={sendAudio}
+            />
+            <ImageDialog
+              openImageDialog={openImageDialog}
+              setOpenImageDialog={setOpenImageDialog}
+              handleCloseImageDialog={handleCloseImageDialog}
+              sendImage={sendImage}
             />
           </Box>
         </Box>
