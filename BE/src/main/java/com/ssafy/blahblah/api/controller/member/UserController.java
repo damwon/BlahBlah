@@ -2,16 +2,17 @@ package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.request.member.*;
 import com.ssafy.blahblah.api.response.member.UserInfoRes;
+import com.ssafy.blahblah.api.response.member.UserLangInfoRes;
 import com.ssafy.blahblah.api.service.language.LangInfoService;
 import com.ssafy.blahblah.api.service.language.LanguageService;
 import com.ssafy.blahblah.api.service.member.EmailService;
+import com.ssafy.blahblah.api.service.member.RatingService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.common.util.RedisUtil;
 import com.ssafy.blahblah.db.entity.User;
-import com.ssafy.blahblah.db.repository.UserRepository;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -35,8 +37,6 @@ import java.util.*;
 public class UserController {
 
 	private final UserService userService;
-
-	private final UserRepository userRepository;
 
 	private final PasswordEncoder passwordEncoder;
 
@@ -50,18 +50,20 @@ public class UserController {
 
 	private final AwsS3Service awsS3Service;
 
-	public UserController(UserService userService, UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService, RedisUtil redisUtil, LanguageService languageService, LangInfoService langInfoService, AwsS3Service awsS3Service) {
+	private final RatingService ratingService;
+
+	private UserController(UserService userService, PasswordEncoder passwordEncoder, EmailService emailService, RedisUtil redisUtil, LanguageService languageService, LangInfoService langInfoService, AwsS3Service awsS3Service, RatingService ratingService) {
 		this.userService = userService;
-		this.userRepository = userRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.emailService = emailService;
 		this.redisUtil = redisUtil;
 		this.languageService = languageService;
 		this.langInfoService = langInfoService;
 		this.awsS3Service = awsS3Service;
+		this.ratingService = ratingService;
 	}
 
-	@GetMapping("/")
+	@GetMapping()
 	@ApiOperation(value = "등록된 유저 테이블", notes = "유저 정보를 리스트로 반환한다")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -69,7 +71,11 @@ public class UserController {
 	})
 	public ResponseEntity getUser() {
 		List<User> users = userService.getUserTable();
-		return new ResponseEntity(users,HttpStatus.OK);
+		List<UserLangInfoRes> userLangInfoRes = users.stream().map(UserLangInfoRes::fromEntity).collect(Collectors.toList());
+		userLangInfoRes.forEach(UserLangInfoRes -> {
+			UserLangInfoRes.setRating(ratingService.countRating(UserLangInfoRes.getId()));
+		});
+		return new ResponseEntity(userLangInfoRes,HttpStatus.OK);
 	}
 
 
@@ -196,7 +202,7 @@ public class UserController {
 		user.setName(userEditPutReq.getName());
 		user.setDescription(userEditPutReq.getDescription());
 		user.setProfileImg(userEditPutReq.getProfileImg());
-		userRepository.save(user);
+		userService.saveUser(user);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
@@ -216,7 +222,7 @@ public class UserController {
 		String email = userDetails.getUsername();
 		User user = userService.getUserByEmail(email);
 		user.setPassword(passwordEncoder.encode(userEditPasswordReq.getPassword()));
-		userRepository.save(user);
+		userService.saveUser(user);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
@@ -231,7 +237,7 @@ public class UserController {
 	public ResponseEntity findPassword(@RequestBody @ApiParam(value="유저 확인용 정보", required = true) UserFindPwReq userFindPwReq) {
 
 		String email  = userFindPwReq.getEmail();
-		Optional<User> user_tmp = userRepository.findByEmail(email);
+		Optional<User> user_tmp = userService.isUserByEmail(email);
 		if (user_tmp.isEmpty()) {
 			return new ResponseEntity<>("id-error",HttpStatus.NOT_FOUND);
 		}
@@ -265,7 +271,7 @@ public class UserController {
 		String email = redisUtil.getData(key);
 		User user = userService.getUserByEmail(email);
 		user.setPassword(passwordEncoder.encode(userChangePwReq.getPassword()));
-		userRepository.save(user);
+		userService.saveUser(user);
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
@@ -278,7 +284,7 @@ public class UserController {
 	@PostMapping("/signup/duplicate-check-email")
 	public ResponseEntity duplicateCheckId(@RequestBody @ApiParam(value="체크할 이메일", required = true) Map<String,Object> body) {
 		String email  = body.get("email").toString();
-		Optional<User> user = userRepository.findByEmail(email);
+		Optional<User> user = userService.isUserByEmail(email);
 
 		if (user.isPresent()) {
 			return new ResponseEntity(HttpStatus.CONFLICT);

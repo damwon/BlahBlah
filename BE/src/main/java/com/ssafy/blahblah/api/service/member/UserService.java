@@ -14,5 +14,6 @@ public interface UserService {
 	Optional<User> isUserByEmail(String email);
 	User createUser(UserInfoPostReq userRegisterInfo);
 	User getUserByEmail(String email);
+	void saveUser(User user);
 	List<User> getUserTable();
 }

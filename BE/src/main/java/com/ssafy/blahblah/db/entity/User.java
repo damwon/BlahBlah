@@ -8,6 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 유저 모델 정의.
@@ -18,6 +20,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Table(name = "user")
 public class User extends BaseEntity{
 
     @Column(nullable = false)
@@ -54,6 +57,10 @@ public class User extends BaseEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(nullable = false)
     private String password;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<LangInfo> langInfos = new ArrayList<>();
 
     @Builder
     public User(String name, Integer gender, Integer age, String email, String description, String profileImg,

@@ -32,5 +32,5 @@ public class UserRegisterPostReq {
 		String password;
 
 		@ApiModelProperty(name="언어 code & level array", example="\"list\" : [{\"code\":\"kor\", \"level\":3}, {\"code\":\"eng\", \"level\":4}, {\"code\":\"chi\", \"level\":5}]")
-		ArrayList<UserLangPostReq> list;
+		List<UserLangPostReq> list;
 }
