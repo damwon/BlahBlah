@@ -60,7 +60,7 @@ public class User extends BaseEntity{
 
     @JsonIgnore
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<LangInfo> langInfo = new ArrayList<>();
+    private List<LangInfo> langInfos = new ArrayList<>();
 
     @Builder
     public User(String name, Integer gender, Integer age, String email, String description, String profileImg,

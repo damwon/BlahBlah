@@ -78,6 +78,11 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void saveUser(User user) {
+		userRepository.save(user);
+	};
+
+	@Override
 	public User getUserByEmail(String email) {
 		 //디비에 유저 정보 조회 (email을 통한 조회).
 		User user = userRepository.findByEmail(email).get();

@@ -5,7 +5,6 @@ import com.ssafy.blahblah.api.service.language.LanguageServiceImpl;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.db.entity.Language;
-import com.ssafy.blahblah.db.repository.LanguageRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +29,6 @@ public class LangController {
 
 	@Autowired
 	LanguageServiceImpl languageServiceImpl;
-
-	@Autowired
-	LanguageRepository languageRepository;
 
 	private final AwsS3Service awsS3Service;
 
