@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *	s3 로직 처리를 위한 서비스 구현 정의.
  */
@@ -19,8 +22,6 @@ public class LangInfoServiceImpl implements LangInfoService {
 	@Override
 	public LangInfo createLangInfo(Long userId, Long langId, Integer level) {
 		LangInfo lang = new LangInfo();
-		lang.setUserId(userId);
-		lang.setLangId(langId);
 		lang.setLevel(level);
 		return langInfoRepository.save(lang);
 	}
@@ -34,4 +35,7 @@ public class LangInfoServiceImpl implements LangInfoService {
 	public LangInfo getLangInfoByLevel(Integer level) {
 		return langInfoRepository.findByLevel(level);
 	}
+
+	@Override
+	public List<LangInfo> getLangInfoListByUserId(Long userId) { return langInfoRepository.findListByUserId(userId);}
 }

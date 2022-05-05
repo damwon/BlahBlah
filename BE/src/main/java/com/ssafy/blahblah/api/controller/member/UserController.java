@@ -1,7 +1,9 @@
 package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.request.member.*;
+import com.ssafy.blahblah.api.response.feed.FeedListRes;
 import com.ssafy.blahblah.api.response.member.UserInfoRes;
+import com.ssafy.blahblah.api.response.member.UserLangInfoRes;
 import com.ssafy.blahblah.api.service.language.LangInfoService;
 import com.ssafy.blahblah.api.service.language.LanguageService;
 import com.ssafy.blahblah.api.service.member.EmailService;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -69,7 +72,8 @@ public class UserController {
 	})
 	public ResponseEntity getUser() {
 		List<User> users = userService.getUserTable();
-		return new ResponseEntity(users,HttpStatus.OK);
+		List<UserLangInfoRes> userLangInfoRes = users.stream().map(UserLangInfoRes::fromEntity).collect(Collectors.toList());
+		return new ResponseEntity(userLangInfoRes,HttpStatus.OK);
 	}
 
 
