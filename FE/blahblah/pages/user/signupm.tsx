@@ -128,7 +128,9 @@ export default function Signup() {
   }
 
   // 프로필 이미지
-  const [file,setFilfe] = useState<any>()
+  const [file,setFilfe] = useState<any>(null)
+  // 이미지 업로드 안해놓으면 기본 null처리
+  // 기본 이미지 사용 누르면 null되게 처리 추가하자
   const onChangeImg = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const formData = new FormData();
