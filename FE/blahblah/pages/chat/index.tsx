@@ -30,6 +30,8 @@ import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 // axios
 import axios from "axios";
+// video call
+import { WebRtcPeer } from "kurento-utils";
 
 const ChatTypographyByMe = styled(Typography)({
   borderRadius: "20px",
@@ -38,8 +40,6 @@ const ChatTypographyByMe = styled(Typography)({
   color: "white",
   fontWeight: 500,
 });
-
-const ChatAudioByMe = styled("audio")({});
 
 const ChatBox = styled(Box)({
   overflowY: "auto",
@@ -50,6 +50,20 @@ const ChatBox = styled(Box)({
 });
 
 let stompClient: any = null;
+
+let ws: any = null;
+
+let webRtcPeer: any = null;
+
+let videoInput: any;
+let videoOutput: any;
+
+var constraints: any = {
+  audio: true,
+  video: true,
+};
+
+let from: any;
 
 export default function Chat() {
   // 유저 정보 가져오기
@@ -80,7 +94,7 @@ export default function Chat() {
 
   const connect = () => {
     let socket = new SockJS("https://blahblah.community:8080/chat-websocket");
-    const token = localStorage.getItem("jwt");
+
     stompClient = Stomp.over(socket);
 
     stompClient.connect({}, function (frame: any) {
@@ -350,6 +364,202 @@ export default function Chat() {
     setOpenImageDialog(false);
   };
 
+  // 화상회의를 위한 웹소켓 연결
+  useEffect(() => {
+    if (userData) {
+      ws = new WebSocket("wss://blahblah.community:9443/call");
+      videoInput = document.getElementById("videoInput");
+      videoOutput = document.getElementById("videoOutput");
+      ws.onopen = function () {
+        register(userData.name);
+      };
+      ws.onmessage = function (message: any) {
+        let parsedMessage = JSON.parse(message.data);
+        console.info("받은 메시지: " + message.data);
+        switch (parsedMessage.id) {
+          case "callResponse":
+            callResponse(parsedMessage);
+            break;
+          case "incomingCall":
+            incomingCall(parsedMessage);
+            break;
+          case "startCommunication":
+            startCommunication(parsedMessage);
+            break;
+          case "stopCommunication":
+            console.info("Communication ended by remote peer");
+            stop(true);
+            break;
+          case "iceCandidate":
+            webRtcPeer.addIceCandidate(
+              parsedMessage.candidate,
+              function (error: any) {
+                if (error)
+                  return console.error("Error adding candidate: " + error);
+              }
+            );
+            break;
+          default:
+            console.error("Unrecognized message", parsedMessage);
+        }
+      };
+      return () => {
+        ws.close();
+      };
+    }
+  }, [userData]);
+
+  function startCommunication(message: any) {
+    webRtcPeer.processAnswer(message.sdpAnswer, function (error: any) {
+      if (error) return console.error(error);
+    });
+  }
+
+  function callResponse(message: any) {
+    if (message.response != "accepted") {
+      console.info("Call not accepted by peer. Closing call");
+      var errorMessage = message.message
+        ? message.message
+        : "Unknown reason for call rejection.";
+      console.log(errorMessage);
+      stop(true);
+    } else {
+      webRtcPeer.processAnswer(message.sdpAnswer, function (error: any) {
+        if (error) return console.error(error);
+      });
+    }
+  }
+
+  async function register(user: string) {
+    let name = user;
+
+    var message = {
+      id: "register",
+      name: name,
+    };
+    sendMessage(message);
+  }
+
+  const [callFrom, setCallFrom] = useState("");
+  function incomingCall(message: any) {
+    // if (callState != NO_CALL) {
+    //   var response = {
+    //     id: "incomingCallResponse",
+    //     from: message.from,
+    //     callResponse: "reject",
+    //     message: "bussy",
+    //   };
+    //   return sendMessage(response);
+    // }
+
+    if (
+      confirm(
+        "User " + message.from + " is calling you. Do you accept the call?"
+      )
+    ) {
+      from = message.from;
+      var options = {
+        localVideo: videoInput,
+        remoteVideo: videoOutput,
+        onicecandidate: onIceCandidate,
+        mediaConstraints: constraints,
+      };
+      webRtcPeer = new (WebRtcPeer.WebRtcPeerSendrecv as any)(
+        options,
+        function (error: any) {
+          if (error) {
+            return console.error(error);
+          }
+          webRtcPeer.generateOffer(onOfferIncomingCall);
+        }
+      );
+    } else {
+      let response = {
+        id: "incomingCallResponse",
+        from: message.from,
+        callResponse: "reject",
+        message: "user declined",
+      };
+      sendMessage(response);
+      stop(true);
+    }
+  }
+
+  function onOfferIncomingCall(error: any, offerSdp: any) {
+    if (error) return console.error("Error generating the offer");
+    let response = {
+      id: "incomingCallResponse",
+      from: from,
+      callResponse: "accept",
+      sdpOffer: offerSdp,
+    };
+    sendMessage(response);
+  }
+
+  const onIceCandidate = (candidate: any) => {
+    console.log("Local candidate" + JSON.stringify(candidate));
+    let message = {
+      id: "onIceCandidate",
+      candidate: candidate,
+    };
+    sendMessage(message);
+  };
+
+  const sendMessage = (message: any) => {
+    if (ws) {
+      let jsonMessage = JSON.stringify(message);
+      console.log("Video Sending Message: " + jsonMessage);
+      ws.send(jsonMessage);
+    }
+  };
+
+  const videoCall = async () => {
+    const options = {
+      localVideo: videoInput,
+      remoteVideo: videoOutput,
+      onicecandidate: onIceCandidate,
+      mediaConstraints: constraints,
+    };
+    webRtcPeer = new (WebRtcPeer.WebRtcPeerSendrecv as any)(options, function (
+      error: any
+    ) {
+      if (error) {
+        return console.error(error);
+      }
+      webRtcPeer.generateOffer(onOfferCall);
+    });
+  };
+
+  const onOfferCall = (error: any, offerSdp: any) => {
+    if (error) return console.error("Error generating the offer");
+    console.log("Invoking SDP offer callback function");
+    let message = {
+      id: "call",
+      from: userData.name,
+      to: chatname,
+      sdpOffer: offerSdp,
+    };
+    sendMessage(message);
+  };
+
+  const stop = (message: any) => {
+    if (webRtcPeer) {
+      webRtcPeer.dispose();
+      webRtcPeer = null;
+
+      if (!message) {
+        let message = {
+          id: "stop",
+        };
+        sendMessage(message);
+      }
+    }
+    videoInput.src = "";
+    videoOutput.src = "";
+    videoInput.style.background = "";
+    videoOutput.style.background = "";
+  };
+
   return (
     <>
       <Box
@@ -365,7 +575,26 @@ export default function Chat() {
             <ChatList chattingList={chattingList} setChatname={setChatname} />
           </Box>
         )}
-
+        <Box>
+          <video
+            style={{ border: "1px solid black" }}
+            playsInline
+            autoPlay
+            id="videoInput"
+            width="240px"
+            height="180px"
+          ></video>
+          <video
+            style={{ border: "1px solid black" }}
+            playsInline
+            autoPlay
+            id="videoOutput"
+            width="240px"
+            height="180px"
+          ></video>
+          <Button onClick={videoCall}>call</Button>
+          <Button onClick={() => stop(true)}>stop</Button>
+        </Box>
         <Box
           sx={{
             display: "flex",
