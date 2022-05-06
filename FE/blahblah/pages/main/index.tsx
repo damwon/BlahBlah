@@ -40,7 +40,10 @@ export default function Index() {
         ?<>{
           mate.map(function(a:any,i:any){
             return (
-              <Mate user={a} key={i}/>
+              <div className="matebox" key = {i}>
+                <Mate user={a} />
+              </div>
+              
 
               
             )
@@ -65,6 +68,16 @@ export default function Index() {
       </Col>
     </Row>
   </Container>
+  <style jsx>{`
+        .matebox{
+          // border-radius: 15px;
+          // background-color:white;
+          
+        }
+       
+        
+
+      `}</style>
     </>
   )
 }

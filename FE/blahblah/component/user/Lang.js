@@ -35,10 +35,10 @@ const lang = {
   'japan signlanguage':'jpnsgn',
   'china signlanguage':'cnsgn',
   'turkey signlanguage':'tksgn',
-  'poland signlanguage':'polsgn',
-  'france signlanguage':'frcsgn',
-  'korea signlanguage':'kosgn',
-  'australia signlanguage':'aussgn',
+  'poland signlanguage'    :'polsgn',
+  'france signlanguage'    :'frcsgn',
+  'korea signlanguage'     :'kosgn',
+  'australia signlanguage' :'aussgn',
 }
 
 export default lang;

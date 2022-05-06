@@ -11,16 +11,82 @@ import WorkIcon from '@mui/icons-material/Work';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import { useEffect,useState } from "react";
+import langarr from '../../component/user/Langarr'
 
 export default function Mate(props) {
+  const larr = langarr
+  // 학습언어
+  const [langa,setLangA] = useState([])
+  // 구사언어
+  const [langb,setLangB] = useState([])
+  // 모국어
+  const [langc,setLangC] = useState([])
+  // 언어전부
+  const [lang,setLang] = useState(props.user.langList)
 
+  // const lc = langc.map((a,i)=>{
+  //   return <div>
+  //     {larr[a]}
+  //   </div>
+  // })
+
+
+  useEffect(() => {
+    console.log('각유저별 언어')
+    console.log(lang)
+    // console.log(Object.keys(lang).length)
+    // 객체에는 길이가 없어서 이렇게 가져와야한다 체크
+    console.log('각유저별언어 반복문')
+    // console.log(lang.lenght)
+    for(let i=0;i<Object.keys(lang).length;i++){
+      // console.log(lang[i]['level'])
+      if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
+        var newarr = [...langa]
+        newarr.push(lang[i]['lang_id'])
+        // newarr.push(3)
+        setLangA(newarr)
+      }else if(lang[i]['level']===4){
+        var newarr = [...langa]
+        newarr.push(lang[i]['lang_id'])
+        setLangB(newarr)
+      }
+      else if(lang[i]['level']===5){
+        var newarr = [...langa]
+        newarr.push(lang[i]['lang_id'])
+        setLangC(newarr)
+      }
+    }
+  }, []);
+
+  useEffect(()=>{
+    console.log('------변환완료----')
+    console.log(langa)
+    console.log(langb)
+    console.log(langc)
+  },[langa])
   
 
   return <>
   <Container>
     <Row>
       <Col sm={2} xs={2}>
-
+    {/* {
+      langa
+      ?<>{langa}</>
+      :<>없어</>
+    }
+    {
+      langc
+      ?<>{
+        langc.map((a,i)=>{
+          return <div key={i}>
+            {larr[a]}
+          </div>
+        })
+      }</>
+      :<></>
+    } */}
       {/* {props.user.name}
       {props.user.description}
       {props.user.gender ===1
@@ -43,6 +109,7 @@ export default function Mate(props) {
   ?<>남자</>
   :<>여자</>
   }/>
+  
         {/* <h5>{props.user.name}({props.user.age})</h5> */}
         {/* <h5>{props.user.gender ===1
   ?<>남자</>
@@ -58,17 +125,27 @@ export default function Mate(props) {
         bgcolor: 'background.paper',
       }}
     >
-      {/* <ListItem>
-        <ListItemText primary="모국어" secondary="영어" />
-      </ListItem>
-      <Divider component="li" /> */}
       <ListItem>
-        <ListItemText primary="구사언어" secondary="중국어, 스페인어" />
+        {/* 템플릿 리털을 안쓰면 되는거아냐? */}
+        <ListItemText primary="모국어" secondary={
+          langc
+          ?<>
+          {
+            langc.map((a,i)=>{
+              return <div key={i}>
+                {larr[a]}
+              </div>
+            })
+          }
+          </>
+          :null
+        } />
       </ListItem>
-      <Divider component="li"/>
+      {/* <Divider component="li" /> */}
       <ListItem>
-        <ListItemText primary="학습언어" secondary="한국어" />
+        <ListItemText primary="인기도" secondary={`${props.user.rating}`} />
       </ListItem>
+      
       {/* <Divider component="li"/> */}
 
 
@@ -85,16 +162,47 @@ export default function Mate(props) {
       }}
     >
       <ListItem>
-        <ListItemText primary="Photos" secondary="Jan 9, 2014" />
+        <ListItemText primary="구사언어" secondary={
+          langb
+          ?<>
+          {
+            langb.map((a,i)=>{
+              return <div key={i}>
+                {larr[a]}
+              </div>
+            })
+          }
+          </>
+          :null
+        } />
       </ListItem>
-      <Divider component="li" />
+      {/* <Divider component="li"/> */}
       <ListItem>
-        <ListItemText primary="Work" secondary="Jan 7, 2014" />
+        <ListItemText primary="학습언어" secondary={
+          langa
+          ?<>
+          {
+            langa.map((a,i)=>{
+              return <div key={i}>
+                {larr[a]}
+              </div>
+            })
+          }
+          </>
+          :null
+        } />
       </ListItem>
-      <Divider component="li"/>
+      {/* <Divider component="li" /> */}
       <ListItem>
-        <ListItemText primary="Work" secondary="Jan 7, 2014" />
+        <ListItemText primary="자기소개" secondary={`${props.user.description}`} />
       </ListItem>
+      {/* <Divider component="li" /> */}
+
+      
+      {/* <ListItem>
+        <ListItemText primary="이메일" secondary={`${props.user.email}`} />
+      </ListItem>
+       */}
       {/* <Divider component="li"/> */}
 
 
@@ -113,12 +221,18 @@ export default function Mate(props) {
 <style jsx>{`
         .matebox{
           border-radius: 15px;
-          background-color:#e8feff;
+          background-color:#edf7f6;
+          // background-color:#e8feff;
           display: flex;
         }
         .box{
           float:left;
           margin:10px;
+        }
+        .tt{
+          color:grey;
+          font-size:6px;
+          opacity:0.5;
         }
         
 
