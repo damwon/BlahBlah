@@ -5,10 +5,7 @@ import com.ssafy.blahblah.api.service.feed.CommentService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Comment;
-import com.ssafy.blahblah.db.entity.Feed;
 import com.ssafy.blahblah.db.entity.User;
-import com.ssafy.blahblah.db.repository.CommentRepository;
-import com.ssafy.blahblah.db.repository.FeedRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @RestController
 @AllArgsConstructor

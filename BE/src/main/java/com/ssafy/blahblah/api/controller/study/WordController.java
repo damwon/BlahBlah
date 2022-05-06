@@ -8,16 +8,12 @@ import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.entity.Word;
 import com.ssafy.blahblah.db.entity.Wordbook;
-import com.ssafy.blahblah.db.repository.WordRepository;
-import com.ssafy.blahblah.db.repository.WordbookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController

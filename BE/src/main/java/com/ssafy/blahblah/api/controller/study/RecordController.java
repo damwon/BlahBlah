@@ -24,8 +24,6 @@ public class RecordController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    RecordRepository recordRepository;
 
     @Autowired
     RecordService recordService;

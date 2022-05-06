@@ -10,7 +10,6 @@ import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Qna;
 import com.ssafy.blahblah.db.entity.User;
-import com.ssafy.blahblah.db.repository.QnaRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,12 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -34,9 +29,6 @@ public class QnaController {
 
     @Autowired
     UserService userService;
-
-    @Autowired
-    QnaRepository qnaRepository;
 
     @Autowired
     AwsS3Service awsS3Service;
