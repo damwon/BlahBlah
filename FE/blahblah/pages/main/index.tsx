@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 import Mate from '../../component/main/Mate'
 
+
 export default function Index() {
 
   const [mate,setMate] = useState<any>()
@@ -33,15 +34,23 @@ export default function Index() {
     <>
     <Container>
     <Row>
-      <Col>블라메이트, 디자인은..내일..
+      <Col>
       {
         mate
         ?<>{
           mate.map(function(a:any,i:any){
-            return<>
-            {/* {a.email} */}
-            <Mate user={a} key={i}></Mate>
-            </>
+            return (
+              <div className="matebox" key = {i}>
+                <Mate user={a} />
+              </div>
+              
+
+              
+            )
+            // <>
+            // <Mate user={a} key={i}/>
+            // </>
+            // 프래그먼트에는 key가안먹는다
           })
         }
         {/* {mate[0].email} */}
@@ -59,6 +68,16 @@ export default function Index() {
       </Col>
     </Row>
   </Container>
+  <style jsx>{`
+        .matebox{
+          // border-radius: 15px;
+          // background-color:white;
+          
+        }
+       
+        
+
+      `}</style>
     </>
   )
 }

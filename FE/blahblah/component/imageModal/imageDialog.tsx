@@ -50,14 +50,14 @@ export default function ImageDialog(props: any) {
         </Form.Group>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleCloseImageDialog}>Cancel</Button>
+        <Button onClick={props.handleCloseImageDialog}>취소</Button>
         <Button
           onClick={() => {
             props.handleCloseImageDialog();
             handleSubmitImage();
           }}
         >
-          Subscribe
+          전송하기
         </Button>
       </DialogActions>
     </Dialog>
