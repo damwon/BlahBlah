@@ -1,4 +1,5 @@
-import { Container,Row,Col,Carousel,Card,Button } from 'react-bootstrap';
+import { Row,Col,Card } from 'react-bootstrap';
+
 
 export default function CardComponent() {
 

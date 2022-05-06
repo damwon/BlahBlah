@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 import Mate from '../../component/main/Mate'
 
+
 export default function Index() {
 
   const [mate,setMate] = useState<any>()
