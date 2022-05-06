@@ -47,7 +47,7 @@ export default function ChatTabs() {
   };
 
   return (
-    <Box sx={{ width: "30%", mr: 10 }}>
+    <Box sx={{ width: "30%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} centered>
           <Tab label="사전" {...a11yProps(0)} />

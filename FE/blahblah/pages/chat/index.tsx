@@ -1,6 +1,5 @@
 /* eslint-disable */
 import { useState, useRef, useEffect } from "react";
-import ChatList from "../../component/chat/chatList";
 import Image from "react-bootstrap/Image";
 import {
   styled,
@@ -14,13 +13,19 @@ import {
   Select,
   SelectChangeEvent,
   MenuItem,
+  Stack,
 } from "@mui/material";
+// icons
 import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
-import ChatTabs from "../../component/chat/chatTabs";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
+import VolumeOffIcon from "@mui/icons-material/VolumeOff";
+import CallEndIcon from "@mui/icons-material/CallEnd";
+// components
+import ChatList from "../../component/chat/chatList";
+import ChatTabs from "../../component/chat/chatTabs";
 import RecorderDialog from "../../component/recorder/recoderDialog";
 import ImageDialog from "../../component/imageModal/imageDialog";
 import ChatBoxOfOther from "../../component/chat/chatBoxOfOther";
@@ -269,7 +274,7 @@ export default function Chat() {
   const getLanguageList = () => {
     axios({
       method: "get",
-      url: "https://blahblah.community:8080/api/supportedLanguage/ko",
+      url: "https://blahblah.community:8080/api/supportedLanguage/en",
     })
       .then((res) => {
         setLanguageList(res.data);
@@ -278,6 +283,7 @@ export default function Chat() {
         console.error(err);
       });
   };
+
   const [targetLanguage, setTargetLanguage] = useState("");
   const handleSelectLanguage = (e: SelectChangeEvent) => {
     setTargetLanguage(e.target.value);
@@ -364,6 +370,8 @@ export default function Chat() {
     setOpenImageDialog(false);
   };
 
+  const [callState, setCallState] = useState(false);
+
   // 화상회의를 위한 웹소켓 연결
   useEffect(() => {
     if (userData) {
@@ -377,6 +385,9 @@ export default function Chat() {
         let parsedMessage = JSON.parse(message.data);
         console.info("받은 메시지: " + message.data);
         switch (parsedMessage.id) {
+          case "registerResponse":
+            console.log(parsedMessage);
+            break;
           case "callResponse":
             callResponse(parsedMessage);
             break;
@@ -387,7 +398,8 @@ export default function Chat() {
             startCommunication(parsedMessage);
             break;
           case "stopCommunication":
-            console.info("Communication ended by remote peer");
+            console.log("Communication ended by remote peer");
+            setCallState(false);
             stop(true);
             break;
           case "iceCandidate":
@@ -424,6 +436,7 @@ export default function Chat() {
       console.log(errorMessage);
       stop(true);
     } else {
+      setCallState(true);
       webRtcPeer.processAnswer(message.sdpAnswer, function (error: any) {
         if (error) return console.error(error);
       });
@@ -440,36 +453,27 @@ export default function Chat() {
     sendMessage(message);
   }
 
-  const [callFrom, setCallFrom] = useState("");
   function incomingCall(message: any) {
-    // if (callState != NO_CALL) {
-    //   var response = {
-    //     id: "incomingCallResponse",
-    //     from: message.from,
-    //     callResponse: "reject",
-    //     message: "bussy",
-    //   };
-    //   return sendMessage(response);
-    // }
-
     if (
       confirm(
         "User " + message.from + " is calling you. Do you accept the call?"
       )
     ) {
       from = message.from;
-      var options = {
+      let options = {
         localVideo: videoInput,
         remoteVideo: videoOutput,
         onicecandidate: onIceCandidate,
         mediaConstraints: constraints,
       };
+      setCallState(true);
       webRtcPeer = new (WebRtcPeer.WebRtcPeerSendrecv as any)(
         options,
         function (error: any) {
           if (error) {
             return console.error(error);
           }
+          console.log("옵션: " + constraints.audio + "/" + constraints.video);
           webRtcPeer.generateOffer(onOfferIncomingCall);
         }
       );
@@ -513,7 +517,7 @@ export default function Chat() {
     }
   };
 
-  const videoCall = async () => {
+  const videoCall = () => {
     const options = {
       localVideo: videoInput,
       remoteVideo: videoOutput,
@@ -526,11 +530,12 @@ export default function Chat() {
       if (error) {
         return console.error(error);
       }
+      // setCallState(true);
       webRtcPeer.generateOffer(onOfferCall);
     });
   };
 
-  const onOfferCall = (error: any, offerSdp: any) => {
+  const onOfferCall = async (error: any, offerSdp: any) => {
     if (error) return console.error("Error generating the offer");
     console.log("Invoking SDP offer callback function");
     let message = {
@@ -548,16 +553,28 @@ export default function Chat() {
       webRtcPeer = null;
 
       if (!message) {
-        let message = {
+        let message2 = {
           id: "stop",
         };
-        sendMessage(message);
+        sendMessage(message2);
       }
     }
+    setCallState(false);
     videoInput.src = "";
     videoOutput.src = "";
     videoInput.style.background = "";
     videoOutput.style.background = "";
+  };
+
+  const [muted, setMuted] = useState(false);
+
+  const mute = () => {
+    if (webRtcPeer) {
+      webRtcPeer.getLocalStream().getAudioTracks()[0].enabled = !webRtcPeer
+        .getLocalStream()
+        .getAudioTracks()[0].enabled;
+      setMuted(!muted);
+    }
   };
 
   return (
@@ -571,30 +588,40 @@ export default function Chat() {
         }}
       >
         {chattingList && (
-          <Box>
+          <Box sx={{ width: "20%", display: callState ? "none" : "block" }}>
             <ChatList chattingList={chattingList} setChatname={setChatname} />
           </Box>
         )}
-        <Box>
-          <video
-            style={{ border: "1px solid black" }}
-            playsInline
-            autoPlay
-            id="videoInput"
-            width="240px"
-            height="180px"
-          ></video>
-          <video
-            style={{ border: "1px solid black" }}
-            playsInline
-            autoPlay
-            id="videoOutput"
-            width="240px"
-            height="180px"
-          ></video>
-          <Button onClick={videoCall}>call</Button>
-          <Button onClick={() => stop(true)}>stop</Button>
-        </Box>
+        <Stack
+          sx={{ width: "20%", display: callState ? "block" : "none" }}
+          spacing={2}
+          textAlign="center"
+        >
+          <Box>
+            <video
+              style={{ border: "1px solid black" }}
+              playsInline
+              autoPlay
+              id="videoInput"
+              width="240px"
+              height="180px"
+            ></video>
+            <video
+              style={{ border: "1px solid black" }}
+              playsInline
+              autoPlay
+              id="videoOutput"
+              width="240px"
+              height="180px"
+            ></video>
+            <Box>
+              <IconButton onClick={() => stop(true)}>
+                <CallEndIcon color="warning" />
+              </IconButton>
+              <Button onClick={mute}>음소거</Button>
+            </Box>
+          </Box>
+        </Stack>
         <Box
           sx={{
             display: "flex",
@@ -618,11 +645,7 @@ export default function Chat() {
           >
             <Typography>username: {chatname}</Typography>
             <Box>
-              <IconButton
-                onClick={() => {
-                  alert("영상통화 버튼 눌림.");
-                }}
-              >
+              <IconButton onClick={videoCall}>
                 <VideocamIcon sx={{ color: "black" }} />
               </IconButton>
               <IconButton

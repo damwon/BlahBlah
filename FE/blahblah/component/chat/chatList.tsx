@@ -10,8 +10,10 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 export default function ChatList(props: any) {
   return (
-    <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-      <ListSubheader>채팅 리스트</ListSubheader>
+    <List sx={{ bgcolor: "background.paper" }}>
+      <ListSubheader sx={{ textAlign: "center", fontSize: "20px" }}>
+        채팅 리스트
+      </ListSubheader>
       {props.chattingList.map((item: any, index: any) => {
         return (
           <ListItem key={index}>
@@ -24,6 +26,7 @@ export default function ChatList(props: any) {
               onClick={() => {
                 props.setChatname(item.roomName);
               }}
+              secondary={item.lastMsg}
             />
           </ListItem>
         );

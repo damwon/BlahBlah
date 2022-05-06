@@ -47,7 +47,38 @@ export default function ChatBoxOfOther(props: any) {
       }}
     >
       {props.type === "text" && (
-        <ChatTypographyByOther>{props.message}</ChatTypographyByOther>
+        <>
+          <ChatTypographyByOther>{props.message}</ChatTypographyByOther>
+          <ChatIconButton onClick={handleClick}>
+            <MoreHorizIcon />
+          </ChatIconButton>
+          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                props.setCorrectMessage(props.message);
+              }}
+            >
+              Correct
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                props.setTranslateMessage(props.message);
+              }}
+            >
+              Translate
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                alert("TTS 버튼 눌림");
+              }}
+            >
+              TTS
+            </MenuItem>
+          </Menu>
+        </>
       )}
       {props.type === "audio" && (
         <audio src={props.message} controls controlsList="nodownload" />
@@ -59,27 +90,6 @@ export default function ChatBoxOfOther(props: any) {
           style={{ width: "200px", height: "200px" }}
         />
       )}
-      <ChatIconButton onClick={handleClick}>
-        <MoreHorizIcon />
-      </ChatIconButton>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            props.setCorrectMessage(props.message);
-          }}
-        >
-          Correct
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            props.setTranslateMessage(props.message);
-          }}
-        >
-          Translate
-        </MenuItem>
-      </Menu>
     </Box>
   );
 }
