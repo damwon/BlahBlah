@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Component
 public class JwtAuthentication{
-    private UserService userService;
+    private final UserService userService;
 
     @Transactional(readOnly = true)
     public Authentication getAuthentication(String token) throws Exception {

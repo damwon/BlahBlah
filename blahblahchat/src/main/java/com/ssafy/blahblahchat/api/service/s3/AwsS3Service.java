@@ -52,7 +52,7 @@ public class AwsS3Service {
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
 			}
 
-			fileNameList.add(fileName);
+			fileNameList.add(filePath+"/"+fileName);
 		});
 		return fileNameList;
 	}
