@@ -4,10 +4,10 @@ import com.ssafy.blahblah.api.request.study.MemoReq;
 import com.ssafy.blahblah.api.response.study.MemoDetailRes;
 import com.ssafy.blahblah.api.response.study.MemoListPageRes;
 import com.ssafy.blahblah.api.service.member.UserService;
+import com.ssafy.blahblah.api.service.study.MemoService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Memo;
 import com.ssafy.blahblah.db.entity.User;
-import com.ssafy.blahblah.db.repository.MemoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,10 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @AllArgsConstructor
@@ -32,14 +29,14 @@ public class MemoController {
     UserService userService;
 
     @Autowired
-    MemoRepository memoRepository;
+    MemoService memoService;
 
     @GetMapping
     public ResponseEntity memoList(Authentication authentication, Pageable pageable) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Page<Memo> memoList = memoRepository.findByUser(user,pageable);
+        Page<Memo> memoList = memoService.memoList(pageable,user);
         if (memoList == null || memoList.getContent().size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -52,7 +49,7 @@ public class MemoController {
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
 
-        Optional<Memo> option = memoRepository.findById(memoId);
+        Optional<Memo> option = memoService.memoDetail(memoId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
@@ -70,43 +67,47 @@ public class MemoController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        memoRepository.save(Memo.builder()
-                .title(memoReq.getTitle())
-                .content(memoReq.getContent())
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .user(user)
-                .build());
+        memoService.memoPost(user,memoReq);
         return new ResponseEntity(HttpStatus.OK);
 
     }
 
-    // user 사용하기
     @PutMapping("/{memoId}")
     public ResponseEntity memoUpdate(Authentication authentication, @PathVariable Long memoId, @RequestBody MemoReq memoReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Optional<Memo> option = memoRepository.findById(memoId);
+
+        Optional<Memo> option = memoService.memoDetail(memoId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+
         Memo memo = option.get();
-        memo.setTitle(memoReq.getTitle());
-        memo.setContent(memoReq.getContent());
-        memo.setUpdatedAt(LocalDateTime.now());
-        memoRepository.save(memo);
-        return new ResponseEntity(HttpStatus.OK);
+        if (memo.getUser().equals(user)) {
+            memoService.memoUpdate(memoReq,memo);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 메모가 아닙니다.");
+
     }
 
 
-    // user 사용하기
     @DeleteMapping("/{memoId}")
     public ResponseEntity memoDelete(Authentication authentication, @PathVariable Long memoId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        memoRepository.deleteById(memoId);
-        return new ResponseEntity(HttpStatus.OK);
+        Optional<Memo> option = memoService.memoDetail(memoId);
+        if (option.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        Memo memo = option.get();
+        if (memo.getUser().equals(user)) {
+            memoService.memoDelete(memoId);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 메모가 아닙니다.");
+
     }
 }
