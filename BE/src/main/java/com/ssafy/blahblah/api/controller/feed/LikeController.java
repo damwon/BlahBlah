@@ -1,5 +1,6 @@
 package com.ssafy.blahblah.api.controller.feed;
 
+import com.ssafy.blahblah.api.service.feed.LikeService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Feed;
@@ -25,36 +26,16 @@ public class LikeController {
     UserService userService;
 
     @Autowired
-    FeedRepository feedRepository;
-
-    @Autowired
-    LikeRepository likeRepository;
+    LikeService likeService;
 
     @PostMapping("/{feedId}")
     public ResponseEntity like(Authentication authentication, @PathVariable Long feedId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
-        if(optionalFeed.isEmpty()) {
+        Feed feed = likeService.like(user,feedId);
+        if(feed == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-        Feed feed = optionalFeed.get();
-        Optional<Heart> optionalLike = likeRepository.findByUserAndFeed(user,feed);
-        if (optionalLike.isEmpty()) { // 좋아요를 누른 적이 없으면
-            likeRepository.save(Heart.builder()
-                    .feed(feed)
-                    .user(user)
-                    .build());
-            feed.setLikeCount(feed.getLikeCount()+1);
-            feedRepository.save(feed);
-
-        }
-        else { // 좋아요를 누른 적이 있으면
-            likeRepository.delete(optionalLike.get());
-            feed.setLikeCount(feed.getLikeCount()-1);
-            feedRepository.save(feed);
-
         }
         return new ResponseEntity(HttpStatus.OK);
 

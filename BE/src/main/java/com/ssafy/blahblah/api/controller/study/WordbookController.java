@@ -4,6 +4,7 @@ import com.ssafy.blahblah.api.request.study.WordbookReq;
 import com.ssafy.blahblah.api.response.study.WordListPageRes;
 import com.ssafy.blahblah.api.response.study.WordbookListPageRes;
 import com.ssafy.blahblah.api.service.member.UserService;
+import com.ssafy.blahblah.api.service.study.WordbookService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.entity.Word;
@@ -28,21 +29,19 @@ import java.util.*;
 @RequestMapping("/api/wordbook")
 public class WordbookController {
 
-    @Autowired
-    WordbookRepository wordbookRepository;
-
-    @Autowired
-    WordRepository wordRepository;
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    WordbookService wordbookService;
 
     @GetMapping
     public ResponseEntity list( Authentication authentication,Pageable pageable) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Page<Wordbook> wordbooks = wordbookRepository.findByUser(user,pageable);
+        Page<Wordbook> wordbooks = wordbookService.list(user,pageable);
         if (wordbooks == null || wordbooks.getContent().size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -56,12 +55,12 @@ public class WordbookController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Optional<Wordbook> optionalWordbook = wordbookRepository.findById(wordbookId);
+        Optional<Wordbook> optionalWordbook = wordbookService.wordlist(wordbookId);
         if(optionalWordbook.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Wordbook wordbook = optionalWordbook.get();
-        Page<Word> words = wordRepository.findByWordbook(wordbook, pageable);
+        Page<Word> words = wordbookService.wordlist2(wordbook, pageable);
 
         return ResponseEntity.status(HttpStatus.OK).body(new WordListPageRes(words));
 
@@ -73,11 +72,7 @@ public class WordbookController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        wordbookRepository.save(Wordbook.builder()
-                .title(wordbookReq.getTitle())
-                .createdAt(LocalDateTime.now())
-                .user(user)
-                .build());
+        wordbookService.post(user,wordbookReq);
         return new ResponseEntity(HttpStatus.OK);
 
     }
@@ -88,25 +83,36 @@ public class WordbookController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Optional<Wordbook> option = wordbookRepository.findById(wordbookId);
+        Optional<Wordbook> option = wordbookService.wordlist(wordbookId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Wordbook wordbook = option.get();
-        wordbook.setTitle(wordbookReq.getTitle());
-        wordbookRepository.save(wordbook);
-        return new ResponseEntity(HttpStatus.OK);
+        if(wordbook.getUser().equals(user)) {
+            wordbookService.update(wordbook,wordbookReq);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 단어장이 아닙니다.");
+
     }
 
 
-    // user 사용하기
+
     @DeleteMapping("/{wordbookId}")
     public ResponseEntity wordbookDelete(Authentication authentication, @PathVariable Long wordbookId) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        wordbookRepository.deleteById(wordbookId);
-        return new ResponseEntity(HttpStatus.OK);
+        Optional<Wordbook> option = wordbookService.wordlist(wordbookId);
+        if (option.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        Wordbook wordbook = option.get();
+        if(wordbook.getUser().equals(user)) {
+            wordbookService.delete(wordbookId);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 단어장이 아닙니다.");
     }
 
 
