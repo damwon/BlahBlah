@@ -34,13 +34,15 @@ export default function Index() {
     <>
     <Container>
     <Row>
-      <Col>블라메이트, 디자인은..내일..
+      <Col>
       {
         mate
         ?<>{
           mate.map(function(a:any,i:any){
             return (
               <Mate user={a} key={i}/>
+
+              
             )
             // <>
             // <Mate user={a} key={i}/>
