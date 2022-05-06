@@ -13,9 +13,11 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { useEffect,useState } from "react";
 import langarr from '../../component/user/Langarr'
+import langkey from '../../component/user/Lang'
 
 export default function Mate(props) {
   const larr = langarr
+  const lkey = langkey
   // 학습언어
   const [langa,setLangA] = useState([])
   // 구사언어
@@ -133,6 +135,13 @@ export default function Mate(props) {
           {
             langc.map((a,i)=>{
               return <div key={i}>
+                <Avatar
+        alt="langImage"
+        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+        // src="/user/young-man.png"
+        sx={{ width: 25, height: 25 }}
+      />
+      {/* 아바타 이미지 언어코드도 휴우..! 다시한번찾자 캬캬 키밸류 */}
                 {larr[a]}
               </div>
             })
@@ -168,6 +177,12 @@ export default function Mate(props) {
           {
             langb.map((a,i)=>{
               return <div key={i}>
+                <Avatar
+        alt="langImage"
+        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+        // src="/user/young-man.png"
+        sx={{ width: 25, height: 25 }}
+      />
                 {larr[a]}
               </div>
             })
@@ -184,6 +199,12 @@ export default function Mate(props) {
           {
             langa.map((a,i)=>{
               return <div key={i}>
+                <Avatar
+        alt="langImage"
+        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+        // src="/user/young-man.png"
+        sx={{ width: 25, height: 25 }}
+      />
                 {larr[a]}
               </div>
             })
