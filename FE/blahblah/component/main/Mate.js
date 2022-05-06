@@ -8,7 +8,8 @@ export default function Mate(props) {
   <Container>
     <Row>
       <Col></Col>
-      <Col>  <Card style={{ width: '14rem' }}>
+      <Col>  
+      <Card style={{ width: '14rem' }}>
   <Card.Img variant="top" src="/user/young-man.png" />
   <Card.Body>
     <Card.Title>{props.user.name}
@@ -28,7 +29,8 @@ export default function Mate(props) {
   }</ListGroup.Item>
 
 
-</ListGroup></Col>
+</ListGroup>
+</Col>
   <Col></Col>
     </Row>
   </Container>

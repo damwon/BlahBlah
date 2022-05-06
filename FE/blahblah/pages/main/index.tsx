@@ -38,10 +38,13 @@ export default function Index() {
         mate
         ?<>{
           mate.map(function(a:any,i:any){
-            return<>
-            {/* {a.email} */}
-            <Mate user={a} key={i}></Mate>
-            </>
+            return (
+              <Mate user={a} key={i}/>
+            )
+            // <>
+            // <Mate user={a} key={i}/>
+            // </>
+            // 프래그먼트에는 key가안먹는다
           })
         }
         {/* {mate[0].email} */}
