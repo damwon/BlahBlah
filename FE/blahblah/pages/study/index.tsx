@@ -1,4 +1,4 @@
-import { Grid, Pagination, Button } from "@mui/material";
+import { Grid } from "@mui/material";
 import Image from "next/image";
 // components
 import Wordnote from "../../component/study/wordnote";

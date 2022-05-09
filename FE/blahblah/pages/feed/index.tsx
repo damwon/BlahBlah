@@ -9,7 +9,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Modal } from "react-bootstrap";
-import Image from "next/image";
+import { Image } from "react-bootstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
@@ -30,6 +30,18 @@ export default function Index() {
       .then((res) => {
         setFeeds(res.data);
         setShowFeeds(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const [userId, setUserId] = useState();
+  useEffect(() => {
+    allAxios
+      .get(`/user/me`, { headers: setToken() })
+      .then((res) => {
+        setUserId(res.data.id);
       })
       .catch((err) => {
         console.log(err);
@@ -127,51 +139,45 @@ export default function Index() {
               showFeeds.map((d: any, i: number) => {
                 console.log(d);
                 return (
-                  <ListItem
-                    key={i}
-                    secondaryAction={
-                      <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                    }
-                  >
-                    <ListItemAvatar>
-                      <div className="container">
-                        <div className="outer">
-                          {/* <Image
-                            className="profile"
-                            src={}
-                            alt="finger image"
-                            width="200%"
-                            height="200%"
-                            layout="responsive"
-                          ></Image> */}
-                          <div className="innerLT"></div>
-                          <div className="innerRT"></div>
-                          <div className="innerLB">
+                  <div key={i}>
+                    <ListItem
+                      secondaryAction={
+                        <IconButton edge="end" aria-label="delete">
+                          {d.userId === userId ? <DeleteIcon /> : null}
+                        </IconButton>
+                      }
+                    >
+                      <ListItemAvatar>
+                        <div className="container">
+                          <div className="outer">
                             <Image
-                              className="report"
-                              src="/images/siren.png"
-                              alt="report image"
-                              width="26"
-                              height="26"
+                              className="profile"
+                              src={d.imgUrl}
+                              alt="finger image"
+                              width="200%"
+                              height="200%"
                             ></Image>
+                            <div className="innerLT"></div>
+                            <div className="innerRT"></div>
+                            <div className="innerLB">
+                              <Image
+                                className="report"
+                                src="/images/siren.png"
+                                alt="report image"
+                                width="26"
+                                height="26"
+                              ></Image>
+                            </div>
+                            <div className="innerRB"></div>
                           </div>
-                          <div className="innerRB"></div>
                         </div>
-                      </div>
-                    </ListItemAvatar>
-                    <ListItemText
-                      style={{ cursor: "pointer", margin: "10px" }}
-                      onClick={() => {
-                        router.push(`/note/${d.id}`);
-                      }}
-                      primary={d.title}
-                    />
-                    <h5>
-                      내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용내용
-                    </h5>
-                  </ListItem>
+                      </ListItemAvatar>
+                      <ListItemText
+                        style={{ margin: "30px" }}
+                        primary={d.content}
+                      />
+                    </ListItem>
+                  </div>
                 );
               })}
           </List>
