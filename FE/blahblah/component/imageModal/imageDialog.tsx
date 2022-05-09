@@ -6,12 +6,13 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Form } from "react-bootstrap";
+import Image from "next/image";
 import axios from "axios";
 
 export default function ImageDialog(props: any) {
-  const [imageData, setImageData] = useState();
+  const [imageData, setImageData] = useState<any>();
   const handleSetImage = (e: any) => {
     setImageData(e.target.files[0]);
   };
@@ -39,6 +40,16 @@ export default function ImageDialog(props: any) {
       <DialogContent>
         <DialogContentText>사진을 첨부해주세요.</DialogContentText>
       </DialogContent>
+      {imageData && (
+        <DialogContent sx={{ textAlign: "center" }}>
+          <Image
+            src={URL.createObjectURL(imageData)}
+            alt=""
+            width="200px"
+            height="200px"
+          />
+        </DialogContent>
+      )}
       <DialogContent>
         <Form.Group controlId="formFile" className="mb-3">
           <Form.Label>첨부하기</Form.Label>
@@ -50,7 +61,14 @@ export default function ImageDialog(props: any) {
         </Form.Group>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleCloseImageDialog}>취소</Button>
+        <Button
+          onClick={() => {
+            props.handleCloseImageDialog();
+            setImageData(null);
+          }}
+        >
+          취소
+        </Button>
         <Button
           onClick={() => {
             props.handleCloseImageDialog();

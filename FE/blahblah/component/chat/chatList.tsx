@@ -26,7 +26,13 @@ export default function ChatList(props: any) {
               onClick={() => {
                 props.setChatname(item.roomName);
               }}
-              secondary={item.lastMsg}
+              secondary={
+                item.type === "text"
+                  ? item.lastMsg
+                  : item.type === "image"
+                  ? "사진"
+                  : "음성 메시지"
+              }
             />
           </ListItem>
         );

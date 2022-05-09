@@ -50,20 +50,17 @@ export default function ChatTabs() {
     <Box sx={{ width: "30%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} centered>
-          <Tab label="사전" {...a11yProps(0)} />
-          <Tab label="단어장" {...a11yProps(1)} />
-          <Tab label="메모장" {...a11yProps(2)} />
+          <Tab label="단어장" {...a11yProps(0)} />
+          <Tab label="메모장" {...a11yProps(1)} />
         </Tabs>
       </Box>
-
       <TabPanel value={value} index={0}>
-        사전 탭
+        단어장
+        {/* <WordNote /> */}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <WordNote />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <Note />
+        메모장
+        {/* <Note /> */}
       </TabPanel>
     </Box>
   );
