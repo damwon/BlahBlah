@@ -72,8 +72,12 @@ public class StompChatController {
         System.out.println("StompChatController.getUserIdByToken");
         System.out.println(token);
         Authentication authentication=jwtAuthentication.getAuthentication(token);
-        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-        return userDetails.getUserId();
+        if(authentication!=null) {
+            SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+            return userDetails.getUserId();
+        }else{
+            return -1L;
+        }
     }
 
     //API로 씀

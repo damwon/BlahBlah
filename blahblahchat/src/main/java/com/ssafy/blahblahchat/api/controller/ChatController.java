@@ -4,8 +4,10 @@ package com.ssafy.blahblahchat.api.controller;
 import com.ssafy.blahblahchat.api.dto.ChatMetaDTO;
 import com.ssafy.blahblahchat.api.entity.ChatMeta;
 import com.ssafy.blahblahchat.api.service.ChatService;
+import com.ssafy.blahblahchat.common.auth.SsafyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,11 +25,14 @@ public class ChatController {
         return;
     }
 
-    @GetMapping("/api/chat")//유저 아이디와 상대방 아이디로 채팅방 번호를 찾는다.
-    public String findRoom(@RequestBody ChatMetaDTO chatMetaDTO){
+    @GetMapping("/api/chat/{opponentId}")//유저 아이디와 상대방 아이디로 채팅방 번호를 찾는다.
+    public String findRoom(Authentication authentication, @PathVariable Long opponentId){
+        System.out.println(authentication);
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        Long userId = userDetails.getUserId();
         log.info("ChatController.findRoom");
         System.out.println("ChatController.findRoom");
-        String roomId= chatService.findChatRoom(chatMetaDTO.getUserId(),chatMetaDTO.getOpponentId());
+        String roomId= chatService.findChatRoom(userId,opponentId);
         if(roomId==null){
             return "No Result";
         }

@@ -55,6 +55,7 @@ public class ChatRepository {
                 target.setUnread(target.getUnread()+1);
             else
                 target.setUnread(0);
+            target.setType(message.getType());
             return "Success";
         } catch (NoResultException e){
             return "No Result";

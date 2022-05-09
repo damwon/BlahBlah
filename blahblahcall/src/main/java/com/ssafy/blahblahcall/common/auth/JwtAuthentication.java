@@ -7,6 +7,7 @@ import com.ssafy.blahblahcall.api.service.member.UserService;
 import com.ssafy.blahblahcall.common.util.JwtTokenUtil;
 import com.ssafy.blahblahcall.db.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
  */
-@RequiredArgsConstructor
 @Component
 public class JwtAuthentication{
-    private final UserService userService;
+
+    @Autowired
+    private UserService userService;
 
     @Transactional(readOnly = true)
     public Authentication getAuthentication(String token) throws Exception {

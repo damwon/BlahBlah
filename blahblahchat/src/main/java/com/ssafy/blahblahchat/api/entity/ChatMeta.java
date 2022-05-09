@@ -35,6 +35,9 @@ public class ChatMeta {
     private String lastMsg;
 
     @Column
+    private String type;
+
+    @Column
     private LocalDateTime last_msg_date;
 
     @Column
