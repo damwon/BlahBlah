@@ -27,6 +27,9 @@ public class Report extends BaseEntity{
     @Column
     private String type;
 
+    @Column
+    private String answer;
+
     @ManyToOne
     @JoinColumn(name="reporter_id", nullable = false)
     private User reporter;
@@ -36,12 +39,14 @@ public class Report extends BaseEntity{
     private User reportee;
 
     @Builder
-    public Report(String content, LocalDateTime createdAt,String imgUrl,String type,User reporter,User reportee){
+    public Report(String content, LocalDateTime createdAt,String imgUrl,String type,User reporter,User reportee,String answer){
         this.content = content;
         this.createdAt = createdAt;
         this.imgUrl = imgUrl;
         this.type = type;
         this.reportee = reportee;
         this.reporter = reporter;
+        this.answer = answer;
     }
+
 }

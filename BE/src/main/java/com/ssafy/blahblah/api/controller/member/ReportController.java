@@ -113,7 +113,7 @@ public class ReportController {
 
 
 
-    @PostMapping("/{reportId}")
+    @PostMapping("/admin/{reportId}")
     public ResponseEntity adminPost(Authentication authentication, @PathVariable Long reportId, @RequestBody ReportAnsPostReq reportAnsPostReq){
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
@@ -125,10 +125,18 @@ public class ReportController {
             }
 
 
+
             Report report = optionalReport.get();
             User reportee = report.getReportee();
+            if(reportee.getExpiredAt().isAfter(LocalDateTime.now())) { // 현재 정지 중이면
+                reportee.setExpiredAt(reportee.getExpiredAt().plusDays(reportAnsPostReq.getDay()));
+            }
+            else {
+                reportee.setExpiredAt(LocalDateTime.now().plusDays(reportAnsPostReq.getDay()));
+            }
             reportee.setExpiredAt(LocalDateTime.now().plusDays(reportAnsPostReq.getDay()));
             reportee.setReportedCnt(reportee.getReportedCnt()+1);
+            report.setAnswer(reportAnsPostReq.getReason());
 
             userRepository.save(reportee);
 
