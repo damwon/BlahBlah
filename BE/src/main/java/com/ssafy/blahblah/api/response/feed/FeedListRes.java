@@ -16,17 +16,26 @@ public class FeedListRes {
     private String content;
     private String imgUrl;
     private String userName;
+    private Long userId;
     private Boolean open;
     private int likeCount;
     private List<CommentListRes> comments;
 
     public static FeedListRes fromEntity(Feed feed) {
+        String imgTmp;
+        if(feed.getImgUrl() != null) {
+            imgTmp = "https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/feed/"+feed.getImgUrl();
+        }
+        else {
+            imgTmp = null;
+        }
         return FeedListRes.builder()
                 .id(feed.getId())
                 .content(feed.getContent())
-                .imgUrl(feed.getImgUrl())
+                .imgUrl(imgTmp)
                 .open(feed.getOpen())
                 .userName(feed.getUser().getName())
+                .userId(feed.getUser().getId())
                 .likeCount(feed.getLikeCount())
                 .comments(feed.getComments().stream().map(CommentListRes::fromEntity).collect(Collectors.toList()))
                 .build();
