@@ -30,9 +30,11 @@ public class AwsS3Service {
 	private String bucket;
 
 	private final AmazonS3 amazonS3;
+	private final String URL="https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/";
 
 	public List<String> uploadFile(List<MultipartFile> multipartFile, String path) {
 		List<String> fileNameList = new ArrayList<>();
+
 		multipartFile.forEach(file -> {
 			String fileName = "";
 			if(path.equals("language")) {
@@ -52,8 +54,9 @@ public class AwsS3Service {
 				throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드에 실패했습니다.");
 			}
 
-			fileNameList.add(filePath+"/"+fileName);
+			fileNameList.add(URL+path+"/"+fileName);
 		});
+		System.out.println(fileNameList.get(0));
 		return fileNameList;
 	}
 

@@ -61,6 +61,7 @@ public class StompChatController {
         Long userId = getUserIdByToken(token);
         template.convertAndSend("/topic/"+userId, messageDTO);
     }
+
     @MessageMapping("/read/{opponentId}")
     public void sendToMe(@Header(name="Authorization", required=false) String token,@DestinationVariable String opponentId) throws Exception {
         System.out.println("StompChatController.sendToMe");
