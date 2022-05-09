@@ -5,7 +5,6 @@ import com.ssafy.blahblah.api.service.language.LanguageServiceImpl;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.db.entity.Language;
-import com.ssafy.blahblah.db.repository.LanguageRepository;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +30,6 @@ public class LangController {
 	@Autowired
 	LanguageServiceImpl languageServiceImpl;
 
-	@Autowired
-	LanguageRepository languageRepository;
-
 	private final AwsS3Service awsS3Service;
 
 	@PostMapping("/regist")
@@ -56,6 +52,17 @@ public class LangController {
 		if(language == null) {
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "InvalidValue"));
 		}
-		return new ResponseEntity(language, HttpStatus.OK);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "언어 정보 저장 성공"));
+	}
+
+	@GetMapping("/")
+	@ApiOperation(value = "등록된 언어 테이블", notes = "언어 코드, 이미지, 영문명을 리스트로 반환한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<? extends BaseResponseBody> getLanguage() {
+		List<Language> languages = languageService.getLanguageTable();
+		return new ResponseEntity(languages,HttpStatus.OK);
 	}
 }

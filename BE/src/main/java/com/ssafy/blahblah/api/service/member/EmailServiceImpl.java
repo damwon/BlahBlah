@@ -1,4 +1,4 @@
-package com.ssafy.blahblahchat.api.service.member;
+package com.ssafy.blahblah.api.service.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

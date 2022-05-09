@@ -1,4 +1,4 @@
-package com.ssafy.blahblahchat.api.request.language;
+package com.ssafy.blahblah.api.request.language;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

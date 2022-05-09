@@ -6,9 +6,11 @@ import com.ssafy.blahblah.db.repository.LanguageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  *	s3 로직 처리를 위한 서비스 구현 정의.
@@ -24,8 +26,8 @@ public class LanguageServiceImpl implements LanguageService {
 	public Language createLanguage(String code, String Langimg, String engName) {
 		Language lang = new Language();
 		lang.setCode(code);
-		lang.setCode(Langimg);
-		lang.setCode(engName);
+		lang.setLangImg(Langimg);
+		lang.setEngName(engName);
 		return languageRepository.save(lang);
 	}
 
@@ -37,5 +39,10 @@ public class LanguageServiceImpl implements LanguageService {
 	@Override
 	public Language getLanguageByEngName(String engName) {
 		return languageRepository.findByEngName(engName);
+	}
+
+	@Override
+	public List<Language> getLanguageTable() {
+		return languageRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 	}
 }

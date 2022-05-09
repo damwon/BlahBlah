@@ -1,13 +1,16 @@
-package com.ssafy.blahblahchat.api.service.member;
+package com.ssafy.blahblah.api.service.member;
 
-import com.ssafy.blahblah.api.request.member.UserRegisterPostReq;
+import com.ssafy.blahblah.api.request.member.UserInfoPostReq;
 import com.ssafy.blahblah.db.entity.User;
 import com.ssafy.blahblah.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -20,9 +23,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
-	
+
 	@Override
-	public User createUser(UserRegisterPostReq userRegisterInfo) {
+	public Optional<User> isUserByEmail(String email) {
+		Optional<User> user = userRepository.findByEmail(email);
+		return user;
+	}
+
+
+	@Override
+	public User createUser(UserInfoPostReq userRegisterInfo) {
 		User user = new User();
 		String email = userRegisterInfo.getEmail();
 		if (email.isBlank()) {
@@ -68,9 +78,19 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public void saveUser(User user) {
+		userRepository.save(user);
+	};
+
+	@Override
 	public User getUserByEmail(String email) {
 		 //디비에 유저 정보 조회 (email을 통한 조회).
 		User user = userRepository.findByEmail(email).get();
 		return user;
+	}
+
+	@Override
+	public List<User> getUserTable() {
+		return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
 	}
 }

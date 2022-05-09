@@ -1,4 +1,4 @@
-package com.ssafy.blahblahchat.api.response.notice;
+package com.ssafy.blahblah.api.response.notice;
 
 import com.ssafy.blahblah.db.entity.Notice;
 import lombok.*;
