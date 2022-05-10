@@ -16,7 +16,7 @@ import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
 
-export default function Wordnote() {
+export default function TA({ handleTF }: any) {
   const router = useRouter();
   // modal 단어폴더 추가
   const [show, setShow] = useState(false);
@@ -128,6 +128,7 @@ export default function Wordnote() {
   };
 
   const [dense, setDense] = useState(false);
+
   return (
     <>
       <h1 className="cent">word note</h1>
@@ -162,9 +163,7 @@ export default function Wordnote() {
                 </ListItemAvatar>
                 <ListItemText
                   style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    router.push(`/wordnote/${d.id}`);
-                  }}
+                  onClick={() => handleTF(false, d.id)}
                   primary={d.title}
                 />
               </ListItem>
