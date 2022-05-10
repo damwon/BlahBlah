@@ -14,8 +14,8 @@ import { Button, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import allAxios from "../../lib/allAxios";
-export default function TB(props: any) {
+import allAxios from "../../../../lib/allAxios";
+export default function WordLstChat(props: any) {
   const [show, setShow] = useState(false);
   const write = () => {
     if (word === "") {
@@ -60,7 +60,6 @@ export default function TB(props: any) {
   };
 
   const router = useRouter();
-  // const id = props.wordId;
   const id = props.wordId;
   const setToken = () => {
     const token = localStorage.getItem("jwt");

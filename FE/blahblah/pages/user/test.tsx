@@ -43,6 +43,7 @@ export default function Login() {
 
   const onClickLogin2 = (event: any) => {
     event.preventDefault();
+    
     axios({
       method:'post',
       url:'https://blahblah.community:8443/api/user/checkemail',
@@ -82,10 +83,10 @@ export default function Login() {
 
     const formData = new FormData();
     const info:any = {
-      "email":"xxxdsdssddf555@ssafy.com",
-      "name":"맛점",
+      "email":"xxxdsdssddf5@ssafy.com",
+      "name":"맛점22",
       "gender":'5',
-      "age":'37',
+      "age":'57',
       "description":"테스계정입니다.",
       "password":"ssafy",
       "list" : [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}]

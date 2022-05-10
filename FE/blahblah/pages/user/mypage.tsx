@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Token } from '@mui/icons-material';
+import Avatar from '@mui/material/Avatar';
 
 export default function Mypage() {
 
@@ -78,13 +79,19 @@ export default function Mypage() {
           </Col>
           <Col sm={6} sx={6}>
             <div className="mypage">
-              <Figure>
+            <Avatar
+        alt="ProfileImage"
+        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${profile.profileImg}`}
+        // src="/user/young-man.png"
+        sx={{ width: 100, height: 100 }}
+      />
+              {/* <Figure>
                 <Figure.Image
                   width={171}
                   height={180}
-                  src="/user/young-man.png"
+                  src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${profile.profileImg}`}
                 />
-              </Figure>
+              </Figure> */}
             </div>
             <ListGroup variant="flush">
               <ListGroup.Item>이름:{profile.name}</ListGroup.Item>
@@ -92,7 +99,7 @@ export default function Mypage() {
               <ListGroup.Item>모국어:</ListGroup.Item>
               <ListGroup.Item>구사언어:</ListGroup.Item>
               <ListGroup.Item>학습언어:</ListGroup.Item>
-              <ListGroup.Item>성별:{profile.gender === 0
+              <ListGroup.Item>성별:{profile.gender === 1
                 ? <>여자</>
                 : <>남자</>
               }</ListGroup.Item>
