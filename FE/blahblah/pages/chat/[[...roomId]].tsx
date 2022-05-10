@@ -21,8 +21,8 @@ import VideocamIcon from "@mui/icons-material/Videocam";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
-import VolumeOffIcon from "@mui/icons-material/VolumeOff";
 import CallEndIcon from "@mui/icons-material/CallEnd";
+import CloseIcon from "@mui/icons-material/Close";
 // components
 import ChatList from "../../component/chat/chatList";
 import ChatTabs from "../../component/chat/chatTabs";
@@ -37,6 +37,8 @@ import SockJS from "sockjs-client";
 import axios from "axios";
 // video call
 import { WebRtcPeer } from "kurento-utils";
+// router
+import { useRouter } from "next/router";
 
 const ChatTypographyByMe = styled(Typography)({
   borderRadius: "20px",
@@ -71,8 +73,24 @@ var constraints: any = {
 let from: any;
 
 export default function Chat() {
-  // 유저 정보 가져오기
+  const router = useRouter();
+  // 로그인한 유저의 정보
   const [userData, setUserData] = useState<any>(null);
+  // 채팅 히스토리(개별)
+  const [chatHistory, setChatHistory] = useState<any[]>([]);
+  // 채팅 목록
+  const [chattingList, setChattingList] = useState<any[]>([]);
+  // 채팅방 정보(개별)
+  const [chatRoomData, setChatRoomData] = useState<any>();
+  // 채팅 상대방 이름
+  const [chatname, setChatname] = useState("");
+
+  // 라우터 쿼리 체크
+  useEffect(() => {
+    console.log(router.query.roomId);
+  }, [router.query]);
+
+  // 유저 정보 가져오기
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {
@@ -80,6 +98,7 @@ export default function Chat() {
     };
     return config;
   };
+
   const getProfile = () => {
     axios({
       url: "https://blahblah.community:8443/api/user/me",
@@ -90,13 +109,12 @@ export default function Chat() {
       console.log(res.data);
     });
   };
+
   useEffect(() => {
     getProfile();
   }, []);
 
-  const [chatHistory, setChatHistory] = useState<any[]>([]);
   // 채팅 웹소켓 연결
-
   const connect = () => {
     let socket = new SockJS("https://blahblah.community:8080/chat-websocket");
 
@@ -113,32 +131,32 @@ export default function Chat() {
       });
       // 채팅 목록 가져오기
       stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
-        console.log(msg.body);
         let tmpMsg = JSON.parse(msg.body);
+        console.log(tmpMsg);
+        setChatRoomData(tmpMsg[0]);
         setChattingList(tmpMsg);
         setChatname(tmpMsg[0].roomName);
       });
-
       list();
     });
   };
-  // 채팅 목록
-  const [chattingList, setChattingList] = useState<any[]>([]);
 
   // 채팅 히스토리
   useEffect(() => {
-    axios({
-      method: "get",
-      url: "https://blahblah.community:8080/api/message/7a819932-4ed4-425f-b66a-05209a4c0a05",
-    })
-      .then((res) => {
-        console.log(res);
-        setChatHistory(res.data);
+    if (chatRoomData) {
+      axios({
+        method: "get",
+        url: `https://blahblah.community:8080/api/message/${chatRoomData.roomId}`,
       })
-      .catch((err) => {
-        console.error(err);
-      });
-  }, []);
+        .then((res) => {
+          console.log(res);
+          setChatHistory(res.data);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [chatRoomData]);
 
   const updateLastRead = () => {
     console.log("list");
@@ -164,21 +182,21 @@ export default function Chat() {
     }
   };
 
-  // 텍스트 채팅 보내기
-  const sendMsg = () => {
+  // type에 따라 채팅 보내기
+  const sendMsg = (type: string, content: any) => {
     const token = localStorage.getItem("jwt");
     if (stompClient) {
       stompClient.send(
-        "/chat/send/" + 1 + "/to-other",
+        "/chat/send/" + chatRoomData.opponentId + "/to-other",
         { Authorization: `Bearer ${token}` },
         JSON.stringify({
-          type: "text",
+          type: type,
           senderId: userData.id,
           senderName: userData.name,
-          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
-          receiverId: 1,
-          receiverName: "김싸피",
-          content: message,
+          roomId: chatRoomData.roomId,
+          receiverId: chatRoomData.opponentId,
+          receiverName: chatname,
+          content: content,
         })
       );
 
@@ -186,15 +204,16 @@ export default function Chat() {
         "/chat/send/to-me",
         { Authorization: `Bearer ${token}` },
         JSON.stringify({
-          type: "text",
+          type: type,
           senderId: userData.id,
           senderName: userData.name,
-          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
-          receiverId: 1,
-          receiverName: "김싸피",
-          content: message,
+          roomId: chatRoomData.roomId,
+          receiverId: chatRoomData.opponentId,
+          receiverName: chatname,
+          content: content,
         })
       );
+      list();
     }
   };
 
@@ -228,7 +247,7 @@ export default function Chat() {
 
   const handleMessageList = () => {
     if (message) {
-      sendMsg();
+      sendMsg("text", message);
       setMessage("");
     } else {
       alert("메시지를 입력해주세요.");
@@ -245,7 +264,6 @@ export default function Chat() {
     setOpenRecorder(false);
   };
 
-  const [chatname, setChatname] = useState("");
   // 채팅 첨삭
   const [correctMessage, setCorrectMessage] = useState("");
 
@@ -293,73 +311,6 @@ export default function Chat() {
     getLanguageList();
   }, []);
 
-  const [voiceUrl, setVoiceUrl] = useState();
-  const sendAudio = () => {
-    const token = localStorage.getItem("jwt");
-    if (stompClient) {
-      stompClient.send(
-        "/chat/send/" + 1 + "/to-other",
-        { Authorization: `Bearer ${token}` },
-        JSON.stringify({
-          type: "audio",
-          senderId: userData.id,
-          senderName: userData.name,
-          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
-          receiverId: 1,
-          receiverName: "김싸피",
-          content: voiceUrl,
-        })
-      );
-
-      stompClient.send(
-        "/chat/send/to-me",
-        { Authorization: `Bearer ${token}` },
-        JSON.stringify({
-          type: "audio",
-          senderId: userData.id,
-          senderName: userData.name,
-          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
-          receiverId: 1,
-          receiverName: "김싸피",
-          content: voiceUrl,
-        })
-      );
-    }
-  };
-
-  const sendImage = (imageUrl: any) => {
-    const token = localStorage.getItem("jwt");
-    if (stompClient) {
-      stompClient.send(
-        "/chat/send/" + 1 + "/to-other",
-        { Authorization: `Bearer ${token}` },
-        JSON.stringify({
-          type: "image",
-          senderId: userData.id,
-          senderName: userData.name,
-          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
-          receiverId: 1,
-          receiverName: "김싸피",
-          content: imageUrl,
-        })
-      );
-
-      stompClient.send(
-        "/chat/send/to-me",
-        { Authorization: `Bearer ${token}` },
-        JSON.stringify({
-          type: "image",
-          senderId: userData.id,
-          senderName: userData.name,
-          roomId: "7a819932-4ed4-425f-b66a-05209a4c0a05",
-          receiverId: 1,
-          receiverName: "김싸피",
-          content: imageUrl,
-        })
-      );
-    }
-  };
-
   // 이미지 dialog 열고 닫기
   const [openImageDialog, setOpenImageDialog] = useState(false);
   const handleClickOpenImageDialog = () => {
@@ -372,10 +323,18 @@ export default function Chat() {
 
   const [callState, setCallState] = useState(false);
 
-  // 화상회의를 위한 웹소켓 연결
-  useEffect(() => {
-    if (userData) {
-      ws = new WebSocket("wss://blahblah.community:9443/call");
+  const getAccessToken = async () => {
+    try {
+      const accessToken = await axios({
+        method: "GET",
+        url: "https://blahblah.community:9443/api/authentication/token",
+        headers: setToken(),
+      });
+      const tokenData = accessToken.data;
+      console.log(tokenData);
+      ws = new WebSocket(
+        `wss://blahblah.community:9443/call?authentication=${tokenData}`
+      );
       videoInput = document.getElementById("videoInput");
       videoOutput = document.getElementById("videoOutput");
       ws.onopen = function () {
@@ -399,8 +358,9 @@ export default function Chat() {
             break;
           case "stopCommunication":
             console.log("Communication ended by remote peer");
+            alert("영상통화가 종료되었습니다.");
             setCallState(false);
-            stop(true);
+            stopCall(false);
             break;
           case "iceCandidate":
             webRtcPeer.addIceCandidate(
@@ -414,10 +374,22 @@ export default function Chat() {
           default:
             console.error("Unrecognized message", parsedMessage);
         }
+        ws.onclose = function () {
+          ws.close();
+        };
       };
-      return () => {
-        ws.close();
-      };
+      // return () => {
+      //   ws.close();
+      // };
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // 화상회의를 위한 웹소켓 연결
+  useEffect(() => {
+    if (userData) {
+      getAccessToken();
     }
   }, [userData]);
 
@@ -434,7 +406,8 @@ export default function Chat() {
         ? message.message
         : "Unknown reason for call rejection.";
       console.log(errorMessage);
-      stop(true);
+      alert("상대방이 통화를 거절했습니다...ㅜㅜ");
+      stopCall(false);
     } else {
       setCallState(true);
       webRtcPeer.processAnswer(message.sdpAnswer, function (error: any) {
@@ -443,7 +416,7 @@ export default function Chat() {
     }
   }
 
-  async function register(user: string) {
+  function register(user: string) {
     let name = user;
 
     var message = {
@@ -454,11 +427,7 @@ export default function Chat() {
   }
 
   function incomingCall(message: any) {
-    if (
-      confirm(
-        "User " + message.from + " is calling you. Do you accept the call?"
-      )
-    ) {
+    if (confirm(message.from + "로부터 영상통화가 왔습니다. 받으시겠습니까?")) {
       from = message.from;
       let options = {
         localVideo: videoInput,
@@ -485,7 +454,7 @@ export default function Chat() {
         message: "user declined",
       };
       sendMessage(response);
-      stop(true);
+      stopCall(false);
     }
   }
 
@@ -530,12 +499,12 @@ export default function Chat() {
       if (error) {
         return console.error(error);
       }
-      // setCallState(true);
+      setCallState(true);
       webRtcPeer.generateOffer(onOfferCall);
     });
   };
 
-  const onOfferCall = async (error: any, offerSdp: any) => {
+  const onOfferCall = (error: any, offerSdp: any) => {
     if (error) return console.error("Error generating the offer");
     console.log("Invoking SDP offer callback function");
     let message = {
@@ -547,7 +516,7 @@ export default function Chat() {
     sendMessage(message);
   };
 
-  const stop = (message: any) => {
+  const stopCall = (message: any) => {
     if (webRtcPeer) {
       webRtcPeer.dispose();
       webRtcPeer = null;
@@ -560,20 +529,26 @@ export default function Chat() {
       }
     }
     setCallState(false);
-    videoInput.src = "";
-    videoOutput.src = "";
-    videoInput.style.background = "";
-    videoOutput.style.background = "";
   };
 
-  const [muted, setMuted] = useState(false);
+  const [audioMuted, setAudioMuted] = useState(false);
+  const [videoMuted, setVideoMuted] = useState(false);
 
-  const mute = () => {
+  const muteAudio = () => {
     if (webRtcPeer) {
       webRtcPeer.getLocalStream().getAudioTracks()[0].enabled = !webRtcPeer
         .getLocalStream()
         .getAudioTracks()[0].enabled;
-      setMuted(!muted);
+      setAudioMuted(!audioMuted);
+    }
+  };
+
+  const muteVideo = () => {
+    if (webRtcPeer) {
+      webRtcPeer.getLocalStream().getVideoTracks()[0].enabled = !webRtcPeer
+        .getLocalStream()
+        .getVideoTracks()[0].enabled;
+      setVideoMuted(!videoMuted);
     }
   };
 
@@ -589,7 +564,11 @@ export default function Chat() {
       >
         {chattingList && (
           <Box sx={{ width: "20%", display: callState ? "none" : "block" }}>
-            <ChatList chattingList={chattingList} setChatname={setChatname} />
+            <ChatList
+              chattingList={chattingList}
+              setChatname={setChatname}
+              setChatRoomData={setChatRoomData}
+            />
           </Box>
         )}
         <Stack
@@ -600,7 +579,6 @@ export default function Chat() {
           <Box>
             <video
               style={{ border: "1px solid black" }}
-              playsInline
               autoPlay
               id="videoInput"
               width="240px"
@@ -608,17 +586,21 @@ export default function Chat() {
             ></video>
             <video
               style={{ border: "1px solid black" }}
-              playsInline
               autoPlay
               id="videoOutput"
               width="240px"
               height="180px"
             ></video>
             <Box>
-              <IconButton onClick={() => stop(true)}>
+              <IconButton onClick={() => stopCall(false)}>
                 <CallEndIcon color="warning" />
               </IconButton>
-              <Button onClick={mute}>음소거</Button>
+              <Button onClick={muteAudio}>
+                {audioMuted ? "음소거 해제" : "음소거"}
+              </Button>
+              <Button onClick={muteVideo}>
+                {videoMuted ? "화면 켜기" : "화면 끄기"}
+              </Button>
             </Box>
           </Box>
         </Stack>
@@ -643,7 +625,7 @@ export default function Chat() {
               justifyContent: "space-between",
             }}
           >
-            <Typography>username: {chatname}</Typography>
+            <Typography>상대방: {chatname}</Typography>
             <Box>
               <IconButton onClick={videoCall}>
                 <VideocamIcon sx={{ color: "black" }} />
@@ -658,8 +640,8 @@ export default function Chat() {
             </Box>
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
-            {chatHistory &&
-              userData &&
+            {userData &&
+              chatHistory &&
               chatHistory.map((item, index) => {
                 if (item.senderId == userData.id) {
                   return (
@@ -746,6 +728,13 @@ export default function Chat() {
                 {translatedMessage && (
                   <Typography>{translatedMessage}</Typography>
                 )}
+                <IconButton
+                  onClick={() => {
+                    setTranslateMessage("");
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
               </Box>
             )}
             <Box>
@@ -777,14 +766,13 @@ export default function Chat() {
               openRecorder={openRecorder}
               setOpenRecorder={setOpenRecorder}
               handleCloseRecorder={handleCloseRecorder}
-              setVoiceUrl={setVoiceUrl}
-              sendAudio={sendAudio}
+              sendMsg={sendMsg}
             />
             <ImageDialog
               openImageDialog={openImageDialog}
               setOpenImageDialog={setOpenImageDialog}
               handleCloseImageDialog={handleCloseImageDialog}
-              sendImage={sendImage}
+              sendMsg={sendMsg}
             />
           </Box>
         </Box>

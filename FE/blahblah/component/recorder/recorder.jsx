@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 import axios from "axios";
 
 function VoiceRecorder(props) {
@@ -58,11 +58,12 @@ function VoiceRecorder(props) {
   };
 
   // 사용자가 음성 녹음을 중지 했을 때
-  const offRecAudio = () => {
+  const offRecAudio = async () => {
     // dataavailable 이벤트로 Blob 데이터에 대한 응답을 받을 수 있음
-    media.ondataavailable = function (e) {
+    media.ondataavailable = async function (e) {
       setAudioUrl(e.data);
       setOnRec(true);
+      props.setVoiceUrl(e.data);
     };
 
     // 모든 트랙에서 stop()을 호출해 오디오 스트림을 정지
@@ -79,41 +80,26 @@ function VoiceRecorder(props) {
     setDisabled(false);
   };
 
-  const play = async () => {
-    if (audioUrl) {
-      URL.createObjectURL(audioUrl); // 출력된 링크에서 녹음된 오디오 확인 가능
-    }
-    // File 생성자를 사용해 파일로 변환
-    const sound = new File([audioUrl], "soundBlob.mp3", {
-      lastModified: new Date().getTime(),
-      type: "audio/mp3",
-    });
-    const form = new FormData();
-    form.append("file", sound);
-    const audioResponse = await axios({
-      method: "post",
-      url: "https://blahblah.community:8080/api/s3/audio",
-      data: form,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    const s3Url = audioResponse.data[0];
-    props.setVoiceUrl(s3Url);
-
-    // 😀😀😀
-
-    console.log(sound); // File 정보 출력
-  };
-
   return (
-    <>
-      <Button onClick={onRec ? onRecAudio : offRecAudio}>녹음</Button>
-      <Button onClick={play} disabled={disabled}>
-        재생
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      {audioUrl && (
+        <audio
+          src={URL.createObjectURL(audioUrl)}
+          controls
+          controlsList="nodownload"
+        />
+      )}
+      <Button onClick={onRec ? onRecAudio : offRecAudio}>
+        {onRec ? "녹음" : "정지"}
       </Button>
-      <Button onClick={props.sendAudio}>채팅으로 보내기</Button>
-    </>
+    </Box>
   );
 }
 
