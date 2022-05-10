@@ -1,7 +1,9 @@
 package com.ssafy.blahblah.api.service.member;
 
 import com.ssafy.blahblah.api.request.member.UserInfoPostReq;
+import com.ssafy.blahblah.db.entity.BanReason;
 import com.ssafy.blahblah.db.entity.User;
+import com.ssafy.blahblah.db.repository.BanReasonRepository;
 import com.ssafy.blahblah.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -23,6 +25,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder;
+
+	@Autowired
+	BanReasonRepository banReasonRepository;
 
 	@Override
 	public Optional<User> isUserByEmail(String email) {
@@ -92,5 +97,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> getUserTable() {
 		return userRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+	}
+
+	@Override
+	public String getBanUserReason(User user){
+		List<BanReason> banReasons = banReasonRepository.findAllByUser(user);
+		for (BanReason banReason : banReasons){
+			if (banReason.getCreatedAt().isBefore(LocalDateTime.now()) && banReason.getExpiredAt().isAfter(LocalDateTime.now())) {
+				return banReason.getReason();
+			}
+		}
+		return null;
+
 	}
 }

@@ -57,7 +57,7 @@ public class RecordbookController {
         Recordbook recordbook = optionalRecordbook.get();
         Page<Record> records = recordbookService.recordList2(recordbook,pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new RecordListPageRes(records));
+        return ResponseEntity.status(HttpStatus.OK).body(new RecordListPageRes(records,recordbook));
 
 
     }

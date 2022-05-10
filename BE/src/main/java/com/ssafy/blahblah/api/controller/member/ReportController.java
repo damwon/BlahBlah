@@ -131,11 +131,14 @@ public class ReportController {
 
             Report report = optionalReport.get();
             User reportee = report.getReportee();
+            LocalDateTime startedAt;
             if(reportee.getExpiredAt().isAfter(LocalDateTime.now())) { // 현재 정지 중이면
                 reportee.setExpiredAt(reportee.getExpiredAt().plusDays(reportAnsPostReq.getDay()));
+                startedAt = reportee.getExpiredAt().plusSeconds(1);
             }
             else {
                 reportee.setExpiredAt(LocalDateTime.now().plusDays(reportAnsPostReq.getDay()));
+                startedAt = LocalDateTime.now();
             }
             reportee.setReportedCnt(reportee.getReportedCnt()+1);
             userRepository.save(reportee);
@@ -143,7 +146,7 @@ public class ReportController {
             banReasonRepository.save(BanReason.builder()
                             .reason(reportAnsPostReq.getReason())
                             .user(reportee)
-                            .createdAt(LocalDateTime.now())
+                            .createdAt(startedAt)
                             .expiredAt(reportee.getExpiredAt())
                     .build());
             return new ResponseEntity(HttpStatus.OK);
