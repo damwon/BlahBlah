@@ -58,7 +58,7 @@ public class WordbookController {
         Wordbook wordbook = optionalWordbook.get();
         Page<Word> words = wordbookService.wordlist2(wordbook, pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new WordListPageRes(words));
+        return ResponseEntity.status(HttpStatus.OK).body(new WordListPageRes(words,wordbook));
 
 
     }

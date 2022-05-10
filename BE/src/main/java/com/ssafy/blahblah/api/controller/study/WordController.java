@@ -47,7 +47,7 @@ public class WordController {
     }
 
 
-    // user 사용하기
+
     @PutMapping("/{wordId}")
     public ResponseEntity wordbookUpdate(Authentication authentication,@PathVariable Long wordId, @RequestBody WordReq wordReq) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
