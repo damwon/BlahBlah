@@ -16,4 +16,6 @@ public interface UserService {
 	User getUserByEmail(String email);
 	void saveUser(User user);
 	List<User> getUserTable();
+
+    String getBanUserReason(User user);
 }
