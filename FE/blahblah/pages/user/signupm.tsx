@@ -4,9 +4,12 @@ import { Form, Button, Container, Row, Col, InputGroup, FormControl } from 'reac
 import axios from "axios";
 import { useState } from "react";
 import lang2 from '../../component/user/Lang'
+import langImg2 from '../../component/user/LangImg'
+// import langkey from '../../component/user/Langarr'
 
 export default function Signup() {
   const lang: any = lang2
+  const langImg: any = langImg2
 
   const Router = useRouter();
   const { query } = useRouter();
@@ -212,21 +215,21 @@ export default function Signup() {
 
 
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>이름{name}</Form.Label>
+                <Form.Label>이름</Form.Label>
                 <Form.Control type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20} />
 
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>패스워드 {password}</Form.Label>
+                <Form.Label>패스워드</Form.Label>
                 <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} maxLength={10} />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>패스워드확인 {pwcheck}-
+                <Form.Label>패스워드확인 -
                   {
                     password === pwcheck && password.length >= 6
-                      ? <>비밀번호가 같습니다.</>
-                      : <>비밀번호가 다릅니다.</>
+                      ? <> 비밀번호가 같습니다.</>
+                      : <> 비밀번호가 다릅니다.</>
                   }
 
                 </Form.Label>
@@ -235,7 +238,7 @@ export default function Signup() {
 
               <Form.Label>- 추가정보 -</Form.Label>
 
-              {gen}
+              {/* {gen} */}
 
               <Form.Select aria-label="Default select example"
                 onChange={onGenHanlder} >
@@ -245,7 +248,7 @@ export default function Signup() {
                 ))}
               </Form.Select>
 
-              {age}
+              {/* {age} */}
               <Form.Select aria-label="Default select example"
                 onChange={onAgeHanlder} >
                 <option>나이 </option>
@@ -257,7 +260,21 @@ export default function Signup() {
 
               <hr />
 
-              <Form.Label>모국어(2개까지) {first} </Form.Label>
+              <Form.Label>모국어(2개까지)
+                {
+                  first
+                  ?<>
+                  {first.map((a,i)=>{
+                    return <><img style={{margin:'5px'}}
+                    src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
+                    {/* {a}  */}
+                    </>
+                  })
+}</>
+                  :null
+                }
+              
+              </Form.Label>
               <Form.Select aria-label="Default select example"
                 onChange={handleFirst} >
                 <option>언어선택 </option>
@@ -273,7 +290,21 @@ export default function Signup() {
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
 
               <hr />
-              <Form.Label>구사언어(3개까지) {second}</Form.Label>
+              <Form.Label>구사언어(3개까지)
+              {
+                  second
+                  ?<>
+                  {second.map((a,i)=>{
+                    return <><img style={{margin:'5px'}}
+                    src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
+                    {/* {a}  */}
+                    </>
+                  })
+}</>
+                  :null
+                }
+              
+              </Form.Label>
               <Form.Select aria-label="Default select example"
                 onChange={handleSecond} >
                 <option>언어선택 </option>
@@ -289,7 +320,20 @@ export default function Signup() {
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
 
               <hr />
-              <Form.Label>학습언어(4개까지) {third}</Form.Label>
+              <Form.Label>학습언어(4개까지) 
+              {
+                  third
+                  ?<>
+                  {third.map((a,i)=>{
+                    return <><img style={{margin:'5px'}}
+                    src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
+                    {/* {a}  */}
+                    </>
+                  })
+}</>
+                  :null
+                }
+                </Form.Label>
               <Form.Select aria-label="Default select example"
                 onChange={handleThird}
 
@@ -307,11 +351,15 @@ export default function Signup() {
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
 
               <hr />
-              <h3>프로필이미지</h3>
-              <form>
+              {/* <h3>프로필이미지</h3> */}
+              {/* <form>
                 <label htmlFor="profile-upload" />
                 <input type="file" id="profile-upload" accept="image/*" onChange={onChangeImg} />
-              </form>
+              </form> */}
+              <Form.Group controlId="formFileSm" className="mb-3">
+              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
+              <Form.Control type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
+            </Form.Group>
               {/* <Form.Label>프로필이미지 {proimg}</Form.Label>
               <Form.Select aria-label="Default select example"
                 onChange={handleProimg} value={proimg}>
@@ -325,7 +373,7 @@ export default function Signup() {
               }}
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
 
-              <Button onClick={() => {
+              {/* <Button onClick={() => {
                 console.log(first)
                 console.log(firstob)
                 console.log(second)
@@ -340,7 +388,7 @@ export default function Signup() {
                 console.log(newarr)
 
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
 
 
 

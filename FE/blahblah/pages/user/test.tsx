@@ -43,6 +43,7 @@ export default function Login() {
 
   const onClickLogin2 = (event: any) => {
     event.preventDefault();
+    
     axios({
       method:'post',
       url:'https://blahblah.community:8443/api/user/checkemail',
