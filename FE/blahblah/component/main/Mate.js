@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Container,Row,Col,Card,Button,ListGroup } from 'react-bootstrap';
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
@@ -92,7 +93,6 @@ export default function Mate(props) {
   return <>
   <Container>
     <Row>
-      <h3>컴포넌트안에 div태그만 없애기! 콘솔로그 해당오류</h3>
       <Col sm={2} xs={2}>
     {/* {
       langa
@@ -128,7 +128,7 @@ export default function Mate(props) {
       />
       </div>
       <div className='box'>
-      <ListItemText primary={`${props.user.name}(${props.user.age})`} secondary={props.user.gender ===1
+      <ListItemText primary={`${props.user.name}(${props.user.age})`} secondary={props.user.gender ===0
   ?<>남자</>
   :<>여자</>
   }/>
@@ -155,21 +155,36 @@ export default function Mate(props) {
           ?<>
           {
             langc.map((a,i)=>{
+              return <span key={i}>
+                  {larr[a]}
+                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}
+                  style={{margin:'5px'}}></img>
+              </span>
+            })
+          }
+          </>        
+          :null
+        } />
+        {/* {
+          langc
+          ?<>
+          {
+            langc.map((a,i)=>{
               return <div key={i}>
-                <Avatar
-        alt="langImage"
-        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
-        // src="/user/young-man.png"
-        // 템플릿 리터럴을 안쓰면댐
-        sx={{ width: 25, height: 25 }}
-      />
-                {larr[a]}
+                <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              sx={{ width: 25, height: 25 }}
+            />
               </div>
             })
           }
-          </>
+          </>        
           :null
-        } />
+        } */}
+
+
+        
       </ListItem>
       <ListItem>
         <ListItemText primary="인기도" secondary={`${props.user.rating}`} />
@@ -192,42 +207,49 @@ export default function Mate(props) {
       <ListItem>
         <ListItemText primary="구사언어" secondary={
           langb
-          ?<>
+          ?<span>
           {
             langb.map((a,i)=>{
-              return <div key={i}>
-                <Avatar
-        alt="langImage"
-        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
-        // src="/user/young-man.png"
-        sx={{ width: 25, height: 25 }}
-      />
-                {larr[a]}
-              </div>
+              return <span key={i}>
+                {/* <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              // src="/user/young-man.png"
+              sx={{ width: 25, height: 25 }}
+            /> */}
+                      {larr[a]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+
+              </span>
             })
           }
-          </>
+          </span>
           :null
         } />
       </ListItem>
+      
       <ListItem>
         <ListItemText primary="학습언어" secondary={
           langa
-          ?<>
+          ?<span>
           {
             langa.map((a,i)=>{
-              return <div key={i}>
-                <Avatar
-        alt="langImage"
-        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
-        // src="/user/young-man.png"
-        sx={{ width: 25, height: 25 }}
-      />
-                {larr[a]}
-              </div>
+              return <span key={i}>
+                {/* <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              // src="/user/young-man.png"
+              sx={{ width: 25, height: 25 }}
+            /> */}
+           {larr[a]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+
+              </span>
             })
           }
-          </>
+          </span>
           :null
         } />
       </ListItem>

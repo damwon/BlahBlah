@@ -92,7 +92,7 @@ export default function Mypage() {
               <ListGroup.Item>모국어:</ListGroup.Item>
               <ListGroup.Item>구사언어:</ListGroup.Item>
               <ListGroup.Item>학습언어:</ListGroup.Item>
-              <ListGroup.Item>성별:{profile.gender === 0
+              <ListGroup.Item>성별:{profile.gender === 1
                 ? <>여자</>
                 : <>남자</>
               }</ListGroup.Item>

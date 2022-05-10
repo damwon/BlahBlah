@@ -80,6 +80,7 @@ export default function ProfileUpdate() {
             {des}
             <div style={{ width: '16rem', margin: '20px' }}>자기소개{profile.description}
               {/* <input onChange={handleDes}></input> */}
+
               <textarea onChange={handleDes} id="story" name="story"
                 rows={5} cols={33}>
 
