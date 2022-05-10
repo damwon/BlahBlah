@@ -41,6 +41,7 @@ export default function Index() {
     allAxios
       .get(`/user/me`, { headers: setToken() })
       .then((res) => {
+        console.log(res.data);
         setUserId(res.data.id);
       })
       .catch((err) => {
@@ -50,7 +51,7 @@ export default function Index() {
 
   useEffect(() => {
     allAxios
-      .get(`/feed`, { headers: setToken() })
+      .get(`/feed/friends`, { headers: setToken() })
       .then((res) => {
         setFriendFeeds(res.data);
       })
@@ -77,13 +78,10 @@ export default function Index() {
       "feedPostReq",
       new Blob([JSON.stringify(data)], { type: "application/json" })
     );
-    console.log(file);
-    console.log(data);
-    console.log(formData);
     allAxios
       .post(`/feed`, formData, { headers: setToken() })
-      .then((res) => {
-        console.log(res);
+      .then(() => {
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -107,6 +105,20 @@ export default function Index() {
       setBtnColor("primary");
       setBtnName("피드 전체 보기");
       setShowFeeds(feeds);
+    }
+  };
+
+  const feedDelete = (id: number, userID: number) => {
+    if (userId === userID) {
+      allAxios
+        .delete(`feed/${id}`, { headers: setToken() })
+        .then(() => {
+          alert("게시물이 삭제되었습니다.");
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   return (
@@ -137,12 +149,17 @@ export default function Index() {
           <List dense={dense}>
             {showFeeds &&
               showFeeds.map((d: any, i: number) => {
-                console.log(d);
                 return (
                   <div key={i}>
                     <ListItem
                       secondaryAction={
-                        <IconButton edge="end" aria-label="delete">
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => {
+                            feedDelete(d.id, d.userId);
+                          }}
+                        >
                           {d.userId === userId ? <DeleteIcon /> : null}
                         </IconButton>
                       }
@@ -172,11 +189,19 @@ export default function Index() {
                           </div>
                         </div>
                       </ListItemAvatar>
-                      <ListItemText
-                        style={{ margin: "30px" }}
-                        primary={d.content}
-                      />
+                      <ListItemText style={{ margin: "30px" }} />
+                      <div>
+                        <Image
+                          className="profile"
+                          src={d.imgUrl}
+                          alt="finger image"
+                          width="100%"
+                          height="100%"
+                        ></Image>
+                        <h5 style={{ margin: "20px" }}>{d.content}</h5>
+                      </div>
                     </ListItem>
+                    <hr></hr>
                   </div>
                 );
               })}
