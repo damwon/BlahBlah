@@ -1,7 +1,7 @@
 import { useState } from "react";
 import WordFolderLstChat from "./folderLst";
 import WordLstChat from "./wordLst";
-export default function Test() {
+export default function WordOnChat() {
   const [TF, setTF] = useState(true);
   const [id, setId] = useState("");
   const handleTF = (data: any, dataId: any) => {

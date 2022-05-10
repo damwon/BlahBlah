@@ -2,7 +2,7 @@ import { useState } from "react";
 import NoteFolderLstChat from "./folderLst";
 import NoteLstChat from "./noteLst";
 import EditOnChat from "./editOnChat";
-export default function Test() {
+export default function NoteOnChat() {
   const [TF, setTF] = useState(1);
   const [id, setId] = useState("");
   const handleTF = (data: any, dataId: any) => {
