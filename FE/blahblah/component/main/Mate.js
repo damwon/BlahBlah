@@ -26,6 +26,8 @@ export default function Mate(props) {
   const [langc,setLangC] = useState([])
   // 언어전부
   const [lang,setLang] = useState(props.user.langList)
+  // 유저아이디
+  const email = props.user.email
 
   // const lc = langc.map((a,i)=>{
   //   return <div>
@@ -33,13 +35,31 @@ export default function Mate(props) {
   //   </div>
   // })
 
+  const userLike = (event) => {
+    event.preventDefault();
+    axios({
+      method:'post',
+      url:`https://blahblah.community:8443/api/rate/${email}`,
+      data: {
+        'email':email
+      },
+    })
+    .then((result)=>{console.log('요청성공')
+    console.log(result)
+ 
+  })
+    .catch((error)=>{console.log('요청실패')
+    console.log(error)  
+  })
+  };
+
 
   useEffect(() => {
-    console.log('각유저별 언어')
-    console.log(lang)
+    // console.log('각유저별 언어')
+    // console.log(lang)
     // console.log(Object.keys(lang).length)
     // 객체에는 길이가 없어서 이렇게 가져와야한다 체크
-    console.log('각유저별언어 반복문')
+    // console.log('각유저별언어 반복문')/
     // console.log(lang.lenght)
     for(let i=0;i<Object.keys(lang).length;i++){
       // console.log(lang[i]['level'])
@@ -61,17 +81,18 @@ export default function Mate(props) {
     }
   }, []);
 
-  useEffect(()=>{
-    console.log('------변환완료----')
-    console.log(langa)
-    console.log(langb)
-    console.log(langc)
-  },[langa])
+  // useEffect(()=>{
+  //   console.log('------변환완료----')
+  //   console.log(langa)
+  //   console.log(langb)
+  //   console.log(langc)
+  // },[langa])
   
 
   return <>
   <Container>
     <Row>
+      <h3>컴포넌트안에 div태그만 없애기! 콘솔로그 해당오류</h3>
       <Col sm={2} xs={2}>
     {/* {
       langa
@@ -128,7 +149,7 @@ export default function Mate(props) {
       }}
     >
       <ListItem>
-        {/* 템플릿 리털을 안쓰면 되는거아냐? */}
+      
         <ListItemText primary="모국어" secondary={
           langc
           ?<>
@@ -139,9 +160,9 @@ export default function Mate(props) {
         alt="langImage"
         src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
         // src="/user/young-man.png"
+        // 템플릿 리터럴을 안쓰면댐
         sx={{ width: 25, height: 25 }}
       />
-      {/* 아바타 이미지 언어코드도 휴우..! 다시한번찾자 캬캬 키밸류 */}
                 {larr[a]}
               </div>
             })
@@ -150,12 +171,10 @@ export default function Mate(props) {
           :null
         } />
       </ListItem>
-      {/* <Divider component="li" /> */}
       <ListItem>
         <ListItemText primary="인기도" secondary={`${props.user.rating}`} />
       </ListItem>
       
-      {/* <Divider component="li"/> */}
 
 
     </List>
@@ -191,7 +210,6 @@ export default function Mate(props) {
           :null
         } />
       </ListItem>
-      {/* <Divider component="li"/> */}
       <ListItem>
         <ListItemText primary="학습언어" secondary={
           langa
@@ -213,18 +231,9 @@ export default function Mate(props) {
           :null
         } />
       </ListItem>
-      {/* <Divider component="li" /> */}
       <ListItem>
         <ListItemText primary="자기소개" secondary={`${props.user.description}`} />
       </ListItem>
-      {/* <Divider component="li" /> */}
-
-      
-      {/* <ListItem>
-        <ListItemText primary="이메일" secondary={`${props.user.email}`} />
-      </ListItem>
-       */}
-      {/* <Divider component="li"/> */}
 
 
     </List>
