@@ -23,6 +23,7 @@ import MicIcon from "@mui/icons-material/Mic";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 // components
 import ChatList from "../../component/chat/chatList";
 import ChatTabs from "../../component/chat/chatTabs";
@@ -217,6 +218,43 @@ export default function Chat() {
     }
   };
 
+  // 첨삭용 메시지 보내기 함수
+  const sendCorrectMsg = (type: string, content: string, fixedMsg: string) => {
+    const token = localStorage.getItem("jwt");
+    if (stompClient) {
+      stompClient.send(
+        "/chat/send/" + chatRoomData.opponentId + "/to-other",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: type,
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: chatRoomData.roomId,
+          receiverId: chatRoomData.opponentId,
+          receiverName: chatname,
+          content: content,
+          comment: fixedMsg,
+        })
+      );
+
+      stompClient.send(
+        "/chat/send/to-me",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: type,
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: chatRoomData.roomId,
+          receiverId: chatRoomData.opponentId,
+          receiverName: chatname,
+          content: content,
+          comment: fixedMsg,
+        })
+      );
+      list();
+    }
+  };
+
   useEffect(() => {
     if (userData) {
       connect();
@@ -331,7 +369,6 @@ export default function Chat() {
         headers: setToken(),
       });
       const tokenData = accessToken.data;
-      console.log(tokenData);
       ws = new WebSocket(
         `wss://blahblah.community:9443/call?authentication=${tokenData}`
       );
@@ -374,9 +411,6 @@ export default function Chat() {
           default:
             console.error("Unrecognized message", parsedMessage);
         }
-        ws.onclose = function () {
-          ws.close();
-        };
       };
       // return () => {
       //   ws.close();
@@ -671,12 +705,32 @@ export default function Chat() {
                           style={{ width: "200px", height: "200px" }}
                         />
                       )}
+                      {item.type === "comment" && (
+                        <Stack
+                          sx={{
+                            borderRadius: "20px",
+                            padding: "10px 20px",
+                            backgroundColor: "skyblue",
+                            fontWeight: 500,
+                            color: "white",
+                          }}
+                        >
+                          <Typography sx={{ borderBottom: "1px solid white" }}>
+                            기존: {item.content}
+                          </Typography>
+                          <Box sx={{ display: "flex" }}>
+                            <ArrowForwardIcon />
+                            <Typography>코멘트: {item.comment}</Typography>
+                          </Box>
+                        </Stack>
+                      )}
                     </Box>
                   );
                 } else {
                   return (
                     <ChatBoxOfOther
                       key={index}
+                      item={item}
                       type={item.type}
                       message={item.content}
                       setCorrectMessage={setCorrectMessage}
@@ -699,6 +753,7 @@ export default function Chat() {
           >
             {correctMessage && (
               <CorrectMessage
+                sendCorrectMsg={sendCorrectMsg}
                 correctMessage={correctMessage}
                 setCorrectMessage={setCorrectMessage}
               />
