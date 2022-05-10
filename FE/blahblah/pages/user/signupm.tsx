@@ -156,7 +156,7 @@ export default function Signup() {
       ...secondob,
       ...thirdob
     ]
-    let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
+    // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
       "email": email,
       "name": name,
@@ -164,7 +164,7 @@ export default function Signup() {
       "age": age,
       "description": profile,
       "password": password,
-      "list": test,
+      "list": [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }],
     }
     formData.append('file', file)
     formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))

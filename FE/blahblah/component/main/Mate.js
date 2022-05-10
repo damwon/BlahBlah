@@ -15,6 +15,7 @@ import Typography from '@mui/material/Typography';
 import { useEffect,useState } from "react";
 import langarr from '../../component/user/Langarr'
 import langkey from '../../component/user/Lang'
+import axios from "axios";
 
 export default function Mate(props) {
   const larr = langarr
@@ -36,20 +37,32 @@ export default function Mate(props) {
   //   </div>
   // })
 
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+
   const userLike = (event) => {
     event.preventDefault();
     axios({
       method:'post',
       url:`https://blahblah.community:8443/api/rate/${email}`,
+      headers: setToken(),
       data: {
         'email':email
       },
     })
-    .then((result)=>{console.log('요청성공')
+    .then((result)=>{
+      console.log('유저 좋아 요청성공')
     console.log(result)
  
   })
-    .catch((error)=>{console.log('요청실패')
+    .catch((error)=>{
+      console.log('유저 좋아 요청실패')
+      console.log(email)
     console.log(error)  
   })
   };
@@ -188,6 +201,9 @@ export default function Mate(props) {
       </ListItem>
       <ListItem>
         <ListItemText primary="인기도" secondary={`${props.user.rating}`} />
+        {/* <button onClick={userLike}>클릭</button> */}
+        <Button onClick={userLike}
+                  style={{ marginBottom: '20px' }} variant="outline-dark">좋아요</Button>
       </ListItem>
       
 
