@@ -103,6 +103,7 @@ public class UserController {
 		userInfoPostReq.setGender(registerInfo.getGender());
 		userInfoPostReq.setAge(registerInfo.getAge());
 		userInfoPostReq.setDescription(registerInfo.getDescription());
+		userInfoPostReq.setReportedCnt(0);
 		String imgString = "profile_default.png";
 		if (multipartFile != null ) {
 			imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);

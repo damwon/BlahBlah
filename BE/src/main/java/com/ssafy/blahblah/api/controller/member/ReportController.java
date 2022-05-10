@@ -7,8 +7,10 @@ import com.ssafy.blahblah.api.response.member.ReportListPageRes;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
+import com.ssafy.blahblah.db.entity.BanReason;
 import com.ssafy.blahblah.db.entity.Report;
 import com.ssafy.blahblah.db.entity.User;
+import com.ssafy.blahblah.db.repository.BanReasonRepository;
 import com.ssafy.blahblah.db.repository.ReportRepository;
 import com.ssafy.blahblah.db.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -42,6 +44,9 @@ public class ReportController {
 
     @Autowired
     ReportRepository reportRepository;
+
+    @Autowired
+    BanReasonRepository banReasonRepository;
 
     @PostMapping("/{userId}")
     public ResponseEntity postReport(Authentication authentication, @PathVariable Long userId,
@@ -124,8 +129,6 @@ public class ReportController {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
 
-
-
             Report report = optionalReport.get();
             User reportee = report.getReportee();
             if(reportee.getExpiredAt().isAfter(LocalDateTime.now())) { // 현재 정지 중이면
@@ -134,11 +137,16 @@ public class ReportController {
             else {
                 reportee.setExpiredAt(LocalDateTime.now().plusDays(reportAnsPostReq.getDay()));
             }
-            reportee.setExpiredAt(LocalDateTime.now().plusDays(reportAnsPostReq.getDay()));
             reportee.setReportedCnt(reportee.getReportedCnt()+1);
-            report.setAnswer(reportAnsPostReq.getReason());
-
             userRepository.save(reportee);
+
+            banReasonRepository.save(BanReason.builder()
+                            .reason(reportAnsPostReq.getReason())
+                            .user(reportee)
+                            .createdAt(LocalDateTime.now())
+                            .expiredAt(reportee.getExpiredAt())
+                    .build());
+            return new ResponseEntity(HttpStatus.OK);
 
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("관리자가 아닙니다");
