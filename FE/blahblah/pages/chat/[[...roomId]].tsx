@@ -14,6 +14,7 @@ import {
   SelectChangeEvent,
   MenuItem,
   Stack,
+  CircularProgress,
 } from "@mui/material";
 // icons
 import ReportIcon from "@mui/icons-material/Report";
@@ -23,6 +24,8 @@ import MicIcon from "@mui/icons-material/Mic";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import CallEndIcon from "@mui/icons-material/CallEnd";
 import CloseIcon from "@mui/icons-material/Close";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import DownloadIcon from "@mui/icons-material/Download";
 // components
 import ChatList from "../../component/chat/chatList";
 import ChatTabs from "../../component/chat/chatTabs";
@@ -30,6 +33,7 @@ import RecorderDialog from "../../component/recorder/recoderDialog";
 import ImageDialog from "../../component/imageModal/imageDialog";
 import ChatBoxOfOther from "../../component/chat/chatBoxOfOther";
 import CorrectMessage from "../../component/chat/correctMessage";
+import VoiceSaveDialog from "../../component/chat/voiceSaveDialog";
 // chat websocket
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
@@ -217,6 +221,43 @@ export default function Chat() {
     }
   };
 
+  // 첨삭용 메시지 보내기 함수
+  const sendCorrectMsg = (type: string, content: string, fixedMsg: string) => {
+    const token = localStorage.getItem("jwt");
+    if (stompClient) {
+      stompClient.send(
+        "/chat/send/" + chatRoomData.opponentId + "/to-other",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: type,
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: chatRoomData.roomId,
+          receiverId: chatRoomData.opponentId,
+          receiverName: chatname,
+          content: content,
+          comment: fixedMsg,
+        })
+      );
+
+      stompClient.send(
+        "/chat/send/to-me",
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({
+          type: type,
+          senderId: userData.id,
+          senderName: userData.name,
+          roomId: chatRoomData.roomId,
+          receiverId: chatRoomData.opponentId,
+          receiverName: chatname,
+          content: content,
+          comment: fixedMsg,
+        })
+      );
+      list();
+    }
+  };
+
   useEffect(() => {
     if (userData) {
       connect();
@@ -331,7 +372,6 @@ export default function Chat() {
         headers: setToken(),
       });
       const tokenData = accessToken.data;
-      console.log(tokenData);
       ws = new WebSocket(
         `wss://blahblah.community:9443/call?authentication=${tokenData}`
       );
@@ -358,7 +398,6 @@ export default function Chat() {
             break;
           case "stopCommunication":
             console.log("Communication ended by remote peer");
-            alert("영상통화가 종료되었습니다.");
             setCallState(false);
             stopCall(false);
             break;
@@ -374,9 +413,6 @@ export default function Chat() {
           default:
             console.error("Unrecognized message", parsedMessage);
         }
-        ws.onclose = function () {
-          ws.close();
-        };
       };
       // return () => {
       //   ws.close();
@@ -399,6 +435,7 @@ export default function Chat() {
     });
   }
 
+  const [calling, setCalling] = useState(true);
   function callResponse(message: any) {
     if (message.response != "accepted") {
       console.info("Call not accepted by peer. Closing call");
@@ -408,8 +445,10 @@ export default function Chat() {
       console.log(errorMessage);
       alert("상대방이 통화를 거절했습니다...ㅜㅜ");
       stopCall(false);
+      setCalling(true);
     } else {
       setCallState(true);
+      setCalling(false);
       webRtcPeer.processAnswer(message.sdpAnswer, function (error: any) {
         if (error) return console.error(error);
       });
@@ -436,6 +475,7 @@ export default function Chat() {
         mediaConstraints: constraints,
       };
       setCallState(true);
+      setCalling(false);
       webRtcPeer = new (WebRtcPeer.WebRtcPeerSendrecv as any)(
         options,
         function (error: any) {
@@ -454,6 +494,7 @@ export default function Chat() {
         message: "user declined",
       };
       sendMessage(response);
+      setCalling(true);
       stopCall(false);
     }
   }
@@ -528,6 +569,7 @@ export default function Chat() {
         sendMessage(message2);
       }
     }
+    setCalling(true);
     setCallState(false);
   };
 
@@ -552,6 +594,19 @@ export default function Chat() {
     }
   };
 
+  // 음성메시지파일 저장 기능
+  const [openVoiceSave, setOpenVoiceSave] = useState(false);
+  const [voiceMsgUrl, setVoiceMsgUrl] = useState("");
+
+  const handleClickOpenVoiceSave = (voiceS3Url: any) => {
+    setOpenVoiceSave(true);
+    setVoiceMsgUrl(voiceS3Url);
+  };
+
+  const handleCloseVoiceSave = () => {
+    setOpenVoiceSave(false);
+  };
+
   return (
     <>
       <Box
@@ -572,9 +627,12 @@ export default function Chat() {
           </Box>
         )}
         <Stack
-          sx={{ width: "20%", display: callState ? "block" : "none" }}
+          sx={{
+            width: "20%",
+            display: callState ? "flex" : "none",
+            alignItems: "center",
+          }}
           spacing={2}
-          textAlign="center"
         >
           <Box>
             <video
@@ -583,14 +641,30 @@ export default function Chat() {
               id="videoInput"
               width="240px"
               height="180px"
-            ></video>
+            />
+
             <video
-              style={{ border: "1px solid black" }}
+              style={{
+                border: "1px solid black",
+                display: calling ? "none" : "block",
+              }}
               autoPlay
               id="videoOutput"
               width="240px"
               height="180px"
-            ></video>
+            />
+            <Box
+              sx={{
+                border: "1px solid black",
+                width: "240px",
+                height: "180px",
+                display: calling ? "flex" : "none",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CircularProgress />
+            </Box>
             <Box>
               <IconButton onClick={() => stopCall(false)}>
                 <CallEndIcon color="warning" />
@@ -659,11 +733,20 @@ export default function Chat() {
                         <ChatTypographyByMe>{item.content}</ChatTypographyByMe>
                       )}
                       {item.type === "audio" && (
-                        <audio
-                          src={item.content}
-                          controls
-                          controlsList="nodownload"
-                        />
+                        <>
+                          <IconButton
+                            onClick={() => {
+                              handleClickOpenVoiceSave(item.content);
+                            }}
+                          >
+                            <DownloadIcon />
+                          </IconButton>
+                          <audio
+                            src={item.content}
+                            controls
+                            controlsList="nodownload"
+                          />
+                        </>
                       )}
                       {item.type === "image" && (
                         <Image
@@ -671,16 +754,42 @@ export default function Chat() {
                           style={{ width: "200px", height: "200px" }}
                         />
                       )}
+                      {item.type === "comment" && (
+                        <Stack
+                          sx={{
+                            borderRadius: "20px",
+                            padding: "10px 20px",
+                            backgroundColor: "skyblue",
+                            fontWeight: 500,
+                            color: "white",
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              borderBottom: "1px solid white",
+                              opacity: 0.5,
+                            }}
+                          >
+                            기존: {item.content}
+                          </Typography>
+                          <Box sx={{ display: "flex" }}>
+                            <ArrowForwardIcon />
+                            <Typography>코멘트: {item.comment}</Typography>
+                          </Box>
+                        </Stack>
+                      )}
                     </Box>
                   );
                 } else {
                   return (
                     <ChatBoxOfOther
                       key={index}
+                      item={item}
                       type={item.type}
                       message={item.content}
                       setCorrectMessage={setCorrectMessage}
                       setTranslateMessage={setTranslateMessage}
+                      handleClickOpenVoiceSave={handleClickOpenVoiceSave}
                     />
                   );
                 }
@@ -699,6 +808,7 @@ export default function Chat() {
           >
             {correctMessage && (
               <CorrectMessage
+                sendCorrectMsg={sendCorrectMsg}
                 correctMessage={correctMessage}
                 setCorrectMessage={setCorrectMessage}
               />
@@ -774,6 +884,13 @@ export default function Chat() {
               handleCloseImageDialog={handleCloseImageDialog}
               sendMsg={sendMsg}
             />
+            {voiceMsgUrl && (
+              <VoiceSaveDialog
+                voiceMsgUrl={voiceMsgUrl}
+                openVoiceSave={openVoiceSave}
+                handleCloseVoiceSave={handleCloseVoiceSave}
+              />
+            )}
           </Box>
         </Box>
         <ChatTabs />

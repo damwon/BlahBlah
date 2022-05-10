@@ -254,7 +254,7 @@ export default function Mynote() {
           }
           .mar-btn {
             width: 150px;
-            margin-right: 50px;
+            margin-right: auto;
             margin-left: auto;
           }
         `}

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Container,Row,Col,Card,Button,ListGroup } from 'react-bootstrap';
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
@@ -6,14 +7,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
-import ImageIcon from '@mui/icons-material/Image';
-import WorkIcon from '@mui/icons-material/Work';
-import BeachAccessIcon from '@mui/icons-material/BeachAccess';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 import { useEffect,useState } from "react";
 import langarr from '../../component/user/Langarr'
 import langkey from '../../component/user/Lang'
+import axios from "axios";
 
 export default function Mate(props) {
   const larr = langarr
@@ -35,20 +32,32 @@ export default function Mate(props) {
   //   </div>
   // })
 
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+
   const userLike = (event) => {
     event.preventDefault();
     axios({
       method:'post',
       url:`https://blahblah.community:8443/api/rate/${email}`,
+      headers: setToken(),
       data: {
         'email':email
       },
     })
-    .then((result)=>{console.log('요청성공')
+    .then((result)=>{
+      console.log('유저 좋아 요청성공')
     console.log(result)
  
   })
-    .catch((error)=>{console.log('요청실패')
+    .catch((error)=>{
+      console.log('유저 좋아 요청실패')
+      console.log(email)
     console.log(error)  
   })
   };
@@ -92,7 +101,6 @@ export default function Mate(props) {
   return <>
   <Container>
     <Row>
-      <h3>컴포넌트안에 div태그만 없애기! 콘솔로그 해당오류</h3>
       <Col sm={2} xs={2}>
     {/* {
       langa
@@ -128,7 +136,7 @@ export default function Mate(props) {
       />
       </div>
       <div className='box'>
-      <ListItemText primary={`${props.user.name}(${props.user.age})`} secondary={props.user.gender ===1
+      <ListItemText primary={`${props.user.name}(${props.user.age})`} secondary={props.user.gender ===0
   ?<>남자</>
   :<>여자</>
   }/>
@@ -155,24 +163,42 @@ export default function Mate(props) {
           ?<>
           {
             langc.map((a,i)=>{
+              return <span key={i}>
+                  {larr[a]}
+                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}
+                  style={{margin:'5px'}}></img>
+              </span>
+            })
+          }
+          </>        
+          :null
+        } />
+        {/* {
+          langc
+          ?<>
+          {
+            langc.map((a,i)=>{
               return <div key={i}>
-                <Avatar
-        alt="langImage"
-        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
-        // src="/user/young-man.png"
-        // 템플릿 리터럴을 안쓰면댐
-        sx={{ width: 25, height: 25 }}
-      />
-                {larr[a]}
+                <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              sx={{ width: 25, height: 25 }}
+            />
               </div>
             })
           }
-          </>
+          </>        
           :null
-        } />
+        } */}
+
+
+        
       </ListItem>
       <ListItem>
         <ListItemText primary="인기도" secondary={`${props.user.rating}`} />
+        {/* <button onClick={userLike}>클릭</button> */}
+        <Button onClick={userLike}
+                  style={{ marginBottom: '20px' }} variant="outline-dark">좋아요</Button>
       </ListItem>
       
 
@@ -192,42 +218,49 @@ export default function Mate(props) {
       <ListItem>
         <ListItemText primary="구사언어" secondary={
           langb
-          ?<>
+          ?<span>
           {
             langb.map((a,i)=>{
-              return <div key={i}>
-                <Avatar
-        alt="langImage"
-        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
-        // src="/user/young-man.png"
-        sx={{ width: 25, height: 25 }}
-      />
-                {larr[a]}
-              </div>
+              return <span key={i}>
+                {/* <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              // src="/user/young-man.png"
+              sx={{ width: 25, height: 25 }}
+            /> */}
+                      {larr[a]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+
+              </span>
             })
           }
-          </>
+          </span>
           :null
         } />
       </ListItem>
+      
       <ListItem>
         <ListItemText primary="학습언어" secondary={
           langa
-          ?<>
+          ?<span>
           {
             langa.map((a,i)=>{
-              return <div key={i}>
-                <Avatar
-        alt="langImage"
-        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
-        // src="/user/young-man.png"
-        sx={{ width: 25, height: 25 }}
-      />
-                {larr[a]}
-              </div>
+              return <span key={i}>
+                {/* <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              // src="/user/young-man.png"
+              sx={{ width: 25, height: 25 }}
+            /> */}
+           {larr[a]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+
+              </span>
             })
           }
-          </>
+          </span>
           :null
         } />
       </ListItem>
