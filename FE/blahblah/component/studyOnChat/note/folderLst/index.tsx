@@ -13,16 +13,14 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FolderIcon from "@mui/icons-material/Folder";
 import { Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
-import allAxios from "../../lib/allAxios";
+import allAxios from "../../../../lib/allAxios";
 import { useRouter } from "next/router";
-
-export default function TA({ handleTF }: any) {
+export default function NoteFolderLstChat({ handleTF }: any) {
   const router = useRouter();
-  // modal 단어폴더 추가
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [wordTitle, setWordTitle] = useState("");
+  const [noteTitle, setNoteTitle] = useState("");
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {
@@ -37,15 +35,15 @@ export default function TA({ handleTF }: any) {
     setPage(value);
   };
 
-  const writeWordTitle = () => {
-    if (wordTitle === "") {
-      alert("단어장 제목을 입력해주세요");
+  const writeNoteTitle = () => {
+    if (noteTitle === "") {
+      alert("메모장 제목을 입력해주세요");
     } else {
       allAxios
         .post(
-          `/wordbook`,
+          `/memo`,
           {
-            title: wordTitle,
+            title: noteTitle,
           },
           {
             headers: setToken(),
@@ -60,15 +58,14 @@ export default function TA({ handleTF }: any) {
         });
     }
   };
-
   // list불러오기
   const [total, setTotal] = useState(1);
   const [file, setFile]: any = useState();
   useEffect(() => {
     allAxios
-      .get(`/wordbook?size=5&page=${page}`, { headers: setToken() })
+      .get(`/memo?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
-        setFile(res.data.wordbookListRes);
+        setFile(res.data.memoListRes);
         setTotal(res.data.totalPages);
       })
       .catch((err) => {
@@ -79,17 +76,16 @@ export default function TA({ handleTF }: any) {
   // wordlist 지우기
   const lstDelete = (num: number, title: string) => {
     allAxios
-      .delete(`/wordbook/${num}`, { headers: setToken() })
+      .delete(`/memo/${num}`, { headers: setToken() })
       .then((res) => {
-        alert("단어장 " + title + " 삭제되었습니다.");
+        alert("메모장 " + title + " 삭제되었습니다.");
         window.location.reload();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  // wordlist 이름 변경
+  // notelist 이름 변경
   const [changeShow, setChangeShow] = useState(false);
   const changeClose = () => setChangeShow(false);
   const changeOpen = (d: any) => {
@@ -105,11 +101,11 @@ export default function TA({ handleTF }: any) {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("단어장 제목을 입력해주세요");
+      alert("메모장 제목을 입력해주세요");
     } else {
       allAxios
         .put(
-          `/wordbook/${changeIdx}`,
+          `/memo/${changeIdx}`,
           {
             title: title,
           },
@@ -126,51 +122,49 @@ export default function TA({ handleTF }: any) {
         });
     }
   };
-
   const [dense, setDense] = useState(false);
-
   return (
     <>
-      <h1 className="cent">word note</h1>
+      <h1 className="cent">my note</h1>
       <List dense={dense}>
-        {file &&
-          file.map((d: any, i: number) => {
-            return (
-              <ListItem
-                style={{ width: "300px", margin: "0 auto" }}
-                key={i}
-                secondaryAction={
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
+        {file
+          ? file.map((d: any, i: number) => {
+              return (
+                <ListItem
+                  style={{ width: "300px", margin: "0 auto" }}
+                  key={i}
+                  secondaryAction={
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => {
+                        lstDelete(d.id, d.title);
+                      }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemAvatar
+                    style={{ cursor: "pointer" }}
                     onClick={() => {
-                      lstDelete(d.id, d.title);
+                      changeOpen(d);
                     }}
                   >
-                    <DeleteIcon />
-                  </IconButton>
-                }
-              >
-                <ListItemAvatar
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    changeOpen(d);
-                  }}
-                >
-                  <Avatar>
-                    <FolderIcon />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  style={{ cursor: "pointer" }}
-                  onClick={() => handleTF(false, d.id)}
-                  primary={d.title}
-                />
-              </ListItem>
-            );
-          })}
+                    <Avatar>
+                      <FolderIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleTF(2, d.id)}
+                    primary={d.title}
+                  />
+                </ListItem>
+              );
+            })
+          : null}
       </List>
-
       <div className="m">
         <div className="m" style={{ width: "400px" }}>
           <Pagination
@@ -188,17 +182,16 @@ export default function TA({ handleTF }: any) {
           variant="contained"
           onClick={() => {
             handleShow();
-            setWordTitle("");
+            setNoteTitle("");
           }}
         >
-          단어장 추가
+          메모장 추가
         </Button>
       </div>
-
-      {/* 단어장 추가 modal */}
+      {/* modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>단어장 제목을 입력해주세요.</Modal.Title>
+          <Modal.Title>메모장 제목을 입력해주세요.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
@@ -208,7 +201,7 @@ export default function TA({ handleTF }: any) {
             <Grid item xs={10}>
               <input
                 onChange={(e: any) => {
-                  setWordTitle(e.target.value);
+                  setNoteTitle(e.target.value);
                 }}
               ></input>
             </Grid>
@@ -219,16 +212,15 @@ export default function TA({ handleTF }: any) {
             취소
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button variant="contained" onClick={writeWordTitle}>
+          <Button variant="contained" onClick={writeNoteTitle}>
             저장
           </Button>
         </Modal.Footer>
       </Modal>
-
-      {/* 단어장 이름 변경 modal */}
+      {/* 메모장 이름 변경 modal */}
       <Modal show={changeShow} onHide={changeClose}>
         <Modal.Header closeButton>
-          <Modal.Title>단어장 제목을 수정해주세요.</Modal.Title>
+          <Modal.Title>메모장 제목을 수정해주세요.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
