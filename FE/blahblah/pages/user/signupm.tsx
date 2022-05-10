@@ -275,10 +275,11 @@ export default function Signup() {
                   first
                   ?<>
                   {first.map((a,i)=>{
-                    return <><img style={{margin:'5px'}}
+                    return <div key={i}>
+                      <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
-                    {/* {a}  */}
-                    </>
+                    {a} 
+                      </div>
                   })
 }</>
                   :null
@@ -305,10 +306,11 @@ export default function Signup() {
                   second
                   ?<>
                   {second.map((a,i)=>{
-                    return <><img style={{margin:'5px'}}
+                    return <div key={i}>
+                      <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
-                    {/* {a}  */}
-                    </>
+                    {a} 
+                    </div>
                   })
 }</>
                   :null
@@ -335,10 +337,11 @@ export default function Signup() {
                   third
                   ?<>
                   {third.map((a,i)=>{
-                    return <><img style={{margin:'5px'}}
+                    return <div key={i}>
+                      <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
-                    {/* {a}  */}
-                    </>
+                    {a} 
+                    </div>
                   })
 }</>
                   :null
