@@ -59,7 +59,7 @@ export default function ChatBoxOfOther(props: any) {
                 props.setCorrectMessage(props.message);
               }}
             >
-              Correct
+              Comment
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -68,14 +68,6 @@ export default function ChatBoxOfOther(props: any) {
               }}
             >
               Translate
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleClose();
-                alert("TTS 버튼 눌림");
-              }}
-            >
-              TTS
             </MenuItem>
           </Menu>
         </>
