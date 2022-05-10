@@ -255,7 +255,7 @@ export default function Recordnote() {
           }
           .mar-btn {
             width: 150px;
-            margin-right: 60px;
+            margin-right: auto;
             margin-left: auto;
           }
         `}
