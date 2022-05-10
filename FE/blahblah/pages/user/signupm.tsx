@@ -42,18 +42,37 @@ export default function Signup() {
     var array: any = [...first]
     var ob: any = [...firstob]
 
-    if (array.includes(e.currentTarget.value) === false && array.length <= 1 && ob.length <= 1) {
+    if (array.includes(e.currentTarget.value) === false && array.length <= 1 && ob.length <= 1&&
+    e.currentTarget.value!=='언어선택') {
       array.push(e.currentTarget.value)
       // let key = e.currentTarget.value
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 1 })
+      // console.log(lname)
+      setFirstob(ob)
+      setFirst(array);
+      console.log(first)
+      console.log(firstob)
     }
-    // console.log(lname)
-    setFirstob(ob)
-    setFirst(array);
-    console.log(first)
-    console.log(firstob)
+    
   };
+  const handleFirstDel = (e:any) =>{
+    var array:any = [...first]
+    var array2:any = [...firstob]
+    var idx = -1
+    for(let i=0;i<array.length;i++){
+      if(array[i]===e){
+        idx = i
+        break
+      }
+    }
+    console.log(idx)
+    array.splice(idx,1)
+    array2.splice(idx,1)
+    setFirst(array)
+    setFirstob(array2)
+
+  }
   // 구사언어
   const [second, setSecond] = useState([])
   const [secondob, setSecondob] = useState([])
@@ -61,16 +80,36 @@ export default function Signup() {
     var array: any = [...second]
     var ob: any = [...secondob]
 
-    if (array.includes(e.currentTarget.value) === false && array.length <= 2 && ob.length <= 2) {
+    if (array.includes(e.currentTarget.value) === false && array.length <= 2 && ob.length <= 2
+    &&e.currentTarget.value!=='언어선택') {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 4 })
+      setSecond(array);
+      setSecondob(ob)
+      console.log(second)
+      console.log(secondob)
     }
-    setSecond(array);
-    setSecondob(ob)
-    console.log(second)
-    console.log(secondob)
+    
   };
+  const handleSecondDel = (e:any) =>{
+    var array:any = [...second]
+    var array2:any = [...secondob]
+    var idx = -1
+    for(let i=0;i<array.length;i++){
+      if(array[i]===e){
+        idx = i
+        break
+      }
+    }
+    console.log(idx)
+    array.splice(idx,1)
+    array2.splice(idx,1)
+    setSecond(array)
+    setSecondob(array2)
+    // 이거를 안바꿔줫네
+
+  }
   // 학습언어
   const [third, setThird] = useState([])
   const [thirdob, setThirdob] = useState([])
@@ -78,16 +117,35 @@ export default function Signup() {
     var array: any = [...third]
     var ob: any = [...thirdob]
 
-    if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3) {
+    if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3
+    &&e.currentTarget.value!=='언어선택') {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 5 })
+      setThird(array);
+      setThirdob(ob)
+      console.log(third)
+      console.log(thirdob)
     }
-    setThird(array);
-    setThirdob(ob)
-    console.log(third)
-    console.log(thirdob)
+    
   };
+  const handleThirdDel = (e:any) =>{
+    var array:any = [...third]
+    var array2:any = [...thirdob]
+    var idx = -1
+    for(let i=0;i<array.length;i++){
+      if(array[i]===e){
+        idx = i
+        break
+      }
+    }
+    console.log(idx)
+    array.splice(idx,1)
+    array2.splice(idx,1)
+    setThird(array)
+    setThirdob(array2)
+
+  }
   // 성별
   const [gen, setGen] = useState("")
   const gens = ['남자', '여자']
@@ -278,7 +336,9 @@ export default function Signup() {
                     return <div key={i}>
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
-                    {a} 
+                    {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
+                    onClick={()=>{handleFirstDel(a)}}>x</span>
+                    {/* splice로 제거할 수있긴함 근데 귀찮은데 그것까지 하고 끝낼까? 초기화로할까 */}
                       </div>
                   })
 }</>
@@ -293,12 +353,12 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              <Button onClick={() => {
+              {/* <Button onClick={() => {
                 var newarr: any = []
                 setFirst(newarr)
                 setFirstob(newarr)
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
 
               <hr />
               <Form.Label>구사언어(3개까지)
@@ -309,7 +369,8 @@ export default function Signup() {
                     return <div key={i}>
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
-                    {a} 
+                    {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
+                    onClick={()=>{handleSecondDel(a)}}>x</span>
                     </div>
                   })
 }</>
@@ -324,12 +385,12 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              <Button onClick={() => {
+              {/* <Button onClick={() => {
                 var newarr: any = []
                 setSecond(newarr)
                 setSecondob(newarr)
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
 
               <hr />
               <Form.Label>학습언어(4개까지) 
@@ -340,7 +401,8 @@ export default function Signup() {
                     return <div key={i}>
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
-                    {a} 
+                    {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
+                    onClick={()=>{handleThirdDel(a)}}>x</span>
                     </div>
                   })
 }</>
@@ -356,12 +418,12 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              <Button onClick={() => {
+              {/* <Button onClick={() => {
                 var newarr: any = []
                 setThird(newarr)
                 setThirdob(newarr)
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
 
               <hr />
               {/* <h3>프로필이미지</h3> */}
@@ -393,7 +455,7 @@ export default function Signup() {
               }}
                 style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
 
-              {/* <Button onClick={() => {
+              <Button onClick={() => {
                 console.log(first)
                 console.log(firstob)
                 console.log(second)
@@ -408,7 +470,7 @@ export default function Signup() {
                 console.log(newarr)
 
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
 
 
 
