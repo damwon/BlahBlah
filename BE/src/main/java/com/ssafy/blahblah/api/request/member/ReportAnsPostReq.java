@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ReportAnsPostReq {
-    Long day;
+    int day;
     String reason;
 }
