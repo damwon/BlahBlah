@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import Image from "react-bootstrap/Image";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const ChatTypographyByOther = styled(Typography)({
   borderRadius: "20px",
@@ -74,7 +75,16 @@ export default function ChatBoxOfOther(props: any) {
         </>
       )}
       {props.type === "audio" && (
-        <audio src={props.message} controls controlsList="nodownload" />
+        <>
+          <audio src={props.message} controls controlsList="nodownload" />
+          <IconButton
+            onClick={() => {
+              props.handleClickOpenVoiceSave(props.message);
+            }}
+          >
+            <DownloadIcon />
+          </IconButton>
+        </>
       )}
       {props.type === "image" && (
         <Image
@@ -92,7 +102,7 @@ export default function ChatBoxOfOther(props: any) {
             fontWeight: 500,
           }}
         >
-          <Typography sx={{ borderBottom: "1px solid black" }}>
+          <Typography sx={{ borderBottom: "1px solid black", opacity: 0.5 }}>
             기존: {props.message}
           </Typography>
           <Box sx={{ display: "flex" }}>

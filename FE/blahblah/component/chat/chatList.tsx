@@ -36,7 +36,9 @@ export default function ChatList(props: any) {
                     ? item.lastMsg
                     : item.type === "image"
                     ? "사진"
-                    : "음성 메시지"
+                    : item.type === "audio"
+                    ? "음성 메시지"
+                    : "첨삭 메시지"
                 }
               />
             </ListItem>
