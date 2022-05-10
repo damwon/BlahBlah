@@ -68,13 +68,31 @@ export default function PassUpdate() {
                 ? <>비밀번호가 다릅니다.</>
                 : null
             }
+            <Form>
+            <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+    {/* <Form.Label column sm="2">
+      Password
+    </Form.Label> */}
+    <Col sm="10">
+      <Form.Control type="password" placeholder="Password" onChange={handlePass} maxLength={15}/>
+    </Col>
+  </Form.Group>
+  <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
+    {/* <Form.Label column sm="2">
+      Password Check
+    </Form.Label> */}
+    <Col sm="10">
+      <Form.Control type="password" placeholder="Password Check" onChange={handlePassCheck} maxLength={15}/>
+    </Col>
+  </Form.Group>
+            </Form>
 
-            <div style={{ width: '16rem', margin: '20px' }}>
+            {/* <div style={{ width: '16rem', margin: '20px' }}>
               <label>비밀번호</label>
               <input type="password" onChange={handlePass} maxLength={15}></input>
               <label>비번확인</label>
               <input type="password" onChange={handlePassCheck} maxLength={15}></input>
-            </div>
+            </div> */}
             <Button onClick={onEditPassword}
               style={{ marginBottom: '20px' }} variant="outline-dark">수정하기</Button>
             <Button onClick={() => {

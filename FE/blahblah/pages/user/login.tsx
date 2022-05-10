@@ -19,28 +19,28 @@ export default function Login() {
     setPassword(event.target.value);
   };
 
-  const handleKeyPress = (event:any) => {
-    if(event.key === 'Enter') {
+  const handleKeyPress = (event: any) => {
+    if (event.key === 'Enter') {
       event.preventDefault();
-    axios
-      .post(`https://blahblah.community:8443/api/auth/login`, {
-        'email': email,
-        'password': password,
-      })
-      .then((res) => {
-        localStorage.setItem("jwt", res.data.accessToken);
-        console.log(res)
-        location.reload()
-        // router.replace('/user')
-        // router.push("/user")
-        // 리다이렉트를하자
-      })
-      .catch((err) => {
-        console.log(err)
-        alert('제대로 입력해')
-        // alert 오류출력
+      axios
+        .post(`https://blahblah.community:8443/api/auth/login`, {
+          'email': email,
+          'password': password,
+        })
+        .then((res) => {
+          localStorage.setItem("jwt", res.data.accessToken);
+          console.log(res)
+          location.reload()
+          // router.replace('/user')
+          // router.push("/user")
+          // 리다이렉트를하자
+        })
+        .catch((err) => {
+          console.log(err)
+          alert('제대로 입력해')
+          // alert 오류출력
 
-      });
+        });
     }
   }
   const onClickLogin = (event: any) => {
@@ -93,7 +93,7 @@ export default function Login() {
                   <Form.Control onKeyUp={handleKeyPress} type="email" placeholder="Enter email" onChange={handleEmail} />
                   {/* <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
-                  </Form.Text> */}s
+                  </Form.Text> */}
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
