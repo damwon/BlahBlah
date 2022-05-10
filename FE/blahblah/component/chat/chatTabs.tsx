@@ -56,11 +56,9 @@ export default function ChatTabs() {
       </Box>
       <TabPanel value={value} index={0}>
         <Wordnote />
-        {/* <WordNote /> */}
       </TabPanel>
       <TabPanel value={value} index={1}>
         <Mynote />
-        {/* <Note /> */}
       </TabPanel>
     </Box>
   );

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Box, Typography, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import SendIcon from "@mui/icons-material/Send";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 export default function CorrectMessage(props: any) {
@@ -18,6 +19,13 @@ export default function CorrectMessage(props: any) {
         defaultValue={props.correctMessage}
       />
       <Typography>{fixedMessage}</Typography>
+      <IconButton
+        onClick={() => {
+          props.sendCorrectMsg("comment", props.correctMessage, fixedMessage);
+        }}
+      >
+        <SendIcon />
+      </IconButton>
       <IconButton
         onClick={() => {
           props.setCorrectMessage("");

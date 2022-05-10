@@ -5,10 +5,11 @@ import {
   IconButton,
   Menu,
   MenuItem,
+  Stack,
 } from "@mui/material";
 import React, { useState } from "react";
 import Image from "react-bootstrap/Image";
-
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 const ChatTypographyByOther = styled(Typography)({
@@ -81,6 +82,24 @@ export default function ChatBoxOfOther(props: any) {
           alt="image"
           style={{ width: "200px", height: "200px" }}
         />
+      )}
+      {props.type === "comment" && (
+        <Stack
+          sx={{
+            borderRadius: "20px",
+            padding: "10px 20px",
+            backgroundColor: "beige",
+            fontWeight: 500,
+          }}
+        >
+          <Typography sx={{ borderBottom: "1px solid black" }}>
+            기존: {props.message}
+          </Typography>
+          <Box sx={{ display: "flex" }}>
+            <ArrowForwardIcon />
+            <Typography>코멘트: {props.item.comment}</Typography>
+          </Box>
+        </Stack>
       )}
     </Box>
   );
