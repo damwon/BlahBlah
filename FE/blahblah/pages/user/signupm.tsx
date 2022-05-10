@@ -119,6 +119,13 @@ export default function Signup() {
   const handleProimg = (e: any) => {
     setProimg(e.currentTarget.value)
   }
+  // 이미지 미리보기
+  // const [files,setFiles] = useState('')
+  // const onLoadFile = (e:any)=>{
+  //   const file = e.target.files;
+  //   console.log(file)
+  //   setFiles(file)
+  // }
 
   // 비밀번호 입력부분
   const handlePassword = (event: any) => {
@@ -202,8 +209,11 @@ export default function Signup() {
 
         <Row>
           <Col></Col>
-          <Col><h1>회원가입 {lang['English']}</h1>
-            {email}
+          <Col><h1>회원가입 </h1>
+            {email
+            ?<>사용할 아이디는 {email} 입니다.</>
+            :null
+            }
             {/* 이거 이메일 빈녀석이면 예외처리 */}
             {/* const [result,setResult] = useState(false) */}
 
@@ -360,6 +370,13 @@ export default function Signup() {
               <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
               <Form.Control type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
+            {/* {file} */}
+            {/* <img src={file}></img>
+            {
+              file
+              ?<>{file}</>
+              :<>없어</>
+            } */}
               {/* <Form.Label>프로필이미지 {proimg}</Form.Label>
               <Form.Select aria-label="Default select example"
                 onChange={handleProimg} value={proimg}>

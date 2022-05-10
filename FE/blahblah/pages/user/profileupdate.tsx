@@ -18,11 +18,29 @@ export default function ProfileUpdate() {
     setName(e.currentTarget.value)
   }
   // 프로필 이미지
-  const [proimg, setProimg] = useState('0')
-  const imgarr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-  const handleProimg = (e: any) => {
-    setProimg(e.currentTarget.value)
+  const [file, setFilfe] = useState<any>(null)
+  // 이미지 업로드 안해놓으면 기본 null처리
+  // 기본 이미지 사용 누르면 null되게 처리 추가하자
+  const onChangeImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const formData = new FormData();
+
+
+    if (e.target.files) {
+      const uploadFile = e.target.files[0]
+      formData.append('file', uploadFile)
+      setFilfe(uploadFile)
+      console.log(uploadFile)
+      console.log('===useState===')
+      console.log(file)
+    }
   }
+  // 프로필 이미지
+  // const [proimg, setProimg] = useState('0')
+  // const imgarr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+  // const handleProimg = (e: any) => {
+  //   setProimg(e.currentTarget.value)
+  // }
   // 프로필 업데이트
   const onEdit = (event: any) => {
     event.preventDefault();
@@ -33,7 +51,7 @@ export default function ProfileUpdate() {
       data: {
         "name": name,
         "description": des,
-        "profileImg": proimg,
+        "profileImg": profile.profileImg,
       },
     })
       .then((res) => {
@@ -77,22 +95,37 @@ export default function ProfileUpdate() {
           <Col></Col>
           <Col>
             <h1>회원정보수정</h1>
-            {des}
-            <div style={{ width: '16rem', margin: '20px' }}>자기소개{profile.description}
-              {/* <input onChange={handleDes}></input> */}
-
+            {/* {des} */}
+            <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+    <Form.Label>이름</Form.Label>
+    <Form.Control type="text" placeholder="New Name" onChange={handleName} maxLength={20}/>
+  </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+    <Form.Label>자기소개</Form.Label>
+    <Form.Control as="textarea" rows={3} onChange={handleDes}/>
+  </Form.Group>
+            </Form>
+            {/* <div style={{ width: '16rem', margin: '20px' }}>자기소개
+            {profile.description}
+              <input onChange={handleDes}></input>
+              
               <textarea onChange={handleDes} id="story" name="story"
                 rows={5} cols={33}>
 
               </textarea>
-            </div>
-            {name}
-            <div style={{ width: '16rem', margin: '20px' }}>
+            </div> */}
+            {/* {name} */}
+            {/* <div style={{ width: '16rem', margin: '20px' }}>
               이름
               <input onChange={handleName} maxLength={20}></input>
-            </div>
+            </div> */}
+            <Form.Group controlId="formFileSm" className="mb-3">
+              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
+              <Form.Control type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
+            </Form.Group>
             {/* {proimg} */}
-            <div style={{ width: '16rem', margin: '20px' }}>
+            {/* <div style={{ width: '16rem', margin: '20px' }}>
               프로필이미지 - {profile.profileImg}
               <Form.Select aria-label="Default select example"
                 onChange={handleProimg} value={proimg}>
@@ -101,7 +134,7 @@ export default function ProfileUpdate() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-            </div>
+            </div> */}
             <Button onClick={onEdit}
               style={{ marginBottom: '20px' }} variant="outline-dark">수정하기</Button>
             <Button onClick={() => {
