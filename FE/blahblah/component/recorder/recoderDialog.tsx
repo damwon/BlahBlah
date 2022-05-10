@@ -33,7 +33,7 @@ export default function RecorderDialog(props: any) {
       },
     });
     const s3Url = audioResponse.data[0];
-    props.sendAudio(s3Url);
+    props.sendMsg("audio", s3Url);
   };
   return (
     <Dialog open={props.openRecorder} onClose={props.handleCloseRecorder}>

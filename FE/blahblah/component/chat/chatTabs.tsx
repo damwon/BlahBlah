@@ -3,8 +3,8 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Note from "../../pages/note";
-import WordNote from "../../pages/wordnote/index";
+import Wordnote from "../study/wordnote";
+import Mynote from "../study/mynote";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,11 +55,11 @@ export default function ChatTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        단어장
+        <Wordnote />
         {/* <WordNote /> */}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        메모장
+        <Mynote />
         {/* <Note /> */}
       </TabPanel>
     </Box>

@@ -30,7 +30,7 @@ export default function ImageDialog(props: any) {
         },
       });
       const s3ImageUrl = response.data[0];
-      await props.sendImage(s3ImageUrl);
+      await props.sendMsg("image", s3ImageUrl);
     }
   };
 
