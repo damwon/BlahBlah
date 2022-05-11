@@ -31,7 +31,6 @@ public class LikeController {
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         Feed feed = likeService.like(user,feedId);
-        System.out.println();
         if(feed == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }

@@ -18,4 +18,6 @@ public interface UserService {
 	List<User> getUserTable();
 
     String getBanUserReason(User user);
+
+    Optional<User> getUserById(Long userId);
 }
