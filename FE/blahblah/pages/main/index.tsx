@@ -41,7 +41,7 @@ export default function Index() {
           mate.map(function(a:any,i:any){
             return (
               <div className="matebox" key = {i}>
-                <Mate user={a} />
+                <Mate user={a} findMate={findMate}/>
               </div>
               
 

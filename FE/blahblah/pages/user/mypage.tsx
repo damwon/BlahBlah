@@ -30,6 +30,7 @@ export default function Mypage() {
     }).then((res) => {
       console.log(res)
       setProfile(res.data);
+      // console.log(res.body)
       console.log(res.data)
     });
   };
@@ -107,12 +108,12 @@ export default function Mypage() {
               <ListGroup.Item>자기소개:{profile.description}</ListGroup.Item>
               <Button onClick={() => {
                 router.push('/user/profileupdate')
-              }}
-                style={{ marginBottom: '20px' }} variant="outline-dark">프로필수정</Button>
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">프로필수정</Button>
               <Button onClick={() => {
-                router.push('/user/passupdate')
-              }}
-                style={{ marginBottom: '20px' }} variant="outline-dark">비밀번호수정</Button>
+                router.push('/user/passupdate') 
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">비밀번호수정</Button>
             </ListGroup>
           </Col>
           <Col sm={3} sx={3}>
