@@ -13,6 +13,8 @@ public interface FeedService {
 
     List<Feed> listForFriends(User user);
 
+    Feed detail(Long feedId);
+
     Feed post(User user, String img, FeedPostReq feedPostReq);
 
     ResponseEntity update(User user, FeedPostReq feedPostReq, List<MultipartFile> multipartFile, Long feedId);

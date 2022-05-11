@@ -65,6 +65,17 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
+    public Feed detail(Long feedId){
+        Optional<Feed> optionalFeed = feedRepository.findById(feedId);
+        if(optionalFeed.isEmpty()) {
+            return null;
+        }
+        Feed feed = optionalFeed.get();
+        return feed;
+    }
+
+
+    @Override
     public Feed post(User user, String img, FeedPostReq feedPostReq) {
         return feedRepository.save(Feed.builder()
                 .content(feedPostReq.getContent())
