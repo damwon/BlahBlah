@@ -26,9 +26,9 @@ export default function Mate(props) {
   // 유저아이디
   const email = props.user.email
   // 유저 좋아요
-  const [like,setLike] = useState(props.user.rating)
+  // const [like,setLike] = useState(props.user.rating)
   // 유저 좋아요 버튼
-  const [likeBtn,setLikeBtn] = useState(true)
+  // const [likeBtn,setLikeBtn] = useState(true)
 
   // const lc = langc.map((a,i)=>{
   //   return <div>
@@ -46,6 +46,7 @@ export default function Mate(props) {
 
   const userLike = (event) => {
     event.preventDefault();
+    // setLikeBtn(!likeBtn)
     axios({
       method:'post',
       url:`https://blahblah.community:8443/api/rate/${email}`,
@@ -55,7 +56,10 @@ export default function Mate(props) {
       },
     })
     .then((result)=>{
-      setLikeBtn(!likeBtn)
+      // setLikeBtn(!likeBtn)
+      props.findMate()
+      // 이걸로 상위 함수 바꿔줘서 좋아요 실시간
+      // setLike(props.user.rating)
       console.log('유저 좋아 요청성공')
     console.log(result)
  
@@ -67,14 +71,14 @@ export default function Mate(props) {
   })
   };
 
-  useEffect(()=>{
-    props.findMate()
-    // 미쳤다리.. 함수 프롭스 ㄷ.ㄷ.. 실시간 변화
-    setLang(props.user.langList)
-    setLike(props.user.rating)
-    console.log(like)
-    // setLang(props.user.langList)
-  },[likeBtn])
+  // useEffect(()=>{
+  //   // props.findMate()
+  //   // 미쳤다리.. 함수 프롭스 ㄷ.ㄷ.. 실시간 변화
+  //   // setLang(props.user.langList)
+  //   // setLike(props.user.rating)
+  //   console.log(like)
+  //   // setLang(props.user.langList)
+  // },[likeBtn])
 
   useEffect(() => {
     // console.log('각유저별 언어')
@@ -208,7 +212,8 @@ export default function Mate(props) {
         
       </ListItem>
       <ListItem>
-        <ListItemText primary="인기도" secondary={`${like}`} />
+        <ListItemText primary="인기도" secondary={`${props.user.rating}`} />
+        {/* props.user.rating를 useState로 하면 한턴 늦게불러오네 */}
         {/* <button onClick={userLike}>클릭</button> */}
         <Button onClick={userLike}
                   style={{ marginBottom: '20px' }} variant="outline-dark">좋아요</Button>
