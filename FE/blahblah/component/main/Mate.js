@@ -106,12 +106,12 @@ export default function Mate(props) {
         // newarr.push(3)
         setLangA(newarr)
       }else if(lang[i]['level']===4){
-        var newarr = [...langa]
+        var newarr = [...langb]
         newarr.push(lang[i]['langId'])
         setLangB(newarr)
       }
       else if(lang[i]['level']===5){
-        var newarr = [...langa]
+        var newarr = [...langc]
         newarr.push(lang[i]['langId'])
         setLangC(newarr)
       }
@@ -319,6 +319,18 @@ export default function Mate(props) {
                 )
             }}
                   className="btncs" variant="outline-secondary">대화하기</Button>
+                  <Button  onClick={()=>{
+              router.push(
+                {
+                  pathname: `/user/detail/`,
+                  query: {
+                    email:props.user.email,
+                  },
+                },
+                `/user/detail/`
+                )
+            }}
+                   variant="outline-secondary">프로필보기</Button>
 </Col>
   <Col sm={2} xs={2}></Col>
     </Row>
