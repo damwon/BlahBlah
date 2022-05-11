@@ -44,6 +44,12 @@ public class LikeServiceImpl implements LikeService{
         return feedRepository.save(feed);
     }
 
+    @Override
+    public Optional<Heart> findByUserAndFeed(User user,Feed feed){
+        return likeRepository.findByUserAndFeed(user,feed);
+    }
+
+
 
 
 }
