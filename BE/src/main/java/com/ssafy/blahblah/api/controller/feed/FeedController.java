@@ -1,6 +1,7 @@
 package com.ssafy.blahblah.api.controller.feed;
 
 import com.ssafy.blahblah.api.request.feed.FeedPostReq;
+import com.ssafy.blahblah.api.response.feed.FeedDetailRes;
 import com.ssafy.blahblah.api.response.feed.FeedListRes;
 import com.ssafy.blahblah.api.service.feed.FeedService;
 import com.ssafy.blahblah.api.service.feed.FeedServiceImpl;
@@ -85,6 +86,15 @@ public class FeedController {
         });
         return ResponseEntity.status(HttpStatus.OK).body(dto2);
 
+    }
+
+    @GetMapping("/{feedId}")
+    public ResponseEntity detail(Authentication authentication,@PathVariable Long feedId) {
+        Feed feed = feedService.detail(feedId);
+        if(feed == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new FeedDetailRes(feed));
     }
 
 
