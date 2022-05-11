@@ -54,7 +54,7 @@ export default function EmailCheck() {
           {
             isCheck
             ?<>이메일인증 요청성공
-            <button onClick={()=>{
+            {/* <button onClick={()=>{
               router.push(
                 {
                   pathname: "/user/signupm",
@@ -63,7 +63,18 @@ export default function EmailCheck() {
                   },
                 },
                 `/user/signupm`)
-            }}>회원가입넘어가기</button>
+            }}>회원가입넘어가기</button> */}
+            <Button onClick={()=>{
+              router.push(
+                {
+                  pathname: "/user/signupm",
+                  query: {
+                    email:key,
+                  },
+                },
+                `/user/signupm`)
+            }}
+                    className="btncs" variant="outline-secondary">회원가입넘어가기</Button>
             </>
             :<>이메일인증 요청실패</>
           }

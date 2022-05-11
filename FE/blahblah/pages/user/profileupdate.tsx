@@ -136,11 +136,11 @@ export default function ProfileUpdate() {
               </Form.Select>
             </div> */}
             <Button onClick={onEdit}
-              style={{ marginBottom: '20px' }} variant="outline-dark">수정하기</Button>
+              className="btncs" variant="outline-secondary">수정하기</Button>
             <Button onClick={() => {
               router.push('/user/mypage')
             }}
-              style={{ marginBottom: '20px' }} variant="outline-dark">마이페이지 돌아가기</Button>
+              style={{ margin: '2px' }} variant="outline-secondary">마이페이지 돌아가기</Button>
             {/* <button onClick={onEdit}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')

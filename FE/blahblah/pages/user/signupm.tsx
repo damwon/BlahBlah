@@ -284,15 +284,15 @@ export default function Signup() {
 
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>이름</Form.Label>
-                <Form.Control type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20} />
+                <Form.Control className="formct" type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20} />
 
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>패스워드</Form.Label>
-                <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} maxLength={10} />
+                <Form.Control className="formct" type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} maxLength={10} />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Group  className="mb-3" controlId="formBasicPassword">
                 <Form.Label>패스워드확인 -
                   {
                     password === pwcheck && password.length >= 6
@@ -301,14 +301,14 @@ export default function Signup() {
                   }
 
                 </Form.Label>
-                <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} maxLength={10} />
+                <Form.Control className="formct" type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} maxLength={10} />
               </Form.Group>
 
               <Form.Label>- 추가정보 -</Form.Label>
 
               {/* {gen} */}
 
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={onGenHanlder} >
                 <option>성별 </option>
                 {gens.map((item, index) => (
@@ -317,7 +317,7 @@ export default function Signup() {
               </Form.Select>
 
               {/* {age} */}
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={onAgeHanlder} >
                 <option>나이 </option>
                 {ages.map((item, index) => (
@@ -346,7 +346,7 @@ export default function Signup() {
                 }
               
               </Form.Label>
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleFirst} >
                 <option>언어선택 </option>
                 {languages.map((item, index) => (
@@ -378,7 +378,7 @@ export default function Signup() {
                 }
               
               </Form.Label>
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleSecond} >
                 <option>언어선택 </option>
                 {languages.map((item, index) => (
@@ -409,7 +409,7 @@ export default function Signup() {
                   :null
                 }
                 </Form.Label>
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleThird}
 
               >
@@ -433,7 +433,7 @@ export default function Signup() {
               </form> */}
               <Form.Group controlId="formFileSm" className="mb-3">
               <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
-              <Form.Control type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
+              <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
             {/* {file} */}
             {/* <img src={file}></img>
@@ -488,7 +488,7 @@ export default function Signup() {
               <Form.Label>자기소개 {profile}</Form.Label>
               <InputGroup>
                 {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
-                <FormControl placeholder='10자이상 입력해주세요' as="textarea"
+                <FormControl className="formct" placeholder='10자이상 입력해주세요' as="textarea"
                   aria-label="With textarea" onChange={handleProfile} />
               </InputGroup>
 

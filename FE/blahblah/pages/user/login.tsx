@@ -93,7 +93,7 @@ export default function Login() {
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>이메일주소</Form.Label>
                   <Form.Control 
-                  className="test"
+                  className="formct"
                   // style={{borderColor:'red'}}
                   onKeyUp={handleKeyPress} type="email" placeholder="Enter email" onChange={handleEmail} />
                   {/* <Form.Text className="text-muted">
@@ -103,21 +103,21 @@ export default function Login() {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>패스워드</Form.Label>
-                  <Form.Control onKeyUp={handleKeyPress} type="password" placeholder="Password" onChange={handlePassword} />
+                  <Form.Control className="formct" onKeyUp={handleKeyPress} type="password" placeholder="Password" onChange={handlePassword} />
                 </Form.Group>
                 {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" label="Check me out" />
                 </Form.Group> */}
-                <Button onClick={onClickLogin} className="custom-btn"
-                  style={{ marginBottom: '20px' }} variant="outline-dark">로그인</Button>
-                <Button onClick={() => {
+                <Button onClick={onClickLogin} className="btncs" 
+                   variant="outline-secondary">로그인</Button>
+                <Button className="btncs" onClick={() => {
                   router.push('/user/email')
                 }}
-                  style={{ marginBottom: '20px' }} variant="outline-dark">회원가입</Button>
-                <Button onClick={() => {
+                   variant="outline-secondary">회원가입</Button>
+                <Button  onClick={() => {
                   router.push('/user/pass')
                 }}
-                  style={{ marginBottom: '20px' }} variant="outline-dark">비밀번호찾기</Button>
+                   variant="outline-secondary">비밀번호찾기</Button>
                   {/* <Button className="btnc" id="btbt">커스텀 연습</Button> */}
                 {/* <button type="submit" onClick={onClickLogin}>
                   로그인

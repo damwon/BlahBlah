@@ -216,7 +216,7 @@ export default function Mate(props) {
         {/* props.user.rating를 useState로 하면 한턴 늦게불러오네 */}
         {/* <button onClick={userLike}>클릭</button> */}
         <Button onClick={userLike}
-                  style={{ marginBottom: '20px' }} variant="outline-dark">좋아요</Button>
+                  className="btncs" variant="outline-secondary">좋아요</Button>
       </ListItem>
       
 
