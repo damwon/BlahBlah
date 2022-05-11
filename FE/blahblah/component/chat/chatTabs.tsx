@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Wordnote from "../study/wordnote";
 import Mynote from "../study/mynote";
+import WordOnChat from "../studyOnChat/word/index";
+import NoteOnChat from "../studyOnChat/note/index";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,10 +57,10 @@ export default function ChatTabs() {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <Wordnote />
+        <WordOnChat />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Mynote />
+        <NoteOnChat />
       </TabPanel>
     </Box>
   );
