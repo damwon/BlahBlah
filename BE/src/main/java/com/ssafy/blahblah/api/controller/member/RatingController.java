@@ -28,8 +28,6 @@ public class RatingController {
         Long upUserId = userDetails.getUser().getId();
         Long userId = userService.getUserByEmail(email).getId();
 
-        ratingService.upRating(upUserId, userId);
-
         Optional<Rating> isRating = ratingService.isRating(upUserId, userId);
 
         if (isRating.isEmpty()) { // 인기도를 누른 적이 없으면
