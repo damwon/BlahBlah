@@ -58,10 +58,6 @@ public class User extends BaseEntity{
     @Column(nullable = false)
     private String password;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<LangInfo> langInfos = new ArrayList<>();
-
     @Builder
     public User(String name, Integer gender, Integer age, String email, String description, String profileImg,
                 String authority, Integer reportedCnt, LocalDateTime expiredAt, LocalDateTime createdAt, String password) {

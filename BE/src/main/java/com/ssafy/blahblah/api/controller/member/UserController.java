@@ -71,11 +71,15 @@ public class UserController {
 	})
 	public ResponseEntity getUser() {
 		List<User> users = userService.getUserTable();
-		List<UserLangInfoRes> userLangInfoRes = users.stream().map(UserLangInfoRes::fromEntity).collect(Collectors.toList());
-		userLangInfoRes.forEach(UserLangInfoRes -> {
-			UserLangInfoRes.setRating(ratingService.countRating(UserLangInfoRes.getId()));
+		List<UserInfoRes> userInfoRes = new ArrayList<UserInfoRes>();
+		users.forEach(user -> {
+			userInfoRes.add(new UserInfoRes(user));
 		});
-		return new ResponseEntity(userLangInfoRes,HttpStatus.OK);
+		userInfoRes.forEach(user -> {
+			user.setLangInfos(langInfoService.getLangInfoListByUserId(user.getId()));
+			user.setRating(ratingService.countRating(user.getId()));
+		});
+		return new ResponseEntity(userInfoRes,HttpStatus.OK);
 	}
 
 
@@ -163,6 +167,23 @@ public class UserController {
 		}
 	}
 
+	@GetMapping("/{email}")
+	@ApiOperation(value = "단일 회원 정보 조회", notes = "단일 회원 정보를 응답한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "엑세스 토큰의 값이 틀림"),
+			@ApiResponse(code = 403, message = "엑세스 토큰이 없이 요청"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity getUserInfo(@ApiIgnore @PathVariable String email) {
+
+		User user = userService.getUserByEmail(email);
+		UserInfoRes userInfoRes = new UserInfoRes(user);
+		userInfoRes.setLangInfos(langInfoService.getLangInfoListByUserId(userInfoRes.getId()));
+		userInfoRes.setRating(ratingService.countRating(userInfoRes.getId()));
+		return new ResponseEntity<>(userInfoRes,HttpStatus.OK);
+	}
+
 	@GetMapping("/me")
 	@ApiOperation(value = "회원 본인 정보 조회", notes = "로그인한 회원 본인의 정보를 응답한다.")
 	@ApiResponses({
@@ -171,7 +192,7 @@ public class UserController {
 			@ApiResponse(code = 403, message = "엑세스 토큰이 없이 요청"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity getUserInfo(@ApiIgnore Authentication authentication) {
+	public ResponseEntity getMyInfo(@ApiIgnore Authentication authentication) {
 		/**
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
 		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
@@ -181,7 +202,8 @@ public class UserController {
 		String email = userDetails.getUsername();
 		User user = userService.getUserByEmail(email);
 		UserInfoRes userInfoRes = new UserInfoRes(user);
-
+		userInfoRes.setLangInfos(langInfoService.getLangInfoListByUserId(userInfoRes.getId()));
+		userInfoRes.setRating(ratingService.countRating(userInfoRes.getId()));
 		return new ResponseEntity<>(userInfoRes,HttpStatus.OK);
 	}
 
