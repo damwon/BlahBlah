@@ -25,6 +25,10 @@ export default function Mate(props) {
   const [lang,setLang] = useState(props.user.langList)
   // 유저아이디
   const email = props.user.email
+  // 유저 좋아요
+  const [like,setLike] = useState(props.user.rating)
+  // 유저 좋아요 버튼
+  const [likeBtn,setLikeBtn] = useState(true)
 
   // const lc = langc.map((a,i)=>{
   //   return <div>
@@ -51,6 +55,7 @@ export default function Mate(props) {
       },
     })
     .then((result)=>{
+      setLikeBtn(!likeBtn)
       console.log('유저 좋아 요청성공')
     console.log(result)
  
@@ -62,6 +67,14 @@ export default function Mate(props) {
   })
   };
 
+  useEffect(()=>{
+    props.findMate()
+    // 미쳤다리.. 함수 프롭스 ㄷ.ㄷ.. 실시간 변화
+    setLang(props.user.langList)
+    setLike(props.user.rating)
+    console.log(like)
+    // setLang(props.user.langList)
+  },[likeBtn])
 
   useEffect(() => {
     // console.log('각유저별 언어')
@@ -195,7 +208,7 @@ export default function Mate(props) {
         
       </ListItem>
       <ListItem>
-        <ListItemText primary="인기도" secondary={`${props.user.rating}`} />
+        <ListItemText primary="인기도" secondary={`${like}`} />
         {/* <button onClick={userLike}>클릭</button> */}
         <Button onClick={userLike}
                   style={{ marginBottom: '20px' }} variant="outline-dark">좋아요</Button>

@@ -1,0 +1,12 @@
+.form-control:not(active){
+  color:white;
+}
+
+.form-control:focus{
+  color:black;
+}
+
+.test:focus {
+  border-color: #00C7AE;
+  box-shadow: 1px 1px 1px #00C7AE inset, 2px 1px 2px #00C7AE;
+}
