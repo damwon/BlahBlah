@@ -103,13 +103,13 @@ public class FeedController {
     public ResponseEntity post(Authentication authentication,
                                @RequestPart(value="image", required = false) List<MultipartFile> multipartFile,
                                @RequestPart(value="feedPostReq") FeedPostReq feedPostReq) {
-        System.out.println("여기이이이이잉"+multipartFile);
+
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
 
         String img;
-        if (multipartFile.get(0).isEmpty()) {
+        if (multipartFile.get(0).getSize() < 11) {
             img = null;
         }
         else {
