@@ -5,6 +5,7 @@ import com.ssafy.blahblah.api.response.feed.FeedDetailRes;
 import com.ssafy.blahblah.api.response.feed.FeedListRes;
 import com.ssafy.blahblah.api.service.feed.FeedService;
 import com.ssafy.blahblah.api.service.feed.FeedServiceImpl;
+import com.ssafy.blahblah.api.service.feed.LikeService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
@@ -42,7 +43,7 @@ public class FeedController {
     FeedService feedService;
 
     @Autowired
-    LikeRepository likeRepository;
+    LikeService likeService;
 
     @GetMapping
     public ResponseEntity listForAll(Authentication authentication){
@@ -53,7 +54,7 @@ public class FeedController {
         List<FeedListRes> dto2 = new ArrayList<>();
         allFeeds.forEach(feed -> {
             Boolean isLike;
-            Optional<Heart> optionalLike = likeRepository.findByUserAndFeed(user,feed);
+            Optional<Heart> optionalLike = likeService.findByUserAndFeed(user,feed);
             if (optionalLike.isEmpty()) {
                 isLike = false;
             }
@@ -75,7 +76,7 @@ public class FeedController {
         List<FeedListRes> dto2 = new ArrayList<>();
         allFeeds.forEach(feed -> {
             Boolean isLike;
-            Optional<Heart> optionalLike = likeRepository.findByUserAndFeed(user,feed);
+            Optional<Heart> optionalLike = likeService.findByUserAndFeed(user,feed);
             if (optionalLike.isEmpty()) {
                 isLike = false;
             }
@@ -102,6 +103,7 @@ public class FeedController {
     public ResponseEntity post(Authentication authentication,
                                @RequestPart(value="image", required = false) List<MultipartFile> multipartFile,
                                @RequestPart(value="feedPostReq") FeedPostReq feedPostReq) {
+        System.out.println("여기이이이이잉"+multipartFile);
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);

@@ -4,6 +4,7 @@ import com.ssafy.blahblah.api.request.member.ReportAnsPostReq;
 import com.ssafy.blahblah.api.request.member.ReportPostReq;
 import com.ssafy.blahblah.api.response.member.ReportDetailRes;
 import com.ssafy.blahblah.api.response.member.ReportListPageRes;
+import com.ssafy.blahblah.api.service.member.ReportService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
@@ -40,13 +41,8 @@ public class ReportController {
     AwsS3Service awsS3Service;
 
     @Autowired
-    UserRepository userRepository;
+    ReportService reportService;
 
-    @Autowired
-    ReportRepository reportRepository;
-
-    @Autowired
-    BanReasonRepository banReasonRepository;
 
     @PostMapping("/{userId}")
     public ResponseEntity postReport(Authentication authentication, @PathVariable Long userId,
@@ -63,20 +59,12 @@ public class ReportController {
         else {
             img = awsS3Service.uploadImage(multipartFile, "report").get(0);
         }
-        Optional<User> userOptional = userRepository.findById(userId);
+        Optional<User> userOptional = userService.getUserById(userId);
         if(userOptional.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         User reportee = userOptional.get();
-        reportRepository.save(Report.builder()
-                        .content(reportPostReq.getContent())
-                        .type(reportPostReq.getType())
-                        .createdAt(LocalDateTime.now())
-                        .imgUrl(img)
-                        .reportee(reportee)
-                        .reporter(reporter)
-
-                .build());
+        reportService.save(reportPostReq,img,reporter,reportee);
         return new ResponseEntity(HttpStatus.OK);
     }
 
@@ -86,7 +74,7 @@ public class ReportController {
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
-            Page<Report> reports = reportRepository.findAll(pageable);
+            Page<Report> reports = reportService.findAll(pageable);
 
             if (reports == null || reports.getContent().size() == 0) {
                 return ResponseEntity.status(HttpStatus.OK).body(null);
@@ -105,7 +93,7 @@ public class ReportController {
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
-            Optional<Report> optionalReport = reportRepository.findById(reportId);
+            Optional<Report> optionalReport = reportService.findById(reportId);
             if(optionalReport.isEmpty()) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
@@ -124,7 +112,7 @@ public class ReportController {
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         if(user.getAuthority().equals("admin")) {
-            Optional<Report> optionalReport = reportRepository.findById(reportId);
+            Optional<Report> optionalReport = reportService.findById(reportId);
             if(optionalReport.isEmpty()) {
                 return new ResponseEntity(HttpStatus.NOT_FOUND);
             }
@@ -141,14 +129,9 @@ public class ReportController {
                 startedAt = LocalDateTime.now();
             }
             reportee.setReportedCnt(reportee.getReportedCnt()+1);
-            userRepository.save(reportee);
+            reportService.saveReportee(reportee);
 
-            banReasonRepository.save(BanReason.builder()
-                            .reason(reportAnsPostReq.getReason())
-                            .user(reportee)
-                            .createdAt(startedAt)
-                            .expiredAt(reportee.getExpiredAt())
-                    .build());
+            reportService.saveBanReason(reportAnsPostReq,reportee,startedAt);
             return new ResponseEntity(HttpStatus.OK);
 
         }
