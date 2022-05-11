@@ -161,7 +161,9 @@ export default function Chat() {
         });
     }
   }, [chatRoomData]);
-
+  useEffect(() => {
+    console.log(chatHistory);
+  }, [chatHistory]);
   const updateLastRead = () => {
     console.log("list");
     const token = localStorage.getItem("jwt");
@@ -715,85 +717,92 @@ export default function Chat() {
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
             {userData &&
-              chatHistory &&
-              chatHistory.map((item, index) => {
-                if (item.senderId == userData.id) {
-                  return (
-                    <Box
-                      sx={{
-                        width: "100%",
-                        padding: 2,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "end",
-                      }}
-                      key={index}
-                    >
-                      {item.type === "text" && (
-                        <ChatTypographyByMe>{item.content}</ChatTypographyByMe>
-                      )}
-                      {item.type === "audio" && (
-                        <>
-                          <IconButton
-                            onClick={() => {
-                              handleClickOpenVoiceSave(item.content);
-                            }}
-                          >
-                            <DownloadIcon />
-                          </IconButton>
-                          <audio
+              (chatHistory.length > 0 ? (
+                chatHistory.map((item, index) => {
+                  if (item.senderId == userData.id) {
+                    return (
+                      <Box
+                        sx={{
+                          width: "100%",
+                          padding: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                        key={index}
+                      >
+                        {item.type === "text" && (
+                          <ChatTypographyByMe>
+                            {item.content}
+                          </ChatTypographyByMe>
+                        )}
+                        {item.type === "audio" && (
+                          <>
+                            <IconButton
+                              onClick={() => {
+                                handleClickOpenVoiceSave(item.content);
+                              }}
+                            >
+                              <DownloadIcon />
+                            </IconButton>
+                            <audio
+                              src={item.content}
+                              controls
+                              controlsList="nodownload"
+                            />
+                          </>
+                        )}
+                        {item.type === "image" && (
+                          <Image
                             src={item.content}
-                            controls
-                            controlsList="nodownload"
+                            style={{ width: "200px", height: "200px" }}
                           />
-                        </>
-                      )}
-                      {item.type === "image" && (
-                        <Image
-                          src={item.content}
-                          style={{ width: "200px", height: "200px" }}
-                        />
-                      )}
-                      {item.type === "comment" && (
-                        <Stack
-                          sx={{
-                            borderRadius: "20px",
-                            padding: "10px 20px",
-                            backgroundColor: "skyblue",
-                            fontWeight: 500,
-                            color: "white",
-                          }}
-                        >
-                          <Typography
+                        )}
+                        {item.type === "comment" && (
+                          <Stack
                             sx={{
-                              borderBottom: "1px solid white",
-                              opacity: 0.5,
+                              borderRadius: "20px",
+                              padding: "10px 20px",
+                              backgroundColor: "skyblue",
+                              fontWeight: 500,
+                              color: "white",
                             }}
                           >
-                            기존: {item.content}
-                          </Typography>
-                          <Box sx={{ display: "flex" }}>
-                            <ArrowForwardIcon />
-                            <Typography>코멘트: {item.comment}</Typography>
-                          </Box>
-                        </Stack>
-                      )}
-                    </Box>
-                  );
-                } else {
-                  return (
-                    <ChatBoxOfOther
-                      key={index}
-                      item={item}
-                      type={item.type}
-                      message={item.content}
-                      setCorrectMessage={setCorrectMessage}
-                      setTranslateMessage={setTranslateMessage}
-                      handleClickOpenVoiceSave={handleClickOpenVoiceSave}
-                    />
-                  );
-                }
-              })}
+                            <Typography
+                              sx={{
+                                borderBottom: "1px solid white",
+                                opacity: 0.5,
+                              }}
+                            >
+                              기존: {item.content}
+                            </Typography>
+                            <Box sx={{ display: "flex" }}>
+                              <ArrowForwardIcon />
+                              <Typography>코멘트: {item.comment}</Typography>
+                            </Box>
+                          </Stack>
+                        )}
+                      </Box>
+                    );
+                  } else {
+                    return (
+                      <ChatBoxOfOther
+                        key={index}
+                        item={item}
+                        type={item.type}
+                        message={item.content}
+                        setCorrectMessage={setCorrectMessage}
+                        setTranslateMessage={setTranslateMessage}
+                        handleClickOpenVoiceSave={handleClickOpenVoiceSave}
+                      />
+                    );
+                  }
+                })
+              ) : (
+                <Box>
+                  <Typography>채팅을 시작하세요~</Typography>
+                </Box>
+              ))}
           </ChatBox>
           <Box
             sx={{
