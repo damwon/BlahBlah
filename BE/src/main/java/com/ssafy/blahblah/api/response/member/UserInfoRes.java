@@ -1,5 +1,6 @@
 package com.ssafy.blahblah.api.response.member;
 
+import com.ssafy.blahblah.db.entity.LangInfo;
 import com.ssafy.blahblah.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,6 +8,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,6 +35,9 @@ public class UserInfoRes {
     LocalDateTime createdAt;
     @ApiModelProperty(name="유저 정지 해제 날짜", example="2022-02-04 14:07:48.206444")
     LocalDateTime expiredAt;
+
+    Integer rating;
+    List<LangInfo> langInfos = new ArrayList<>();
 
     public UserInfoRes(User entity) {
         this.id = entity.getId();

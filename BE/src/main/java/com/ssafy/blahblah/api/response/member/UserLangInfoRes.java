@@ -2,7 +2,7 @@ package com.ssafy.blahblah.api.response.member;
 
 import com.ssafy.blahblah.api.request.member.UserLangPostReq;
 import com.ssafy.blahblah.api.response.feed.CommentListRes;
-import com.ssafy.blahblah.api.response.language.LangListRes;
+//import com.ssafy.blahblah.api.response.language.LangListRes;
 import com.ssafy.blahblah.db.entity.Rating;
 import com.ssafy.blahblah.db.entity.User;
 import io.swagger.annotations.ApiModel;
@@ -39,7 +39,6 @@ public class UserLangInfoRes {
                 .age(user.getAge())
                 .description(user.getDescription())
                 .profileImg(user.getProfileImg())
-                .langList(user.getLangInfos().stream().map(LangListRes::fromEntity).collect(Collectors.toList()))
                 .build();
     }
 }
