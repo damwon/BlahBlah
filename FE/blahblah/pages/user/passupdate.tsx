@@ -74,7 +74,7 @@ export default function PassUpdate() {
       Password
     </Form.Label> */}
     <Col sm="10">
-      <Form.Control type="password" placeholder="Password" onChange={handlePass} maxLength={15}/>
+      <Form.Control className="formct" type="password" placeholder="Password" onChange={handlePass} maxLength={15}/>
     </Col>
   </Form.Group>
   <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
@@ -82,7 +82,7 @@ export default function PassUpdate() {
       Password Check
     </Form.Label> */}
     <Col sm="10">
-      <Form.Control type="password" placeholder="Password Check" onChange={handlePassCheck} maxLength={15}/>
+      <Form.Control className="formct" type="password" placeholder="Password Check" onChange={handlePassCheck} maxLength={15}/>
     </Col>
   </Form.Group>
             </Form>

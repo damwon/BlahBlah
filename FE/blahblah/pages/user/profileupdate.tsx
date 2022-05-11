@@ -99,11 +99,11 @@ export default function ProfileUpdate() {
             <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
     <Form.Label>이름</Form.Label>
-    <Form.Control type="text" placeholder="New Name" onChange={handleName} maxLength={20}/>
+    <Form.Control className="formct" type="text" placeholder="New Name" onChange={handleName} maxLength={20}/>
   </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
     <Form.Label>자기소개</Form.Label>
-    <Form.Control as="textarea" rows={3} onChange={handleDes}/>
+    <Form.Control className="formct" as="textarea" rows={3} onChange={handleDes}/>
   </Form.Group>
             </Form>
             {/* <div style={{ width: '16rem', margin: '20px' }}>자기소개
@@ -122,7 +122,7 @@ export default function ProfileUpdate() {
             </div> */}
             <Form.Group controlId="formFileSm" className="mb-3">
               <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
-              <Form.Control type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
+              <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
             {/* {proimg} */}
             {/* <div style={{ width: '16rem', margin: '20px' }}>
