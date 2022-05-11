@@ -74,7 +74,7 @@ export default function PassUpdate() {
       Password
     </Form.Label> */}
     <Col sm="10">
-      <Form.Control type="password" placeholder="Password" onChange={handlePass} maxLength={15}/>
+      <Form.Control className="formct" type="password" placeholder="Password" onChange={handlePass} maxLength={15}/>
     </Col>
   </Form.Group>
   <Form.Group as={Row} className="mb-3" controlId="formPlaintextPassword">
@@ -82,7 +82,7 @@ export default function PassUpdate() {
       Password Check
     </Form.Label> */}
     <Col sm="10">
-      <Form.Control type="password" placeholder="Password Check" onChange={handlePassCheck} maxLength={15}/>
+      <Form.Control className="formct" type="password" placeholder="Password Check" onChange={handlePassCheck} maxLength={15}/>
     </Col>
   </Form.Group>
             </Form>
@@ -94,11 +94,11 @@ export default function PassUpdate() {
               <input type="password" onChange={handlePassCheck} maxLength={15}></input>
             </div> */}
             <Button onClick={onEditPassword}
-              style={{ marginBottom: '20px' }} variant="outline-dark">수정하기</Button>
+              className="btncs" variant="outline-secondary">수정하기</Button>
             <Button onClick={() => {
               router.push('/user/mypage')
             }}
-              style={{ marginBottom: '20px' }} variant="outline-dark">마이페이지 돌아가기</Button>
+              style={{ margin: '2px'}} variant="outline-secondary">마이페이지 돌아가기</Button>
             {/* <button onClick={onEditPassword}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')

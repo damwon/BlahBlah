@@ -91,13 +91,13 @@ export default function Regist() {
           <h1>회원가입 이메일인증</h1>
           <Form.Group className="mb-3" controlId="formBasicEmail">
                 {/* <Form.Label>이메일주소 {inputEmail}</Form.Label> */}
-                <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
-                <Button onClick={onClickEmailCheck}
-                  style={{ marginTop: '5px' }} variant="outline-dark">이메일 중복체크</Button>
+                <Form.Control className="formct" type="email" placeholder="Enter email" onChange={handleEmail} />
+                <Button onClick={onClickEmailCheck} className="btncs"
+                   variant="outline-dark">이메일 중복체크</Button>
                
                 {EmailCheck === true
                   ? <><Button onClick = {onSendEmail}
-                    style={{ marginTop: '5px' }} variant="outline-dark">이메일 인증</Button>
+                    style={{ marginTop: '5px' }} variant="outline-secondary">이메일 인증</Button>
                   </>
                   : null
                 }

@@ -66,8 +66,8 @@ export default function Regist() {
                   {/* {inputEmail} */}
                   </Form.Label>
                 <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
-                <Button onClick={onClickEmailCheck}
-                  style={{ marginTop: '5px' }} variant="outline-dark">이메일 보내기</Button>
+                <Button onClick={onClickEmailCheck} 
+                  className="btncs" variant="outline-secondary">이메일 보내기</Button>
                
           
 

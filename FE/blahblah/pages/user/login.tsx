@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
-
+// import '../../styles/test.css'
 export default function Login() {
   const router = useRouter()
   const [email, setEmail] = useState("")
@@ -37,6 +37,7 @@ export default function Login() {
         })
         .catch((err) => {
           console.log(err)
+          // 여기 에러중에 403이면 body값 출력하기
           alert('제대로 입력해')
           // alert 오류출력
 
@@ -87,10 +88,14 @@ export default function Login() {
             {/* {email}
             {password} */}
             <div className='logdiv'>
-              <Form>
+            
+              <Form id='formtest'>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                   <Form.Label>이메일주소</Form.Label>
-                  <Form.Control onKeyUp={handleKeyPress} type="email" placeholder="Enter email" onChange={handleEmail} />
+                  <Form.Control 
+                  className="formct"
+                  // style={{borderColor:'red'}}
+                  onKeyUp={handleKeyPress} type="email" placeholder="Enter email" onChange={handleEmail} />
                   {/* <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
                   </Form.Text> */}
@@ -98,21 +103,22 @@ export default function Login() {
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
                   <Form.Label>패스워드</Form.Label>
-                  <Form.Control onKeyUp={handleKeyPress} type="password" placeholder="Password" onChange={handlePassword} />
+                  <Form.Control className="formct" onKeyUp={handleKeyPress} type="password" placeholder="Password" onChange={handlePassword} />
                 </Form.Group>
                 {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" label="Check me out" />
                 </Form.Group> */}
-                <Button onClick={onClickLogin}
-                  style={{ marginBottom: '20px' }} variant="outline-dark">로그인</Button>
-                <Button onClick={() => {
+                <Button onClick={onClickLogin} className="btncs" 
+                   variant="outline-secondary">로그인</Button>
+                <Button className="btncs" onClick={() => {
                   router.push('/user/email')
                 }}
-                  style={{ marginBottom: '20px' }} variant="outline-dark">회원가입</Button>
-                <Button onClick={() => {
+                   variant="outline-secondary">회원가입</Button>
+                <Button  onClick={() => {
                   router.push('/user/pass')
                 }}
-                  style={{ marginBottom: '20px' }} variant="outline-dark">비밀번호찾기</Button>
+                   variant="outline-secondary">비밀번호찾기</Button>
+                  {/* <Button className="btnc" id="btbt">커스텀 연습</Button> */}
                 {/* <button type="submit" onClick={onClickLogin}>
                   로그인
                 </button>
@@ -134,6 +140,7 @@ export default function Login() {
             </div></Col>
           <Col></Col>
         </Row>
+        
       </Container>
 
       <style jsx>{`
@@ -146,6 +153,13 @@ export default function Login() {
           color: black;
           text-decoration-line: none;
         }
+
+      
+    
+
+
+        
+        
 
       `}</style>
     </>
