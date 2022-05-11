@@ -11,9 +11,12 @@ import {
 import { Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import EditIcon from "@mui/icons-material/Edit";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
 export default function Index() {
+  const [update, setUpdate] = useState(1);
   const router = useRouter();
   const setToken = () => {
     const token = localStorage.getItem("jwt");
@@ -34,14 +37,13 @@ export default function Index() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [update]);
 
   const [userId, setUserId] = useState();
   useEffect(() => {
     allAxios
       .get(`/user/me`, { headers: setToken() })
       .then((res) => {
-        console.log(res.data);
         setUserId(res.data.id);
       })
       .catch((err) => {
@@ -58,10 +60,16 @@ export default function Index() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [update]);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => {
+    setShow(true);
+    setFile();
+  };
+  const [show2, setShow2] = useState(false);
+  const handleClose2 = () => setShow(false);
+  const handleShow2 = () => {
     setShow(true);
     setFile();
   };
@@ -69,7 +77,15 @@ export default function Index() {
   const [content, setContent]: any = useState();
   const writeFeed = () => {
     const formData = new FormData();
-    formData.append("image", file);
+    if (file) {
+      formData.append("image", file);
+    } else {
+      formData.append(
+        "image",
+        new Blob([JSON.stringify(file)], { type: "multipart/form-data" })
+      );
+    }
+
     const data = {
       content: content,
       open: true,
@@ -78,6 +94,9 @@ export default function Index() {
       "feedPostReq",
       new Blob([JSON.stringify(data)], { type: "application/json" })
     );
+    // for (var value of formData.values()) {
+    //   console.log(value);
+    // }
     allAxios
       .post(`/feed`, formData, { headers: setToken() })
       .then(() => {
@@ -87,7 +106,11 @@ export default function Index() {
         console.log(err);
       });
   };
-  const [file, setFile]: any = useState(0);
+
+  const modifyFeed = (fId: number) => {
+    console.log(fId);
+  };
+  const [file, setFile]: any = useState(null);
   const handleFile = (e: any) => {
     const imgFile = e.target.files[0];
     setFile(imgFile);
@@ -121,6 +144,18 @@ export default function Index() {
         });
     }
   };
+
+  const feedLike = (id: number) => {
+    allAxios
+      .post(`like/${id}`, "", { headers: setToken() })
+      .then(() => {
+        setUpdate(update + 1);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <Grid spacing={3} container>
@@ -153,15 +188,7 @@ export default function Index() {
                   <div key={i}>
                     <ListItem
                       secondaryAction={
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => {
-                            feedDelete(d.id, d.userId);
-                          }}
-                        >
-                          {d.userId === userId ? <DeleteIcon /> : null}
-                        </IconButton>
+                        <IconButton edge="end" aria-label="delete"></IconButton>
                       }
                     >
                       <ListItemAvatar>
@@ -190,17 +217,43 @@ export default function Index() {
                         </div>
                       </ListItemAvatar>
                       <ListItemText style={{ margin: "30px" }} />
-                      <div>
+                      <div style={{ width: "100%" }}>
                         <Image
                           className="profile"
                           src={d.imgUrl}
                           alt="finger image"
-                          width="100%"
-                          height="100%"
+                          width="70%"
+                          height="70%"
                         ></Image>
-                        <h5 style={{ margin: "20px" }}>{d.content}</h5>
+                        <h5 style={{ margin: "20px", width: "70%" }}>
+                          {d.content}
+                        </h5>
+                        <ThumbUpIcon
+                          style={{ margin: "5px", cursor: "pointer" }}
+                          onClick={() => {
+                            feedLike(d.id);
+                          }}
+                          color={d.isLike ? "primary" : ""}
+                        ></ThumbUpIcon>
+                        <EditIcon
+                          style={{ margin: "5px", cursor: "pointer" }}
+                          onClick={() => {
+                            modifyFeed(d.id);
+                          }}
+                        ></EditIcon>
+                        {d.userId === userId ? (
+                          <DeleteIcon
+                            style={{ margin: "5px", cursor: "pointer" }}
+                            onClick={() => {
+                              feedDelete(d.id, d.userId);
+                            }}
+                          />
+                        ) : null}
+
+                        <h4>{d.likeCount}</h4>
                       </div>
                     </ListItem>
+
                     <hr></hr>
                   </div>
                 );
@@ -209,7 +262,7 @@ export default function Index() {
         </Grid>
         <Grid item xs={3} />
       </Grid>
-      {/* 단어장 추가 modal */}
+      {/* 피드 작성 modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>피드를 작성해주세요.</Modal.Title>
@@ -237,6 +290,34 @@ export default function Index() {
           <Button variant="contained" onClick={writeFeed}>
             저장
           </Button>
+        </Modal.Footer>
+      </Modal>
+      {/* 피드 수정 modal */}
+      <Modal show={show2} onHide={handleClose2}>
+        <Modal.Header closeButton>
+          <Modal.Title>피드를 작성해주세요.</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Grid spacing={2} container>
+            <Grid item xs={2}>
+              <h4>내용</h4>
+            </Grid>
+            <Grid item xs={10}>
+              <input
+                onChange={(e: any) => {
+                  setContent(e.target.value);
+                }}
+              ></input>
+            </Grid>
+          </Grid>
+          <input type="file" name="file" onChange={(e) => handleFile(e)} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="contained" color="error" onClick={handleClose2}>
+            취소
+          </Button>
+          <div style={{ width: "10px" }}></div>
+          <Button variant="contained">저장</Button>
         </Modal.Footer>
       </Modal>
       <style jsx>
