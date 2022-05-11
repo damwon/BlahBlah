@@ -19,10 +19,10 @@ public class ChatRepository {
     @PersistenceContext
     EntityManager em;
 
-    public long createChat(ChatMeta chatList){
+    public String createChat(ChatMeta chatMeta){
         log.info("ChatRoomRepository.createChat");
-        em.persist(chatList);
-        return chatList.getId();
+        em.persist(chatMeta);
+        return chatMeta.getRoomId();
     }
 
     public String findChat(long userId, long opponentId){

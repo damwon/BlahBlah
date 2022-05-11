@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @Log4j2
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class TranslateController {
 
     private final TranslateService translateService;
