@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.

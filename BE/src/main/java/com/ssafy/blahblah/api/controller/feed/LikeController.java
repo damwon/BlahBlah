@@ -26,14 +26,17 @@ public class LikeController {
 
     @PostMapping("/{feedId}")
     public ResponseEntity like(Authentication authentication, @PathVariable Long feedId) {
+
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         Feed feed = likeService.like(user,feedId);
+        System.out.println();
         if(feed == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(HttpStatus.OK);
+
 
     }
 

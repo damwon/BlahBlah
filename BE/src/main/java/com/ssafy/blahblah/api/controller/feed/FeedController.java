@@ -8,7 +8,9 @@ import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Feed;
+import com.ssafy.blahblah.db.entity.Heart;
 import com.ssafy.blahblah.db.entity.User;
+import com.ssafy.blahblah.db.repository.LikeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,7 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,14 +40,28 @@ public class FeedController {
     @Autowired
     FeedService feedService;
 
+    @Autowired
+    LikeRepository likeRepository;
+
     @GetMapping
     public ResponseEntity listForAll(Authentication authentication){
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         List<Feed> allFeeds = feedService.listForAll(user);
-        List<FeedListRes> dto = allFeeds.stream().map(FeedListRes::fromEntity).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        List<FeedListRes> dto2 = new ArrayList<>();
+        allFeeds.forEach(feed -> {
+            Boolean isLike;
+            Optional<Heart> optionalLike = likeRepository.findByUserAndFeed(user,feed);
+            if (optionalLike.isEmpty()) {
+                isLike = false;
+            }
+            else {
+                isLike = true;
+            }
+            dto2.add(FeedListRes.fromEntity(feed,isLike));
+        });
+        return ResponseEntity.status(HttpStatus.OK).body(dto2);
     }
 
     @GetMapping("/friends")
@@ -52,8 +71,19 @@ public class FeedController {
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
         List<Feed> allFeeds = feedService.listForFriends(user);
-        List<FeedListRes> dto = allFeeds.stream().map(FeedListRes::fromEntity).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+        List<FeedListRes> dto2 = new ArrayList<>();
+        allFeeds.forEach(feed -> {
+            Boolean isLike;
+            Optional<Heart> optionalLike = likeRepository.findByUserAndFeed(user,feed);
+            if (optionalLike.isEmpty()) {
+                isLike = false;
+            }
+            else {
+                isLike = true;
+            }
+            dto2.add(FeedListRes.fromEntity(feed,isLike));
+        });
+        return ResponseEntity.status(HttpStatus.OK).body(dto2);
 
     }
 
