@@ -16,7 +16,7 @@ export default function ChatList(props: any) {
       <ListSubheader sx={{ textAlign: "center", fontSize: "20px" }}>
         채팅 리스트
       </ListSubheader>
-      {props.chattingList ? (
+      {props.chattingList.length > 0 ? (
         props.chattingList.map((item: any, index: any) => {
           return (
             <ListItem key={index}>
@@ -38,7 +38,9 @@ export default function ChatList(props: any) {
                     ? "사진"
                     : item.type === "audio"
                     ? "음성 메시지"
-                    : "첨삭 메시지"
+                    : item.type === "comment"
+                    ? "첨삭 메시지"
+                    : ""
                 }
               />
             </ListItem>

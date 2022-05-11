@@ -89,9 +89,45 @@ export default function Chat() {
   // 채팅 상대방 이름
   const [chatname, setChatname] = useState("");
 
+  // 라우터를 활용한 방번호 상태 저장
+  const [routerRoomId, setRouterRoomId] = useState("");
+  useEffect(() => {
+    if (router.query.roomId !== undefined) {
+      setRouterRoomId(router.query.roomId[0]);
+    }
+  }, [router.query]);
+
   // 라우터 쿼리 체크
   useEffect(() => {
-    console.log(router.query.roomId);
+    if (router.query.userId !== undefined) {
+      axios({
+        url: `https://blahblah.community:8080/api/chat/${router.query.userId}`,
+        method: "get",
+        headers: setToken(),
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            axios({
+              url: "https://blahblah.community:8080/api/chat",
+              method: "post",
+              headers: setToken(),
+              data: {
+                opponentId: router.query.userId,
+                opponentName: router.query.name,
+              },
+            })
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        });
+    }
   }, [router.query]);
 
   // 유저 정보 가져오기
@@ -108,10 +144,13 @@ export default function Chat() {
       url: "https://blahblah.community:8443/api/user/me",
       method: "get",
       headers: setToken(),
-    }).then((res) => {
-      setUserData(res.data);
-      console.log(res.data);
-    });
+    })
+      .then((res) => {
+        setUserData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   useEffect(() => {
@@ -126,27 +165,42 @@ export default function Chat() {
 
     stompClient.connect({}, function (frame: any) {
       console.log("Connected:" + frame);
-      stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
-        updateLastRead();
-        list();
-        let tmpChat = JSON.parse(msg.body);
-        console.log(tmpChat);
-        setChatHistory((prev) => [...prev, tmpChat]);
-      });
       // 채팅 목록 가져오기
       stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
         let tmpMsg = JSON.parse(msg.body);
         console.log(tmpMsg);
-        setChatRoomData(tmpMsg[0]);
         setChattingList(tmpMsg);
-        setChatname(tmpMsg[0].roomName);
       });
       list();
+      stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
+        updateLastRead();
+        let tmpChat = JSON.parse(msg.body);
+        console.log(tmpChat);
+        console.log(tmpChat.roomId);
+        addMsg(tmpChat);
+      });
     });
   };
 
+  useEffect(() => {
+    if (userData) {
+      connect();
+    }
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
+  }, [userData]);
+
+  const addMsg = (msg: any) => {
+    if (msg.roomId == routerRoomId) {
+      setChatHistory((prev) => [...prev, msg]);
+    }
+  };
   // 채팅 히스토리
   useEffect(() => {
+    console.log(chatRoomData);
     if (chatRoomData) {
       axios({
         method: "get",
@@ -161,17 +215,21 @@ export default function Chat() {
         });
     }
   }, [chatRoomData]);
+
   useEffect(() => {
     console.log(chatHistory);
   }, [chatHistory]);
+
   const updateLastRead = () => {
     console.log("list");
     const token = localStorage.getItem("jwt");
-    stompClient.send(
-      "chat/read/" + 1,
-      { Authorization: `Bearer ${token}` },
-      JSON.stringify({})
-    );
+    if (stompClient) {
+      stompClient.send(
+        "chat/read/" + chatRoomData.opponentId,
+        { Authorization: `Bearer ${token}` },
+        JSON.stringify({})
+      );
+    }
   };
 
   const list = () => {
@@ -259,17 +317,6 @@ export default function Chat() {
       list();
     }
   };
-
-  useEffect(() => {
-    if (userData) {
-      connect();
-    }
-    return () => {
-      if (stompClient) {
-        stompClient.disconnect();
-      }
-    };
-  }, [userData]);
 
   const [message, setMessage] = useState<string>("");
   const handleMessage = (e: any) => {
