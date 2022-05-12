@@ -15,14 +15,14 @@ import javax.persistence.*;
 public class Rating extends BaseEntity{
 
     @Column(nullable = false)
-    private Long userId;
-
-    @Column(nullable = false)
     private Long upUserId;
 
+    @Column(nullable = false)
+    private Long userId;
+
     @Builder
-    public Rating(Long userId, Long upUserId) {
-        this.userId = userId;
+    public Rating(Long upUserId, Long userId) {
         this.upUserId = upUserId;
+        this.userId = userId;
     }
 }

@@ -2,7 +2,7 @@ package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.request.member.*;
 import com.ssafy.blahblah.api.response.member.UserInfoRes;
-import com.ssafy.blahblah.api.response.member.UserLangInfoRes;
+//import com.ssafy.blahblah.api.response.member.UserLangInfoRes;
 import com.ssafy.blahblah.api.service.language.LangInfoService;
 import com.ssafy.blahblah.api.service.language.LanguageService;
 import com.ssafy.blahblah.api.service.member.EmailService;
@@ -131,7 +131,6 @@ public class UserController {
 				langInfoService.createLangInfo(userId, langId, level);
 			}
 		}
-
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 

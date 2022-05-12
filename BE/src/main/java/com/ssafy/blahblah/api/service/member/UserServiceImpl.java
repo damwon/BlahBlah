@@ -35,7 +35,6 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
-
 	@Override
 	public User createUser(UserInfoPostReq userRegisterInfo) {
 		User user = new User();
