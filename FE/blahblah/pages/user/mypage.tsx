@@ -104,7 +104,7 @@ export default function Mypage() {
                 </ListGroup>
                 <a className="linkmenu" onClick={() => {
                   router.push('/user/friends')
-                }}>전체친구 보러가기</a>
+                }}>팔로잉, 팔로워</a>
               </Card.Body>
             </Card>
 
@@ -112,7 +112,7 @@ export default function Mypage() {
               <Card.Body>
                 <Card.Title>내가 작성한 피드</Card.Title>
                 <ListGroup variant="flush">
-                  <ListGroup.Item>최근작성글1</ListGroup.Item>
+                  <ListGroup.Item>최근작성글</ListGroup.Item>
                   <ListGroup.Item>최근작성글</ListGroup.Item>
                   <ListGroup.Item>최근작성글</ListGroup.Item>
                 </ListGroup>
