@@ -53,10 +53,11 @@ export default function Mate(props) {
   // 팔로우요청(언팔)
   const userFollow = (event) => {
     event.preventDefault();
-    setFollowBtn(!likeBtn)
+    setFollowBtn(!followBtn)
     axios({
       method:'post',
       url:`https://blahblah.community:8443/api/follow/${props.user.id}`,
+      headers: setToken(),
       // data: {
       //   'email':email
       // },
