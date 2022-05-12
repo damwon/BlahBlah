@@ -27,6 +27,9 @@ public class RatingController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         Long upUserId = userDetails.getUser().getId();
         Long userId = userService.getUserByEmail(email).getId();
+        if (upUserId == userId) {
+            return new ResponseEntity<>("can not rate self",HttpStatus.NOT_FOUND);
+        }
 
         Optional<Rating> isRating = ratingService.isRating(upUserId, userId);
 
