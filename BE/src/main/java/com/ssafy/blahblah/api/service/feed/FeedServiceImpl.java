@@ -100,7 +100,7 @@ public class FeedServiceImpl implements FeedService{
             feed.setOpen(feedPostReq.getOpen());
             feed.setUpdatedAt(LocalDateTime.now());
             String img;
-            if (multipartFile.get(0).isEmpty()) {
+            if (multipartFile.get(0).getSize() < 11) {
                 img = null;
             }
             else {

@@ -2,13 +2,11 @@ package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.response.member.FollowerListRes;
 import com.ssafy.blahblah.api.response.member.FollowingListRes;
-import com.ssafy.blahblah.api.response.member.ReportListRes;
 import com.ssafy.blahblah.api.service.member.FollowService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.Follow;
 import com.ssafy.blahblah.db.entity.User;
-import com.ssafy.blahblah.db.repository.FollowRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -42,11 +40,16 @@ public class FollowController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         User toUser = userOptional.get();
+        if(fromUser == toUser){
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
         Optional<Follow> optionalFollow = followService.getFollow(toUser,fromUser);
         if(optionalFollow.isEmpty()) { // 팔로우 한적이 없으면 팔로우하기
+
             followService.postFollow(toUser,fromUser);
         }
         else { // 언팔로우하기
+
             followService.unfollow(optionalFollow);
         }
 
