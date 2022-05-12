@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,4 +42,18 @@ public class FollowServiceImpl implements FollowService{
     public void unfollow(Optional<Follow> optionalFollow) {
         followRepository.delete(optionalFollow.get());
     }
+
+    @Override
+    public List<Follow> getMyFollowings(User user){
+        return followRepository.findAllByFromUser(user);
+    }
+
+    @Override
+    public List<Follow> getMyFollowers(User user){
+        return followRepository.findAllByToUser(user);
+    }
+
+
+
+
 }
