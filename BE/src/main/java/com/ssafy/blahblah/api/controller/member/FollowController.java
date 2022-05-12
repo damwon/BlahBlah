@@ -42,11 +42,16 @@ public class FollowController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         User toUser = userOptional.get();
+        if(fromUser == toUser){
+            return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
+        }
         Optional<Follow> optionalFollow = followService.getFollow(toUser,fromUser);
         if(optionalFollow.isEmpty()) { // 팔로우 한적이 없으면 팔로우하기
+
             followService.postFollow(toUser,fromUser);
         }
         else { // 언팔로우하기
+
             followService.unfollow(optionalFollow);
         }
 
