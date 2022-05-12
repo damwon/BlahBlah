@@ -17,10 +17,8 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import EditIcon from "@mui/icons-material/Edit";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
-import axios from "axios";
 export default function Index() {
   const [update, setUpdate] = useState(1);
-  const router = useRouter();
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {
@@ -28,14 +26,38 @@ export default function Index() {
     };
     return config;
   };
+
+  const [showFeeds, setShowFeeds]: any = useState();
   const [feeds, setFeeds]: any = useState();
-  const [friendFeeds, setFriendFeeds]: any = useState();
   useEffect(() => {
     allAxios
       .get(`/feed`, { headers: setToken() })
       .then((res) => {
         setFeeds(res.data);
-        setShowFeeds(res.data);
+        return res;
+      })
+      .then((res) => {
+        if (btnColor === "primary") {
+          setShowFeeds(res.data);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [update]);
+
+  const [friendFeeds, setFriendFeeds]: any = useState();
+  useEffect(() => {
+    allAxios
+      .get(`/feed/friends`, { headers: setToken() })
+      .then((res) => {
+        setFriendFeeds(res.data);
+        return res;
+      })
+      .then((res) => {
+        if (btnColor !== "primary") {
+          setShowFeeds(res.data);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -43,9 +65,16 @@ export default function Index() {
   }, [update]);
 
   useEffect(() => {
+    if (showFeeds) {
+      console.log("데이터 바꼈다");
+      console.log(showFeeds[0].comments);
+    }
+  }, [showFeeds]);
+  useEffect(() => {
     allAxios
       .get(`/feed`, { headers: setToken() })
       .then((res) => {
+        setShowFeeds(res.data);
         const tmpArr: any = [];
         for (let i = 0; i < res.data.length; i++) {
           tmpArr.push({ display: "none" });
@@ -69,16 +98,6 @@ export default function Index() {
       });
   }, []);
 
-  useEffect(() => {
-    allAxios
-      .get(`/feed/friends`, { headers: setToken() })
-      .then((res) => {
-        setFriendFeeds(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [update]);
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => {
@@ -179,7 +198,6 @@ export default function Index() {
 
   const [btnColor, setBtnColor] = useState("primary");
   const [btnName, setBtnName] = useState("피드 전체 보기");
-  const [showFeeds, setShowFeeds]: any = useState();
   const btnChange = () => {
     if (btnColor === "primary") {
       setBtnColor("success");
@@ -240,22 +258,23 @@ export default function Index() {
   };
 
   const showComments = (i: number) => {
+    setUpdate(update + 1);
     const tmpStyle: any = myStyle;
     tmpStyle[i] = null;
     setMyStyle(tmpStyle);
-    setUpdate(update + 1);
   };
 
   const closeComments = (i: number) => {
+    setUpdate(update + 1);
     const tmpStyle: any = myStyle;
     tmpStyle[i] = { display: "none" };
     setMyStyle(tmpStyle);
-    setUpdate(update + 1);
   };
   const [myStyle, setMyStyle] = useState();
   const inputNull = (i: number) => {
     $(`#${i}`).val("");
   };
+
   return (
     <>
       <Grid spacing={3} container>
@@ -279,6 +298,17 @@ export default function Index() {
               onClick={btnChange}
             >
               {btnName}
+            </Button>
+            <Button
+              style={{ width: 100 }}
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => {
+                console.log(myStyle);
+              }}
+            >
+              test
             </Button>
           </div>
           <List dense={dense}>
@@ -356,11 +386,19 @@ export default function Index() {
 
                         <hr></hr>
 
-                        {d.comments.length > 0
+                        {d.comments.length > 0 && myStyle
                           ? d.comments.map((d1: any, i1: number) => {
                               if (i1 < 3) {
                                 return (
                                   <div key={i1}>
+                                    <h6>
+                                      {d1.userName}: {d1.content}
+                                    </h6>
+                                  </div>
+                                );
+                              } else {
+                                return (
+                                  <div style={myStyle[i]} key={i1}>
                                     <h6>
                                       {d1.userName}: {d1.content}
                                     </h6>
@@ -371,8 +409,9 @@ export default function Index() {
                           : [0].map((f: any, k: number) => {
                               return <h5 key={k}>첫 댓글을 작성해보세요.</h5>;
                             })}
-                        {d.comments.length > 3 && myStyle && myStyle[i]
-                          ? [0].map((d2: any, i2: number) => {
+                        {myStyle && myStyle[i] ? (
+                          [0].map((d2: any, i2: number) => {
+                            if (d.comments.length > 3) {
                               return (
                                 <div key={i2}>
                                   <Button
@@ -386,22 +425,22 @@ export default function Index() {
                                   </Button>
                                 </div>
                               );
-                            })
-                          : null}
-                        {d.comments.length > 2 && myStyle
-                          ? d.comments.map((d3: any, i3: number) => {
-                              if (i3 > 2) {
-                                return (
-                                  <div style={myStyle[i]} key={i3}>
-                                    <h6>
-                                      {d3.userName}: {d3.content}
-                                    </h6>
-                                  </div>
-                                );
-                              }
-                            })
-                          : null}
-                        {myStyle && myStyle[i] ? null : (
+                            } else if (myStyle[i] === null) {
+                              return (
+                                <Button
+                                  key={i2}
+                                  variant="contained"
+                                  onClick={() => {
+                                    closeComments(i);
+                                  }}
+                                  size="small"
+                                >
+                                  접기
+                                </Button>
+                              );
+                            }
+                          })
+                        ) : (
                           <Button
                             variant="contained"
                             onClick={() => {
@@ -412,6 +451,7 @@ export default function Index() {
                             접기
                           </Button>
                         )}
+
                         <div>
                           <input
                             id={i}
@@ -422,10 +462,12 @@ export default function Index() {
                           ></input>
                           <Button
                             variant="contained"
-                            onClick={(e) => {
+                            onClick={() => {
                               writeComment(d.id);
-                              showComments(i);
                               inputNull(i);
+                              if (d.comments.length > 2) {
+                                showComments(i);
+                              }
                             }}
                           >
                             작성
