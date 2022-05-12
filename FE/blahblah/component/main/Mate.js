@@ -34,6 +34,8 @@ export default function Mate(props) {
   // const [like,setLike] = useState(props.user.rating)
   // 유저 좋아요 버튼
   const [likeBtn,setLikeBtn] = useState(true)
+  // 유저 팔로우 버튼
+  const [followBtn,setFollowBtn] = useState(true)
 
   // const lc = langc.map((a,i)=>{
   //   return <div>
@@ -48,7 +50,29 @@ export default function Mate(props) {
     };
     return config;
   };
+  // 팔로우요청(언팔)
+  const userFollow = (event) => {
+    event.preventDefault();
+    setFollowBtn(!likeBtn)
+    axios({
+      method:'post',
+      url:`https://blahblah.community:8443/api/follow/${props.user.id}`,
+      // data: {
+      //   'email':email
+      // },
+    })
+    .then((result)=>{
+    console.log('팔로우 요청성공')
+    console.log(result)
+ 
+  })
+    .catch((error)=>{
+      console.log('팔로우 요청실패')
+      console.log(error)  
+  })
+  };
 
+  // 좋아요 요청
   const userLike = (event) => {
     event.preventDefault();
     setLikeBtn(!likeBtn)
@@ -169,6 +193,16 @@ export default function Mate(props) {
   ?<>남자</>
   :<>여자</>
   }/>
+  {
+    followBtn
+    ?<>  <Button variant="outline-secondary" size="sm" onClick={userFollow}>
+    follow
+  </Button></>
+    :<>  <Button variant="outline-secondary" size="sm" onClick={userFollow}>
+    unfollow
+  </Button></>
+  }
+
   
         {/* <h5>{props.user.name}({props.user.age})</h5> */}
         {/* <h5>{props.user.gender ===1
@@ -225,6 +259,7 @@ export default function Mate(props) {
       </ListItem>
       <ListItem>
         <ListItemText primary={`인기도`} secondary={`${props.user.rating}`} />
+        
         {
           likeBtn
           ?<FavoriteBorderIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteBorderIcon>
@@ -234,6 +269,7 @@ export default function Mate(props) {
         {/* <button onClick={userLike}>클릭</button> */}
         {/* <Button onClick={userLike}
                   className="btncs" variant="outline-secondary">좋아요</Button> */}
+                  
       </ListItem>
       
 
