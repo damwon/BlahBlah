@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import $ from "jquery";
 import {
   Button,
   Grid,
@@ -7,6 +8,7 @@ import {
   IconButton,
   ListItemAvatar,
   ListItemText,
+  Checkbox,
 } from "@mui/material";
 import { Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
@@ -15,6 +17,7 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import EditIcon from "@mui/icons-material/Edit";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
+import axios from "axios";
 export default function Index() {
   const [update, setUpdate] = useState(1);
   const router = useRouter();
@@ -38,6 +41,21 @@ export default function Index() {
         console.log(err);
       });
   }, [update]);
+
+  useEffect(() => {
+    allAxios
+      .get(`/feed`, { headers: setToken() })
+      .then((res) => {
+        const tmpArr: any = [];
+        for (let i = 0; i < res.data.length; i++) {
+          tmpArr.push({ display: "none" });
+        }
+        setMyStyle(tmpArr);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const [userId, setUserId] = useState();
   useEffect(() => {
@@ -66,16 +84,28 @@ export default function Index() {
   const handleShow = () => {
     setShow(true);
     setFile();
+    setOpen(true);
   };
   const [show2, setShow2] = useState(false);
-  const handleClose2 = () => setShow(false);
-  const handleShow2 = () => {
-    setShow(true);
-    setFile();
+  const handleClose2 = () => setShow2(false);
+  const [feedContent, setFeedContent] = useState();
+  const [changeIdx, setChangeIdx] = useState();
+  const handleShow2 = (idx: number) => {
+    setShow2(true);
+    allAxios
+      .get(`feed/${idx}`)
+      .then((res) => {
+        setFeedContent(res.data.content);
+        setChangeIdx(res.data.id);
+      })
+      .catch((err) => console.log(err));
   };
-  const [dense, setDense] = useState(false);
-  const [content, setContent]: any = useState();
-  const writeFeed = () => {
+  const contentChange = (e: any) => {
+    const val = e.target.value;
+    setFeedContent(val);
+  };
+
+  const modifyFeed = () => {
     const formData = new FormData();
     if (file) {
       formData.append("image", file);
@@ -87,19 +117,17 @@ export default function Index() {
     }
 
     const data = {
-      content: content,
-      open: true,
+      content: feedContent,
+      open: open,
     };
     formData.append(
       "feedPostReq",
       new Blob([JSON.stringify(data)], { type: "application/json" })
     );
-    // for (var value of formData.values()) {
-    //   console.log(value);
-    // }
     allAxios
-      .post(`/feed`, formData, { headers: setToken() })
-      .then(() => {
+      .put(`/feed/${changeIdx}`, formData, { headers: setToken() })
+      .then((res) => {
+        alert("피드를 수정했습니다.");
         window.location.reload();
       })
       .catch((err) => {
@@ -107,9 +135,42 @@ export default function Index() {
       });
   };
 
-  const modifyFeed = (fId: number) => {
-    console.log(fId);
+  const [dense, setDense] = useState(false);
+  const [content, setContent]: any = useState();
+  const [open, setOpen] = useState(true);
+  const writeFeed = () => {
+    if (content) {
+      const formData = new FormData();
+      if (file) {
+        formData.append("image", file);
+      } else {
+        formData.append(
+          "image",
+          new Blob([JSON.stringify(file)], { type: "multipart/form-data" })
+        );
+      }
+
+      const data = {
+        content: content,
+        open: open,
+      };
+      formData.append(
+        "feedPostReq",
+        new Blob([JSON.stringify(data)], { type: "application/json" })
+      );
+      allAxios
+        .post(`/feed`, formData, { headers: setToken() })
+        .then(() => {
+          window.location.reload();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert("내용을 입력해주세요");
+    }
   };
+
   const [file, setFile]: any = useState(null);
   const handleFile = (e: any) => {
     const imgFile = e.target.files[0];
@@ -156,6 +217,45 @@ export default function Index() {
       });
   };
 
+  const [comment, setComment]: any = useState();
+  const writeComment = (fId: number) => {
+    if (comment) {
+      allAxios
+        .post(
+          `comment/${fId}`,
+          {
+            content: comment,
+          },
+          { headers: setToken() }
+        )
+        .then(() => {
+          setUpdate(update + 1);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      alert("댓글에 내용을 입력해주세요.");
+    }
+  };
+
+  const showComments = (i: number) => {
+    const tmpStyle: any = myStyle;
+    tmpStyle[i] = null;
+    setMyStyle(tmpStyle);
+    setUpdate(update + 1);
+  };
+
+  const closeComments = (i: number) => {
+    const tmpStyle: any = myStyle;
+    tmpStyle[i] = { display: "none" };
+    setMyStyle(tmpStyle);
+    setUpdate(update + 1);
+  };
+  const [myStyle, setMyStyle] = useState();
+  const inputNull = (i: number) => {
+    $(`#${i}`).val("");
+  };
   return (
     <>
       <Grid spacing={3} container>
@@ -183,7 +283,7 @@ export default function Index() {
           </div>
           <List dense={dense}>
             {showFeeds &&
-              showFeeds.map((d: any, i: number) => {
+              showFeeds.map((d: any, i: any) => {
                 return (
                   <div key={i}>
                     <ListItem
@@ -191,7 +291,9 @@ export default function Index() {
                         <IconButton edge="end" aria-label="delete"></IconButton>
                       }
                     >
-                      <ListItemAvatar>
+                      <ListItemAvatar
+                        style={{ marginTop: "30px", marginBottom: "auto" }}
+                      >
                         <div className="container">
                           <div className="outer">
                             <Image
@@ -201,33 +303,29 @@ export default function Index() {
                               width="200%"
                               height="200%"
                             ></Image>
-                            <div className="innerLT"></div>
-                            <div className="innerRT"></div>
-                            <div className="innerLB">
-                              <Image
-                                className="report"
-                                src="/images/siren.png"
-                                alt="report image"
-                                width="26"
-                                height="26"
-                              ></Image>
-                            </div>
+
                             <div className="innerRB"></div>
                           </div>
                         </div>
                       </ListItemAvatar>
                       <ListItemText style={{ margin: "30px" }} />
                       <div style={{ width: "100%" }}>
-                        <Image
-                          className="profile"
-                          src={d.imgUrl}
-                          alt="finger image"
-                          width="70%"
-                          height="70%"
-                        ></Image>
+                        {d.imgUrl ? (
+                          <Image
+                            className="profile"
+                            src={d.imgUrl}
+                            alt="finger image"
+                            width="70%"
+                            height="70%"
+                          ></Image>
+                        ) : null}
+
                         <h5 style={{ margin: "20px", width: "70%" }}>
                           {d.content}
                         </h5>
+
+                        <hr></hr>
+
                         <ThumbUpIcon
                           style={{ margin: "5px", cursor: "pointer" }}
                           onClick={() => {
@@ -235,22 +333,104 @@ export default function Index() {
                           }}
                           color={d.isLike ? "primary" : ""}
                         ></ThumbUpIcon>
-                        <EditIcon
-                          style={{ margin: "5px", cursor: "pointer" }}
-                          onClick={() => {
-                            modifyFeed(d.id);
-                          }}
-                        ></EditIcon>
+
+                        {d.userId === userId ? (
+                          <EditIcon
+                            color="primary"
+                            style={{ margin: "5px", cursor: "pointer" }}
+                            onClick={() => {
+                              handleShow2(d.id);
+                            }}
+                          ></EditIcon>
+                        ) : null}
                         {d.userId === userId ? (
                           <DeleteIcon
+                            color="error"
                             style={{ margin: "5px", cursor: "pointer" }}
                             onClick={() => {
                               feedDelete(d.id, d.userId);
                             }}
                           />
                         ) : null}
-
                         <h4>{d.likeCount}</h4>
+
+                        <hr></hr>
+
+                        {d.comments.length > 0
+                          ? d.comments.map((d1: any, i1: number) => {
+                              if (i1 < 3) {
+                                return (
+                                  <div key={i1}>
+                                    <h6>
+                                      {d1.userName}: {d1.content}
+                                    </h6>
+                                  </div>
+                                );
+                              }
+                            })
+                          : [0].map((f: any, k: number) => {
+                              return <h5 key={k}>첫 댓글을 작성해보세요.</h5>;
+                            })}
+                        {d.comments.length > 3 && myStyle && myStyle[i]
+                          ? [0].map((d2: any, i2: number) => {
+                              return (
+                                <div key={i2}>
+                                  <Button
+                                    variant="contained"
+                                    onClick={() => {
+                                      showComments(i);
+                                    }}
+                                    size="small"
+                                  >
+                                    더보기
+                                  </Button>
+                                </div>
+                              );
+                            })
+                          : null}
+                        {d.comments.length > 2 && myStyle
+                          ? d.comments.map((d3: any, i3: number) => {
+                              if (i3 > 2) {
+                                return (
+                                  <div style={myStyle[i]} key={i3}>
+                                    <h6>
+                                      {d3.userName}: {d3.content}
+                                    </h6>
+                                  </div>
+                                );
+                              }
+                            })
+                          : null}
+                        {myStyle && myStyle[i] ? null : (
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              closeComments(i);
+                            }}
+                            size="small"
+                          >
+                            접기
+                          </Button>
+                        )}
+                        <div>
+                          <input
+                            id={i}
+                            style={{ width: "70%", margin: "10px" }}
+                            onChange={(e) => {
+                              setComment(e.target.value);
+                            }}
+                          ></input>
+                          <Button
+                            variant="contained"
+                            onClick={(e) => {
+                              writeComment(d.id);
+                              showComments(i);
+                              inputNull(i);
+                            }}
+                          >
+                            작성
+                          </Button>
+                        </div>
                       </div>
                     </ListItem>
 
@@ -273,14 +453,26 @@ export default function Index() {
               <h4>내용</h4>
             </Grid>
             <Grid item xs={10}>
-              <input
+              <textarea
+                style={{ minHeight: 200, width: "90%" }}
                 onChange={(e: any) => {
                   setContent(e.target.value);
                 }}
-              ></input>
+              ></textarea>
             </Grid>
           </Grid>
           <input type="file" name="file" onChange={(e) => handleFile(e)} />
+          <span>피드 공개여부</span>
+          <Checkbox
+            onClick={() => {
+              if (open) {
+                setOpen(false);
+              } else {
+                setOpen(true);
+              }
+            }}
+            defaultChecked
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
@@ -295,7 +487,7 @@ export default function Index() {
       {/* 피드 수정 modal */}
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>
-          <Modal.Title>피드를 작성해주세요.</Modal.Title>
+          <Modal.Title>피드 수정</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
@@ -303,21 +495,34 @@ export default function Index() {
               <h4>내용</h4>
             </Grid>
             <Grid item xs={10}>
-              <input
-                onChange={(e: any) => {
-                  setContent(e.target.value);
-                }}
-              ></input>
+              <textarea
+                style={{ minHeight: 200, width: "90%" }}
+                onChange={contentChange}
+                value={feedContent}
+              ></textarea>
             </Grid>
           </Grid>
           <input type="file" name="file" onChange={(e) => handleFile(e)} />
+          <span>피드 공개여부</span>
+          <Checkbox
+            onClick={() => {
+              if (open) {
+                setOpen(false);
+              } else {
+                setOpen(true);
+              }
+            }}
+            defaultChecked
+          />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose2}>
             취소
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button variant="contained">저장</Button>
+          <Button variant="contained" onClick={modifyFeed}>
+            저장
+          </Button>
         </Modal.Footer>
       </Modal>
       <style jsx>
@@ -341,7 +546,8 @@ export default function Index() {
             overflow: hidden;
           }
 
-          .innerLT {
+           {
+            /* .innerLT {
             background-color: white;
             width: 30px;
             height: 30px;
@@ -370,16 +576,16 @@ export default function Index() {
             bottom: 20px;
             left: 20px;
             cursor: pointer;
+          } */
           }
           .innerRB {
-            background-color: white;
+            background-color: rgb(130, 219, 78);
             width: 30px;
             height: 30px;
             border-radius: 50%;
             position: absolute;
             bottom: 20px;
             right: 20px;
-            cursor: pointer;
           }
 
           .inner:hover {
