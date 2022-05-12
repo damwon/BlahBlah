@@ -14,6 +14,11 @@ export default function Signup() {
   const Router = useRouter();
   const { query } = useRouter();
   const [email, setEmail] = useState(query.email)
+  
+  // 가입절차
+  const [page1,setPage1] = useState(true)
+  const [page2,setPage2] = useState(false)
+
 
   // 가입결과 테스트
   const [result, setResult] = useState(false)
@@ -264,7 +269,6 @@ export default function Signup() {
   return (
     <>
       <Container>
-
         <Row>
           <Col></Col>
           <Col><h1>회원가입 </h1>
@@ -274,14 +278,9 @@ export default function Signup() {
             }
             {/* 이거 이메일 빈녀석이면 예외처리 */}
             {/* const [result,setResult] = useState(false) */}
-
-
-
-
-            <div className='logdiv'>
-
-
-
+            {
+              page1
+              ?<div className='logdiv'>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>이름</Form.Label>
                 <Form.Control className="formct" type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20} />
@@ -327,8 +326,43 @@ export default function Signup() {
 
 
               <hr />
+              
+              
 
-              <Form.Label>모국어(2개까지)
+              <Form.Group controlId="formFileSm" className="mb-3">
+              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
+              <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
+            </Form.Group>
+
+              {/* <Button onClick={() => {
+                console.log(first)
+                console.log(firstob)
+                console.log(second)
+                console.log(secondob)
+                console.log(third)
+                console.log(thirdob)
+                const newarr = [
+                  ...firstob,
+                  ...secondob,
+                  ...thirdob
+                ]
+                console.log(newarr)
+
+              }}
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
+              <Form.Label>자기소개 {profile}</Form.Label>
+              <InputGroup>
+                {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
+                <FormControl className="formct" placeholder='10자이상 입력해주세요' as="textarea"
+                  aria-label="With textarea" onChange={handleProfile} />
+              </InputGroup>
+
+              
+
+
+            </div>
+            :<>
+            <Form.Label>모국어(2개까지)
                 {
                   first
                   ?<>
@@ -353,12 +387,6 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              {/* <Button onClick={() => {
-                var newarr: any = []
-                setFirst(newarr)
-                setFirstob(newarr)
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
 
               <hr />
               <Form.Label>구사언어(3개까지)
@@ -385,13 +413,6 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              {/* <Button onClick={() => {
-                var newarr: any = []
-                setSecond(newarr)
-                setSecondob(newarr)
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
-
               <hr />
               <Form.Label>학습언어(4개까지) 
               {
@@ -418,86 +439,29 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              {/* <Button onClick={() => {
-                var newarr: any = []
-                setThird(newarr)
-                setThirdob(newarr)
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
-
-              <hr />
-              {/* <h3>프로필이미지</h3> */}
-              {/* <form>
-                <label htmlFor="profile-upload" />
-                <input type="file" id="profile-upload" accept="image/*" onChange={onChangeImg} />
-              </form> */}
-              <Form.Group controlId="formFileSm" className="mb-3">
-              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
-              <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
-            </Form.Group>
-            {/* {file} */}
-            {/* <img src={file}></img>
+              <Button onClick={onSubmit} className="btncs" 
+                   variant="outline-secondary"
+                style={{ marginTop: '3px',marginRight:'5px' }} >가입</Button>
+                <Button style={{marginTop:'3px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>이전페이지</Button>
+                
+                
+            </>
+            }
             {
-              file
-              ?<>{file}</>
-              :<>없어</>
-            } */}
-              {/* <Form.Label>프로필이미지 {proimg}</Form.Label>
-              <Form.Select aria-label="Default select example"
-                onChange={handleProimg} value={proimg}>
-                <option>이미지고르기 </option>
-                {imgarr.map((item, index) => (
-                  <option key={index} value={item}>{item}</option>
-                ))}
-              </Form.Select>
-              <Button onClick={() => {
-                setProimg('0')
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
+              page1
+              ?<Button style={{marginTop:'5px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>다음페이지</Button>
+              :null
+            }
+            
+            </Col>
 
-              <Button onClick={() => {
-                console.log(first)
-                console.log(firstob)
-                console.log(second)
-                console.log(secondob)
-                console.log(third)
-                console.log(thirdob)
-                const newarr = [
-                  ...firstob,
-                  ...secondob,
-                  ...thirdob
-                ]
-                console.log(newarr)
-
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              <Form.Label>자기소개 {profile}</Form.Label>
-              <InputGroup>
-                {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
-                <FormControl className="formct" placeholder='10자이상 입력해주세요' as="textarea"
-                  aria-label="With textarea" onChange={handleProfile} />
-              </InputGroup>
-
-              <Button onClick={onSubmit}
-                style={{ marginTop: '5px' }} variant="outline-dark">가입</Button>
-
-
-            </div></Col>
-          <Col></Col>
+            <Col>
+            
+            </Col>
         </Row>
       </Container>
 
