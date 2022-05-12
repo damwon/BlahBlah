@@ -10,6 +10,32 @@ import Mate from '../../component/main/Mate'
 export default function Index() {
 
   const [mate,setMate] = useState<any>()
+  const [following,setFollowing] = useState<any>()
+
+  // 팔로잉 목록, 이걸로 follow버튼 처음에 활성, 비활성화
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+  const getFollowing = () => {
+    axios({
+      url: "https://blahblah.community:8443/api/follow/following",
+      method: "get",
+      headers: setToken(),
+    }).then((res) => {
+      console.log('팔로잉 목록 요청성공')
+      // console.log(res)
+      console.log(res.data)
+      setFollowing(res.data)
+      // setFollowing(res.data)
+    }).catch((err)=>{
+      console.log('팔로잉 목록 요청실패')
+      console.log(err)
+    });
+  };
 
   const findMate = () => {
     // event.preventDefault();
@@ -29,6 +55,7 @@ export default function Index() {
   };
   useEffect(() => {
     findMate()
+    getFollowing()
   }, []);
   return (
     <>
@@ -41,7 +68,7 @@ export default function Index() {
           mate.map(function(a:any,i:any){
             return (
               <div className="matebox" key = {i}>
-                <Mate user={a} findMate={findMate}/>
+                <Mate user={a} findMate={findMate} following={following}/>
               </div>
               
 

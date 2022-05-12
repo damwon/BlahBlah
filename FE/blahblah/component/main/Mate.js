@@ -37,6 +37,9 @@ export default function Mate(props) {
   // 유저 팔로우 버튼
   const [followBtn,setFollowBtn] = useState(true)
 
+  // 팔로잉 목록
+  // const [following,setFollowing] = useState(following)
+
   // const lc = langc.map((a,i)=>{
   //   return <div>
   //     {larr[a]}
@@ -50,6 +53,7 @@ export default function Mate(props) {
     };
     return config;
   };
+
   // 팔로우요청(언팔)
   const userFollow = (event) => {
     event.preventDefault();
@@ -100,6 +104,16 @@ export default function Mate(props) {
     console.log(error)  
   })
   };
+  useEffect(()=>{
+    // console.log('----props----')
+    // console.log(props.following)
+    // let flag = 0
+    for(let i=0;i<props.following.length;i++){
+      if(props.following[i].id === props.user.id){
+        setFollowBtn(false)
+      }
+    }
+  },[])
 
   // useEffect(()=>{
   //   // props.findMate()
@@ -196,7 +210,7 @@ export default function Mate(props) {
   }/>
   {
     followBtn
-    ?<>  <Button variant="outline-secondary" size="sm" onClick={userFollow}>
+    ?<>  <Button variant="secondary" size="sm" onClick={userFollow}>
     follow
   </Button></>
     :<>  <Button variant="outline-secondary" size="sm" onClick={userFollow}>
