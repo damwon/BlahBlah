@@ -21,8 +21,7 @@ public class LangInfoServiceImpl implements LangInfoService {
 
 	@Override
 	public LangInfo createLangInfo(Long userId, Long langId, Integer level) {
-		LangInfo lang = new LangInfo();
-		lang.setLevel(level);
+		LangInfo lang = new LangInfo(userId,langId,level);
 		return langInfoRepository.save(lang);
 	}
 

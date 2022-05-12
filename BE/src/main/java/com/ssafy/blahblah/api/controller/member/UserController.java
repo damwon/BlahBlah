@@ -2,7 +2,7 @@ package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.request.member.*;
 import com.ssafy.blahblah.api.response.member.UserInfoRes;
-import com.ssafy.blahblah.api.response.member.UserLangInfoRes;
+//import com.ssafy.blahblah.api.response.member.UserLangInfoRes;
 import com.ssafy.blahblah.api.service.language.LangInfoService;
 import com.ssafy.blahblah.api.service.language.LanguageService;
 import com.ssafy.blahblah.api.service.member.EmailService;
@@ -131,7 +131,6 @@ public class UserController {
 				langInfoService.createLangInfo(userId, langId, level);
 			}
 		}
-
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
@@ -215,16 +214,23 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PutMapping("/edit")
-	public ResponseEntity editUserInfo(
+	public ResponseEntity<? extends BaseResponseBody> editUserInfo(
 			@ApiIgnore Authentication authentication,
 			@ApiParam(value="회원정보 수정 데이터", required = true)
-			@RequestBody UserEditInfoReq userEditPutReq) {
+			@RequestPart("info") UserEditInfoReq userEditPutReq,
+			@RequestPart(value="file",required = false) List<MultipartFile> multipartFile) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String email = userDetails.getUsername();
 		User user = userService.getUserByEmail(email);
 		user.setName(userEditPutReq.getName());
 		user.setDescription(userEditPutReq.getDescription());
-		user.setProfileImg(userEditPutReq.getProfileImg());
+
+		String imgString = "profile_default.png";
+		if (multipartFile != null ) {
+			imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
+		}
+		awsS3Service.deleteImage(user.getProfileImg(),"profile");
+		user.setProfileImg(imgString);
 		userService.saveUser(user);
 		return new ResponseEntity(HttpStatus.OK);
 	}

@@ -14,9 +14,7 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public void upRating(Long upUserId, Long userId) {
-        Rating rating = new Rating();
-        rating.setUpUserId(upUserId);
-        rating.setUserId(userId);
+        Rating rating = new Rating(upUserId,userId);
         ratingRepository.save(rating);
     }
 

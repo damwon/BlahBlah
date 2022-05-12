@@ -15,6 +15,4 @@ public class UserEditInfoReq {
     String name;
     @ApiModelProperty(name="유저 description", example="your_description")
     String description;
-    @ApiModelProperty(name="유저 profileImg", example="your_profileImg")
-    String profileImg;
 }
