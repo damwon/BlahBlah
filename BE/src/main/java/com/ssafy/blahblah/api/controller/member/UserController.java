@@ -122,12 +122,12 @@ public class UserController {
 		} else {
 			long userId = user.getId();
 
-			UserLangPostReq userLangPostReq = new UserLangPostReq();
+//			UserLangPostReq userLangPostReq = new UserLangPostReq();
 
 			for(UserLangPostReq item: registerInfo.getList()) {
 				long langId = languageService.getLanguageByCode(item.getCode()).getId();
 				Integer level = item.getLevel();
-				userLangPostReq.setLevel(item.getLevel());
+//				userLangPostReq.setLevel(item.getLevel());
 				langInfoService.createLangInfo(userId, langId, level);
 			}
 		}
@@ -206,7 +206,7 @@ public class UserController {
 		return new ResponseEntity<>(userInfoRes,HttpStatus.OK);
 	}
 
-	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보 중 닉네임과 이메일을 수정한다.")
+	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보 중 닉네임, 이메일, 이미지를 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
 			@ApiResponse(code = 401, message = "엑세스 토큰 값이 틀림"),
@@ -214,7 +214,7 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	@PutMapping("/edit")
-	public ResponseEntity<? extends BaseResponseBody> editUserInfo(
+	public ResponseEntity<? extends BaseResponseBody> editUserLangInfo(
 			@ApiIgnore Authentication authentication,
 			@ApiParam(value="회원정보 수정 데이터", required = true)
 			@RequestPart("info") UserEditInfoReq userEditPutReq,
@@ -232,6 +232,32 @@ public class UserController {
 		awsS3Service.deleteImage(user.getProfileImg(),"profile");
 		user.setProfileImg(imgString);
 		userService.saveUser(user);
+		return new ResponseEntity(HttpStatus.OK);
+	}
+
+	@ApiOperation(value = "회원 언어정보 수정", notes = "회원의 언어정보를 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "엑세스 토큰 값이 틀림"),
+			@ApiResponse(code = 403, message = "엑세스 토큰이 없이 요청"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	@PutMapping("/edit-lang")
+	public ResponseEntity<? extends BaseResponseBody> editUserInfo(
+			@ApiIgnore Authentication authentication,
+			@ApiParam(value="회원언어정보 수정 데이터", required = true)
+			@RequestPart("langList") List<UserLangPostReq> langList) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String email = userDetails.getUsername();
+		long userId = userService.getUserByEmail(email).getId();
+
+		langInfoService.deleteLangInfoByUserId(userId);
+
+		for(UserLangPostReq item: langList) {
+			long langId = languageService.getLanguageByCode(item.getCode()).getId();
+			Integer level = item.getLevel();
+			langInfoService.createLangInfo(userId, langId, level);
+		}
 		return new ResponseEntity(HttpStatus.OK);
 	}
 

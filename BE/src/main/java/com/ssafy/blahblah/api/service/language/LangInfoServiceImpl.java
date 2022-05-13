@@ -37,4 +37,9 @@ public class LangInfoServiceImpl implements LangInfoService {
 
 	@Override
 	public List<LangInfo> getLangInfoListByUserId(Long userId) { return langInfoRepository.findListByUserId(userId);}
+
+	@Override
+	public void deleteLangInfoByUserId(Long userId) {
+		langInfoRepository.deleteAllByUserId(userId);
+	};
 }
