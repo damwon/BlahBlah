@@ -227,8 +227,13 @@ public class UserController {
 
 		String imgString = user.getProfileImg();
 		if(userEditPutReq.getImgState() == 1) {
-			imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
-			awsS3Service.deleteImage(user.getProfileImg(),"profile");
+			if(multipartFile == null) {
+				imgString = "profile_default.png";
+				awsS3Service.deleteImage(user.getProfileImg(),"profile");
+			} else {
+				imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
+				awsS3Service.deleteImage(user.getProfileImg(),"profile");
+			}
 		}
 		user.setProfileImg(imgString);
 		userService.saveUser(user);
