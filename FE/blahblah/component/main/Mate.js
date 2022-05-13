@@ -114,12 +114,15 @@ export default function Mate(props) {
     // let flag = 0
     
     // 이거 조건문하나 넣어주자 ㅇㅇ
-    for(let i=0;i<props.following.length;i++){
+    // 이것도 keys로?
+    // Object
+    //Object.keys(lang).length 이건 꼭체크
+    for(let i=0;i<Object(props.following).length;i++){
       if(props.following[i].id === props.user.id){
         setFollowBtn(false)
       }
     }
-    for(let i=0;i<props.rateList.length;i++){
+    for(let i=0;i<Object(props.rateList).length;i++){
       if(props.rateList[i].userId === props.user.id){
         setLikeBtn(false)
       }
@@ -134,39 +137,66 @@ export default function Mate(props) {
   //   console.log(like)
   //   // setLang(props.user.langList)
   // },[likeBtn])
+  // useEffect(()=>{
+  //   if(lang.length!==0){
+  //     console.log('됫다!')
+  //     // var newarr:any = [...langa]
+  //     var newarra = [...langa]
+  //     var newarrb  = [...langb]
+  //     var newarrc  = [...langc]
 
+
+  //     for(let i=0;i<Object.keys(lang).length;i++){
+
+  //       if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
+  //         // var newarr:any = [...langa]
+  //         newarra.push(lang[i]['langId'])
+  //         setLangA(newarra)
+  //       }else if(lang[i]['level']===4){
+  //         newarrb.push(lang[i]['langId'])
+  //         setLangB(newarrb)
+  //       }
+  //       else if(lang[i]['level']===5){
+  //         // any형식의 인수는never형식에 할당할 수없음, 배열도any로 설정
+  //         newarrc.push(lang[i]['langId'])
+  //         setLangC(newarrc)
+  //       }
+  //     }
+  //   }
+  // },[lang])
   useEffect(() => {
     // console.log('각유저별 언어')
     // console.log(lang)
     // console.log(Object.keys(lang).length)
     // 객체에는 길이가 없어서 이렇게 가져와야한다 체크
     // console.log('각유저별언어 반복문')/
-    // console.log(lang.lenght)
-    // langInfos
-    // for(let i=0;i<Object.keys(lang).length;i++){
-    // console.log(props.user.email)
-    for(let i=0;i<Object.keys(lang).length;i++){
-      // console.log(lang[i]['level'])
-      // console.log(lang[i])
-      // console.log(lang[i]['langId'])
-      if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
-        var newarr = [...langa]
-        // newarr.push(lang[i]['lang_id'])
-        newarr.push(lang[i]['langId'])
-        // newarr.push(3)
-        setLangA(newarr)
-      }else if(lang[i]['level']===4){
-        var newarr = [...langb]
-        newarr.push(lang[i]['langId'])
-        setLangB(newarr)
-      }
-      else if(lang[i]['level']===5){
-        var newarr = [...langc]
-        newarr.push(lang[i]['langId'])
-        setLangC(newarr)
+    if(lang.length!==0){
+      // 이걸 for문 밖에 써줘야했네...헠..쓰
+      var newarra = [...langa]
+        var newarrb  = [...langb]
+        var newarrc  = [...langc]
+      for(let i=0;i<Object.keys(lang).length;i++){
+        
+        // var newarra = [...langa]
+        // var newarrb = [...langb]
+        // var newarrc = [...langc]
+        if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
+          // newarr.push(lang[i]['lang_id'])
+          newarra.push(lang[i]['langId'])
+          // newarr.push(3)
+          setLangA(newarra)
+        }else if(lang[i]['level']===4){
+          newarrb.push(lang[i]['langId'])
+          setLangB(newarrb)
+        }
+        else if(lang[i]['level']===5){
+          newarrc.push(lang[i]['langId'])
+          setLangC(newarrc)
+        }
       }
     }
-  }, []);
+    
+  }, [lang]);
 
   // useEffect(()=>{
   //   console.log('------변환완료----')

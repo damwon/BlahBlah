@@ -5,14 +5,19 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import lang2 from '../../component/user/Lang'
 import langImg2 from '../../component/user/LangImg'
+import LangId from '../../component/user/Langarr'
+
 
 
 export default function LangUpdate() {
   const lang: any = lang2
   const langImg: any = langImg2
+  const langId:any = LangId
   const router = useRouter()
     // 본인 정보 저장
     const [profile, setProfile] = useState<any>([]);
+    // 본인의 모든 언어정보
+    const [myLang,setMyLang] = useState<any>()
     // 본인 정보
     const getProfile = () => {
       axios({
@@ -24,6 +29,18 @@ export default function LangUpdate() {
         setProfile(res.data);
         console.log(res.data)
         console.log(res.data.langInfos)
+        setMyLang(res.data.langInfos)
+        // for(let i=0;i<res.data.langInfos;i++){
+        //   if(res.data.langInfos[i].level===1||res.data.langInfos[i].level===2||res.data.langInfos[i].level===3){
+        //     var array: any = [...first]
+        //     var ob: any = [...firstob]
+        //     ob.push({ "code": lang[res.data.langId], "level": 1 })
+        //     array.push(langId[res.data.langId-1])
+        //     setFirst(array)
+        //     setFirstob(ob)
+        //   }
+        //   // setFirst
+        // }
       });
     };
   
@@ -38,6 +55,45 @@ export default function LangUpdate() {
     useEffect(() => {
       getProfile();
     }, []);
+    useEffect(()=>{
+      console.log('useEffectmyLang')
+      console.log(myLang)
+      console.log(Object(myLang))
+      var array: any = [...first]
+      var ob: any = [...firstob]
+      var array2: any = [...second]
+      var ob2: any = [...secondob]
+      var array3: any = [...third]
+      var ob3: any = [...thirdob]
+      for(let i=0;i<Object(myLang).length;i++){
+        console.log(myLang[i])
+
+        if(myLang[i].level===1||myLang[i].level===2||myLang[i].level===3){
+          console.log('----코드용-0---')
+          // console.log(lang[langId[myLang[i].langId-1]])
+          console.log('----코드용-0---')
+          ob.push({ "code": lang[langId[myLang[i].langId-1]], "level": 1 })
+          console.log(langId[myLang[i].langId-1])
+          array.push(langId[myLang[i].langId-1])
+          setFirst(array)
+          setFirstob(ob)
+        }
+        else if(myLang[i].level===4){
+          ob2.push({ "code": lang[langId[myLang[i].langId-1]], "level": 4 })
+          array2.push(langId[myLang[i].langId-1])
+          setSecond(array2)
+          setSecondob(ob2)
+        }else if(myLang[i].level===5){
+          ob3.push({ "code": lang[langId[myLang[i].langId-1]], "level": 5 })
+          array3.push(langId[myLang[i].langId-1])
+          setThird(array3)
+          setThirdob(ob3)
+        }
+        
+      }
+    }
+    ,[myLang])
+
 
     // 언어종류
   const languages = Object.keys(lang)
@@ -46,6 +102,10 @@ export default function LangUpdate() {
   // 모국어
   const [first, setFirst] = useState([])
   const [firstob, setFirstob] = useState([])
+  // useEffect(()=>{
+  //   console.log('----------first')
+  //   console.log(first)
+  // },[first])
   const handleFirst = (e: any) => {
 
     var array: any = [...first]
@@ -299,11 +359,11 @@ export default function LangUpdate() {
                 style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
                 <Button onClick={onEdit} className="btncs" 
                    variant="outline-secondary"
-                style={{ marginTop: '3px',marginRight:'5px' }} >수정하기</Button>
+                style={{ margin: '5px' }} >수정하기</Button>
                 <Button onClick={() => {
               router.push('/user/mypage')
             }}
-              style={{ margin: '2px' }} variant="outline-secondary">마이페이지 돌아가기</Button>
+            style={{ margin: '5px' }} variant="outline-secondary">마이페이지 돌아가기</Button>
           </Col>
           <Col></Col>
         </Row>
