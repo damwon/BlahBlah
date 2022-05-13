@@ -152,13 +152,13 @@ export default function Signup() {
 
   }
   // 성별
-  const [gen, setGen] = useState("")
+  const [gen, setGen] = useState<any>()
   const gens = ['남자', '여자']
   const onGenHanlder = (e: any) => {
     if (e.currentTarget.value === '남자') {
-      setGen('0')
+      setGen(0)
     } else {
-      setGen('1')
+      setGen(1)
     }
     // setGen(e.currentTarget.value)
   }
@@ -231,13 +231,15 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      "email": email,
+      "email": '151515@test.com',
       "name": name,
       "gender": gen,
       "age": age,
       "description": profile,
       "password": password,
-      "list": [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }],
+      "list":newarr,
+      // "list" : [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}],
+      // "list": [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }],
     }
     formData.append('file', file)
     formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))
@@ -334,22 +336,7 @@ export default function Signup() {
               <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
 
-              {/* <Button onClick={() => {
-                console.log(first)
-                console.log(firstob)
-                console.log(second)
-                console.log(secondob)
-                console.log(third)
-                console.log(thirdob)
-                const newarr = [
-                  ...firstob,
-                  ...secondob,
-                  ...thirdob
-                ]
-                console.log(newarr)
-
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
+              
               <Form.Label>자기소개 {profile}</Form.Label>
               <InputGroup>
                 {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
@@ -439,6 +426,22 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
+              <Button onClick={() => {
+                // console.log(first)
+                // console.log(firstob)
+                // console.log(second)
+                // console.log(secondob)
+                // console.log(third)
+                // console.log(thirdob)
+                const newarr = [
+                  ...firstob,
+                  ...secondob,
+                  ...thirdob
+                ]
+                console.log(newarr)
+
+              }}
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
               <Button onClick={onSubmit} className="btncs" 
                    variant="outline-secondary"
                 style={{ marginTop: '3px',marginRight:'5px' }} >가입</Button>
