@@ -83,8 +83,8 @@ export default function Login() {
 
     const formData = new FormData();
     const info:any = {
-      "email":"xxxdsdssddf5@ssafy.com",
-      "name":"맛점22",
+      "email":"asdfadfeon@ssafy.com",
+      "name":"맛점2332",
       "gender":'5',
       "age":'57',
       "description":"테스계정입니다.",

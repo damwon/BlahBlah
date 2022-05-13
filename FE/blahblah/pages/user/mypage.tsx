@@ -6,8 +6,23 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { Token } from '@mui/icons-material';
 import Avatar from '@mui/material/Avatar';
+import langarr from '../../component/user/Langarr'
+import langkey from '../../component/user/Lang'
+import langIMG from '../../component/user/LangImg'
+
 
 export default function Mypage() {
+  const [lang,setLang] = useState<any>([])
+
+  const larr:any = langarr
+  const lkey:any = langkey
+  const lImg:any = langIMG
+  // 학습언어
+  const [langa,setLangA] = useState([])
+  // 구사언어
+  const [langb,setLangB] = useState([])
+  // 모국어
+  const [langc,setLangC] = useState([])
 
   const [islogin, setIslogin] = useState(false)
   useEffect(() => {
@@ -30,6 +45,8 @@ export default function Mypage() {
     }).then((res) => {
       console.log(res)
       setProfile(res.data);
+      setLang(res.data['langInfos'])
+      // console.log(res.body)
       console.log(res.data)
     });
   };
@@ -45,6 +62,35 @@ export default function Mypage() {
       getProfile();
     }
   }, [islogin]);
+
+  useEffect(()=>{
+    if(lang.length!==0){
+      console.log('됫다!')
+      // var newarr:any = [...langa]
+      var newarra:any = [...langa]
+      var newarrb:any  = [...langb]
+      var newarrc:any  = [...langc]
+
+
+      for(let i=0;i<Object.keys(lang).length;i++){
+
+        if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
+          // var newarr:any = [...langa]
+          newarra.push(lang[i]['langId'])
+          setLangA(newarra)
+        }else if(lang[i]['level']===4){
+          newarrb.push(lang[i]['langId'])
+          setLangB(newarrb)
+        }
+        else if(lang[i]['level']===5){
+          // any형식의 인수는never형식에 할당할 수없음, 배열도any로 설정
+          newarrc.push(lang[i]['langId'])
+          setLangC(newarrc)
+        }
+      }
+    }
+  },[lang])
+
   return (
     <>
 
@@ -61,7 +107,7 @@ export default function Mypage() {
                 </ListGroup>
                 <a className="linkmenu" onClick={() => {
                   router.push('/user/friends')
-                }}>전체친구 보러가기</a>
+                }}>팔로잉, 팔로워</a>
               </Card.Body>
             </Card>
 
@@ -69,7 +115,7 @@ export default function Mypage() {
               <Card.Body>
                 <Card.Title>내가 작성한 피드</Card.Title>
                 <ListGroup variant="flush">
-                  <ListGroup.Item>최근작성글1</ListGroup.Item>
+                  <ListGroup.Item>최근작성글</ListGroup.Item>
                   <ListGroup.Item>최근작성글</ListGroup.Item>
                   <ListGroup.Item>최근작성글</ListGroup.Item>
                 </ListGroup>
@@ -96,9 +142,55 @@ export default function Mypage() {
             <ListGroup variant="flush">
               <ListGroup.Item>이름:{profile.name}</ListGroup.Item>
               <ListGroup.Item>이메일주소:{profile.email}</ListGroup.Item>
-              <ListGroup.Item>모국어:</ListGroup.Item>
-              <ListGroup.Item>구사언어:</ListGroup.Item>
-              <ListGroup.Item>학습언어:</ListGroup.Item>
+              <ListGroup.Item>모국어:{
+          langc
+          ?<>
+          {
+            langc.map((a,i)=>{
+              return <span key={i}>
+                  {larr[a-1]}
+                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}
+                  style={{margin:'5px'}}></img>
+              </span>
+            })
+          }
+          </>        
+          :null
+        }</ListGroup.Item>
+              <ListGroup.Item>구사언어:{
+          langb
+          ?<span>
+          {
+            langb.map((a,i)=>{
+              return <span key={i}>
+                
+                      {larr[a-1]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
+
+              </span>
+            })
+          }
+          </span>
+          :null
+        }</ListGroup.Item>
+              <ListGroup.Item>학습언어:{
+          langa
+          ?<span>
+          {
+            langa.map((a,i)=>{
+              return <span key={i}>
+                
+           {larr[a-1]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
+
+              </span>
+            })
+          }
+          </span>
+          :null
+        }</ListGroup.Item>
               <ListGroup.Item>성별:{profile.gender === 1
                 ? <>여자</>
                 : <>남자</>
@@ -106,13 +198,17 @@ export default function Mypage() {
               <ListGroup.Item>나이:{profile.age}</ListGroup.Item>
               <ListGroup.Item>자기소개:{profile.description}</ListGroup.Item>
               <Button onClick={() => {
-                router.push('/user/profileupdate')
-              }}
-                style={{ marginBottom: '20px' }} variant="outline-dark">프로필수정</Button>
+                router.push('/user/langupdate')
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">언어수정</Button>
               <Button onClick={() => {
-                router.push('/user/passupdate')
-              }}
-                style={{ marginBottom: '20px' }} variant="outline-dark">비밀번호수정</Button>
+                router.push('/user/profileupdate')
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">프로필수정</Button>
+              <Button onClick={() => {
+                router.push('/user/passupdate') 
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">비밀번호수정</Button>
             </ListGroup>
           </Col>
           <Col sm={3} sx={3}>

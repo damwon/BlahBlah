@@ -7,16 +7,47 @@ import { useState, useEffect } from "react";
 
 export default function ProfileUpdate() {
   const router = useRouter()
+  //
+    // 본인 정보 저장
+    const [profile, setProfile] = useState<any>([]);
+    // 본인 정보
+    const getProfile = () => {
+      axios({
+        url: `https://blahblah.community:8443/api/user/me`,
+        method: "get",
+        headers: setToken(),
+      }).then((res) => {
+        console.log(res)
+        setProfile(res.data);
+        console.log(res.data)
+      });
+    };
+  
+    const setToken = () => {
+      const token = localStorage.getItem("jwt");
+      const config = {
+        Authorization: `Bearer ${token}`,
+      };
+      return config;
+    };
+  
+    useEffect(() => {
+      getProfile();
+    }, []);
+
   //자기소개
   const [des, setDes] = useState('')
   const handleDes = (e: any) => {
     setDes(e.currentTarget.value)
   }
+
   //이름
   const [name, setName] = useState('')
   const handleName = (e: any) => {
     setName(e.currentTarget.value)
   }
+  // 프로필이미지 변경여부
+  const [imgState,setImgState] = useState<any>(1)
   // 프로필 이미지
   const [file, setFilfe] = useState<any>(null)
   // 이미지 업로드 안해놓으면 기본 null처리
@@ -33,6 +64,7 @@ export default function ProfileUpdate() {
       console.log(uploadFile)
       console.log('===useState===')
       console.log(file)
+      setImgState(1)
     }
   }
   // 프로필 이미지
@@ -43,16 +75,26 @@ export default function ProfileUpdate() {
   // }
   // 프로필 업데이트
   const onEdit = (event: any) => {
+    const formData = new FormData();
+    const info: any = {    
+      "name": name,
+      "description": des,
+      "imgState":imgState,
+    }
+    formData.append('file', file)
+    formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))
+
     event.preventDefault();
     axios({
       url: `https://blahblah.community:8443/api/user/edit`,
       method: "put",
       headers: setToken(),
-      data: {
-        "name": name,
-        "description": des,
-        "profileImg": profile.profileImg,
-      },
+      data: formData,
+      // {
+      //   "name": name,
+      //   "description": des,
+      //   "profileImg": profile.profileImg,
+      // },
     })
       .then((res) => {
         console.log(res)
@@ -62,32 +104,7 @@ export default function ProfileUpdate() {
         console.log(err);
       });
   };
-  // 본인 정보 저장
-  const [profile, setProfile] = useState<any>([]);
-  // 본인 정보
-  const getProfile = () => {
-    axios({
-      url: `https://blahblah.community:8443/api/user/me`,
-      method: "get",
-      headers: setToken(),
-    }).then((res) => {
-      console.log(res)
-      setProfile(res.data);
-      console.log(res.data)
-    });
-  };
 
-  const setToken = () => {
-    const token = localStorage.getItem("jwt");
-    const config = {
-      Authorization: `Bearer ${token}`,
-    };
-    return config;
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, []);
   return (
     <>
       <Container>
@@ -99,11 +116,11 @@ export default function ProfileUpdate() {
             <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
     <Form.Label>이름</Form.Label>
-    <Form.Control type="text" placeholder="New Name" onChange={handleName} maxLength={20}/>
+    <Form.Control className="formct" type="text" placeholder="New Name" onChange={handleName} maxLength={20}/>
   </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
     <Form.Label>자기소개</Form.Label>
-    <Form.Control as="textarea" rows={3} onChange={handleDes}/>
+    <Form.Control className="formct" as="textarea" rows={3} onChange={handleDes}/>
   </Form.Group>
             </Form>
             {/* <div style={{ width: '16rem', margin: '20px' }}>자기소개
@@ -121,9 +138,22 @@ export default function ProfileUpdate() {
               <input onChange={handleName} maxLength={20}></input>
             </div> */}
             <Form.Group controlId="formFileSm" className="mb-3">
-              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
-              <Form.Control type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
+              <Form.Label>변경할 이미지를 업로드 해주세요</Form.Label>
+            
+              <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
+            <div><Button onClick={()=>{
+              setImgState(0)
+            }} style={{ marginRight: '3px' }}variant="outline-secondary" size="sm">
+      이미지변경없음
+    </Button>
+    <Button onClick={()=>{
+              setImgState(1)
+              setFilfe(null)
+            }} variant="outline-secondary" size="sm">
+      기본이미지사용
+    </Button>
+              </div>
             {/* {proimg} */}
             {/* <div style={{ width: '16rem', margin: '20px' }}>
               프로필이미지 - {profile.profileImg}
@@ -136,11 +166,11 @@ export default function ProfileUpdate() {
               </Form.Select>
             </div> */}
             <Button onClick={onEdit}
-              style={{ marginBottom: '20px' }} variant="outline-dark">수정하기</Button>
+              className="btncs" variant="outline-secondary">수정하기</Button>
             <Button onClick={() => {
               router.push('/user/mypage')
             }}
-              style={{ marginBottom: '20px' }} variant="outline-dark">마이페이지 돌아가기</Button>
+              style={{ margin: '2px' }} variant="outline-secondary">마이페이지 돌아가기</Button>
             {/* <button onClick={onEdit}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')

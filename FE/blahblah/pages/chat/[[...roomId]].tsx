@@ -85,13 +85,41 @@ export default function Chat() {
   // 채팅 목록
   const [chattingList, setChattingList] = useState<any[]>([]);
   // 채팅방 정보(개별)
-  const [chatRoomData, setChatRoomData] = useState<any>();
+  const [chatRoomData, setChatRoomData] = useState<any>({});
   // 채팅 상대방 이름
   const [chatname, setChatname] = useState("");
 
   // 라우터 쿼리 체크
   useEffect(() => {
-    console.log(router.query.roomId);
+    if (router.query.userId !== undefined) {
+      axios({
+        url: `https://blahblah.community:8080/api/chat/${router.query.userId}`,
+        method: "get",
+        headers: setToken(),
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            axios({
+              url: "https://blahblah.community:8080/api/chat",
+              method: "post",
+              headers: setToken(),
+              data: {
+                opponentId: router.query.userId,
+                opponentName: router.query.name,
+              },
+            })
+              .then((res) => {
+                console.log(res);
+              })
+              .catch((err) => {
+                console.error(err);
+              });
+          }
+        });
+    }
   }, [router.query]);
 
   // 유저 정보 가져오기
@@ -108,10 +136,13 @@ export default function Chat() {
       url: "https://blahblah.community:8443/api/user/me",
       method: "get",
       headers: setToken(),
-    }).then((res) => {
-      setUserData(res.data);
-      console.log(res.data);
-    });
+    })
+      .then((res) => {
+        setUserData(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   useEffect(() => {
@@ -119,34 +150,54 @@ export default function Chat() {
   }, []);
 
   // 채팅 웹소켓 연결
-  const connect = () => {
+  const connect = (chatRoomData: any) => {
     let socket = new SockJS("https://blahblah.community:8080/chat-websocket");
 
     stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function (frame: any) {
+    stompClient.connect({ userId: userData.id }, function (frame: any) {
       console.log("Connected:" + frame);
       stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
-        updateLastRead();
-        list();
         let tmpChat = JSON.parse(msg.body);
         console.log(tmpChat);
-        setChatHistory((prev) => [...prev, tmpChat]);
+        console.log("채팅먼저");
+
+        if (tmpChat.roomId === chatRoomData.roomId) {
+          console.log(true);
+          readMsg(chatRoomData.opponentId);
+          addMsg(tmpChat);
+        }
+        // updateLastRead();
+        list();
       });
       // 채팅 목록 가져오기
       stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
         let tmpMsg = JSON.parse(msg.body);
         console.log(tmpMsg);
-        setChatRoomData(tmpMsg[0]);
+        console.log("목록 나중");
         setChattingList(tmpMsg);
-        setChatname(tmpMsg[0].roomName);
       });
       list();
     });
   };
 
+  useEffect(() => {
+    if (userData) {
+      connect(chatRoomData);
+    }
+    return () => {
+      if (stompClient) {
+        stompClient.disconnect();
+      }
+    };
+  }, [userData, chatRoomData]);
+
+  const addMsg = (msg: any) => {
+    setChatHistory((prev) => [...prev, msg]);
+  };
   // 채팅 히스토리
   useEffect(() => {
+    console.log(chatRoomData);
     if (chatRoomData) {
       axios({
         method: "get",
@@ -162,16 +213,6 @@ export default function Chat() {
     }
   }, [chatRoomData]);
 
-  const updateLastRead = () => {
-    console.log("list");
-    const token = localStorage.getItem("jwt");
-    stompClient.send(
-      "chat/read/" + 1,
-      { Authorization: `Bearer ${token}` },
-      JSON.stringify({})
-    );
-  };
-
   const list = () => {
     console.log("list");
     const token = localStorage.getItem("jwt");
@@ -181,6 +222,18 @@ export default function Chat() {
         {
           Authorization: `Bearer ${token}`,
         },
+        JSON.stringify({})
+      );
+    }
+  };
+
+  // 채팅리스트 눌렀을 때 읽었다는 처리
+  const readMsg = (opponentId: number) => {
+    const token = localStorage.getItem("jwt");
+    if (stompClient) {
+      stompClient.send(
+        "/chat/read/" + opponentId,
+        { Authorization: `Bearer ${token}` },
         JSON.stringify({})
       );
     }
@@ -258,17 +311,6 @@ export default function Chat() {
     }
   };
 
-  useEffect(() => {
-    if (userData) {
-      connect();
-    }
-    return () => {
-      if (stompClient) {
-        stompClient.disconnect();
-      }
-    };
-  }, [userData]);
-
   const [message, setMessage] = useState<string>("");
   const handleMessage = (e: any) => {
     setMessage(e.target.value);
@@ -333,7 +375,7 @@ export default function Chat() {
   const getLanguageList = () => {
     axios({
       method: "get",
-      url: "https://blahblah.community:8080/api/supportedLanguage/en",
+      url: "https://blahblah.community:8080/api/trans/en",
     })
       .then((res) => {
         setLanguageList(res.data);
@@ -414,9 +456,6 @@ export default function Chat() {
             console.error("Unrecognized message", parsedMessage);
         }
       };
-      // return () => {
-      //   ws.close();
-      // };
     } catch (err) {
       console.error(err);
     }
@@ -620,6 +659,7 @@ export default function Chat() {
         {chattingList && (
           <Box sx={{ width: "20%", display: callState ? "none" : "block" }}>
             <ChatList
+              readMsg={readMsg}
               chattingList={chattingList}
               setChatname={setChatname}
               setChatRoomData={setChatRoomData}
@@ -715,85 +755,92 @@ export default function Chat() {
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
             {userData &&
-              chatHistory &&
-              chatHistory.map((item, index) => {
-                if (item.senderId == userData.id) {
-                  return (
-                    <Box
-                      sx={{
-                        width: "100%",
-                        padding: 2,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "end",
-                      }}
-                      key={index}
-                    >
-                      {item.type === "text" && (
-                        <ChatTypographyByMe>{item.content}</ChatTypographyByMe>
-                      )}
-                      {item.type === "audio" && (
-                        <>
-                          <IconButton
-                            onClick={() => {
-                              handleClickOpenVoiceSave(item.content);
-                            }}
-                          >
-                            <DownloadIcon />
-                          </IconButton>
-                          <audio
+              (chatHistory.length > 0 ? (
+                chatHistory.map((item, index) => {
+                  if (item.senderId == userData.id) {
+                    return (
+                      <Box
+                        sx={{
+                          width: "100%",
+                          padding: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "end",
+                        }}
+                        key={index}
+                      >
+                        {item.type === "text" && (
+                          <ChatTypographyByMe>
+                            {item.content}
+                          </ChatTypographyByMe>
+                        )}
+                        {item.type === "audio" && (
+                          <>
+                            <IconButton
+                              onClick={() => {
+                                handleClickOpenVoiceSave(item.content);
+                              }}
+                            >
+                              <DownloadIcon />
+                            </IconButton>
+                            <audio
+                              src={item.content}
+                              controls
+                              controlsList="nodownload"
+                            />
+                          </>
+                        )}
+                        {item.type === "image" && (
+                          <Image
                             src={item.content}
-                            controls
-                            controlsList="nodownload"
+                            style={{ width: "200px", height: "200px" }}
                           />
-                        </>
-                      )}
-                      {item.type === "image" && (
-                        <Image
-                          src={item.content}
-                          style={{ width: "200px", height: "200px" }}
-                        />
-                      )}
-                      {item.type === "comment" && (
-                        <Stack
-                          sx={{
-                            borderRadius: "20px",
-                            padding: "10px 20px",
-                            backgroundColor: "skyblue",
-                            fontWeight: 500,
-                            color: "white",
-                          }}
-                        >
-                          <Typography
+                        )}
+                        {item.type === "comment" && (
+                          <Stack
                             sx={{
-                              borderBottom: "1px solid white",
-                              opacity: 0.5,
+                              borderRadius: "20px",
+                              padding: "10px 20px",
+                              backgroundColor: "skyblue",
+                              fontWeight: 500,
+                              color: "white",
                             }}
                           >
-                            기존: {item.content}
-                          </Typography>
-                          <Box sx={{ display: "flex" }}>
-                            <ArrowForwardIcon />
-                            <Typography>코멘트: {item.comment}</Typography>
-                          </Box>
-                        </Stack>
-                      )}
-                    </Box>
-                  );
-                } else {
-                  return (
-                    <ChatBoxOfOther
-                      key={index}
-                      item={item}
-                      type={item.type}
-                      message={item.content}
-                      setCorrectMessage={setCorrectMessage}
-                      setTranslateMessage={setTranslateMessage}
-                      handleClickOpenVoiceSave={handleClickOpenVoiceSave}
-                    />
-                  );
-                }
-              })}
+                            <Typography
+                              sx={{
+                                borderBottom: "1px solid white",
+                                opacity: 0.5,
+                              }}
+                            >
+                              기존: {item.content}
+                            </Typography>
+                            <Box sx={{ display: "flex" }}>
+                              <ArrowForwardIcon />
+                              <Typography>코멘트: {item.comment}</Typography>
+                            </Box>
+                          </Stack>
+                        )}
+                      </Box>
+                    );
+                  } else {
+                    return (
+                      <ChatBoxOfOther
+                        key={index}
+                        item={item}
+                        type={item.type}
+                        message={item.content}
+                        setCorrectMessage={setCorrectMessage}
+                        setTranslateMessage={setTranslateMessage}
+                        handleClickOpenVoiceSave={handleClickOpenVoiceSave}
+                      />
+                    );
+                  }
+                })
+              ) : (
+                <Box>
+                  <Typography>채팅을 시작하세요~</Typography>
+                </Box>
+              ))}
           </ChatBox>
           <Box
             sx={{
@@ -841,6 +888,7 @@ export default function Chat() {
                 <IconButton
                   onClick={() => {
                     setTranslateMessage("");
+                    setTranslatedMessage("");
                   }}
                 >
                   <CloseIcon />

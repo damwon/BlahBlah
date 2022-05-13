@@ -4,6 +4,12 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 export default function QnA() {
+  useEffect(() => {
+    if (localStorage.getItem("jwt") === null) {
+      alert("로그인 후 사용해주세요.");
+      router.push(`/`);
+    }
+  });
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {

@@ -14,6 +14,11 @@ export default function Signup() {
   const Router = useRouter();
   const { query } = useRouter();
   const [email, setEmail] = useState(query.email)
+  
+  // 가입절차
+  const [page1,setPage1] = useState(true)
+  const [page2,setPage2] = useState(false)
+
 
   // 가입결과 테스트
   const [result, setResult] = useState(false)
@@ -147,13 +152,13 @@ export default function Signup() {
 
   }
   // 성별
-  const [gen, setGen] = useState("")
+  const [gen, setGen] = useState<any>()
   const gens = ['남자', '여자']
   const onGenHanlder = (e: any) => {
     if (e.currentTarget.value === '남자') {
-      setGen('0')
+      setGen(0)
     } else {
-      setGen('1')
+      setGen(1)
     }
     // setGen(e.currentTarget.value)
   }
@@ -226,13 +231,15 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      "email": email,
+      "email": '20220513@test.com',
       "name": name,
       "gender": gen,
       "age": age,
       "description": profile,
       "password": password,
-      "list": [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }],
+      "list":newarr,
+      // "list" : [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}],
+      // "list": [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }],
     }
     formData.append('file', file)
     formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))
@@ -264,7 +271,6 @@ export default function Signup() {
   return (
     <>
       <Container>
-
         <Row>
           <Col></Col>
           <Col><h1>회원가입 </h1>
@@ -274,25 +280,20 @@ export default function Signup() {
             }
             {/* 이거 이메일 빈녀석이면 예외처리 */}
             {/* const [result,setResult] = useState(false) */}
-
-
-
-
-            <div className='logdiv'>
-
-
-
+            {
+              page1
+              ?<div className='logdiv'>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>이름</Form.Label>
-                <Form.Control type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20} />
+                <Form.Control className="formct" type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20} />
 
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
                 <Form.Label>패스워드</Form.Label>
-                <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} maxLength={10} />
+                <Form.Control className="formct" type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} maxLength={10} />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Group  className="mb-3" controlId="formBasicPassword">
                 <Form.Label>패스워드확인 -
                   {
                     password === pwcheck && password.length >= 6
@@ -301,14 +302,14 @@ export default function Signup() {
                   }
 
                 </Form.Label>
-                <Form.Control type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} maxLength={10} />
+                <Form.Control className="formct" type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} maxLength={10} />
               </Form.Group>
 
               <Form.Label>- 추가정보 -</Form.Label>
 
               {/* {gen} */}
 
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={onGenHanlder} >
                 <option>성별 </option>
                 {gens.map((item, index) => (
@@ -317,7 +318,7 @@ export default function Signup() {
               </Form.Select>
 
               {/* {age} */}
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={onAgeHanlder} >
                 <option>나이 </option>
                 {ages.map((item, index) => (
@@ -327,8 +328,28 @@ export default function Signup() {
 
 
               <hr />
+              
+              
 
-              <Form.Label>모국어(2개까지)
+              <Form.Group controlId="formFileSm" className="mb-3">
+              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
+              <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
+            </Form.Group>
+
+              
+              <Form.Label>자기소개 {profile}</Form.Label>
+              <InputGroup>
+                {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
+                <FormControl className="formct" placeholder='10자이상 입력해주세요' as="textarea"
+                  aria-label="With textarea" onChange={handleProfile} />
+              </InputGroup>
+
+              
+
+
+            </div>
+            :<>
+            <Form.Label>모국어(2개까지)
                 {
                   first
                   ?<>
@@ -346,19 +367,13 @@ export default function Signup() {
                 }
               
               </Form.Label>
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleFirst} >
                 <option>언어선택 </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              {/* <Button onClick={() => {
-                var newarr: any = []
-                setFirst(newarr)
-                setFirstob(newarr)
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
 
               <hr />
               <Form.Label>구사언어(3개까지)
@@ -378,20 +393,13 @@ export default function Signup() {
                 }
               
               </Form.Label>
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleSecond} >
                 <option>언어선택 </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              {/* <Button onClick={() => {
-                var newarr: any = []
-                setSecond(newarr)
-                setSecondob(newarr)
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
-
               <hr />
               <Form.Label>학습언어(4개까지) 
               {
@@ -409,7 +417,7 @@ export default function Signup() {
                   :null
                 }
                 </Form.Label>
-              <Form.Select aria-label="Default select example"
+              <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleThird}
 
               >
@@ -418,50 +426,13 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              {/* <Button onClick={() => {
-                var newarr: any = []
-                setThird(newarr)
-                setThirdob(newarr)
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
-
-              <hr />
-              {/* <h3>프로필이미지</h3> */}
-              {/* <form>
-                <label htmlFor="profile-upload" />
-                <input type="file" id="profile-upload" accept="image/*" onChange={onChangeImg} />
-              </form> */}
-              <Form.Group controlId="formFileSm" className="mb-3">
-              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
-              <Form.Control type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
-            </Form.Group>
-            {/* {file} */}
-            {/* <img src={file}></img>
-            {
-              file
-              ?<>{file}</>
-              :<>없어</>
-            } */}
-              {/* <Form.Label>프로필이미지 {proimg}</Form.Label>
-              <Form.Select aria-label="Default select example"
-                onChange={handleProimg} value={proimg}>
-                <option>이미지고르기 </option>
-                {imgarr.map((item, index) => (
-                  <option key={index} value={item}>{item}</option>
-                ))}
-              </Form.Select>
               <Button onClick={() => {
-                setProimg('0')
-              }}
-                style={{ marginTop: '5px' }} variant="outline-dark">초기화</Button> */}
-
-              <Button onClick={() => {
-                console.log(first)
-                console.log(firstob)
-                console.log(second)
-                console.log(secondob)
-                console.log(third)
-                console.log(thirdob)
+                // console.log(first)
+                // console.log(firstob)
+                // console.log(second)
+                // console.log(secondob)
+                // console.log(third)
+                // console.log(thirdob)
                 const newarr = [
                   ...firstob,
                   ...secondob,
@@ -471,33 +442,29 @@ export default function Signup() {
 
               }}
                 style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
+              <Button onClick={onSubmit} className="btncs" 
+                   variant="outline-secondary"
+                style={{ marginTop: '3px',marginRight:'5px' }} >가입</Button>
+                <Button style={{marginTop:'3px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>이전페이지</Button>
+                
+                
+            </>
+            }
+            {
+              page1
+              ?<Button style={{marginTop:'5px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>다음페이지</Button>
+              :null
+            }
+            
+            </Col>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-              <Form.Label>자기소개 {profile}</Form.Label>
-              <InputGroup>
-                {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
-                <FormControl placeholder='10자이상 입력해주세요' as="textarea"
-                  aria-label="With textarea" onChange={handleProfile} />
-              </InputGroup>
-
-              <Button onClick={onSubmit}
-                style={{ marginTop: '5px' }} variant="outline-dark">가입</Button>
-
-
-            </div></Col>
-          <Col></Col>
+            <Col>
+            
+            </Col>
         </Row>
       </Container>
 
