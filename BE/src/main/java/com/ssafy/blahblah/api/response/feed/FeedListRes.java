@@ -26,6 +26,7 @@ public class FeedListRes {
     private String imgUrl;
     private String userName;
     private Long userId;
+    private String userProfile;
     private Boolean open;
     private Boolean isLike;
     private int likeCount;
@@ -43,6 +44,14 @@ public class FeedListRes {
             imgTmp = null;
         }
 
+        String profileImg;
+        if(feed.getUser().getProfileImg() != null) {
+            profileImg = "https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/"+feed.getUser().getProfileImg();
+        }
+        else {
+            profileImg = null;
+        }
+
 
         return FeedListRes.builder()
                 .id(feed.getId())
@@ -54,6 +63,7 @@ public class FeedListRes {
                 .likeCount(feed.getLikeCount())
                 .isLike(isLike)
                 .createdAt(feed.getCreatedAt())
+                .userProfile(profileImg)
                 .comments(feed.getComments().stream().map(CommentListRes::fromEntity).sorted(Comparator.comparing(CommentListRes::getCreatedAt)).collect(Collectors.toList()))
                 .build();
     }
