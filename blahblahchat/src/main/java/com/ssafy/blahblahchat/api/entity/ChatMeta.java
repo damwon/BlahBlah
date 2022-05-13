@@ -38,14 +38,12 @@ public class ChatMeta {
     private String type;
 
     @Column
-    private LocalDateTime last_msg_date;
+    private LocalDateTime lastMsgDate;
 
     @Column
-    private LocalDateTime last_read_date;
+    private LocalDateTime lastReadDate;
 
     @Column
     private int unread;
-
-
 
 }

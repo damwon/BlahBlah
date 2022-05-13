@@ -34,14 +34,14 @@ public class MessageService {
         return mongoTemplate.find(query,Message.class,"message");
     }
 
-    //유저 아이디로 보내거나 받은 메시지를 모두 찾음
-    public List<Message> findAllMessagesByUserId(String userId){
-        Criteria criteria = new Criteria();
-        criteria.orOperator(Criteria.where("senderId").is(userId),Criteria.where("receiverId").is(userId));
-        Query query=new Query(criteria);
-        System.out.println(query.toString());
-        return mongoTemplate.find(query,Message.class,"message");
-    }
+//    //유저 아이디로 보내거나 받은 메시지를 모두 찾음
+//    public List<Message> findAllMessagesByUserId(String userId){
+//        Criteria criteria = new Criteria();
+//        criteria.orOperator(Criteria.where("senderId").is(userId),Criteria.where("receiverId").is(userId));
+//        Query query=new Query(criteria);
+//        System.out.println(query.toString());
+//        return mongoTemplate.find(query,Message.class,"message");
+//    }
 
     public Message tranDTO(MessageDTO messageDTO){
         Message message = new Message();

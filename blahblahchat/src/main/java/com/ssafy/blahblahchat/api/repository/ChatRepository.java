@@ -45,7 +45,7 @@ public class ChatRepository {
                     .setParameter("userId", userId)
                     .setParameter("opponentId", opponentId)
                     .getSingleResult();
-            target.setLast_msg_date(message.getCreatedAt());
+            target.setLastMsgDate(message.getCreatedAt());
             int lastMagLength=message.getContent().length();
             if(lastMagLength>20)
                 target.setLastMsg(message.getContent().substring(0,18));
@@ -69,7 +69,7 @@ public class ChatRepository {
                     .setParameter("userId", userId)
                     .setParameter("opponentId", opponentId)
                     .getSingleResult();
-           target.setLast_read_date(LocalDateTime.now());
+           target.setLastReadDate(LocalDateTime.now());
            target.setUnread(0);
             return "Success";
         } catch (NoResultException e){
@@ -81,7 +81,7 @@ public class ChatRepository {
     public List<ChatMeta> findChatListByUserId(long userId){
         System.out.println("ChatRepository.findChatListByUserId");
         try {
-            List<ChatMeta> chatList = em.createQuery("select c from chat_list c where c.userId=:userId ", ChatMeta.class)
+            List<ChatMeta> chatList = em.createQuery("select c from chat_list c where c.userId=:userId order by c.lastMsgDate DESC", ChatMeta.class)
                     .setParameter("userId", userId)
                     .getResultList();
             return chatList;

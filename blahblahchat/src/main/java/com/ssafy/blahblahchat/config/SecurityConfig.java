@@ -2,7 +2,6 @@ package com.ssafy.blahblahchat.config;
 
 
 import com.ssafy.blahblahchat.api.service.member.UserService;
-import com.ssafy.blahblahchat.common.auth.JwtAuthentication;
 import com.ssafy.blahblahchat.common.auth.JwtAuthenticationFilter;
 import com.ssafy.blahblahchat.common.auth.SsafyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;

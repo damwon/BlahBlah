@@ -6,7 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@ApiModel("채팅방 만들 때 필요한 정보")
+@ApiModel("ChatMetaDTO")
 public class ChatMetaDTO {
     @ApiModelProperty(name="상대방 아이디", example="12")
     private long opponentId;

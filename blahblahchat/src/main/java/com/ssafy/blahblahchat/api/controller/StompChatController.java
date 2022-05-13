@@ -16,7 +16,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-
 import java.util.List;
 
 
@@ -33,7 +32,6 @@ public class StompChatController {
 
     @MessageMapping(value = "/list") //로그인하면 구독 상태, 자기 채팅 리스트를 받아와야함
     public void enter(@Header(name="Authorization", required=false) String token) throws Exception {
-        System.out.println("StompChatController.enter");
         Long userId = getUserIdByToken(token);
         List<ChatMeta> chatList= chatService.findChatListByUserId(userId);
         log.debug("userId:{} listCnt:{}",userId,chatList.size());
@@ -42,10 +40,9 @@ public class StompChatController {
 
     @MessageMapping("/send/{opponentId}/to-other")
     public void sendToOther(@Header(name="Authorization", required=false) String token, MessageDTO messageDTO, @DestinationVariable String opponentId) throws Exception {
-        System.out.println("StompChatController.sendToOther");
         Long userId = getUserIdByToken(token);
         log.debug("StompChatController.sendToOther");
-        log.debug("senderId: {} receiverId:{}",messageDTO.getSenderId(),messageDTO.getReceiverId());
+        log.debug("senderId: {} receiverId:{}",userId,messageDTO.getReceiverId());
 
         Message saveMessage=messageService.saveMessage(messageDTO);
 
@@ -57,21 +54,17 @@ public class StompChatController {
 
     @MessageMapping("/send/to-me")
     public void sendToMe(@Header(name="Authorization", required=false) String token,MessageDTO messageDTO) throws Exception {
-        System.out.println("StompChatController.sendToMe");
         Long userId = getUserIdByToken(token);
         template.convertAndSend("/topic/"+userId, messageDTO);
     }
 
     @MessageMapping("/read/{opponentId}")
     public void sendToMe(@Header(name="Authorization", required=false) String token,@DestinationVariable String opponentId) throws Exception {
-        System.out.println("StompChatController.sendToMe");
         Long userId = getUserIdByToken(token);
         chatService.updateLastRead(userId,Long.parseLong(opponentId));
     }
 
     private Long getUserIdByToken(String token) throws Exception{
-        System.out.println("StompChatController.getUserIdByToken");
-        System.out.println(token);
         Authentication authentication=jwtAuthentication.getAuthentication(token);
         if(authentication!=null) {
             SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
@@ -81,10 +74,4 @@ public class StompChatController {
         }
     }
 
-    //API로 씀
-//    @MessageMapping("/history/{userId}/{roomId}")
-//    public void getHistory(@DestinationVariable String userId,@DestinationVariable String roomId) throws Exception {
-//       List<Message> messages=messageService.findAllMessagesByRoomId(roomId);
-//        template.convertAndSend("/topic/"+userId, messages);
-//    }
 }

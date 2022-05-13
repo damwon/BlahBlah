@@ -4,6 +4,7 @@ package com.ssafy.blahblahchat.api.controller;
 import com.ssafy.blahblahchat.api.dto.ChatMetaDTO;
 import com.ssafy.blahblahchat.api.entity.ChatMeta;
 import com.ssafy.blahblahchat.api.service.ChatService;
+import com.ssafy.blahblahchat.common.auth.JwtAuthentication;
 import com.ssafy.blahblahchat.common.auth.SsafyUserDetails;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +28,7 @@ import java.util.List;
 public class ChatController {
 
     private final ChatService chatService;
+    private final JwtAuthentication jwtAuthentication;
 
     @PostMapping()
     @ApiOperation(value = "채팅방 생성",notes = "<strong>상대방과의 채팅방</strong>을 만든다.")
@@ -70,5 +72,6 @@ public class ChatController {
 //        log.info("ChatController.findRooms");
 //        return chatService.findChatListByUserId(Long.parseLong(userId));
 //    }
+
 
 }
