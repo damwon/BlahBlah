@@ -18,6 +18,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
 export default function Index() {
+  const router = useRouter();
   const [update, setUpdate] = useState(1);
   const setToken = () => {
     const token = localStorage.getItem("jwt");
@@ -27,6 +28,12 @@ export default function Index() {
     return config;
   };
 
+  useEffect(() => {
+    if (localStorage.getItem("jwt") === null) {
+      alert("로그인 후 사용해주세요.");
+      router.push(`/`);
+    }
+  });
   const [showFeeds, setShowFeeds]: any = useState();
   const [feeds, setFeeds]: any = useState();
   useEffect(() => {
@@ -329,7 +336,7 @@ export default function Index() {
                           <div className="outer">
                             <Image
                               className="profile"
-                              src={d.imgUrl}
+                              src={d.userProfile}
                               alt="finger image"
                               width="200%"
                               height="200%"

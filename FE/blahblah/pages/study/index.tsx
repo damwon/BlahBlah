@@ -1,10 +1,19 @@
 import { Grid } from "@mui/material";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 // components
 import Wordnote from "../../component/study/wordnote";
 import Mynote from "../../component/study/mynote";
 import Recordnote from "../../component/study/recorenote";
 export default function Study() {
+  const router = useRouter();
+  useEffect(() => {
+    if (localStorage.getItem("jwt") === null) {
+      alert("로그인 후 사용해주세요.");
+      router.push(`/`);
+    }
+  });
   return (
     <>
       <Grid spacing={3} container>
