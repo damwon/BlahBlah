@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import { Email } from '@mui/icons-material';
 import langarr from '../../../component/user/Langarr'
 import langkey from '../../../component/user/Lang'
+import langIMG from '../../../component/user/LangImg'
 
 export default function UserDetail() {
   const router = useRouter();
@@ -17,6 +18,8 @@ export default function UserDetail() {
   // 기억하자..배열 사용할때 any!
   const larr:any = langarr
   const lkey:any = langkey
+  const lImg:any = langIMG
+
   // 학습언어
   const [langa,setLangA] = useState([])
   // 구사언어
@@ -50,26 +53,26 @@ export default function UserDetail() {
   useEffect(()=>{
     if(lang.length!==0){
       console.log('됫다!')
+      // var newarr:any = [...langa]
+      var newarra:any = [...langa]
+      var newarrb:any  = [...langb]
+      var newarrc:any  = [...langc]
+
+
       for(let i=0;i<Object.keys(lang).length;i++){
-        // console.log(lang[i]['level'])
-        // console.log(lang[i])
-        // console.log(lang[i]['langId'])
+
         if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
-          var newarr:any = [...langa]
-          // newarr.push(lang[i]['lang_id'])
-          newarr.push(lang[i]['langId'])
-          // newarr.push(3)
-          setLangA(newarr)
+          // var newarr:any = [...langa]
+          newarra.push(lang[i]['langId'])
+          setLangA(newarra)
         }else if(lang[i]['level']===4){
-          var newarr:any  = [...langb]
-          newarr.push(lang[i]['langId'])
-          setLangB(newarr)
+          newarrb.push(lang[i]['langId'])
+          setLangB(newarrb)
         }
         else if(lang[i]['level']===5){
-          var newarr:any  = [...langc]
           // any형식의 인수는never형식에 할당할 수없음, 배열도any로 설정
-          newarr.push(lang[i]['langId'])
-          setLangC(newarr)
+          newarrc.push(lang[i]['langId'])
+          setLangC(newarrc)
         }
       }
     }
@@ -96,8 +99,8 @@ export default function UserDetail() {
           {
             langc.map((a,i)=>{
               return <span key={i}>
-                  {larr[a]}
-                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}
+                  {larr[a-1]}
+                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}
                   style={{margin:'5px'}}></img>
               </span>
             })
@@ -112,9 +115,9 @@ export default function UserDetail() {
             langb.map((a,i)=>{
               return <span key={i}>
                 
-                      {larr[a]} 
+                      {larr[a-1]} 
                       <img style={{margin:'5px'}}
-                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
 
               </span>
             })
@@ -129,9 +132,9 @@ export default function UserDetail() {
             langa.map((a,i)=>{
               return <span key={i}>
                 
-           {larr[a]} 
+           {larr[a-1]} 
                       <img style={{margin:'5px'}}
-                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
 
               </span>
             })

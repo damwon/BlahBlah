@@ -34,7 +34,7 @@ export default function WordNote() {
             headers: setToken(),
           }
         )
-        .then((res) => {
+        .then(() => {
           setShow(false);
           window.location.reload();
         })
@@ -71,6 +71,7 @@ export default function WordNote() {
 
   const [total, setTotal] = useState(1);
   const [words, setWords]: any = useState();
+  const [title, setTitle] = useState();
   useEffect(() => {
     if (String(id) != "NaN") {
       allAxios
@@ -78,6 +79,7 @@ export default function WordNote() {
           headers: setToken(),
         })
         .then((res) => {
+          setTitle(res.data.wordBookTitle);
           setWords(res.data.wordListRes);
           setTotal(res.data.totalPages);
         })
@@ -124,7 +126,7 @@ export default function WordNote() {
             height="40"
             layout="responsive"
           />
-          <h1 className="cent">Title:</h1>
+          <h1 className="cent">{title}</h1>
           <List dense={dense}>
             <Grid container spacing={4}>
               {words &&

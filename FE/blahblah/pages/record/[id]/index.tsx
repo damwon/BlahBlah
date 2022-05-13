@@ -17,41 +17,6 @@ import Image from "next/image";
 import allAxios from "../../../lib/allAxios";
 export default function WordNote() {
   const [show, setShow] = useState(false);
-  const write = () => {
-    if (word === "") {
-      alert("단어를 입력해주세요");
-    } else if (mean === "") {
-      alert("뜻을 입력해주세요");
-    } else {
-      allAxios
-        .post(
-          `word/${id}`,
-          {
-            meaning: mean,
-            word: word,
-          },
-          {
-            headers: setToken(),
-          }
-        )
-        .then((res) => {
-          setShow(false);
-          window.location.reload();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  };
-
-  const handleClose = () => {
-    setShow(false);
-  };
-
-  const handleShow = () => {
-    setShow(true);
-    setWord(""), setMean("");
-  };
 
   // pagination
   const [page, setPage] = useState(1);
@@ -70,34 +35,34 @@ export default function WordNote() {
   };
 
   const [total, setTotal] = useState(1);
-  const [words, setWords]: any = useState();
-  // useEffect(() => {
-  //   if (String(id) != "NaN") {
-  //     allAxios
-  //       .get(`/wordbook/${id}?size=16&page=${page}`, {
-  //         headers: setToken(),
-  //       })
-  //       .then((res) => {
-  //         setWords(res.data.wordListRes);
-  //         setTotal(res.data.totalPages);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  // }, [id, page]);
+  const [audios, setAudios]: any = useState();
+  const [title, setTitle] = useState();
+  useEffect(() => {
+    if (String(id) != "NaN") {
+      allAxios
+        .get(`/recordbook/${id}?size=16&page=${page}`, {
+          headers: setToken(),
+        })
+        .then((res) => {
+          setTitle(res.data.recordBookTitle);
+          setTotal(res.data.totalPages);
+          setAudios(res.data.recordListRes);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [id, page]);
 
-  const [word, setWord] = useState("");
-  const [mean, setMean] = useState("");
   const [dense, setDense] = useState(false);
 
-  const delWord = (d: any) => {
+  const delRecord = (d: any) => {
     allAxios
-      .delete(`word/${d.id}`, {
+      .delete(`record/${d.id}`, {
         headers: setToken(),
       })
-      .then((res) => {
-        alert("단어가 삭제되었습니다.");
+      .then(() => {
+        alert("음성파일이 삭제되었습니다.");
         window.location.reload();
       })
 
@@ -124,53 +89,53 @@ export default function WordNote() {
             height="40"
             layout="responsive"
           />
-          <h1 className="cent">Title:</h1>
+          <h1 className="cent">{title}</h1>
           <List dense={dense}>
             <Grid container spacing={4}>
-              {words &&
-                words.map((d: any, i: number) => {
+              {audios &&
+                audios.map((d: any, i: number) => {
+                  console.log(d);
                   return (
-                    <Grid item xs={3} key={i}>
-                      <ListItem
-                        style={{ width: "250px", margin: "0 auto" }}
-                        secondaryAction={
-                          <IconButton
-                            onClick={() => {
-                              delWord(d);
-                            }}
-                            edge="end"
-                            aria-label="delete"
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        }
+                    <div key={i}>
+                      <audio
+                        src={d.recordUrl}
+                        controls
+                        controlsList="nodownload"
+                      />
+                      <IconButton
+                        style={{ marginBottom: "50px" }}
+                        onClick={() => {
+                          delRecord(d);
+                        }}
+                        edge="end"
+                        aria-label="delete"
                       >
-                        <ListItemAvatar>
-                          <Avatar>
-                            <LibraryBooks />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary={d.word} secondary={d.meaning} />
-                      </ListItem>
-                    </Grid>
+                        <DeleteIcon />
+                      </IconButton>
+                    </div>
                   );
                 })}
             </Grid>
           </List>
-          {words &&
-            words.length === 0 &&
+          {audios &&
+            audios.length === 0 &&
             [0].map((d: any, i: number) => {
               return (
                 <h1 key={i} style={{ width: "500px", margin: "auto" }}>
-                  새 단어를 입력해주세요!
+                  저장된 음성파일이 없습니다.
                 </h1>
               );
             })}
 
           <br></br>
           <div className="m" style={{ width: "140px" }}>
-            <Button variant="primary" onClick={handleShow}>
-              단어 추가하기
+            <Button
+              variant="primary"
+              onClick={() => {
+                router.push(`/study`);
+              }}
+            >
+              뒤로가기
             </Button>
           </div>
           <br></br>
@@ -186,56 +151,6 @@ export default function WordNote() {
         </Grid>
         <Grid item xs={1} />
       </Grid>
-
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>추가할 단어를 입력해보세요!</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Grid container spacing={3}>
-            <Grid item xs={5}>
-              <h3>word</h3>
-            </Grid>
-            <Grid item xs={1} />
-            <Grid item xs={6}>
-              <h3>mean</h3>
-            </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item xs={5}>
-              <textarea
-                autoFocus
-                onChange={(e) => {
-                  setWord(e.target.value);
-                }}
-                style={{ minHeight: "60px" }}
-                className="clean-textarea"
-                placeholder="word"
-              ></textarea>
-            </Grid>
-            <Grid item xs={1} />
-            <Grid item xs={6}>
-              <textarea
-                autoFocus
-                onChange={(e) => {
-                  setMean(e.target.value);
-                }}
-                style={{ minHeight: "60px" }}
-                className="clean-textarea"
-                placeholder="mean"
-              ></textarea>
-            </Grid>
-          </Grid>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            취소
-          </Button>
-          <Button variant="primary" onClick={write}>
-            저장
-          </Button>
-        </Modal.Footer>
-      </Modal>
 
       <style jsx>
         {`
