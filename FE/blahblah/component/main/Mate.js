@@ -10,6 +10,8 @@ import Avatar from '@mui/material/Avatar';
 import { useEffect,useState } from "react";
 import langarr from '../../component/user/Langarr'
 import langkey from '../../component/user/Lang'
+import langImg from '../../component/user/LangImg'
+
 import axios from "axios";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -20,6 +22,7 @@ export default function Mate(props) {
 
   const larr = langarr
   const lkey = langkey
+  const lImg = langImg
   // 학습언어
   const [langa,setLangA] = useState([])
   // 구사언어
@@ -250,8 +253,9 @@ export default function Mate(props) {
           {
             langc.map((a,i)=>{
               return <span key={i}>
-                  {larr[a]}
-                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}
+                {/* {a} */}
+                  {larr[a-1]}
+                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}
                   style={{margin:'5px'}}></img>
               </span>
             })
@@ -322,9 +326,10 @@ export default function Mate(props) {
               // src="/user/young-man.png"
               sx={{ width: 25, height: 25 }}
             /> */}
-                      {larr[a]} 
+            
+                      {larr[a-1]} 
                       <img style={{margin:'5px'}}
-                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
 
               </span>
             })
@@ -347,9 +352,9 @@ export default function Mate(props) {
               // src="/user/young-man.png"
               sx={{ width: 25, height: 25 }}
             /> */}
-           {larr[a]} 
+           {larr[a-1]} 
                       <img style={{margin:'5px'}}
-                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
 
               </span>
             })

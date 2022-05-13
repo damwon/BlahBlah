@@ -231,7 +231,7 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      "email": '151515@test.com',
+      "email": '20220513@test.com',
       "name": name,
       "gender": gen,
       "age": age,

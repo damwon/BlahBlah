@@ -8,12 +8,15 @@ import { Token } from '@mui/icons-material';
 import Avatar from '@mui/material/Avatar';
 import langarr from '../../component/user/Langarr'
 import langkey from '../../component/user/Lang'
+import langIMG from '../../component/user/LangImg'
+
 
 export default function Mypage() {
   const [lang,setLang] = useState<any>([])
 
   const larr:any = langarr
   const lkey:any = langkey
+  const lImg:any = langIMG
   // 학습언어
   const [langa,setLangA] = useState([])
   // 구사언어
@@ -145,8 +148,8 @@ export default function Mypage() {
           {
             langc.map((a,i)=>{
               return <span key={i}>
-                  {larr[a]}
-                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}
+                  {larr[a-1]}
+                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}
                   style={{margin:'5px'}}></img>
               </span>
             })
@@ -161,9 +164,9 @@ export default function Mypage() {
             langb.map((a,i)=>{
               return <span key={i}>
                 
-                      {larr[a]} 
+                      {larr[a-1]} 
                       <img style={{margin:'5px'}}
-                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
 
               </span>
             })
@@ -178,9 +181,9 @@ export default function Mypage() {
             langa.map((a,i)=>{
               return <span key={i}>
                 
-           {larr[a]} 
+           {larr[a-1]} 
                       <img style={{margin:'5px'}}
-                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`} width={25}></img>
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
 
               </span>
             })
@@ -194,6 +197,10 @@ export default function Mypage() {
               }</ListGroup.Item>
               <ListGroup.Item>나이:{profile.age}</ListGroup.Item>
               <ListGroup.Item>자기소개:{profile.description}</ListGroup.Item>
+              <Button onClick={() => {
+                router.push('/user/langupdate')
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">언어수정</Button>
               <Button onClick={() => {
                 router.push('/user/profileupdate')
               }} style={{margin:'5px'}}
