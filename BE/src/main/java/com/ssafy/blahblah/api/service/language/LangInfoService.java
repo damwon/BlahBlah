@@ -14,4 +14,5 @@ public interface LangInfoService {
 	LangInfo getLangInfoByUserId(Long userId);
 	LangInfo getLangInfoByLevel(Integer level);
 	List<LangInfo> getLangInfoListByUserId(Long userId);
+	void deleteLangInfoByUserId(Long userId);
 }
