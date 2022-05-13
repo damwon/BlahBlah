@@ -1,12 +1,15 @@
 package com.ssafy.blahblahchat.api.dto;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
+@ApiModel("ChatMetaDTO")
 public class ChatMetaDTO {
-    private long userId;
+    @ApiModelProperty(name="상대방 아이디", example="12")
     private long opponentId;
-    private String roomId;
+    @ApiModelProperty(name="상대방 이름", example="박성건")
     private String opponentName;
 }

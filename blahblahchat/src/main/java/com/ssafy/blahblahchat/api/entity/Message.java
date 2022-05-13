@@ -20,6 +20,7 @@ public class Message {
     String receiverId;
     String receiverName;
     String content;
+    String comment;
     String roomId;
     LocalDateTime createdAt;
 
