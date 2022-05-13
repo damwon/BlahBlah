@@ -17,22 +17,29 @@ public class CommentListRes {
     String content;
     Long userId;
     String userName;
+    String userProfile;
+
+
 
     public static CommentListRes fromEntity(Comment comment) {
+        String profileImg;
+        if(comment.getUser().getProfileImg() != null) {
+            profileImg = "https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/"+comment.getUser().getProfileImg();
+        }
+        else {
+            profileImg = null;
+        }
+
         return CommentListRes.builder()
                 .id(comment.getId())
                 .createdAt(comment.getCreatedAt())
                 .content(comment.getContent())
                 .userName(comment.getUser().getName())
                 .userId(comment.getUser().getId())
+                .userProfile(profileImg)
                 .build();
     }
 
-//    public CommentListRes(Comment comment){
-//        this.id = comment.getId();
-//        this.createdAt = comment.getCreatedAt();
-//        this.content = comment.getContent();
-//        this.userName = comment.getUser().getName();
-//    }
+//
 
 }
