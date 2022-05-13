@@ -2,7 +2,7 @@
 import { useRouter } from "next/router";
 import { Form, Button, Container, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import lang2 from '../../component/user/Lang'
 import langImg2 from '../../component/user/LangImg'
 // import langkey from '../../component/user/Langarr'
@@ -231,7 +231,7 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      "email": email,
+      "email": query.email,
       "name": name,
       "gender": gen,
       "age": age,
@@ -263,7 +263,10 @@ export default function Signup() {
       });
 
   }
-
+  useEffect(()=>{
+    console.log('----------쿼리이메일---------')
+    console.log(query.email)
+  },[])
 
 
 
