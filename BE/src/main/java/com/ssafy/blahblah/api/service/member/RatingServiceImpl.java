@@ -5,6 +5,7 @@ import com.ssafy.blahblah.db.repository.RatingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,4 +34,7 @@ public class RatingServiceImpl implements RatingService {
     public int countRating(Long userId) {
         return ratingRepository.countByUserId(userId);
     }
+
+    @Override
+    public List<Rating> getRatedList(Long userId) { return ratingRepository.findAllByUpUserId(userId);}
 }

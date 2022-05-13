@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -40,7 +41,15 @@ public class RatingController {
             ratingService.downRating(upUserId, userId);
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
 
+    @GetMapping("ratedlist")
+    public ResponseEntity getRatedList(Authentication authentication) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        Long userId = userDetails.getUser().getId();
+
+        List<Rating> ratedList = ratingService.getRatedList(userId);
+        return new ResponseEntity(ratedList,HttpStatus.OK);
     }
 
 }
