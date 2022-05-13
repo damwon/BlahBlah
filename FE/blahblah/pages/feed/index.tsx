@@ -311,7 +311,7 @@ export default function Index() {
             <Button
               style={{ width: 150 }}
               variant="contained"
-              color={btnColor}
+              color={btnColor === "primary" ? "primary" : "secondary"}
               size="small"
               onClick={btnChange}
             >
@@ -369,7 +369,7 @@ export default function Index() {
                           onClick={() => {
                             feedLike(d.id);
                           }}
-                          color={d.isLike ? "primary" : ""}
+                          color={d.isLike ? "primary" : "disabled"}
                         ></ThumbUpIcon>
 
                         {d.userId === userId ? (
