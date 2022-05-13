@@ -99,9 +99,9 @@ export default function LangUpdate() {
   const languages = Object.keys(lang)
   // const languages = ['Korean', 'English', 'Japanese', 'Chinese', 'Spanish'
   //   , 'a', 'b', 'c', '....']
-  // 모국어
-  const [first, setFirst] = useState([])
-  const [firstob, setFirstob] = useState([])
+  // 학습언어... (원래는모국어)
+  const [first, setFirst] = useState<any>([])
+  const [firstob, setFirstob] = useState<any>([])
   // useEffect(()=>{
   //   console.log('----------first')
   //   console.log(first)
@@ -179,7 +179,8 @@ export default function LangUpdate() {
     // 이거를 안바꿔줫네
 
   }
-  // 학습언어
+  // 모국어...(원래는 한ㄱ습언어)
+  // 이것만 수정해서 ㅇㅇ 바꾸면될거같은데 레벨을..?
   const [third, setThird] = useState([])
   const [thirdob, setThirdob] = useState([])
   const handleThird = (e: any) => {
@@ -229,9 +230,9 @@ export default function LangUpdate() {
     ]
 
     console.log(newarr)
-    var test:any = [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}]
-    console.log('test--------')
-    console.log(test)
+    // var test:any = [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}]
+    // console.log('test--------')
+    // console.log(test)
     formData.append('langList', new Blob([JSON.stringify(newarr)], { type: "application/json" }))
     // formData.append('langList', test)
     
@@ -266,9 +267,9 @@ export default function LangUpdate() {
             <h1>언어수정</h1>
             <Form.Label>모국어(2개까지)
                 {
-                  first
+                  third
                   ?<>
-                  {first.map((a,i)=>{
+                  {third.map((a,i)=>{
                     return <div key={i}>
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
@@ -318,14 +319,15 @@ export default function LangUpdate() {
               <hr />
               <Form.Label>학습언어(4개까지) 
               {
-                  third
+                  first
                   ?<>
-                  {third.map((a,i)=>{
+                  {first.map((a:any,i:any)=>{
                     return <div key={i}>
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
                     {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
                     onClick={()=>{handleThirdDel(a)}}>x</span>
+                    <span>{firstob[i].level}</span>
                     </div>
                   })
 }</>

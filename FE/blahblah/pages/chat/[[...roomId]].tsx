@@ -85,17 +85,9 @@ export default function Chat() {
   // 채팅 목록
   const [chattingList, setChattingList] = useState<any[]>([]);
   // 채팅방 정보(개별)
-  const [chatRoomData, setChatRoomData] = useState<any>();
+  const [chatRoomData, setChatRoomData] = useState<any>({});
   // 채팅 상대방 이름
   const [chatname, setChatname] = useState("");
-
-  // 라우터를 활용한 방번호 상태 저장
-  const [routerRoomId, setRouterRoomId] = useState("");
-  useEffect(() => {
-    if (router.query.roomId !== undefined) {
-      setRouterRoomId(router.query.roomId[0]);
-    }
-  }, [router.query]);
 
   // 라우터 쿼리 체크
   useEffect(() => {
@@ -158,45 +150,50 @@ export default function Chat() {
   }, []);
 
   // 채팅 웹소켓 연결
-  const connect = () => {
+  const connect = (chatRoomData: any) => {
     let socket = new SockJS("https://blahblah.community:8080/chat-websocket");
 
     stompClient = Stomp.over(socket);
 
-    stompClient.connect({}, function (frame: any) {
+    stompClient.connect({ userId: userData.id }, function (frame: any) {
       console.log("Connected:" + frame);
+      stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
+        let tmpChat = JSON.parse(msg.body);
+        console.log(tmpChat);
+        console.log("채팅먼저");
+
+        if (tmpChat.roomId === chatRoomData.roomId) {
+          console.log(true);
+          readMsg(chatRoomData.opponentId);
+          addMsg(tmpChat);
+        }
+        // updateLastRead();
+        list();
+      });
       // 채팅 목록 가져오기
       stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
         let tmpMsg = JSON.parse(msg.body);
         console.log(tmpMsg);
+        console.log("목록 나중");
         setChattingList(tmpMsg);
       });
       list();
-      stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
-        updateLastRead();
-        let tmpChat = JSON.parse(msg.body);
-        console.log(tmpChat);
-        console.log(tmpChat.roomId);
-        addMsg(tmpChat);
-      });
     });
   };
 
   useEffect(() => {
     if (userData) {
-      connect();
+      connect(chatRoomData);
     }
     return () => {
       if (stompClient) {
         stompClient.disconnect();
       }
     };
-  }, [userData]);
+  }, [userData, chatRoomData]);
 
   const addMsg = (msg: any) => {
-    if (msg.roomId == routerRoomId) {
-      setChatHistory((prev) => [...prev, msg]);
-    }
+    setChatHistory((prev) => [...prev, msg]);
   };
   // 채팅 히스토리
   useEffect(() => {
@@ -216,22 +213,6 @@ export default function Chat() {
     }
   }, [chatRoomData]);
 
-  useEffect(() => {
-    console.log(chatHistory);
-  }, [chatHistory]);
-
-  const updateLastRead = () => {
-    console.log("list");
-    const token = localStorage.getItem("jwt");
-    if (stompClient) {
-      stompClient.send(
-        "chat/read/" + chatRoomData.opponentId,
-        { Authorization: `Bearer ${token}` },
-        JSON.stringify({})
-      );
-    }
-  };
-
   const list = () => {
     console.log("list");
     const token = localStorage.getItem("jwt");
@@ -241,6 +222,18 @@ export default function Chat() {
         {
           Authorization: `Bearer ${token}`,
         },
+        JSON.stringify({})
+      );
+    }
+  };
+
+  // 채팅리스트 눌렀을 때 읽었다는 처리
+  const readMsg = (opponentId: number) => {
+    const token = localStorage.getItem("jwt");
+    if (stompClient) {
+      stompClient.send(
+        "/chat/read/" + opponentId,
+        { Authorization: `Bearer ${token}` },
         JSON.stringify({})
       );
     }
@@ -382,7 +375,7 @@ export default function Chat() {
   const getLanguageList = () => {
     axios({
       method: "get",
-      url: "https://blahblah.community:8080/api/supportedLanguage/en",
+      url: "https://blahblah.community:8080/api/trans/en",
     })
       .then((res) => {
         setLanguageList(res.data);
@@ -463,9 +456,6 @@ export default function Chat() {
             console.error("Unrecognized message", parsedMessage);
         }
       };
-      // return () => {
-      //   ws.close();
-      // };
     } catch (err) {
       console.error(err);
     }
@@ -669,6 +659,7 @@ export default function Chat() {
         {chattingList && (
           <Box sx={{ width: "20%", display: callState ? "none" : "block" }}>
             <ChatList
+              readMsg={readMsg}
               chattingList={chattingList}
               setChatname={setChatname}
               setChatRoomData={setChatRoomData}
@@ -897,6 +888,7 @@ export default function Chat() {
                 <IconButton
                   onClick={() => {
                     setTranslateMessage("");
+                    setTranslatedMessage("");
                   }}
                 >
                   <CloseIcon />

@@ -27,9 +27,9 @@ export default function ChatList(props: any) {
                 primary={item.roomName}
                 sx={{ cursor: "pointer" }}
                 onClick={() => {
+                  props.readMsg(item.opponentId);
                   props.setChatRoomData(item);
                   props.setChatname(item.roomName);
-                  router.push(`/chat/${item.roomId}`);
                 }}
                 secondary={
                   item.type === "text"
@@ -43,6 +43,7 @@ export default function ChatList(props: any) {
                     : ""
                 }
               />
+              <ListItemText primary={item.unread} />
             </ListItem>
           );
         })
