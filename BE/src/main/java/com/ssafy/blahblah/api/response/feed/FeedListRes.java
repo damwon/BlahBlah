@@ -7,6 +7,8 @@ import com.ssafy.blahblah.db.repository.LikeRepository;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +29,7 @@ public class FeedListRes {
     private Boolean open;
     private Boolean isLike;
     private int likeCount;
+    private LocalDateTime createdAt;
 
     private List<CommentListRes> comments;
 
@@ -50,7 +53,8 @@ public class FeedListRes {
                 .userId(feed.getUser().getId())
                 .likeCount(feed.getLikeCount())
                 .isLike(isLike)
-                .comments(feed.getComments().stream().map(CommentListRes::fromEntity).collect(Collectors.toList()))
+                .createdAt(feed.getCreatedAt())
+                .comments(feed.getComments().stream().map(CommentListRes::fromEntity).sorted(Comparator.comparing(CommentListRes::getCreatedAt)).collect(Collectors.toList()))
                 .build();
     }
 }

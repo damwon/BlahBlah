@@ -1,6 +1,7 @@
 package com.ssafy.blahblah.api.controller.feed;
 
 import com.ssafy.blahblah.api.request.feed.FeedPostReq;
+import com.ssafy.blahblah.api.response.feed.CommentListRes;
 import com.ssafy.blahblah.api.response.feed.FeedDetailRes;
 import com.ssafy.blahblah.api.response.feed.FeedListRes;
 import com.ssafy.blahblah.api.service.feed.FeedService;
@@ -21,9 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -62,6 +61,7 @@ public class FeedController {
                 isLike = true;
             }
             dto2.add(FeedListRes.fromEntity(feed,isLike));
+            dto2.sort(Comparator.comparing(FeedListRes::getCreatedAt));
         });
         return ResponseEntity.status(HttpStatus.OK).body(dto2);
     }
@@ -84,6 +84,8 @@ public class FeedController {
                 isLike = true;
             }
             dto2.add(FeedListRes.fromEntity(feed,isLike));
+            dto2.sort(Comparator.comparing(FeedListRes::getCreatedAt));
+
         });
         return ResponseEntity.status(HttpStatus.OK).body(dto2);
 
