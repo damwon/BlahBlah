@@ -338,8 +338,8 @@ export default function Index() {
                               className="profile"
                               src={d.userProfile}
                               alt="finger image"
-                              width="200%"
-                              height="200%"
+                              width="100%"
+                              height="100%"
                             ></Image>
 
                             <div className="innerRB"></div>

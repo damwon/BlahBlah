@@ -64,12 +64,18 @@ export default function Wordnote() {
   // list불러오기
   const [total, setTotal] = useState(1);
   const [file, setFile]: any = useState();
+  const [myWidth, setMyWidth] = useState(84);
   useEffect(() => {
     allAxios
       .get(`/wordbook?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
         setFile(res.data.wordbookListRes);
         setTotal(res.data.totalPages);
+        if (res.data.totalPages <= 6) {
+          setMyWidth(252 - (7 - res.data.totalPages) * 28);
+        } else if (res.data.totalPages > 7) {
+          setMyWidth(252);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -131,7 +137,7 @@ export default function Wordnote() {
   return (
     <>
       <h1 className="cent">word note</h1>
-      <List dense={dense}>
+      <List dense={dense} style={{ height: "320px" }}>
         {file &&
           file.map((d: any, i: number) => {
             return (
@@ -172,9 +178,11 @@ export default function Wordnote() {
           })}
       </List>
 
-      <div className="m">
-        <div className="m" style={{ width: "400px" }}>
+      <div>
+        <div>
           <Pagination
+            style={{ width: `${myWidth}px`, margin: "auto" }}
+            size="small"
             count={total}
             variant="outlined"
             shape="rounded"
@@ -184,7 +192,7 @@ export default function Wordnote() {
         </div>
       </div>
       <br></br>
-      <div className="mar-btn">
+      <div style={{ width: "109px", margin: "auto" }}>
         <Button
           variant="contained"
           onClick={() => {
@@ -255,15 +263,6 @@ export default function Wordnote() {
         {`
           .cent {
             text-align: center;
-          }
-          .m {
-            width: 300px;
-            margin: 0 auto;
-          }
-          .mar-btn {
-            width: 150px;
-            margin-right: auto;
-            margin-left: auto;
           }
         `}
       </style>
