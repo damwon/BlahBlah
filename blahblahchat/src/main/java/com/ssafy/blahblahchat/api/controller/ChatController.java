@@ -17,7 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
+
 
 @Api(value = "채팅 방 관련 API",tags = {"Chat."})
 @RestController
@@ -61,17 +62,57 @@ public class ChatController {
         return new ResponseEntity(roomId,HttpStatus.OK);
     }
 
+    //유저 아이디로 MySql에 저장된 채팅 리스트를 모두 찾는다.
+    @GetMapping("/api/chat/list")
+    @ApiOperation(value = "채팅리스트 찾기",notes = "로그인 한 유저의 모든 ChatMeta 리스트 반환")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code=200, message = "성공"),
+            }
+    )
+    public List<ChatMeta> findRooms(Authentication authentication){
+        Long userId=getUserId(authentication);
+        log.info("ChatController.findRooms");
+        return chatService.findChatListByUserId(userId);
+    }
+
+
+
+    @GetMapping("/online/{opponentId}")//유저가 소켓 연결이 되어 있는가?
+    @ApiOperation(value = "온라인 여부",notes = "유저의 온라인 여부(소켓 연결 여부)")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code=200, message = "연결"),
+                    @ApiResponse(code = 404, message = "연결 X")
+            }
+    )
+    public ResponseEntity isLogin(Authentication authentication, @PathVariable Long opponentId){
+        Long userId=getUserId(authentication);
+        if(chatService.isConnected(opponentId)==false){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/online")//현재 연결된 모든 유저 리스트, 테스트 용
+    @ApiOperation(value = "온라인 된 유저 리스트",notes = "유저의 온라인 여부(소켓 연결 여부)")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code=200, message = "연결")
+            }
+    )
+    public ResponseEntity loginUsers(){
+        List<Long> list =chatService.allConnectedUser();
+        return new ResponseEntity(list,HttpStatus.OK);
+    }
+
+
+
     private Long getUserId(Authentication authentication) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         return userDetails.getUserId();
     }
 
-//    //유저 아이디로 MySql에 저장된 채팅 리스트를 모두 찾는다.
-//    @GetMapping("/api/chat-list/{userId}")
-//    public List<ChatMeta> findRooms(@PathVariable String userId){
-//        log.info("ChatController.findRooms");
-//        return chatService.findChatListByUserId(Long.parseLong(userId));
-//    }
 
 
 }

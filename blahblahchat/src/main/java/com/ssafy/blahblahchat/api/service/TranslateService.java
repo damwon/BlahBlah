@@ -21,7 +21,9 @@ public class TranslateService {
 
     public String translateText(String text,String targetLanguage){
         Translation translation=translate.translate(text, Translate.TranslateOption.targetLanguage(targetLanguage));
-        return translation.getTranslatedText();
+        String tmpText=translation.getTranslatedText();
+        tmpText=tmpText.replaceAll("&#39;","'");
+        return tmpText;
     }
 
     public List<SupportedLanguageTrans> getSupportedLanguageByTargetLanguage(String targetLanguage){

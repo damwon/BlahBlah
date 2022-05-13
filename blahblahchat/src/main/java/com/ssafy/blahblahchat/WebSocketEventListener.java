@@ -2,8 +2,7 @@ package com.ssafy.blahblahchat;
 
 
 import com.ssafy.blahblahchat.api.service.ChatService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -19,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 @Component
+@Log4j2
 public class WebSocketEventListener {
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
 
     @Autowired
     private ChatService chatService;
@@ -34,25 +33,17 @@ public class WebSocketEventListener {
         String userId = (String)((List) nativeHeaders.get("userId")).get(0);
         String sessionId = (String) generic.getHeaders().get("simpSessionId");
 
-        /*StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-        System.out.println("## headerAccessor :: " + headerAccessor);
-        String chatRoomId = headerAccessor.getNativeHeader("chatRoomId").get(0);
-        String sessionId = headerAccessor.getSessionId();*/
-
-        logger.info("[Connected] userId : {} | websocket session id : {}", userId, sessionId);
-
-//        chatService.connectUser(userId, sessionId);
+        log.info("[Connected] userId : {} | websocket session id : {}", userId, sessionId);
+        chatService.addUser(Long.parseLong(userId), sessionId);
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
         System.out.println("WebSocketEventListener.handleWebSocketDisconnectListener");
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-
         String sessionId = headerAccessor.getSessionId();
 
-        logger.info("[Disconnected] websocket session id : {}", sessionId);
-
-//        chatService.disconnectUser(sessionId);
+        log.info("[Disconnected] websocket session id : {}", sessionId);
+        chatService.removeUser(sessionId);
     }
 }

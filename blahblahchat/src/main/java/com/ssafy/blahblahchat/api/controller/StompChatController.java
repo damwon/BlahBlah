@@ -48,7 +48,7 @@ public class StompChatController {
 
         //채팅이 오가면 MySql에 저장된 채팅 리스트 메타 정보를 바꿔줘야함
         chatService.updateList(Long.parseLong(messageDTO.getSenderId()),Long.parseLong(opponentId),messageDTO.getReceiverName(),saveMessage);
-        chatService.updateList(Long.parseLong(messageDTO.getReceiverId()),Long.parseLong(messageDTO.getSenderId()),messageDTO.getSenderName(),saveMessage);
+        chatService.updateList(Long.parseLong(opponentId),Long.parseLong(messageDTO.getSenderId()),messageDTO.getSenderName(),saveMessage);
         template.convertAndSend("/topic/"+opponentId, messageDTO);
     }
 
@@ -59,9 +59,11 @@ public class StompChatController {
     }
 
     @MessageMapping("/read/{opponentId}")
-    public void sendToMe(@Header(name="Authorization", required=false) String token,@DestinationVariable String opponentId) throws Exception {
+    public void readMsg(@Header(name="Authorization", required=false) String token,@DestinationVariable String opponentId) throws Exception {
         Long userId = getUserIdByToken(token);
         chatService.updateLastRead(userId,Long.parseLong(opponentId));
+        List<ChatMeta> chatList= chatService.findChatListByUserId(userId);
+        template.convertAndSend("/topic/list/"+userId,chatList);
     }
 
     private Long getUserIdByToken(String token) throws Exception{
