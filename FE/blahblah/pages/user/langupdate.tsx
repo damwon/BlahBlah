@@ -328,7 +328,9 @@ export default function LangUpdate() {
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
                     {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
                     onClick={()=>{handleFirstDel(a)}}>x</span>
-                    <span>{firstob[i].level}</span>
+                    <span style={{cursor:'pointer'}} onClick={()=>{
+                      
+                    }}>{' '}Level - {firstob[i].level}{`(수정하기)`}</span>
                     </div>
                   })
 }</>
