@@ -111,7 +111,7 @@ export default function LangUpdate() {
     var array: any = [...first]
     var ob: any = [...firstob]
 
-    if (array.includes(e.currentTarget.value) === false && array.length <= 1 && ob.length <= 1&&
+    if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3&&
     e.currentTarget.value!=='언어선택') {
       array.push(e.currentTarget.value)
       // let key = e.currentTarget.value
@@ -187,7 +187,7 @@ export default function LangUpdate() {
     var array: any = [...third]
     var ob: any = [...thirdob]
 
-    if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3
+    if (array.includes(e.currentTarget.value) === false && array.length <= 1 && ob.length <= 1
     &&e.currentTarget.value!=='언어선택') {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
@@ -285,7 +285,7 @@ export default function LangUpdate() {
               
               </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
-                onChange={handleFirst} >
+                onChange={handleThird} >
                 <option>언어선택 </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
@@ -338,7 +338,7 @@ export default function LangUpdate() {
                 }
                 </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
-                onChange={handleThird}
+                onChange={handleFirst}
 
               >
                 <option>언어선택 </option>
