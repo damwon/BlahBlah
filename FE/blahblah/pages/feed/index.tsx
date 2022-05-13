@@ -66,8 +66,6 @@ export default function Index() {
 
   useEffect(() => {
     if (showFeeds) {
-      console.log("데이터 바꼈다");
-      console.log(showFeeds[0].comments);
     }
   }, [showFeeds]);
   useEffect(() => {
@@ -145,7 +143,7 @@ export default function Index() {
     );
     allAxios
       .put(`/feed/${changeIdx}`, formData, { headers: setToken() })
-      .then((res) => {
+      .then(() => {
         alert("피드를 수정했습니다.");
         window.location.reload();
       })
@@ -207,6 +205,19 @@ export default function Index() {
       setBtnColor("primary");
       setBtnName("피드 전체 보기");
       setShowFeeds(feeds);
+    }
+  };
+
+  const commentDelete = (id: number, userID: number) => {
+    if (userId === userID) {
+      allAxios
+        .delete(`comment/${id}`, { headers: setToken() })
+        .then(() => {
+          alert("댓글이 삭제되었습니다.");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -299,21 +310,11 @@ export default function Index() {
             >
               {btnName}
             </Button>
-            <Button
-              style={{ width: 100 }}
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={() => {
-                console.log(myStyle);
-              }}
-            >
-              test
-            </Button>
           </div>
           <List dense={dense}>
             {showFeeds &&
               showFeeds.map((d: any, i: any) => {
+                console.log(d);
                 return (
                   <div key={i}>
                     <ListItem
@@ -391,17 +392,41 @@ export default function Index() {
                               if (i1 < 3) {
                                 return (
                                   <div key={i1}>
-                                    <h6>
+                                    <span>
                                       {d1.userName}: {d1.content}
-                                    </h6>
+                                    </span>
+                                    {d1.userId === userId ? (
+                                      <DeleteIcon
+                                        color="error"
+                                        style={{
+                                          margin: "5px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => {
+                                          commentDelete(d1.id, d1.userId);
+                                        }}
+                                      />
+                                    ) : null}
                                   </div>
                                 );
                               } else {
                                 return (
                                   <div style={myStyle[i]} key={i1}>
-                                    <h6>
+                                    <span>
                                       {d1.userName}: {d1.content}
-                                    </h6>
+                                    </span>
+                                    {d1.userId === userId ? (
+                                      <DeleteIcon
+                                        color="error"
+                                        style={{
+                                          margin: "5px",
+                                          cursor: "pointer",
+                                        }}
+                                        onClick={() => {
+                                          commentDelete(d1.id, d1.userId);
+                                        }}
+                                      />
+                                    ) : null}
                                   </div>
                                 );
                               }
