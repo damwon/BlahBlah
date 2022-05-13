@@ -15,6 +15,7 @@ public class CommentListRes {
     Long id;
     LocalDateTime createdAt;
     String content;
+    Long userId;
     String userName;
 
     public static CommentListRes fromEntity(Comment comment) {
@@ -23,6 +24,7 @@ public class CommentListRes {
                 .createdAt(comment.getCreatedAt())
                 .content(comment.getContent())
                 .userName(comment.getUser().getName())
+                .userId(comment.getUser().getId())
                 .build();
     }
 
