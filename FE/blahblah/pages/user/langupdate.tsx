@@ -250,7 +250,8 @@ export default function LangUpdate() {
       .then((res) => {
         console.log(res)
         console.log('잘수정됫엉')
-        // router.push('/user/mypage')
+        router.push('/user/mypage')
+        // router.push('/user/mypage')/
       })
       .catch((err) => {
         console.log(err);
@@ -274,7 +275,7 @@ export default function LangUpdate() {
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
                     {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
-                    onClick={()=>{handleFirstDel(a)}}>x</span>
+                    onClick={()=>{handleThirdDel(a)}}>x</span>
                     {/* splice로 제거할 수있긴함 근데 귀찮은데 그것까지 하고 끝낼까? 초기화로할까 */}
                       </div>
                   })
@@ -326,7 +327,7 @@ export default function LangUpdate() {
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
                     {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
-                    onClick={()=>{handleThirdDel(a)}}>x</span>
+                    onClick={()=>{handleFirstDel(a)}}>x</span>
                     <span>{firstob[i].level}</span>
                     </div>
                   })
