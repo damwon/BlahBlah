@@ -106,11 +106,19 @@ export default function Mate(props) {
   };
   useEffect(()=>{
     // console.log('----props----')
+    // console.log('-----프롭스 팔로잉--------')
     // console.log(props.following)
     // let flag = 0
+    
+    // 이거 조건문하나 넣어주자 ㅇㅇ
     for(let i=0;i<props.following.length;i++){
       if(props.following[i].id === props.user.id){
         setFollowBtn(false)
+      }
+    }
+    for(let i=0;i<props.rateList.length;i++){
+      if(props.rateList[i].userId === props.user.id){
+        setLikeBtn(false)
       }
     }
   },[])
