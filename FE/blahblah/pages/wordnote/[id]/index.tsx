@@ -7,10 +7,11 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
+  Button
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LibraryBooks from "@mui/icons-material/LibraryBooks";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -171,7 +172,9 @@ export default function WordNote() {
 
           <br></br>
           <div className="m" style={{ width: "140px" }}>
-            <Button variant="primary" onClick={handleShow}>
+            <Button style={{
+                            backgroundColor: "#00ccb1",
+                        }} variant="contained" onClick={handleShow}>
               단어 추가하기
             </Button>
           </div>
@@ -230,10 +233,12 @@ export default function WordNote() {
           </Grid>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <Button color="error" variant="contained" onClick={handleClose}>
             취소
           </Button>
-          <Button variant="primary" onClick={write}>
+          <Button style={{
+                            backgroundColor: "#00ccb1",
+                        }} variant="contained" onClick={write}>
             저장
           </Button>
         </Modal.Footer>

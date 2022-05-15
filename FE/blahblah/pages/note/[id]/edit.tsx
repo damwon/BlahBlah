@@ -126,7 +126,9 @@ export default function Edit() {
             >
               취소
             </Button>
-            <Button className="mar" variant="contained" onClick={edit}>
+            <Button style={{
+                            backgroundColor: "#00ccb1",
+                        }} className="mar" variant="contained" onClick={edit}>
               수정 완료
             </Button>
           </Grid>

@@ -10,6 +10,10 @@ import {
   ListItemText,
   Checkbox,
 } from "@mui/material";
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
+import CreateIcon from '@mui/icons-material/Create';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -31,7 +35,7 @@ export default function Index() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
       alert("로그인 후 사용해주세요.");
-      router.push(`/`);
+      router.push(`/user/login`);
     }
   });
   const [showFeeds, setShowFeeds]: any = useState();
@@ -300,28 +304,35 @@ export default function Index() {
         <Grid item xs={6}>
           <div>
             <Button
-              style={{ width: 100 }}
+            style={{
+              backgroundColor: "#00ccb1",
+              width: 120
+          }}
               variant="contained"
               color="primary"
               size="small"
               onClick={handleShow}
             >
+              <CreateIcon style={{marginRight: '10px'}}></CreateIcon>
               피드 작성
             </Button>
             <Button
-              style={{ width: 150 }}
+            style={{
+              backgroundColor: "#00ccb1",
+              width: 160
+          }}
               variant="contained"
               color={btnColor === "primary" ? "primary" : "secondary"}
               size="small"
               onClick={btnChange}
             >
+              <ChangeCircleIcon style={{marginRight:'10px'}}></ChangeCircleIcon>
               {btnName}
             </Button>
           </div>
           <List dense={dense}>
             {showFeeds &&
               showFeeds.map((d: any, i: any) => {
-                console.log(d);
                 return (
                   <div key={i}>
                     <ListItem
@@ -337,7 +348,7 @@ export default function Index() {
                             <Image
                               className="profile"
                               src={d.userProfile}
-                              alt="finger image"
+                              alt=" "
                               width="100%"
                               height="100%"
                             ></Image>
@@ -348,6 +359,13 @@ export default function Index() {
                       </ListItemAvatar>
                       <ListItemText style={{ margin: "30px" }} />
                       <div style={{ width: "100%" }}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={6}><h5>{d.userName}</h5></Grid>
+                          <Grid item xs={6}>
+                            <h6 style={{textAlign: 'right'}}>{d.createdAt.substr(0, 10)}</h6></Grid>
+                        </Grid>
+                        
+                        
                         {d.imgUrl ? (
                           <Image
                             className="profile"
@@ -358,11 +376,9 @@ export default function Index() {
                           ></Image>
                         ) : null}
 
-                        <h5 style={{ margin: "20px", width: "70%" }}>
+                        <h6 style={{ margin: "20px 0px", width: "70%" }}>
                           {d.content}
-                        </h5>
-
-                        <hr></hr>
+                        </h6  >
 
                         <ThumbUpIcon
                           style={{ margin: "5px", cursor: "pointer" }}
@@ -439,7 +455,7 @@ export default function Index() {
                               }
                             })
                           : [0].map((f: any, k: number) => {
-                              return <h5 key={k}>첫 댓글을 작성해보세요.</h5>;
+                              return <h6 key={k}>첫 댓글을 작성해보세요.</h6>;
                             })}
                         {myStyle && myStyle[i] ? (
                           [0].map((d2: any, i2: number) => {
@@ -447,12 +463,16 @@ export default function Index() {
                               return (
                                 <div key={i2}>
                                   <Button
+                                  style={{
+                                    backgroundColor: "#00ccb1",
+                                }}
                                     variant="contained"
                                     onClick={() => {
                                       showComments(i);
                                     }}
                                     size="small"
                                   >
+                                    <ArrowDropDownIcon style={{marginRight:'10px'}}></ArrowDropDownIcon>
                                     더보기
                                   </Button>
                                 </div>
@@ -461,12 +481,17 @@ export default function Index() {
                               return (
                                 <Button
                                   key={i2}
+                                  
+                          style={{
+                            backgroundColor: "#00ccb1",
+                        }}
                                   variant="contained"
                                   onClick={() => {
                                     closeComments(i);
                                   }}
                                   size="small"
                                 >
+                                  <ArrowDropUpIcon style= {{marginRight: '10px'}}></ArrowDropUpIcon>
                                   접기
                                 </Button>
                               );
@@ -474,12 +499,17 @@ export default function Index() {
                           })
                         ) : (
                           <Button
+                          
+                          style={{
+                            backgroundColor: "#00ccb1",
+                        }}
                             variant="contained"
                             onClick={() => {
                               closeComments(i);
                             }}
                             size="small"
                           >
+                            <ArrowDropUpIcon style= {{marginRight: '10px'}}></ArrowDropUpIcon>
                             접기
                           </Button>
                         )}
@@ -493,6 +523,9 @@ export default function Index() {
                             }}
                           ></input>
                           <Button
+                          style={{
+                            backgroundColor: "#00ccb1",
+                        }}
                             variant="contained"
                             onClick={() => {
                               writeComment(d.id);
@@ -549,11 +582,17 @@ export default function Index() {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="contained" color="error" onClick={handleClose}>
+          <Button 
+                          style={{
+                            
+                        }}variant="contained" color="error" onClick={handleClose}>
             취소
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button variant="contained" onClick={writeFeed}>
+          <Button 
+                          style={{
+                            backgroundColor: "#00ccb1",
+                        }}variant="contained" onClick={writeFeed}>
             저장
           </Button>
         </Modal.Footer>

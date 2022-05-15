@@ -87,6 +87,9 @@ export default function Note() {
           </Button>{" "}
           <Button
             className="mar"
+            style={{
+              backgroundColor: "#00ccb1",
+          }}
             variant="contained"
             onClick={() => {
               router.push(`/note/${id}/edit/`);
