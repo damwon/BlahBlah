@@ -194,9 +194,9 @@ export default function Wordnote() {
       <br></br>
       <div style={{ width: "109px", margin: "auto" }}>
         <Button
-        style={{
-          backgroundColor: "#00ccb1",
-      }}
+          style={{
+            backgroundColor: "#00ccb1",
+          }}
           variant="contained"
           onClick={() => {
             handleShow();
@@ -231,9 +231,13 @@ export default function Wordnote() {
             취소
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button style={{
-                            backgroundColor: "#00ccb1",
-                        }} variant="contained" onClick={writeWordTitle}>
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={writeWordTitle}
+          >
             저장
           </Button>
         </Modal.Footer>
@@ -259,9 +263,13 @@ export default function Wordnote() {
             취소
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button style={{
-                            backgroundColor: "#00ccb1",
-                        }}variant="contained" onClick={titleChangeClick}>
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={titleChangeClick}
+          >
             수정
           </Button>
         </Modal.Footer>

@@ -112,7 +112,7 @@ export default function Notice() {
         <br></br>
 
         <div className="m" style={{ width: "250px" }}>
-        <Pagination
+          <Pagination
             style={{ width: `${myWidth}px`, margin: "auto" }}
             size="small"
             count={total}
