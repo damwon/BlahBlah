@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-export default function userNav() {
+export default function userNav(props) {
   const router = useRouter();
   const [isLogin, setIslogin] = useState(false);
   useEffect(() => {
@@ -27,6 +27,7 @@ export default function userNav() {
   return (
     <>
       {/* 테스트 */}
+      
       <div className="nav">
         <div>
           <Link href="/">
@@ -89,7 +90,11 @@ export default function userNav() {
         .nav {
           margin-top: 10px;
           margin-bottom: 20px;
-          background-color: white;
+          background-color:transparent;
+          // 배경색 투명하게하기
+          // background-color: #ffffff;
+        // opacity: 0.5; 이건 그냥 투명도 조절
+          // background-color: #fffad1;
         }
         .mainnav {
           color: #00ccb1;

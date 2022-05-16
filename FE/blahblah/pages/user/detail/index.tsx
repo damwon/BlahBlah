@@ -227,7 +227,7 @@ export default function UserDetail() {
         sx={{ width: 100, height: 100 }}
       />
             <ListGroup variant="flush">
-            <ListGroup.Item><div className="fw-bold">Name</div>{user.name}{
+            <ListGroup.Item><div className="fw-bold">Name</div>{user.name}{' '}{
     followBtn
     ?<>  <Button variant="secondary" size="sm" onClick={userFollow}>
     follow
@@ -236,7 +236,7 @@ export default function UserDetail() {
     unfollow
   </Button></>
   }
-
+{' '}
 {
           likeBtn
           ?<FavoriteBorderIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteBorderIcon>
