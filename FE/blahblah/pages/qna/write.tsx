@@ -1,8 +1,16 @@
 import { Grid, Button } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 export default function QnaWrite() {
+  useEffect(() => {
+    if (localStorage.getItem("jwt") === null) {
+      alert("잘못된 접근입니다..");
+      router.push(`/`);
+    }
+  });
+  const router = useRouter()
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {
@@ -76,10 +84,13 @@ export default function QnaWrite() {
         <br></br>
         <br></br>
         <div className="m">
-          <Button variant="contained" disabled>
+          <Button color="error" variant="contained" onClick={() => {router.push(`/qna`)}}>
             취소
           </Button>{" "}
-          <Button variant="contained" onClick={write}>
+          <Button 
+            style={{
+              backgroundColor: "#00ccb1",
+          }} variant="contained" onClick={write}>
             작성
           </Button>
         </div>

@@ -7,7 +7,7 @@ export default function QnA() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
       alert("로그인 후 사용해주세요.");
-      router.push(`/`);
+      router.push(`/user/login`);
     }
   });
   const setToken = () => {
@@ -17,7 +17,7 @@ export default function QnA() {
     };
     return config;
   };
-
+  const [myWidth, setMyWidth] = useState(84);
   const [page, setPage] = useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -31,6 +31,11 @@ export default function QnA() {
       .then((res) => {
         setLst(res.data.myQnaListRes);
         setTotal(res.data.totalPages);
+        if (res.data.totalPages <= 6) {
+          setMyWidth(252 - (7 - res.data.totalPages) * 28);
+        } else if (res.data.totalPages > 7) {
+          setMyWidth(252);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -92,8 +97,10 @@ export default function QnA() {
               );
             })}
 
-          <div className="m" style={{ width: 400 }}>
+          <div>
             <Pagination
+            style={{ width: `${myWidth}px`, margin: "auto" }}
+            size="small"
               count={total}
               variant="outlined"
               shape="rounded"
@@ -101,8 +108,11 @@ export default function QnA() {
               onChange={handleChange}
             />
           </div>
-          <div className="m" style={{ width: 100 }}>
-            <Button
+          <div style={{ width: "90px", margin: "20px auto" }}>
+        <Button
+        style={{
+          backgroundColor: "#00ccb1",
+      }}
               variant="contained"
               onClick={() => {
                 router.push(`/qna/write`);

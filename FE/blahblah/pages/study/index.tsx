@@ -11,7 +11,7 @@ export default function Study() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
       alert("로그인 후 사용해주세요.");
-      router.push(`/`);
+      router.push(`/user/login`);
     }
   });
   return (

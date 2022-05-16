@@ -58,7 +58,7 @@ export default function QnaInfo() {
           <Grid item xs={2}>
             <Button
               size="small"
-              style={{ width: 100 }}
+              style={{ width: 100, cursor: "default" }}
               variant="contained"
               color="primary"
             >
@@ -84,6 +84,9 @@ export default function QnaInfo() {
         <br></br>
         <div className="m">
           <Button
+            style={{
+              backgroundColor: "#00ccb1",
+          }}
             variant="contained"
             onClick={() => {
               router.push(`/notice`);
