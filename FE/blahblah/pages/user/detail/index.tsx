@@ -11,6 +11,8 @@ import langIMG from '../../../component/user/LangImg'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import User from '..';
+import Avatar from '@mui/material/Avatar';
+
 
 export default function UserDetail() {
   const router = useRouter();
@@ -214,9 +216,17 @@ export default function UserDetail() {
         <Row>
           <Col></Col>
           <Col>
+          
           {
             user
-            ?<> <ListGroup variant="flush">
+            ?<> 
+            <Avatar
+        alt="ProfileImage"
+        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${user.profileImg}`}
+        // src="/user/young-man.png"
+        sx={{ width: 100, height: 100 }}
+      />
+            <ListGroup variant="flush">
             <ListGroup.Item><div className="fw-bold">Name</div>{user.name}{
     followBtn
     ?<>  <Button variant="secondary" size="sm" onClick={userFollow}>
@@ -293,6 +303,10 @@ export default function UserDetail() {
             </>
             :null
           }
+          <Button onClick={() => {
+                router.push('/main') 
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">뒤로가기</Button>
             
          
           </Col>

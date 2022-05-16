@@ -3,16 +3,21 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
-import { useRouter } from 'next/router'
 import Mate from '../../component/main/Mate'
+import { useRouter } from "next/router";
+
 // import '../../styles/bg.css'
 
 
 export default function Index() {
+  const router = useRouter()
+
 
   const [mate,setMate] = useState<any>()
   const [following,setFollowing] = useState<any>()
   const [rateList,setRateList] = useState<any>()
+  const [islogin, setIslogin] = useState<any>(false)
+
 
   // 팔로잉 목록, 이걸로 follow버튼 처음에 활성, 비활성화
   const setToken = () => {
@@ -77,6 +82,16 @@ export default function Index() {
     findMate()
     getFollowing()
     getRateList()
+  }, []);
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      setIslogin(true)
+    } else {
+      router.push('/user/login')
+      alert('Please login')
+      
+    }
   }, []);
   return (
     <>
