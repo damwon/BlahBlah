@@ -15,44 +15,52 @@ export default function RecorderDialog(props: any) {
   const handleSubmitVoiceRecord = async () => {
     if (voiceUrl) {
       URL.createObjectURL(voiceUrl); // 출력된 링크에서 녹음된 오디오 확인 가능
+      // File 생성자를 사용해 파일로 변환
+      const sound = new File([voiceUrl], "soundBlob.mp3", {
+        lastModified: new Date().getTime(),
+        type: "audio/mp3",
+      });
+      console.log(sound);
+      const form = new FormData();
+      form.append("file", sound);
+      const audioResponse = await axios({
+        method: "post",
+        url: "https://blahblah.community:8080/api/s3/audio",
+        data: form,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      const s3Url = audioResponse.data[0];
+      await props.sendMsg("audio", s3Url);
+      setVoiceUrl(null);
+      props.handleCloseRecorder();
+    } else {
+      alert("Please record your voice.");
     }
-    // File 생성자를 사용해 파일로 변환
-    const sound = new File([voiceUrl], "soundBlob.mp3", {
-      lastModified: new Date().getTime(),
-      type: "audio/mp3",
-    });
-    console.log(sound);
-    const form = new FormData();
-    form.append("file", sound);
-    const audioResponse = await axios({
-      method: "post",
-      url: "https://blahblah.community:8080/api/s3/audio",
-      data: form,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    const s3Url = audioResponse.data[0];
-    props.sendMsg("audio", s3Url);
   };
   return (
     <Dialog open={props.openRecorder} onClose={props.handleCloseRecorder}>
-      <DialogTitle>음성 녹음</DialogTitle>
+      <DialogTitle>Voice Recorder</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          녹음을 하시려면 녹음 시작하기를 누르세요.
-        </DialogContentText>
+        <DialogContentText>Please press Start Button.</DialogContentText>
         <VoiceRecorder setVoiceUrl={setVoiceUrl} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleCloseRecorder}>취소</Button>
         <Button
           onClick={() => {
+            setVoiceUrl(null);
             props.handleCloseRecorder();
+          }}
+        >
+          Cancel
+        </Button>
+        <Button
+          onClick={() => {
             handleSubmitVoiceRecord();
           }}
         >
-          채팅으로 전송
+          Send
         </Button>
       </DialogActions>
     </Dialog>

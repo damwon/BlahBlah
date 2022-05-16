@@ -31,15 +31,16 @@ export default function ImageDialog(props: any) {
       });
       const s3ImageUrl = response.data[0];
       await props.sendMsg("image", s3ImageUrl);
+      setImageData(null);
+      props.handleCloseImageDialog();
+    } else {
+      alert("Please select your image.");
     }
   };
 
   return (
     <Dialog open={props.openImageDialog} onClose={props.handleCloseImageDialog}>
-      <DialogTitle>사진 첨부</DialogTitle>
-      <DialogContent>
-        <DialogContentText>사진을 첨부해주세요.</DialogContentText>
-      </DialogContent>
+      <DialogTitle>Send Image</DialogTitle>
       {imageData && (
         <DialogContent sx={{ textAlign: "center" }}>
           <Image
@@ -52,7 +53,7 @@ export default function ImageDialog(props: any) {
       )}
       <DialogContent>
         <Form.Group controlId="formFile" className="mb-3">
-          <Form.Label>첨부하기</Form.Label>
+          <Form.Label>Select your Image</Form.Label>
           <Form.Control
             onChange={handleSetImage}
             type="file"
@@ -67,15 +68,14 @@ export default function ImageDialog(props: any) {
             setImageData(null);
           }}
         >
-          취소
+          Cancel
         </Button>
         <Button
           onClick={() => {
-            props.handleCloseImageDialog();
             handleSubmitImage();
           }}
         >
-          전송하기
+          Send
         </Button>
       </DialogActions>
     </Dialog>

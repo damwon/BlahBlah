@@ -52,8 +52,8 @@ export default function ChatTabs() {
     <Box sx={{ width: "30%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} centered>
-          <Tab label="단어장" {...a11yProps(0)} />
-          <Tab label="메모장" {...a11yProps(1)} />
+          <Tab label="Vocabulary" {...a11yProps(0)} />
+          <Tab label="Memo" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
