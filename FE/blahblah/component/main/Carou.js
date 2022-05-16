@@ -10,7 +10,7 @@ export default function Carou() {
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src="main/r1.png"
+      src="main/m1.png"
       alt="Second slide"
     />
 
@@ -19,12 +19,13 @@ export default function Carou() {
   <Carousel.Item>
     <img
       className="d-block w-100"
-      src="main/r2.png"
+      src="main/m2.png"
       alt="Second slide"
     />
 
     
   </Carousel.Item>
+  
   
 </Carousel>
   
