@@ -18,6 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
           body{
             font-family: 'Noto Sans KR', sans-serif;
+            // background:grey;
           }
         a {
             color: black;

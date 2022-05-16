@@ -5,6 +5,7 @@ import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
 import Mate from '../../component/main/Mate'
+// import '../../styles/bg.css'
 
 
 export default function Index() {
@@ -79,7 +80,7 @@ export default function Index() {
   }, []);
   return (
     <>
-    <Container>
+    <Container >
     <Row>
       <Col>
       {
@@ -116,6 +117,9 @@ export default function Index() {
     </Row>
   </Container>
   <style jsx>{`
+          body {
+            background:grey;
+          }
         .matebox{
           // border-radius: 15px;
           // background-color:white;

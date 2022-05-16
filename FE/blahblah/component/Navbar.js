@@ -79,6 +79,7 @@ export default function userNav() {
           )}
         </div>
       </div>
+      {/* <hr></hr> */}
       <style jsx>{`
         .nav {
           margin-top: 10px;
