@@ -265,8 +265,8 @@ export default function LangUpdate() {
         <Row>
           <Col></Col>
           <Col>
-            <h1>언어수정</h1>
-            <Form.Label>모국어(2개까지)
+            <h1>Language Update</h1>
+            <Form.Label>Native Language(two)
                 {
                   third
                   ?<>
@@ -287,14 +287,14 @@ export default function LangUpdate() {
               </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleThird} >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
 
               <hr />
-              <Form.Label>구사언어(3개까지)
+              <Form.Label>Second Language(three)
               {
                   second
                   ?<>
@@ -313,13 +313,13 @@ export default function LangUpdate() {
               </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleSecond} >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
               <hr />
-              <Form.Label>학습언어(4개까지) 
+              <Form.Label>Study Language(four) 
               {
                   first
                   ?<>
@@ -408,12 +408,12 @@ export default function LangUpdate() {
                 onChange={handleFirst}
 
               >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              <Button onClick={() => {
+              {/* <Button onClick={() => {
                 // console.log(first)
                 // console.log(firstob)
                 // console.log(second)
@@ -428,14 +428,14 @@ export default function LangUpdate() {
                 console.log(newarr)
 
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
                 <Button onClick={onEdit} className="btncs" 
                    variant="outline-secondary"
-                style={{ margin: '5px' }} >수정하기</Button>
+                style={{ margin: '5px' }} >Edit</Button>
                 <Button onClick={() => {
               router.push('/user/mypage')
             }}
-            style={{ margin: '5px' }} variant="outline-secondary">마이페이지 돌아가기</Button>
+            style={{ margin: '5px' }} variant="outline-secondary">Back to Mypage</Button>
           </Col>
           <Col></Col>
         </Row>

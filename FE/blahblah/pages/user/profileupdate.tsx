@@ -111,15 +111,15 @@ export default function ProfileUpdate() {
         <Row>
           <Col></Col>
           <Col>
-            <h1>회원정보수정</h1>
+            <h1>Profile Update</h1>
             {/* {des} */}
             <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-    <Form.Label>이름</Form.Label>
+    <Form.Label>Name</Form.Label>
     <Form.Control className="formct" type="text" placeholder="New Name" onChange={handleName} maxLength={20}/>
   </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-    <Form.Label>자기소개</Form.Label>
+    <Form.Label>Description</Form.Label>
     <Form.Control className="formct" as="textarea" rows={3} onChange={handleDes}/>
   </Form.Group>
             </Form>
@@ -138,20 +138,20 @@ export default function ProfileUpdate() {
               <input onChange={handleName} maxLength={20}></input>
             </div> */}
             <Form.Group controlId="formFileSm" className="mb-3">
-              <Form.Label>변경할 이미지를 업로드 해주세요</Form.Label>
+              <Form.Label>you can upload your new image</Form.Label>
             
               <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
             <div><Button onClick={()=>{
               setImgState(0)
             }} style={{ marginRight: '3px' }}variant="outline-secondary" size="sm">
-      이미지변경없음
+      No change
     </Button>
     <Button onClick={()=>{
               setImgState(1)
               setFilfe(null)
             }} variant="outline-secondary" size="sm">
-      기본이미지사용
+      Use default image
     </Button>
               </div>
             {/* {proimg} */}
@@ -166,11 +166,11 @@ export default function ProfileUpdate() {
               </Form.Select>
             </div> */}
             <Button onClick={onEdit}
-              className="btncs" variant="outline-secondary">수정하기</Button>
+              className="btncs" variant="outline-secondary">Edit</Button>
             <Button onClick={() => {
               router.push('/user/mypage')
             }}
-              style={{ margin: '2px' }} variant="outline-secondary">마이페이지 돌아가기</Button>
+              style={{ margin: '2px' }} variant="outline-secondary">Back to Mypage </Button>
             {/* <button onClick={onEdit}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')

@@ -57,15 +57,15 @@ export default function PassUpdate() {
         <Row>
           <Col></Col>
           <Col>
-            <h1>비밀번호변경</h1>
+            <h1>Password Update</h1>
             {
               pass === passcheck && pass.length >= 1
-                ? <>비밀번호가 같습니다.</>
+                ? <>Same Password</>
                 : null
             }
             {
               pass !== passcheck && pass.length >= 1 && passcheck.length >= 1
-                ? <>비밀번호가 다릅니다.</>
+                ? <>Different Password</>
                 : null
             }
             <Form>
@@ -94,11 +94,11 @@ export default function PassUpdate() {
               <input type="password" onChange={handlePassCheck} maxLength={15}></input>
             </div> */}
             <Button onClick={onEditPassword}
-              className="btncs" variant="outline-secondary">수정하기</Button>
+              className="btncs" variant="outline-secondary">Edit</Button>
             <Button onClick={() => {
               router.push('/user/mypage')
             }}
-              style={{ margin: '2px'}} variant="outline-secondary">마이페이지 돌아가기</Button>
+              style={{ margin: '2px'}} variant="outline-secondary">Back to Mypage</Button>
             {/* <button onClick={onEditPassword}>수정하기</button>
             <button onClick={() => {
               router.push('/user/mypage')
