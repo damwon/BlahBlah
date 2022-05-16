@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   ListSubheader,
   ListItemAvatar,
@@ -7,49 +7,57 @@ import {
   ListItemText,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useRouter } from "next/router";
 
 export default function ChatList(props: any) {
-  const router = useRouter();
+  const handleListItemClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number
+  ) => {
+    props.setSelectedIndex(index);
+  };
   return (
     <List sx={{ bgcolor: "background.paper" }}>
       <ListSubheader sx={{ textAlign: "center", fontSize: "20px" }}>
-        채팅 리스트
+        Chatting List
       </ListSubheader>
       {props.chattingList.length > 0 ? (
         props.chattingList.map((item: any, index: any) => {
           return (
-            <ListItem key={index}>
+            <ListItem
+              selected={props.chatRoomData.roomId === item.roomId}
+              key={index}
+            >
               <ListItemAvatar>
                 <AccountCircleIcon fontSize="large" />
               </ListItemAvatar>
               <ListItemText
                 primary={item.roomName}
                 sx={{ cursor: "pointer" }}
-                onClick={() => {
+                onClick={(e) => {
                   props.readMsg(item.opponentId);
                   props.setChatRoomData(item);
                   props.setChatname(item.roomName);
+                  handleListItemClick(e, index);
                 }}
                 secondary={
                   item.type === "text"
                     ? item.lastMsg
                     : item.type === "image"
-                    ? "사진"
+                    ? "Image"
                     : item.type === "audio"
-                    ? "음성 메시지"
+                    ? "Voice Message"
                     : item.type === "comment"
-                    ? "첨삭 메시지"
+                    ? "Comment"
                     : ""
                 }
               />
-              <ListItemText primary={item.unread} />
+              <ListItemText primary={item.unread === 0 ? "" : item.unread} />
             </ListItem>
           );
         })
       ) : (
         <ListItem>
-          <ListItemText>채팅 목록이 없습니다.</ListItemText>
+          <ListItemText>No chatting list.</ListItemText>
         </ListItem>
       )}
     </List>

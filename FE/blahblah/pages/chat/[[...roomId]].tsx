@@ -43,11 +43,12 @@ import axios from "axios";
 import { WebRtcPeer } from "kurento-utils";
 // router
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
 const ChatTypographyByMe = styled(Typography)({
   borderRadius: "20px",
   padding: "10px 20px",
-  backgroundColor: "skyblue",
+  backgroundColor: "#00CCB1",
   color: "white",
   fontWeight: 500,
 });
@@ -87,7 +88,9 @@ export default function Chat() {
   // 채팅방 정보(개별)
   const [chatRoomData, setChatRoomData] = useState<any>({});
   // 채팅 상대방 이름
-  const [chatname, setChatname] = useState("");
+  const [chatname, setChatname] = useState("Start Chatting!");
+  // 채팅리스트 인덱스
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   // 라우터 쿼리 체크
   useEffect(() => {
@@ -195,7 +198,8 @@ export default function Chat() {
   const addMsg = (msg: any) => {
     setChatHistory((prev) => [...prev, msg]);
   };
-  // 채팅 히스토리
+
+  // 채팅 히스토리 가져오기
   useEffect(() => {
     console.log(chatRoomData);
     if (chatRoomData) {
@@ -659,6 +663,9 @@ export default function Chat() {
         {chattingList && (
           <Box sx={{ width: "20%", display: callState ? "none" : "block" }}>
             <ChatList
+              chatRoomData={chatRoomData}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
               readMsg={readMsg}
               chattingList={chattingList}
               setChatname={setChatname}
@@ -739,7 +746,7 @@ export default function Chat() {
               justifyContent: "space-between",
             }}
           >
-            <Typography>상대방: {chatname}</Typography>
+            <Typography>{chatname}</Typography>
             <Box>
               <IconButton onClick={videoCall}>
                 <VideocamIcon sx={{ color: "black" }} />
@@ -756,89 +763,130 @@ export default function Chat() {
           <ChatBox ref={chatRef} className="chatbox-scroll">
             {userData &&
               (chatHistory.length > 0 ? (
-                chatHistory.map((item, index) => {
-                  if (item.senderId == userData.id) {
-                    return (
-                      <Box
-                        sx={{
-                          width: "100%",
-                          padding: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "end",
-                        }}
-                        key={index}
-                      >
-                        {item.type === "text" && (
-                          <ChatTypographyByMe>
-                            {item.content}
-                          </ChatTypographyByMe>
-                        )}
-                        {item.type === "audio" && (
-                          <>
-                            <IconButton
-                              onClick={() => {
-                                handleClickOpenVoiceSave(item.content);
-                              }}
-                            >
-                              <DownloadIcon />
-                            </IconButton>
-                            <audio
-                              src={item.content}
-                              controls
-                              controlsList="nodownload"
-                            />
-                          </>
-                        )}
-                        {item.type === "image" && (
-                          <Image
-                            src={item.content}
-                            style={{ width: "200px", height: "200px" }}
-                          />
-                        )}
-                        {item.type === "comment" && (
-                          <Stack
+                <>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      padding: 2,
+                      textAlign: "center",
+                    }}
+                  >
+                    <Typography>
+                      {dayjs(chatHistory[0].createdAt).format("YYYY-MM-DD")}
+                    </Typography>
+                  </Box>
+                  {chatHistory.map((item, index) => {
+                    if (index > 0) {
+                      const date1 = new Date(item.createdAt);
+                      const date2 = new Date(chatHistory[index - 1].createdAt);
+                      if (date1.getDate() > date2.getDate()) {
+                        return (
+                          <Box
                             sx={{
-                              borderRadius: "20px",
-                              padding: "10px 20px",
-                              backgroundColor: "skyblue",
-                              fontWeight: 500,
-                              color: "white",
+                              width: "100%",
+                              padding: 2,
+                              textAlign: "center",
+                            }}
+                            key={index}
+                          >
+                            <Typography>
+                              {dayjs(item.createdAt).format("YYYY-MM-DD")}
+                            </Typography>
+                          </Box>
+                        );
+                      }
+                    }
+                    if (item.senderId == userData.id) {
+                      return (
+                        <Box
+                          sx={{
+                            width: "100%",
+                            padding: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                          key={index}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: "15px",
+                              mr: "10px",
                             }}
                           >
-                            <Typography
+                            {dayjs(item.createdAt).format("HH:mm")}
+                          </Typography>
+                          {item.type === "text" && (
+                            <ChatTypographyByMe>
+                              {item.content}
+                            </ChatTypographyByMe>
+                          )}
+                          {item.type === "audio" && (
+                            <>
+                              <IconButton
+                                onClick={() => {
+                                  handleClickOpenVoiceSave(item.content);
+                                }}
+                              >
+                                <DownloadIcon />
+                              </IconButton>
+                              <audio
+                                src={item.content}
+                                controls
+                                controlsList="nodownload"
+                              />
+                            </>
+                          )}
+                          {item.type === "image" && (
+                            <Image
+                              src={item.content}
+                              style={{ width: "200px", height: "200px" }}
+                            />
+                          )}
+                          {item.type === "comment" && (
+                            <Stack
                               sx={{
-                                borderBottom: "1px solid white",
-                                opacity: 0.5,
+                                borderRadius: "20px",
+                                padding: "10px 20px",
+                                backgroundColor: "#00CCB1",
+                                fontWeight: 500,
+                                color: "white",
                               }}
                             >
-                              기존: {item.content}
-                            </Typography>
-                            <Box sx={{ display: "flex" }}>
-                              <ArrowForwardIcon />
-                              <Typography>코멘트: {item.comment}</Typography>
-                            </Box>
-                          </Stack>
-                        )}
-                      </Box>
-                    );
-                  } else {
-                    return (
-                      <ChatBoxOfOther
-                        key={index}
-                        item={item}
-                        type={item.type}
-                        message={item.content}
-                        setCorrectMessage={setCorrectMessage}
-                        setTranslateMessage={setTranslateMessage}
-                        handleClickOpenVoiceSave={handleClickOpenVoiceSave}
-                      />
-                    );
-                  }
-                })
+                              <Typography
+                                sx={{
+                                  borderBottom: "1px solid white",
+                                  opacity: 0.5,
+                                }}
+                              >
+                                {item.content}
+                              </Typography>
+                              <Box sx={{ display: "flex" }}>
+                                <ArrowForwardIcon />
+                                <Typography>{item.comment}</Typography>
+                              </Box>
+                            </Stack>
+                          )}
+                        </Box>
+                      );
+                    } else {
+                      return (
+                        <ChatBoxOfOther
+                          key={index}
+                          item={item}
+                          type={item.type}
+                          message={item.content}
+                          setCorrectMessage={setCorrectMessage}
+                          setTranslateMessage={setTranslateMessage}
+                          handleClickOpenVoiceSave={handleClickOpenVoiceSave}
+                        />
+                      );
+                    }
+                  })}
+                </>
               ) : (
                 <Box>
-                  <Typography>채팅을 시작하세요~</Typography>
+                  <Typography>Start Chatting!</Typography>
                 </Box>
               ))}
           </ChatBox>

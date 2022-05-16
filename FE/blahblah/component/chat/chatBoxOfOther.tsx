@@ -12,6 +12,7 @@ import Image from "react-bootstrap/Image";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DownloadIcon from "@mui/icons-material/Download";
+import dayjs from "dayjs";
 
 const ChatTypographyByOther = styled(Typography)({
   borderRadius: "20px",
@@ -111,6 +112,9 @@ export default function ChatBoxOfOther(props: any) {
           </Box>
         </Stack>
       )}
+      <Typography sx={{ fontSize: "15px" }}>
+        {dayjs(props.item.createdAt).format("HH:mm")}
+      </Typography>
     </Box>
   );
 }

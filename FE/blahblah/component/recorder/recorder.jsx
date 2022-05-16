@@ -97,7 +97,7 @@ function VoiceRecorder(props) {
         />
       )}
       <Button onClick={onRec ? onRecAudio : offRecAudio}>
-        {onRec ? "녹음" : "정지"}
+        {onRec ? "Start" : "Stop"}
       </Button>
     </Box>
   );
