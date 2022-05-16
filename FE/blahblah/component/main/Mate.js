@@ -253,7 +253,7 @@ export default function Mate(props) {
     >
       <ListItem>
       
-        <ListItemText primary="모국어" secondary={
+        <ListItemText primary="Native Language" secondary={
           langc
           ?<>
           {
@@ -291,7 +291,7 @@ export default function Mate(props) {
         
       </ListItem>
       <ListItem>
-        <ListItemText primary={`인기도`} secondary={`${props.user.rating}`} />
+        <ListItemText primary={`Rating`} secondary={`${props.user.rating}`} />
         
         {
           likeBtn
@@ -320,7 +320,7 @@ export default function Mate(props) {
       }}
     >
       <ListItem>
-        <ListItemText primary="구사언어" secondary={
+        <ListItemText primary="SecondLanguage" secondary={
           langb
           ?<span>
           {
@@ -346,7 +346,7 @@ export default function Mate(props) {
       </ListItem>
       
       <ListItem>
-        <ListItemText primary="학습언어" secondary={
+        <ListItemText primary="Study Language" secondary={
           langa
           ?<span>
           {
@@ -370,7 +370,7 @@ export default function Mate(props) {
         } />
       </ListItem>
       <ListItem>
-        <ListItemText primary="자기소개" secondary={`${props.user.description}`} />
+        <ListItemText primary="Description" secondary={`${props.user.description}`} />
       </ListItem>
 
 
@@ -388,7 +388,7 @@ export default function Mate(props) {
                 
                 )
             }}
-                  className="btncs" variant="outline-secondary">대화하기</Button>
+                  className="btncs" variant="outline-secondary">Chat</Button>
                   <Button  onClick={()=>{
               router.push(
                 {
@@ -400,7 +400,7 @@ export default function Mate(props) {
                 `/user/detail/`
                 )
             }}
-                   variant="outline-secondary" style={{marginLeft:'5px'}}>프로필보기</Button>
+                   variant="outline-secondary" style={{marginLeft:'5px'}}>Profile</Button>
 </Col>
     </Row>
     {/* <hr></hr> */}
