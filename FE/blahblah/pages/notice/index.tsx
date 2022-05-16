@@ -40,14 +40,14 @@ export default function Notice() {
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
-        {/* <Image
+        <Image
           priority
-          src="/images/notice2.PNG"
+          src="/images/notice2.png"
           alt="notice image"
           width="200"
-          height="40"
+          height="30"
           layout="responsive"
-        /> */}
+        />
         <br></br>
         <br></br>
         <Grid container spacing={3}>

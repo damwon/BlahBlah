@@ -298,15 +298,17 @@ export default function UserDetail() {
               : <>Man</>
             }</ListGroup.Item>
             <ListGroup.Item><div className="fw-bold">Age</div>{user.age}</ListGroup.Item>
+            <ListGroup.Item><div className="fw-bold">Rating</div>{user.rating}</ListGroup.Item>
             <ListGroup.Item><div className="fw-bold">Description</div>{user.description}</ListGroup.Item>
           </ListGroup>
             </>
             :null
           }
           <Button onClick={() => {
-                router.push('/main') 
+                // router.push('/main') 
+                history.back()
               }} style={{margin:'5px'}}
-              className="btncs" variant="outline-secondary">뒤로가기</Button>
+              className="btncs" variant="outline-secondary">Back</Button>
             
          
           </Col>
