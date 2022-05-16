@@ -31,7 +31,7 @@ export default function Note() {
           if (tmpContent != null) {
             setContent(tmpContent);
           } else {
-            setContent("내용을 작성해주세요");
+            setContent("Write your memo");
           }
         })
         .catch((err) => {
@@ -76,26 +76,24 @@ export default function Note() {
         </div>
         <div className="m">
           <Button
-            className="mar"
             variant="contained"
-            color="error"
+            style={{ backgroundColor: "grey" }}
             onClick={() => {
               router.push(`/study`);
             }}
           >
-            취소
+            Back
           </Button>{" "}
           <Button
-            className="mar"
             style={{
               backgroundColor: "#00ccb1",
-          }}
+            }}
             variant="contained"
             onClick={() => {
               router.push(`/note/${id}/edit/`);
             }}
           >
-            수정
+            Edit
           </Button>
         </div>
       </Grid>
@@ -103,7 +101,7 @@ export default function Note() {
       <style jsx>
         {`
           .m {
-            width: 200px;
+            width: 142px;
             margin: 0 auto;
           }
           .lb-wrap {
@@ -130,9 +128,6 @@ export default function Note() {
           h3 {
             font-size: min(1vw, 1.5vh);
             color: rgb(97, 17, 70);
-          }
-          .mar {
-            margin: 10px;
           }
         `}
       </style>

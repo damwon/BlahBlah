@@ -49,7 +49,7 @@ export default function ChatTabs() {
   };
 
   return (
-    <Box sx={{ width: "30%" }}>
+    <Box sx={{ width: "30%", border: "1px solid gray" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} centered>
           <Tab label="Vocabulary" {...a11yProps(0)} />

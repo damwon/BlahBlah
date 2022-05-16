@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FolderIcon from "@mui/icons-material/Folder";
-import { Modal } from "react-bootstrap";
+import { Modal, Card } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
@@ -37,7 +37,7 @@ export default function Mynote() {
 
   const writeNoteTitle = () => {
     if (noteTitle === "") {
-      alert("메모장 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .post(
@@ -84,7 +84,7 @@ export default function Mynote() {
     allAxios
       .delete(`/memo/${num}`, { headers: setToken() })
       .then((res) => {
-        alert("메모장 " + title + " 삭제되었습니다.");
+        alert("The " + title + " is deleted.");
         window.location.reload();
       })
       .catch((err) => {
@@ -107,7 +107,7 @@ export default function Mynote() {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("메모장 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .put(
@@ -132,47 +132,51 @@ export default function Mynote() {
   const [dense, setDense] = useState(false);
   return (
     <>
-      <h1 className="cent">my note</h1>
-      <List dense={dense} style={{ height: "320px" }}>
-        {file
-          ? file.map((d: any, i: number) => {
-              return (
-                <ListItem
-                  key={i}
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => {
-                        lstDelete(d.id, d.title);
-                      }}
+      <Card style={{ width: "21.5vw" }}>
+        <Card.Body>
+          <Card.Title style={{ textAlign: "center" }}>my note</Card.Title>
+          <List dense={dense} style={{ height: "320px" }}>
+            {file
+              ? file.map((d: any, i: number) => {
+                  return (
+                    <ListItem
+                      key={i}
+                      secondaryAction={
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => {
+                            lstDelete(d.id, d.title);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      }
                     >
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemAvatar
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      changeOpen(d);
-                    }}
-                  >
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      router.push(`/note/${d.id}`);
-                    }}
-                    primary={d.title}
-                  />
-                </ListItem>
-              );
-            })
-          : null}
-      </List>
+                      <ListItemAvatar
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          changeOpen(d);
+                        }}
+                      >
+                        <Avatar>
+                          <FolderIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          router.push(`/note/${d.id}`);
+                        }}
+                        primary={d.title}
+                      />
+                    </ListItem>
+                  );
+                })
+              : null}
+          </List>
+        </Card.Body>
+      </Card>
       <div>
         <div>
           <Pagination
@@ -187,29 +191,29 @@ export default function Mynote() {
         </div>
       </div>
       <br></br>
-      <div style={{ width: "109px", margin: "auto" }}>
+      <div style={{ width: "113px", margin: "auto" }}>
         <Button
-        style={{
-          backgroundColor: "#00ccb1",
-      }}
+          style={{
+            backgroundColor: "#00ccb1",
+          }}
           variant="contained"
           onClick={() => {
             handleShow();
             setNoteTitle("");
           }}
         >
-          메모장 추가
+          add memo
         </Button>
       </div>
       {/* modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>메모장 제목을 입력해주세요.</Modal.Title>
+          <Modal.Title>Please write title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input
@@ -222,25 +226,29 @@ export default function Mynote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button style={{
-                            backgroundColor: "#00ccb1",
-                        }}variant="contained" onClick={writeNoteTitle}>
-            저장
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={writeNoteTitle}
+          >
+            save
           </Button>
         </Modal.Footer>
       </Modal>
       {/* 메모장 이름 변경 modal */}
       <Modal show={changeShow} onHide={changeClose}>
         <Modal.Header closeButton>
-          <Modal.Title>메모장 제목을 수정해주세요.</Modal.Title>
+          <Modal.Title>Please rewrite title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input value={title} onChange={titleChange}></input>
@@ -249,13 +257,17 @@ export default function Mynote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={changeClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button style={{
-                            backgroundColor: "#00ccb1",
-                        }}variant="contained" onClick={titleChangeClick}>
-            수정
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={titleChangeClick}
+          >
+            save
           </Button>
         </Modal.Footer>
       </Modal>

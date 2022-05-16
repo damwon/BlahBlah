@@ -55,7 +55,7 @@ const ChatTypographyByMe = styled(Typography)({
 
 const ChatBox = styled(Box)({
   overflowY: "auto",
-  height: "100%",
+  height: "75vh",
   width: "100%",
   display: "flex",
   flexDirection: "column",
@@ -88,7 +88,7 @@ export default function Chat() {
   // 채팅방 정보(개별)
   const [chatRoomData, setChatRoomData] = useState<any>({});
   // 채팅 상대방 이름
-  const [chatname, setChatname] = useState("Start Chatting!");
+  const [chatname, setChatname] = useState("No one...");
   // 채팅리스트 인덱스
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -141,6 +141,7 @@ export default function Chat() {
       headers: setToken(),
     })
       .then((res) => {
+        console.log(res.data);
         setUserData(res.data);
       })
       .catch((err) => {
@@ -654,14 +655,21 @@ export default function Chat() {
     <>
       <Box
         style={{
-          height: "80vh",
+          // height: "89vh",
           marginTop: "20px",
+          marginBottom: "20px",
           display: "flex",
           justifyContent: "space-between",
         }}
       >
         {chattingList && (
-          <Box sx={{ width: "20%", display: callState ? "none" : "block" }}>
+          <Box
+            sx={{
+              width: "20%",
+              display: callState ? "none" : "block",
+              border: "1px solid gray",
+            }}
+          >
             <ChatList
               chatRoomData={chatRoomData}
               selectedIndex={selectedIndex}
@@ -717,10 +725,10 @@ export default function Chat() {
                 <CallEndIcon color="warning" />
               </IconButton>
               <Button onClick={muteAudio}>
-                {audioMuted ? "음소거 해제" : "음소거"}
+                {audioMuted ? "Unmute" : "Mute"}
               </Button>
               <Button onClick={muteVideo}>
-                {videoMuted ? "화면 켜기" : "화면 끄기"}
+                {videoMuted ? "Video on" : "Video off"}
               </Button>
             </Box>
           </Box>
@@ -728,8 +736,8 @@ export default function Chat() {
         <Box
           sx={{
             display: "flex",
-            border: "1px solid black",
-            borderRadius: "10px",
+            borderTop: "1px solid gray",
+            borderBottom: "1px solid gray",
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "center",
@@ -742,7 +750,7 @@ export default function Chat() {
               display: "flex",
               alignItems: "center",
               padding: 3,
-              borderBottom: "1px solid black",
+              borderBottom: "1px solid gray",
               justifyContent: "space-between",
             }}
           >
@@ -885,14 +893,27 @@ export default function Chat() {
                   })}
                 </>
               ) : (
-                <Box>
-                  <Typography>Start Chatting!</Typography>
+                <Box
+                  sx={{
+                    textAlign: "center",
+                    marginTop: "50px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "50px",
+                      color: "#00CCB1",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Start Chatting!
+                  </Typography>
                 </Box>
               ))}
           </ChatBox>
           <Box
             sx={{
-              borderTop: "1px solid black",
+              borderTop: "1px solid gray",
               width: "100%",
               height: "15%",
               display: "flex",
@@ -909,13 +930,20 @@ export default function Chat() {
               />
             )}
             {translateMessage && languageList && (
-              <Box sx={{ display: "flex" }}>
-                <Typography>{translateMessage}</Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography sx={{ marginRight: "10px" }}>
+                  {translateMessage}
+                </Typography>
                 <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
                     <InputLabel>Language</InputLabel>
                     <Select
-                      label="언어"
+                      label="Language"
                       onChange={handleSelectLanguage}
                       value={targetLanguage}
                     >
@@ -931,7 +959,10 @@ export default function Chat() {
                 </Box>
                 <Button onClick={handleTranslate}>Translate!</Button>
                 {translatedMessage && (
-                  <Typography>{translatedMessage}</Typography>
+                  <>
+                    <ArrowForwardIcon />
+                    <Typography>{translatedMessage}</Typography>
+                  </>
                 )}
                 <IconButton
                   onClick={() => {

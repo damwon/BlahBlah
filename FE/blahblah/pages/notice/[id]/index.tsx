@@ -58,11 +58,15 @@ export default function QnaInfo() {
           <Grid item xs={2}>
             <Button
               size="small"
-              style={{ width: 100, cursor: "default" }}
+              style={{
+                backgroundColor: "#00ccb1",
+                width: 100,
+                cursor: "default",
+              }}
               variant="contained"
               color="primary"
             >
-              공지
+              Notice
             </Button>
           </Grid>
           <Grid item xs={7}>
@@ -85,14 +89,14 @@ export default function QnaInfo() {
         <div className="m">
           <Button
             style={{
-              backgroundColor: "#00ccb1",
-          }}
+              backgroundColor: "grey",
+            }}
             variant="contained"
             onClick={() => {
               router.push(`/notice`);
             }}
           >
-            목록
+            Back
           </Button>{" "}
         </div>
         <Grid item xs={2} />
