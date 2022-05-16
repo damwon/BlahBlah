@@ -7,7 +7,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
-  TextField,
+  ListItemText,
   List,
   ListItem,
 } from "@mui/material";
@@ -44,7 +44,7 @@ export default function VoiceSaveDialog(props: any) {
 
   const saveVoiceMsg = (recordbookId: number) => {
     if (!voiceTitle) {
-      alert("음성메시지 제목을 입력하세요.");
+      alert("Please write the title of the voice message.");
     } else {
       axios({
         url: `https://blahblah.community:8443/api/record/${recordbookId}`,
@@ -57,7 +57,7 @@ export default function VoiceSaveDialog(props: any) {
       })
         .then((res) => {
           console.log(res);
-          alert("음성메시지가 성공적으로 저장되었습니다.");
+          alert("The voice message was successfully saved.");
           props.handleCloseVoiceSave();
         })
         .catch((err) => {
@@ -68,20 +68,20 @@ export default function VoiceSaveDialog(props: any) {
 
   return (
     <Dialog open={props.openVoiceSave} onClose={props.handleCloseVoiceSave}>
-      <DialogTitle>음성메시지 저장</DialogTitle>
+      <DialogTitle>Save voice messages</DialogTitle>
       <DialogContent>
-        <DialogContentText>
-          폴더를 선택하시고 음성메시지의 제목을 입력하신 뒤 하단 저장 버튼을
-          눌러주세요.
+        <DialogContentText sx={{ mb: 3 }}>
+          Write down the title of your voice message, and then click the folder.
         </DialogContentText>
         <Form.Group className="mb-3">
-          <Form.Label>음성메시지 제목</Form.Label>
+          <Form.Label>Title</Form.Label>
           <Form.Control
             onChange={handleChangeVoiceTitle}
             type="text"
-            placeholder="제목을 입력하세요."
+            placeholder="Make your title."
           />
         </Form.Group>
+        <Form.Label>Folder List</Form.Label>
         <List sx={{ border: "1px solid black" }}>
           {recorderList &&
             recorderList.map((item: any, index: any) => {
@@ -100,7 +100,7 @@ export default function VoiceSaveDialog(props: any) {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleCloseVoiceSave}>취소</Button>
+        <Button onClick={props.handleCloseVoiceSave}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );

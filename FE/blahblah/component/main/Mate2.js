@@ -207,9 +207,224 @@ export default function Mate(props) {
   
 
   return <>
+  <div className="container">
+	<div className="item1">
+  <div className='matebox'>
+      <div className='box'>
+      <Avatar
+        alt="ProfileImage"
+        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${props.user.profileImg}`}
+        // src="/user/young-man.png"
+        sx={{ width: 100, height: 100 }}
+      />
+      </div>
+      <div className='box'>
+      <ListItemText primary={`${props.user.name}(${props.user.age})`} secondary={props.user.gender ===0
+  ?<>남자</>
+  :<>여자</>
+  }/>
+  {
+    followBtn
+    ?<>  <Button variant="secondary" size="sm" onClick={userFollow}>
+    follow
+  </Button></>
+    :<>  <Button variant="outline-secondary" size="sm" onClick={userFollow}>
+    unfollow
+  </Button></>
+  }
+
+  
+        {/* <h5>{props.user.name}({props.user.age})</h5> */}
+        {/* <h5>{props.user.gender ===1
+  ?<>남자</>
+  :<>여자</>
+  }</h5> */}
+
+      </div>
+      </div>
+      <List
+      sx={{
+        width: '100%',
+        maxWidth: 360,
+        bgcolor: 'background.paper',
+      }}
+    >
+      <ListItem>
+      
+        <ListItemText primary="모국어" secondary={
+          langc
+          ?<>
+          {
+            langc.map((a,i)=>{
+              return <span key={i}>
+                {/* {a} */}
+                  {larr[a-1]}
+                  <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}
+                  style={{margin:'5px'}}></img>
+              </span>
+            })
+          }
+          </>        
+          :null
+        } />
+        {/* {
+          langc
+          ?<>
+          {
+            langc.map((a,i)=>{
+              return <div key={i}>
+                <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              sx={{ width: 25, height: 25 }}
+            />
+              </div>
+            })
+          }
+          </>        
+          :null
+        } */}
+
+
+        
+      </ListItem>
+      <ListItem>
+        <ListItemText primary={`인기도`} secondary={`${props.user.rating}`} />
+        
+        {
+          likeBtn
+          ?<FavoriteBorderIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteBorderIcon>
+          :<FavoriteIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteIcon>
+        }
+        {/* props.user.rating를 useState로 하면 한턴 늦게불러오네 */}
+        {/* <button onClick={userLike}>클릭</button> */}
+        {/* <Button onClick={userLike}
+                  className="btncs" variant="outline-secondary">좋아요</Button> */}
+                  
+      </ListItem>
+      
+
+
+    </List>
+  </div>
+	<div className="item2"><List
+      sx={{
+        width: '100%',
+        maxWidth: 360,
+        bgcolor: 'background.paper',
+      }}
+    >
+      <ListItem>
+        <ListItemText primary="구사언어" secondary={
+          langb
+          ?<span>
+          {
+            langb.map((a,i)=>{
+              return <span key={i}>
+                {/* <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              // src="/user/young-man.png"
+              sx={{ width: 25, height: 25 }}
+            /> */}
+            
+                      {larr[a-1]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
+
+              </span>
+            })
+          }
+          </span>
+          :null
+        } />
+      </ListItem>
+      
+      <ListItem>
+        <ListItemText primary="학습언어" secondary={
+          langa
+          ?<span>
+          {
+            langa.map((a,i)=>{
+              return <span key={i}>
+                {/* <Avatar 
+              alt="langImage"
+              src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lkey[larr[a]]}.png`}
+              // src="/user/young-man.png"
+              sx={{ width: 25, height: 25 }}
+            /> */}
+           {larr[a-1]} 
+                      <img style={{margin:'5px'}}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
+
+              </span>
+            })
+          }
+          </span>
+          :null
+        } />
+      </ListItem>
+      <ListItem>
+        <ListItemText primary="자기소개" secondary={`${props.user.description}`} />
+      </ListItem>
+
+
+    </List>
+    <Button onClick={()=>{
+              router.push(
+                {
+                  pathname: "/chat",
+                  query: {
+                    name:props.user.name,
+                    userId:props.user.id
+                  },
+                },
+                `/chat`
+                
+                )
+            }}
+                  className="btncs" variant="outline-secondary">대화하기</Button>
+                  <Button  onClick={()=>{
+              router.push(
+                {
+                  pathname: `/user/detail/`,
+                  query: {
+                    email:props.user.email,
+                  },
+                },
+                `/user/detail/`
+                )
+            }}
+                   variant="outline-secondary">프로필보기</Button></div>
+	
+</div>
   <Container>
     <Row>
-
+      <Col sm={2} xs={2}>
+        
+    {/* {
+      langa
+      ?<>{langa}</>
+      :<>없어</>
+    }
+    {
+      langc
+      ?<>{
+        langc.map((a,i)=>{
+          return <div key={i}>
+            {larr[a]}
+          </div>
+        })
+      }</>
+      :<></>
+    } */}
+      {/* {props.user.name}
+      {props.user.description}
+      {props.user.gender ===1
+  ?<>남자</>
+  :<>여자</>
+  } */}
+      </Col>
       <Col>  
       <div className='matebox'>
       <div className='box'>
@@ -253,7 +468,7 @@ export default function Mate(props) {
     >
       <ListItem>
       
-        <ListItemText primary="Native Language" secondary={
+        <ListItemText primary="모국어" secondary={
           langc
           ?<>
           {
@@ -291,7 +506,7 @@ export default function Mate(props) {
         
       </ListItem>
       <ListItem>
-        <ListItemText primary={`Rating`} secondary={`${props.user.rating}`} />
+        <ListItemText primary={`인기도`} secondary={`${props.user.rating}`} />
         
         {
           likeBtn
@@ -312,7 +527,7 @@ export default function Mate(props) {
       </Col>
       
       <Col>
-      <List
+<List
       sx={{
         width: '100%',
         maxWidth: 360,
@@ -320,7 +535,7 @@ export default function Mate(props) {
       }}
     >
       <ListItem>
-        <ListItemText primary="SecondLanguage" secondary={
+        <ListItemText primary="구사언어" secondary={
           langb
           ?<span>
           {
@@ -346,7 +561,7 @@ export default function Mate(props) {
       </ListItem>
       
       <ListItem>
-        <ListItemText primary="Study Language" secondary={
+        <ListItemText primary="학습언어" secondary={
           langa
           ?<span>
           {
@@ -370,7 +585,7 @@ export default function Mate(props) {
         } />
       </ListItem>
       <ListItem>
-        <ListItemText primary="Description" secondary={`${props.user.description}`} />
+        <ListItemText primary="자기소개" secondary={`${props.user.description}`} />
       </ListItem>
 
 
@@ -388,7 +603,7 @@ export default function Mate(props) {
                 
                 )
             }}
-                  className="btncs" variant="outline-secondary">Chat</Button>
+                  className="btncs" variant="outline-secondary">대화하기</Button>
                   <Button  onClick={()=>{
               router.push(
                 {
@@ -400,9 +615,12 @@ export default function Mate(props) {
                 `/user/detail/`
                 )
             }}
-                   variant="outline-secondary" style={{marginLeft:'5px'}}>Profile</Button>
+                   variant="outline-secondary">프로필보기</Button>
+
 </Col>
+  <Col sm={2} xs={2}></Col>
     </Row>
+
     {/* <hr></hr> */}
   </Container>
 
@@ -412,12 +630,18 @@ export default function Mate(props) {
 
 
 <style jsx>{`
+.findmatebox{
+  border:solid 1px grey;
+  // margin:2px;
+  border-radius: 5px;
+}
+
         .matebox{
           border-radius: 15px;
           background-color:#edf7f6;
           // background-color:#e8feff;
           display: flex;
-          margin-top:20px;
+          margin:5px;
         }
         .box{
           float:left;
@@ -427,6 +651,16 @@ export default function Mate(props) {
           color:grey;
           font-size:6px;
           opacity:0.5;
+        }
+        .container{
+          display: flex;
+        }
+        .item1{
+          width:400px;
+
+        }
+        .item2{
+
         }
         
 

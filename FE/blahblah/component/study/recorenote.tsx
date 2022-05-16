@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import FolderIcon from "@mui/icons-material/Folder";
-import { Modal } from "react-bootstrap";
+import { Modal, Card } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
@@ -37,7 +37,7 @@ export default function Recordnote() {
 
   const writeRecordTitle = () => {
     if (recordTitle === "") {
-      alert("음성폴더 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .post(
@@ -62,12 +62,18 @@ export default function Recordnote() {
   // list불러오기
   const [total, setTotal] = useState(1);
   const [file, setFile]: any = useState([{}, {}, {}]);
+  const [myWidth, setMyWidth] = useState(84);
   useEffect(() => {
     allAxios
       .get(`/recordbook`, { headers: setToken() })
       .then((res) => {
         setFile(res.data.recordbookListRes);
         setTotal(res.data.totalPages);
+        if (res.data.totalPages <= 6) {
+          setMyWidth(252 - (7 - res.data.totalPages) * 28);
+        } else if (res.data.totalPages > 7) {
+          setMyWidth(252);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -79,7 +85,7 @@ export default function Recordnote() {
     allAxios
       .delete(`/recordbook/${num}`, { headers: setToken() })
       .then((res) => {
-        alert("음성폴더 " + title + " 삭제되었습니다.");
+        alert("The " + title + " is deleted.");
         window.location.reload();
       })
       .catch((err) => {
@@ -103,7 +109,7 @@ export default function Recordnote() {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("메모장 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .put(
@@ -128,49 +134,55 @@ export default function Recordnote() {
   const [dense, setDense] = useState(false);
   return (
     <>
-      <h1 className="cent">record note</h1>
-      <List dense={dense}>
-        {file
-          ? file.map((d: any, i: number) => {
-              return (
-                <ListItem
-                  key={i}
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => {
-                        lstDelete(d.id, d.title);
-                      }}
+      <Card style={{ width: "21.5vw" }}>
+        <Card.Body>
+          <Card.Title style={{ textAlign: "center" }}>record note</Card.Title>
+          <List dense={dense} style={{ height: "320px" }}>
+            {file
+              ? file.map((d: any, i: number) => {
+                  return (
+                    <ListItem
+                      key={i}
+                      secondaryAction={
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => {
+                            lstDelete(d.id, d.title);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      }
                     >
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemAvatar
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      changeOpen(d);
-                    }}
-                  >
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      router.push(`/record/${d.id}`);
-                    }}
-                    primary={d.title}
-                  />
-                </ListItem>
-              );
-            })
-          : null}
-      </List>
+                      <ListItemAvatar
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          changeOpen(d);
+                        }}
+                      >
+                        <Avatar>
+                          <FolderIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          router.push(`/record/${d.id}`);
+                        }}
+                        primary={d.title}
+                      />
+                    </ListItem>
+                  );
+                })
+              : null}
+          </List>
+        </Card.Body>
+      </Card>
       <div className="m">
         <Pagination
+          style={{ width: `${myWidth}px`, margin: "auto" }}
+          size="small"
           count={total}
           variant="outlined"
           shape="rounded"
@@ -179,26 +191,29 @@ export default function Recordnote() {
         />
       </div>
       <br></br>
-      <div className="mar-btn">
+      <div style={{ width: "171px", margin: "auto" }}>
         <Button
+          style={{
+            backgroundColor: "#00ccb1",
+          }}
           variant="contained"
           onClick={() => {
             handleShow();
             setRecordTitle("");
           }}
         >
-          음성폴더 추가
+          Add recordnote
         </Button>
       </div>
       {/* modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>음성폴더 제목을 입력해주세요.</Modal.Title>
+          <Modal.Title>Please write title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input
@@ -211,23 +226,29 @@ export default function Recordnote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button variant="contained" onClick={writeRecordTitle}>
-            저장
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={writeRecordTitle}
+          >
+            save
           </Button>
         </Modal.Footer>
       </Modal>
       {/* 음성폴더 이름 변경 modal */}
       <Modal show={changeShow} onHide={changeClose}>
         <Modal.Header closeButton>
-          <Modal.Title>메모장 제목을 수정해주세요.</Modal.Title>
+          <Modal.Title>Please rewrite title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input value={title} onChange={titleChange}></input>
@@ -236,11 +257,17 @@ export default function Recordnote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={changeClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button variant="contained" onClick={titleChangeClick}>
-            수정
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={titleChangeClick}
+          >
+            save
           </Button>
         </Modal.Footer>
       </Modal>
@@ -248,15 +275,6 @@ export default function Recordnote() {
         {`
           .cent {
             text-align: center;
-          }
-          .m {
-            width: 300px;
-            margin: 0 auto;
-          }
-          .mar-btn {
-            width: 150px;
-            margin-right: auto;
-            margin-left: auto;
           }
         `}
       </style>

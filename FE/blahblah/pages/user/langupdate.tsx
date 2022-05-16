@@ -72,7 +72,7 @@ export default function LangUpdate() {
           console.log('----코드용-0---')
           // console.log(lang[langId[myLang[i].langId-1]])
           console.log('----코드용-0---')
-          ob.push({ "code": lang[langId[myLang[i].langId-1]], "level": 1 })
+          ob.push({ "code": lang[langId[myLang[i].langId-1]], "level": myLang[i].level })
           console.log(langId[myLang[i].langId-1])
           array.push(langId[myLang[i].langId-1])
           setFirst(array)
@@ -265,8 +265,8 @@ export default function LangUpdate() {
         <Row>
           <Col></Col>
           <Col>
-            <h1>언어수정</h1>
-            <Form.Label>모국어(2개까지)
+            <h1>Language Update</h1>
+            <Form.Label>Native Language(two)
                 {
                   third
                   ?<>
@@ -275,7 +275,8 @@ export default function LangUpdate() {
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
                     {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
-                    onClick={()=>{handleThirdDel(a)}}>x</span>
+                    onClick={()=>{handleThirdDel(a)}}
+                    >x</span>
                     {/* splice로 제거할 수있긴함 근데 귀찮은데 그것까지 하고 끝낼까? 초기화로할까 */}
                       </div>
                   })
@@ -286,14 +287,14 @@ export default function LangUpdate() {
               </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleThird} >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
 
               <hr />
-              <Form.Label>구사언어(3개까지)
+              <Form.Label>Second Language(three)
               {
                   second
                   ?<>
@@ -312,13 +313,13 @@ export default function LangUpdate() {
               </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleSecond} >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
               <hr />
-              <Form.Label>학습언어(4개까지) 
+              <Form.Label>Study Language(four) 
               {
                   first
                   ?<>
@@ -328,9 +329,75 @@ export default function LangUpdate() {
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
                     {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
                     onClick={()=>{handleFirstDel(a)}}>x</span>
-                    <span style={{cursor:'pointer'}} onClick={()=>{
-                      
-                    }}>{' '}Level - {firstob[i].level}{`(수정하기)`}</span>
+                    <span>{' '}Level - {firstob[i].level}</span>
+                    
+                    {/* <span style={{cursor:'pointer'}} onClick={()=>{
+                      console.log(firstob)
+                      var newarr:any = [...firstob]
+
+                      for(let i=0;i<Object(newarr).length;i++){
+                        console.log(newarr[i].code)
+                        if(newarr[i].code===lang[a]){
+                          newarr[i].level = 3
+                        }
+                        setFirstob(newarr)
+                        // console.log(lang[a])
+                      }
+                      console.log(newarr)
+                    }}>{`,lv3`}</span> */}
+                    
+
+                    <Button style={{display:'none'}}></Button>
+                    {/* 더미용 버튼.. 뭐지 대체 왜 클릭되는거지 맨앞에거 */}
+                      <Button style={{margin:'3px'}} onClick={()=>{
+                      console.log(firstob)
+                      var newarr:any = [...firstob]
+
+                      for(let i=0;i<Object(newarr).length;i++){
+                        console.log(newarr[i].code)
+                        if(newarr[i].code===lang[a]){
+                          newarr[i].level = 1
+                        }
+                        setFirstob(newarr)
+                        // console.log(lang[a])
+                      }
+                      console.log(newarr)
+                    }} variant="outline-secondary" size="sm">
+      LV1
+    </Button>
+    <Button style={{margin:'3px'}} onClick={()=>{
+                      console.log(firstob)
+                      var newarr:any = [...firstob]
+
+                      for(let i=0;i<Object(newarr).length;i++){
+                        console.log(newarr[i].code)
+                        if(newarr[i].code===lang[a]){
+                          newarr[i].level = 2
+                        }
+                        setFirstob(newarr)
+                        // console.log(lang[a])
+                      }
+                      console.log(newarr)
+                    }} variant="outline-secondary" size="sm">
+      LV2
+    </Button>
+                    <Button style={{margin:'3px'}} onClick={()=>{
+                      console.log(firstob)
+                      var newarr:any = [...firstob]
+
+                      for(let i=0;i<Object(newarr).length;i++){
+                        console.log(newarr[i].code)
+                        if(newarr[i].code===lang[a]){
+                          newarr[i].level = 3
+                        }
+                        setFirstob(newarr)
+                        // console.log(lang[a])
+                      }
+                      console.log(newarr)
+                    }} variant="outline-secondary" size="sm">
+      LV3
+    </Button>
+                   
                     </div>
                   })
 }</>
@@ -341,12 +408,12 @@ export default function LangUpdate() {
                 onChange={handleFirst}
 
               >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              <Button onClick={() => {
+              {/* <Button onClick={() => {
                 // console.log(first)
                 // console.log(firstob)
                 // console.log(second)
@@ -361,14 +428,14 @@ export default function LangUpdate() {
                 console.log(newarr)
 
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
                 <Button onClick={onEdit} className="btncs" 
                    variant="outline-secondary"
-                style={{ margin: '5px' }} >수정하기</Button>
+                style={{ margin: '5px' }} >Edit</Button>
                 <Button onClick={() => {
               router.push('/user/mypage')
             }}
-            style={{ margin: '5px' }} variant="outline-secondary">마이페이지 돌아가기</Button>
+            style={{ margin: '5px' }} variant="outline-secondary">Back to Mypage</Button>
           </Col>
           <Col></Col>
         </Row>

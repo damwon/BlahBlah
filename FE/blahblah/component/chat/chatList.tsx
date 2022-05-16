@@ -1,55 +1,80 @@
-import * as React from "react";
+import React, { useState } from "react";
 import {
   ListSubheader,
   ListItemAvatar,
   List,
   ListItem,
   ListItemText,
+  Divider,
+  ListItemButton,
+  Avatar,
+  Typography,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { useRouter } from "next/router";
 
 export default function ChatList(props: any) {
-  const router = useRouter();
+  const handleListItemClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number
+  ) => {
+    props.setSelectedIndex(index);
+  };
   return (
-    <List sx={{ bgcolor: "background.paper" }}>
+    <List sx={{ bgcolor: "background.paper", overflowY: "auto" }}>
       <ListSubheader sx={{ textAlign: "center", fontSize: "20px" }}>
-        채팅 리스트
+        Chatting List
       </ListSubheader>
+      <Divider />
       {props.chattingList.length > 0 ? (
         props.chattingList.map((item: any, index: any) => {
           return (
-            <ListItem key={index}>
-              <ListItemAvatar>
-                <AccountCircleIcon fontSize="large" />
-              </ListItemAvatar>
-              <ListItemText
-                primary={item.roomName}
-                sx={{ cursor: "pointer" }}
-                onClick={() => {
-                  props.readMsg(item.opponentId);
-                  props.setChatRoomData(item);
-                  props.setChatname(item.roomName);
-                }}
-                secondary={
-                  item.type === "text"
-                    ? item.lastMsg
-                    : item.type === "image"
-                    ? "사진"
-                    : item.type === "audio"
-                    ? "음성 메시지"
-                    : item.type === "comment"
-                    ? "첨삭 메시지"
-                    : ""
-                }
-              />
-              <ListItemText primary={item.unread} />
-            </ListItem>
+            <>
+              <ListItem
+                selected={props.chatRoomData.roomId === item.roomId}
+                key={index}
+              >
+                <ListItemButton
+                  onClick={(e) => {
+                    props.readMsg(item.opponentId);
+                    props.setChatRoomData(item);
+                    props.setChatname(item.roomName);
+                    handleListItemClick(e, index);
+                  }}
+                >
+                  <ListItemAvatar>
+                    <AccountCircleIcon fontSize="large" />
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.roomName}
+                    sx={{ cursor: "pointer" }}
+                    secondary={
+                      item.type === "text"
+                        ? item.lastMsg
+                        : item.type === "image"
+                        ? "Image"
+                        : item.type === "audio"
+                        ? "Voice Message"
+                        : item.type === "comment"
+                        ? "Comment"
+                        : ""
+                    }
+                  />
+                  {item.unread === 0 ? null : (
+                    <ListItemAvatar>
+                      <Avatar sx={{ backgroundColor: "#00CCB1" }}>
+                        <Typography>{item.unread}</Typography>
+                      </Avatar>
+                    </ListItemAvatar>
+                  )}
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+            </>
           );
         })
       ) : (
         <ListItem>
-          <ListItemText>채팅 목록이 없습니다.</ListItemText>
+          <ListItemText>No chatting list.</ListItemText>
         </ListItem>
       )}
     </List>

@@ -11,7 +11,7 @@ export default function Study() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
       alert("로그인 후 사용해주세요.");
-      router.push(`/`);
+      router.push(`/user/login`);
     }
   });
   return (
@@ -19,14 +19,15 @@ export default function Study() {
       <Grid spacing={3} container>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <Image
+          {/* <Image
             priority
             src="/images/study.PNG"
             alt="study image"
             width="200"
             height="40"
             layout="responsive"
-          />
+          /> */}
+          <br></br>
           <Grid spacing={3} container>
             <Grid item xs={4}>
               <Wordnote></Wordnote>

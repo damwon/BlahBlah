@@ -10,6 +10,10 @@ import {
   ListItemText,
   Checkbox,
 } from "@mui/material";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import CreateIcon from "@mui/icons-material/Create";
+import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -30,8 +34,8 @@ export default function Index() {
 
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("로그인 후 사용해주세요.");
-      router.push(`/`);
+      alert("you need to login first.");
+      router.push(`/user/login`);
     }
   });
   const [showFeeds, setShowFeeds]: any = useState();
@@ -151,7 +155,7 @@ export default function Index() {
     allAxios
       .put(`/feed/${changeIdx}`, formData, { headers: setToken() })
       .then(() => {
-        alert("피드를 수정했습니다.");
+        alert("the feed is modified.");
         window.location.reload();
       })
       .catch((err) => {
@@ -191,7 +195,7 @@ export default function Index() {
           console.log(err);
         });
     } else {
-      alert("내용을 입력해주세요");
+      alert("please write contents");
     }
   };
 
@@ -202,15 +206,15 @@ export default function Index() {
   };
 
   const [btnColor, setBtnColor] = useState("primary");
-  const [btnName, setBtnName] = useState("피드 전체 보기");
+  const [btnName, setBtnName] = useState("Show All Feed");
   const btnChange = () => {
     if (btnColor === "primary") {
       setBtnColor("success");
-      setBtnName("친구 피드만 보기");
+      setBtnName("Show Follower's Feed");
       setShowFeeds(friendFeeds);
     } else {
       setBtnColor("primary");
-      setBtnName("피드 전체 보기");
+      setBtnName("Show All Feed");
       setShowFeeds(feeds);
     }
   };
@@ -220,7 +224,7 @@ export default function Index() {
       allAxios
         .delete(`comment/${id}`, { headers: setToken() })
         .then(() => {
-          alert("댓글이 삭제되었습니다.");
+          alert("the comment is deleted.");
         })
         .catch((err) => {
           console.log(err);
@@ -233,7 +237,7 @@ export default function Index() {
       allAxios
         .delete(`feed/${id}`, { headers: setToken() })
         .then(() => {
-          alert("게시물이 삭제되었습니다.");
+          alert("the feed is deleted.");
           window.location.reload();
         })
         .catch((err) => {
@@ -271,7 +275,7 @@ export default function Index() {
           console.log(err);
         });
     } else {
-      alert("댓글에 내용을 입력해주세요.");
+      alert("please write contents.");
     }
   };
 
@@ -300,28 +304,37 @@ export default function Index() {
         <Grid item xs={6}>
           <div>
             <Button
-              style={{ width: 100 }}
+              style={{
+                backgroundColor: "#00ccb1",
+                width: 150,
+              }}
               variant="contained"
               color="primary"
               size="small"
               onClick={handleShow}
             >
-              피드 작성
-            </Button>
+              <CreateIcon style={{ marginRight: "10px" }}></CreateIcon>
+              Write Feed
+            </Button>{" "}
             <Button
-              style={{ width: 150 }}
+              style={{
+                backgroundColor: "#00ccb1",
+                width: 230,
+              }}
               variant="contained"
               color={btnColor === "primary" ? "primary" : "secondary"}
               size="small"
               onClick={btnChange}
             >
+              <ChangeCircleIcon
+                style={{ marginRight: "10px" }}
+              ></ChangeCircleIcon>
               {btnName}
             </Button>
           </div>
           <List dense={dense}>
             {showFeeds &&
               showFeeds.map((d: any, i: any) => {
-                console.log(d);
                 return (
                   <div key={i}>
                     <ListItem
@@ -337,9 +350,9 @@ export default function Index() {
                             <Image
                               className="profile"
                               src={d.userProfile}
-                              alt="finger image"
-                              width="200%"
-                              height="200%"
+                              alt=" "
+                              width="100%"
+                              height="100%"
                             ></Image>
 
                             <div className="innerRB"></div>
@@ -348,6 +361,17 @@ export default function Index() {
                       </ListItemAvatar>
                       <ListItemText style={{ margin: "30px" }} />
                       <div style={{ width: "100%" }}>
+                        <Grid container spacing={2}>
+                          <Grid item xs={6}>
+                            <h5>{d.userName}</h5>
+                          </Grid>
+                          <Grid item xs={6}>
+                            <h6 style={{ textAlign: "right" }}>
+                              {d.createdAt.substr(0, 10)}
+                            </h6>
+                          </Grid>
+                        </Grid>
+
                         {d.imgUrl ? (
                           <Image
                             className="profile"
@@ -358,11 +382,9 @@ export default function Index() {
                           ></Image>
                         ) : null}
 
-                        <h5 style={{ margin: "20px", width: "70%" }}>
+                        <h6 style={{ margin: "20px 0px", width: "70%" }}>
                           {d.content}
-                        </h5>
-
-                        <hr></hr>
+                        </h6>
 
                         <ThumbUpIcon
                           style={{ margin: "5px", cursor: "pointer" }}
@@ -439,7 +461,7 @@ export default function Index() {
                               }
                             })
                           : [0].map((f: any, k: number) => {
-                              return <h5 key={k}>첫 댓글을 작성해보세요.</h5>;
+                              return <h6 key={k}>첫 댓글을 작성해보세요.</h6>;
                             })}
                         {myStyle && myStyle[i] ? (
                           [0].map((d2: any, i2: number) => {
@@ -447,13 +469,19 @@ export default function Index() {
                               return (
                                 <div key={i2}>
                                   <Button
+                                    style={{
+                                      backgroundColor: "#00ccb1",
+                                    }}
                                     variant="contained"
                                     onClick={() => {
                                       showComments(i);
                                     }}
                                     size="small"
                                   >
-                                    더보기
+                                    <ArrowDropDownIcon
+                                      style={{ marginRight: "10px" }}
+                                    ></ArrowDropDownIcon>
+                                    Open Comments
                                   </Button>
                                 </div>
                               );
@@ -461,26 +489,38 @@ export default function Index() {
                               return (
                                 <Button
                                   key={i2}
+                                  style={{
+                                    backgroundColor: "#00ccb1",
+                                  }}
                                   variant="contained"
                                   onClick={() => {
                                     closeComments(i);
                                   }}
                                   size="small"
                                 >
-                                  접기
+                                  <ArrowDropUpIcon
+                                    style={{ marginRight: "10px" }}
+                                  ></ArrowDropUpIcon>
+                                  Close Comments
                                 </Button>
                               );
                             }
                           })
                         ) : (
                           <Button
+                            style={{
+                              backgroundColor: "#00ccb1",
+                            }}
                             variant="contained"
                             onClick={() => {
                               closeComments(i);
                             }}
                             size="small"
                           >
-                            접기
+                            <ArrowDropUpIcon
+                              style={{ marginRight: "10px" }}
+                            ></ArrowDropUpIcon>
+                            Close Comments
                           </Button>
                         )}
 
@@ -493,6 +533,9 @@ export default function Index() {
                             }}
                           ></input>
                           <Button
+                            style={{
+                              backgroundColor: "#00ccb1",
+                            }}
                             variant="contained"
                             onClick={() => {
                               writeComment(d.id);
@@ -502,7 +545,7 @@ export default function Index() {
                               }
                             }}
                           >
-                            작성
+                            write
                           </Button>
                         </div>
                       </div>
@@ -519,12 +562,12 @@ export default function Index() {
       {/* 피드 작성 modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>피드를 작성해주세요.</Modal.Title>
+          <Modal.Title>Write your Feed.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>내용</h4>
+              <h6>Content</h6>
             </Grid>
             <Grid item xs={10}>
               <textarea
@@ -536,7 +579,7 @@ export default function Index() {
             </Grid>
           </Grid>
           <input type="file" name="file" onChange={(e) => handleFile(e)} />
-          <span>피드 공개여부</span>
+          <span>Feed Open All</span>
           <Checkbox
             onClick={() => {
               if (open) {
@@ -549,24 +592,35 @@ export default function Index() {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="contained" color="error" onClick={handleClose}>
-            취소
+          <Button
+            style={{}}
+            variant="contained"
+            color="error"
+            onClick={handleClose}
+          >
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
-          <Button variant="contained" onClick={writeFeed}>
-            저장
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={writeFeed}
+          >
+            save
           </Button>
         </Modal.Footer>
       </Modal>
       {/* 피드 수정 modal */}
       <Modal show={show2} onHide={handleClose2}>
         <Modal.Header closeButton>
-          <Modal.Title>피드 수정</Modal.Title>
+          <Modal.Title>Feed Rewrite</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>내용</h4>
+              <h6>Content</h6>
             </Grid>
             <Grid item xs={10}>
               <textarea
@@ -577,7 +631,7 @@ export default function Index() {
             </Grid>
           </Grid>
           <input type="file" name="file" onChange={(e) => handleFile(e)} />
-          <span>피드 공개여부</span>
+          <span>Feed Open All</span>
           <Checkbox
             onClick={() => {
               if (open) {
@@ -591,11 +645,11 @@ export default function Index() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose2}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button variant="contained" onClick={modifyFeed}>
-            저장
+            save
           </Button>
         </Modal.Footer>
       </Modal>
@@ -619,38 +673,6 @@ export default function Index() {
             position: relative;
             overflow: hidden;
           }
-
-           {
-            /* .innerLT {
-            background-color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            cursor: pointer;
-          }
-          .innerRT {
-            background-color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-          }
-          .innerLB {
-            background-color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            cursor: pointer;
-          } */
           }
           .innerRB {
             background-color: rgb(130, 219, 78);

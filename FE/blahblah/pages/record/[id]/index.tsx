@@ -1,16 +1,5 @@
-import {
-  Pagination,
-  Grid,
-  List,
-  ListItem,
-  IconButton,
-  ListItemAvatar,
-  ListItemText,
-  Avatar,
-} from "@mui/material";
+import { Pagination, Grid, List, IconButton, Button } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import LibraryBooks from "@mui/icons-material/LibraryBooks";
-import { Button, Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -37,6 +26,7 @@ export default function WordNote() {
   const [total, setTotal] = useState(1);
   const [audios, setAudios]: any = useState();
   const [title, setTitle] = useState();
+  const [myWidth, setMyWidth] = useState(84);
   useEffect(() => {
     if (String(id) != "NaN") {
       allAxios
@@ -47,6 +37,11 @@ export default function WordNote() {
           setTitle(res.data.recordBookTitle);
           setTotal(res.data.totalPages);
           setAudios(res.data.recordListRes);
+          if (res.data.totalPages <= 6) {
+            setMyWidth(252 - (7 - res.data.totalPages) * 28);
+          } else if (res.data.totalPages > 7) {
+            setMyWidth(252);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -62,7 +57,7 @@ export default function WordNote() {
         headers: setToken(),
       })
       .then(() => {
-        alert("음성파일이 삭제되었습니다.");
+        alert("The record file is deleted.");
         window.location.reload();
       })
 
@@ -81,22 +76,25 @@ export default function WordNote() {
       >
         <Grid item xs={1} />
         <Grid item xs={10}>
-          <Image
+          {/* <Image
             priority
             src="/images/recording.PNG"
             alt="recording image"
             width="200"
             height="40"
             layout="responsive"
-          />
+          /> */}
           <h1 className="cent">{title}</h1>
+          <br></br>
+          <br></br>
+          <br></br>
           <List dense={dense}>
             <Grid container spacing={4}>
               {audios &&
                 audios.map((d: any, i: number) => {
-                  console.log(d);
                   return (
-                    <div key={i}>
+                    <Grid item xs={3} key={i}>
+                      <h5 style={{ marginLeft: "20px" }}>{d.title}</h5>
                       <audio
                         src={d.recordUrl}
                         controls
@@ -112,7 +110,7 @@ export default function WordNote() {
                       >
                         <DeleteIcon />
                       </IconButton>
-                    </div>
+                    </Grid>
                   );
                 })}
             </Grid>
@@ -122,25 +120,28 @@ export default function WordNote() {
             [0].map((d: any, i: number) => {
               return (
                 <h1 key={i} style={{ width: "500px", margin: "auto" }}>
-                  저장된 음성파일이 없습니다.
+                  Please add your first record file.
                 </h1>
               );
             })}
 
           <br></br>
-          <div className="m" style={{ width: "140px" }}>
+          <div className="m" style={{ width: "72px" }}>
             <Button
-              variant="primary"
+              style={{ backgroundColor: "grey" }}
+              variant="contained"
               onClick={() => {
                 router.push(`/study`);
               }}
             >
-              뒤로가기
+              Back
             </Button>
           </div>
           <br></br>
           <div className="m" style={{ width: "400px" }}>
             <Pagination
+              style={{ width: `${myWidth}px`, margin: "auto" }}
+              size="small"
               count={total}
               variant="outlined"
               shape="rounded"

@@ -8,6 +8,11 @@ import { Email } from '@mui/icons-material';
 import langarr from '../../../component/user/Langarr'
 import langkey from '../../../component/user/Lang'
 import langIMG from '../../../component/user/LangImg'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import User from '..';
+import Avatar from '@mui/material/Avatar';
+
 
 export default function UserDetail() {
   const router = useRouter();
@@ -78,6 +83,129 @@ export default function UserDetail() {
     }
   },[lang])
 
+    // 유저 좋아요 버튼
+    const [likeBtn,setLikeBtn] = useState(true)
+    // 유저 팔로우 버튼
+    const [followBtn,setFollowBtn] = useState(true)
+
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+  // 팔로우요청,언팔로우요청
+  const userFollow = (event:any) => {
+    event.preventDefault();
+    setFollowBtn(!followBtn)
+    axios({
+      method:'post',
+      url:`https://blahblah.community:8443/api/follow/${user.id}`,
+      headers: setToken(),
+      // data: {
+      //   'email':email
+      // },
+    })
+    .then((result)=>{
+    console.log('팔로우 요청성공')
+    console.log(result)
+ 
+  })
+    .catch((error)=>{
+      console.log('팔로우 요청실패')
+      console.log(error)  
+  })
+  };
+
+  // 좋아요 요청
+  const userLike = (event:any) => {
+    event.preventDefault();
+    setLikeBtn(!likeBtn)
+    axios({
+      method:'post',
+      url:`https://blahblah.community:8443/api/rate/${email}`,
+      headers: setToken(),
+      data: {
+        'email':email
+      },
+    })
+    .then((result)=>{
+      // setLikeBtn(!likeBtn)
+      // props.findMate()
+      // 이걸로 상위 함수 바꿔줘서 좋아요 실시간
+      // setLike(props.user.rating)
+      console.log('유저 좋아 요청성공')
+    console.log(result)
+ 
+  })
+    .catch((error)=>{
+      console.log('유저 좋아 요청실패')
+      console.log(email)
+    console.log(error)  
+  })
+  };
+
+  const [following,setFollowing] = useState<any>()
+  const [rateList,setRateList] = useState<any>()
+  const getFollowing = () => {
+    axios({
+      url: "https://blahblah.community:8443/api/follow/following",
+      method: "get",
+      headers: setToken(),
+    }).then((res) => {
+      console.log('팔로잉 목록 요청성공')
+      // console.log(res)
+      console.log(res.data)
+      setFollowing(res.data)
+      // setFollowing(res.data)
+    }).catch((err)=>{
+      console.log('팔로잉 목록 요청실패')
+      console.log(err)
+    });
+  };
+
+  const getRateList = () => {
+    axios({
+      url: "https://blahblah.community:8443/api/rate/ratedlist",
+      method: "get",
+      headers: setToken(),
+    }).then((res) => {
+      console.log('좋아요 목록 요청성공')
+      // console.log(res)
+      console.log(res.data)
+      setRateList(res.data)
+      // setFollowing(res.data)
+      // setFollowing(res.data)
+    }).catch((err)=>{
+      console.log('좋아요 목록 요청실패')
+      console.log(err)
+    });
+  };
+
+  useEffect(() => {
+    getFollowing()
+    getRateList()
+  }, []);
+
+  useEffect(()=>{
+    console.log('챙겨오기~')
+    console.log(following)
+    console.log('유저출력~')
+    console.log(user)
+    if(user){
+      for(let i=0;i<Object(following).length;i++){
+        if(following[i].id === user.id){
+          setFollowBtn(false)
+        }
+      }
+      for(let i=0;i<Object(rateList).length;i++){
+        if(rateList[i].userId === user.id){
+          setLikeBtn(false)
+        }
+      }
+    }
+  },[following])
 
 
 
@@ -88,12 +216,35 @@ export default function UserDetail() {
         <Row>
           <Col></Col>
           <Col>
+          
           {
             user
-            ?<> <ListGroup variant="flush">
-            <ListGroup.Item>이름:{user.name}</ListGroup.Item>
-            <ListGroup.Item>이메일주소:{user.email}</ListGroup.Item>
-            <ListGroup.Item>모국어:{
+            ?<> 
+            <Avatar
+        alt="ProfileImage"
+        src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${user.profileImg}`}
+        // src="/user/young-man.png"
+        sx={{ width: 100, height: 100 }}
+      />
+            <ListGroup variant="flush">
+            <ListGroup.Item><div className="fw-bold">Name</div>{user.name}{' '}{
+    followBtn
+    ?<>  <Button variant="secondary" size="sm" onClick={userFollow}>
+    follow
+  </Button></>
+    :<>  <Button variant="outline-secondary" size="sm" onClick={userFollow}>
+    unfollow
+  </Button></>
+  }
+{' '}
+{
+          likeBtn
+          ?<FavoriteBorderIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteBorderIcon>
+          :<FavoriteIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteIcon>
+        }
+            </ListGroup.Item>
+            <ListGroup.Item><div className="fw-bold">Email</div>{user.email}</ListGroup.Item>
+            <ListGroup.Item><div className="fw-bold">Native Language</div>{
           langc
           ?<>
           {
@@ -108,7 +259,7 @@ export default function UserDetail() {
           </>        
           :null
         }</ListGroup.Item>
-            <ListGroup.Item>구사언어:{
+            <ListGroup.Item><div className="fw-bold">Second Language</div>{
           langb
           ?<span>
           {
@@ -125,7 +276,7 @@ export default function UserDetail() {
           </span>
           :null
         }</ListGroup.Item>
-            <ListGroup.Item>학습언어:{
+            <ListGroup.Item><div className="fw-bold">Study Language</div>{
           langa
           ?<span>
           {
@@ -142,16 +293,23 @@ export default function UserDetail() {
           </span>
           :null
         }</ListGroup.Item>
-            <ListGroup.Item>성별:{user.gender === 1
-              ? <>여자</>
-              : <>남자</>
+            <ListGroup.Item><div className="fw-bold">Sex</div>{user.gender === 1
+              ? <>Woman</>
+              : <>Man</>
             }</ListGroup.Item>
-            <ListGroup.Item>나이:{user.age}</ListGroup.Item>
-            <ListGroup.Item>자기소개:{user.description}</ListGroup.Item>
+            <ListGroup.Item><div className="fw-bold">Age</div>{user.age}</ListGroup.Item>
+            <ListGroup.Item><div className="fw-bold">Rating</div>{user.rating}</ListGroup.Item>
+            <ListGroup.Item><div className="fw-bold">Description</div>{user.description}</ListGroup.Item>
           </ListGroup>
             </>
             :null
           }
+          <Button onClick={() => {
+                // router.push('/main') 
+                history.back()
+              }} style={{margin:'5px'}}
+              className="btncs" variant="outline-secondary">Back</Button>
+            
          
           </Col>
           <Col></Col>

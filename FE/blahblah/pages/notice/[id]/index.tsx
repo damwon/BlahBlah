@@ -38,12 +38,13 @@ export default function QnaInfo() {
       <Grid item xs={8}>
         <Image
           priority
-          src="/images/notice2.PNG"
+          src="/images/notice2.png"
           alt="notice image"
           width="200"
-          height="40"
+          height="30"
           layout="responsive"
         />
+        <br></br>
         <br></br>
         <br></br>
         <Grid container spacing={3}>
@@ -58,11 +59,15 @@ export default function QnaInfo() {
           <Grid item xs={2}>
             <Button
               size="small"
-              style={{ width: 100 }}
+              style={{
+                backgroundColor: "#00ccb1",
+                width: 100,
+                cursor: "default",
+              }}
               variant="contained"
               color="primary"
             >
-              공지
+              Notice
             </Button>
           </Grid>
           <Grid item xs={7}>
@@ -84,12 +89,15 @@ export default function QnaInfo() {
         <br></br>
         <div className="m">
           <Button
+            style={{
+              backgroundColor: "grey",
+            }}
             variant="contained"
             onClick={() => {
               router.push(`/notice`);
             }}
           >
-            목록
+            Back
           </Button>{" "}
         </div>
         <Grid item xs={2} />

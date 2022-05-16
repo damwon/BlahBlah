@@ -22,11 +22,11 @@ export default function Findpass() {
     })
       .then(() => {
         setEmail("");
-        alert("인증메일 확인해");
+        alert("Check your Email Message");
       })
       .catch((err) => {
         console.log(err);
-        alert('제대로 입력해')
+        alert('Enter Correctly')
       });
   };
   return (
@@ -34,18 +34,18 @@ export default function Findpass() {
       <Container>
         <Row>
           <Col>
-            <h1>비밀번호찾기</h1>
-            이메일입력해
+            <h1>Find Password</h1>
+            Input Your Email
             {email}
             <div>
               <input onChange={handleEmail}></input>
             </div>
             <Button onClick={onCheckEmail}
-              style={{ marginBottom: '20px' }} variant="outline-dark">인증메일보내기</Button>
+              style={{ marginBottom: '20px' }} variant="outline-dark">Send Confirm Email Message</Button>
             <Button onClick={() => {
               router.push('/user/login')
             }}
-              style={{ marginBottom: '20px' }} variant="outline-dark">로그인하러가기</Button>
+              style={{ marginBottom: '20px' }} variant="outline-dark">Go to Login</Button>
             {/* <button onClick={onCheckEmail}>눌러버튼</button> */}
           </Col>
         </Row>

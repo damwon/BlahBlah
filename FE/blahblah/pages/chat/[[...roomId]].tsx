@@ -17,7 +17,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 // icons
-import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
@@ -43,18 +42,19 @@ import axios from "axios";
 import { WebRtcPeer } from "kurento-utils";
 // router
 import { useRouter } from "next/router";
+import dayjs from "dayjs";
 
 const ChatTypographyByMe = styled(Typography)({
   borderRadius: "20px",
   padding: "10px 20px",
-  backgroundColor: "skyblue",
+  backgroundColor: "#00CCB1",
   color: "white",
   fontWeight: 500,
 });
 
 const ChatBox = styled(Box)({
   overflowY: "auto",
-  height: "100%",
+  height: "75vh",
   width: "100%",
   display: "flex",
   flexDirection: "column",
@@ -87,7 +87,9 @@ export default function Chat() {
   // 채팅방 정보(개별)
   const [chatRoomData, setChatRoomData] = useState<any>({});
   // 채팅 상대방 이름
-  const [chatname, setChatname] = useState("");
+  const [chatname, setChatname] = useState("No one...");
+  // 채팅리스트 인덱스
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   // 라우터 쿼리 체크
   useEffect(() => {
@@ -138,6 +140,7 @@ export default function Chat() {
       headers: setToken(),
     })
       .then((res) => {
+        console.log(res.data);
         setUserData(res.data);
       })
       .catch((err) => {
@@ -185,6 +188,11 @@ export default function Chat() {
     if (userData) {
       connect(chatRoomData);
     }
+    // router.events.on("routeChangeStart", function () {
+    //   if (stompClient) {
+    //     stompClient.disconnect();
+    //   }
+    // });
     return () => {
       if (stompClient) {
         stompClient.disconnect();
@@ -195,7 +203,8 @@ export default function Chat() {
   const addMsg = (msg: any) => {
     setChatHistory((prev) => [...prev, msg]);
   };
-  // 채팅 히스토리
+
+  // 채팅 히스토리 가져오기
   useEffect(() => {
     console.log(chatRoomData);
     if (chatRoomData) {
@@ -427,6 +436,9 @@ export default function Chat() {
         console.info("받은 메시지: " + message.data);
         switch (parsedMessage.id) {
           case "registerResponse":
+            if (parsedMessage.response.includes("already registered")) {
+              alert("이미 등록되었습니다. 새로고침 해주세요.");
+            }
             console.log(parsedMessage);
             break;
           case "callResponse":
@@ -650,15 +662,24 @@ export default function Chat() {
     <>
       <Box
         style={{
-          height: "80vh",
-          marginTop: "20px",
+          marginBottom: "20px",
           display: "flex",
           justifyContent: "space-between",
         }}
       >
         {chattingList && (
-          <Box sx={{ width: "20%", display: callState ? "none" : "block" }}>
+          <Box
+            sx={{
+              width: "20%",
+              display: callState ? "none" : "block",
+              border: "1px solid #b5b5b5",
+              borderRightStyle: "none",
+            }}
+          >
             <ChatList
+              chatRoomData={chatRoomData}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
               readMsg={readMsg}
               chattingList={chattingList}
               setChatname={setChatname}
@@ -710,10 +731,10 @@ export default function Chat() {
                 <CallEndIcon color="warning" />
               </IconButton>
               <Button onClick={muteAudio}>
-                {audioMuted ? "음소거 해제" : "음소거"}
+                {audioMuted ? "Unmute" : "Mute"}
               </Button>
               <Button onClick={muteVideo}>
-                {videoMuted ? "화면 켜기" : "화면 끄기"}
+                {videoMuted ? "Video on" : "Video off"}
               </Button>
             </Box>
           </Box>
@@ -721,8 +742,9 @@ export default function Chat() {
         <Box
           sx={{
             display: "flex",
-            border: "1px solid black",
-            borderRadius: "10px",
+            borderTop: "1px solid #b5b5b5",
+            borderBottom: "1px solid #b5b5b5",
+            borderLeft: "1px solid #b5b5b5",
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "center",
@@ -735,116 +757,163 @@ export default function Chat() {
               display: "flex",
               alignItems: "center",
               padding: 3,
-              borderBottom: "1px solid black",
+              borderBottom: "1px solid #b5b5b5",
               justifyContent: "space-between",
             }}
           >
-            <Typography>상대방: {chatname}</Typography>
-            <Box>
-              <IconButton onClick={videoCall}>
-                <VideocamIcon sx={{ color: "black" }} />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  alert("신고 버튼 눌림");
-                }}
-              >
-                <ReportIcon color="warning" />
-              </IconButton>
-            </Box>
+            <Typography sx={{ fontSize: "30px" }}>{chatname}</Typography>
+            <IconButton onClick={videoCall}>
+              <VideocamIcon fontSize="large" sx={{ color: "black" }} />
+            </IconButton>
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
             {userData &&
               (chatHistory.length > 0 ? (
-                chatHistory.map((item, index) => {
-                  if (item.senderId == userData.id) {
-                    return (
-                      <Box
-                        sx={{
-                          width: "100%",
-                          padding: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "end",
-                        }}
-                        key={index}
-                      >
-                        {item.type === "text" && (
-                          <ChatTypographyByMe>
-                            {item.content}
-                          </ChatTypographyByMe>
-                        )}
-                        {item.type === "audio" && (
-                          <>
-                            <IconButton
-                              onClick={() => {
-                                handleClickOpenVoiceSave(item.content);
-                              }}
-                            >
-                              <DownloadIcon />
-                            </IconButton>
-                            <audio
-                              src={item.content}
-                              controls
-                              controlsList="nodownload"
-                            />
-                          </>
-                        )}
-                        {item.type === "image" && (
-                          <Image
-                            src={item.content}
-                            style={{ width: "200px", height: "200px" }}
-                          />
-                        )}
-                        {item.type === "comment" && (
-                          <Stack
+                <>
+                  <Box
+                    sx={{
+                      width: "100%",
+                      padding: 2,
+                      textAlign: "center",
+                    }}
+                  >
+                    <Typography>
+                      {dayjs(chatHistory[0].createdAt).format("YYYY-MM-DD")}
+                    </Typography>
+                  </Box>
+                  {chatHistory.map((item, index) => {
+                    if (index > 0) {
+                      const date1 = new Date(item.createdAt);
+                      const date2 = new Date(chatHistory[index - 1].createdAt);
+                      if (date1.getDate() > date2.getDate()) {
+                        return (
+                          <Box
                             sx={{
-                              borderRadius: "20px",
-                              padding: "10px 20px",
-                              backgroundColor: "skyblue",
-                              fontWeight: 500,
-                              color: "white",
+                              width: "100%",
+                              padding: 2,
+                              textAlign: "center",
+                            }}
+                            key={index}
+                          >
+                            <Typography>
+                              {dayjs(item.createdAt).format("YYYY-MM-DD")}
+                            </Typography>
+                          </Box>
+                        );
+                      }
+                    }
+                    if (item.senderId == userData.id) {
+                      return (
+                        <Box
+                          sx={{
+                            width: "100%",
+                            padding: 2,
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "end",
+                          }}
+                          key={index}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: "15px",
+                              mr: "10px",
                             }}
                           >
-                            <Typography
+                            {dayjs(item.createdAt).format("HH:mm")}
+                          </Typography>
+                          {item.type === "text" && (
+                            <ChatTypographyByMe>
+                              {item.content}
+                            </ChatTypographyByMe>
+                          )}
+                          {item.type === "audio" && (
+                            <>
+                              <IconButton
+                                onClick={() => {
+                                  handleClickOpenVoiceSave(item.content);
+                                }}
+                              >
+                                <DownloadIcon />
+                              </IconButton>
+                              <audio
+                                src={item.content}
+                                controls
+                                controlsList="nodownload"
+                              />
+                            </>
+                          )}
+                          {item.type === "image" && (
+                            <Image
+                              src={item.content}
+                              style={{ width: "200px", height: "200px" }}
+                            />
+                          )}
+                          {item.type === "comment" && (
+                            <Stack
                               sx={{
-                                borderBottom: "1px solid white",
-                                opacity: 0.5,
+                                borderRadius: "20px",
+                                padding: "10px 20px",
+                                backgroundColor: "#00CCB1",
+                                fontWeight: 500,
+                                color: "white",
                               }}
                             >
-                              기존: {item.content}
-                            </Typography>
-                            <Box sx={{ display: "flex" }}>
-                              <ArrowForwardIcon />
-                              <Typography>코멘트: {item.comment}</Typography>
-                            </Box>
-                          </Stack>
-                        )}
-                      </Box>
-                    );
-                  } else {
-                    return (
-                      <ChatBoxOfOther
-                        key={index}
-                        item={item}
-                        type={item.type}
-                        message={item.content}
-                        setCorrectMessage={setCorrectMessage}
-                        setTranslateMessage={setTranslateMessage}
-                        handleClickOpenVoiceSave={handleClickOpenVoiceSave}
-                      />
-                    );
-                  }
-                })
+                              <Typography
+                                sx={{
+                                  borderBottom: "1px solid white",
+                                  opacity: 0.5,
+                                }}
+                              >
+                                {item.content}
+                              </Typography>
+                              <Box sx={{ display: "flex" }}>
+                                <ArrowForwardIcon />
+                                <Typography>{item.comment}</Typography>
+                              </Box>
+                            </Stack>
+                          )}
+                        </Box>
+                      );
+                    } else {
+                      return (
+                        <ChatBoxOfOther
+                          key={index}
+                          item={item}
+                          type={item.type}
+                          message={item.content}
+                          setCorrectMessage={setCorrectMessage}
+                          setTranslateMessage={setTranslateMessage}
+                          handleClickOpenVoiceSave={handleClickOpenVoiceSave}
+                        />
+                      );
+                    }
+                  })}
+                </>
               ) : (
-                <Box>
-                  <Typography>채팅을 시작하세요~</Typography>
+                <Box
+                  sx={{
+                    textAlign: "center",
+                    marginTop: "50px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "50px",
+                      color: "#00CCB1",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {chatname === "No one..."
+                      ? "Choose one on your left!"
+                      : "Start Chatting!"}
+                  </Typography>
                 </Box>
               ))}
           </ChatBox>
           <Box
             sx={{
-              borderTop: "1px solid black",
+              borderTop: "1px solid #b5b5b5",
               width: "100%",
               height: "15%",
               display: "flex",
@@ -861,13 +930,18 @@ export default function Chat() {
               />
             )}
             {translateMessage && languageList && (
-              <Box sx={{ display: "flex" }}>
-                <Typography>{translateMessage}</Typography>
-                <Box sx={{ minWidth: 120 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Typography sx={{ mr: 3 }}>{translateMessage}</Typography>
+                <Box sx={{ minWidth: 120, mr: 3 }}>
                   <FormControl fullWidth>
                     <InputLabel>Language</InputLabel>
                     <Select
-                      label="언어"
+                      label="Language"
                       onChange={handleSelectLanguage}
                       value={targetLanguage}
                     >
@@ -883,7 +957,10 @@ export default function Chat() {
                 </Box>
                 <Button onClick={handleTranslate}>Translate!</Button>
                 {translatedMessage && (
-                  <Typography>{translatedMessage}</Typography>
+                  <>
+                    <ArrowForwardIcon sx={{ mr: 3 }} />
+                    <Typography>{translatedMessage}</Typography>
+                  </>
                 )}
                 <IconButton
                   onClick={() => {
@@ -895,31 +972,41 @@ export default function Chat() {
                 </IconButton>
               </Box>
             )}
-            <Box>
-              <TextField
-                sx={{ width: "30vw" }}
-                value={message}
-                placeholder="Type your message."
-                onChange={handleMessage}
-                onKeyPress={(e: any) => {
-                  if (e.key === "Enter") {
-                    handleMessageList();
-                  }
+            {chatname === "No one..." ? null : (
+              <Box
+                sx={{
+                  display:
+                    translateMessage || correctMessage ? "none" : "block",
                 }}
-                variant="standard"
-              />
-              <IconButton onClick={handleMessageList}>
-                <SendIcon color="primary" />
-              </IconButton>
-              <IconButton onClick={handleClickOpenRecorder}>
-                <MicIcon sx={{ color: "black" }} />
-              </IconButton>
-              <IconButton onClick={handleClickOpenImageDialog}>
-                <AttachFileIcon
-                  sx={{ color: "black", transform: "rotate(45deg)" }}
+              >
+                <TextField
+                  sx={{
+                    width: "30vw",
+                  }}
+                  value={message}
+                  placeholder="Type your message."
+                  onChange={handleMessage}
+                  onKeyPress={(e: any) => {
+                    if (e.key === "Enter") {
+                      handleMessageList();
+                    }
+                  }}
+                  variant="standard"
                 />
-              </IconButton>
-            </Box>
+                <IconButton onClick={handleMessageList}>
+                  <SendIcon color="primary" />
+                </IconButton>
+                <IconButton onClick={handleClickOpenRecorder}>
+                  <MicIcon sx={{ color: "black" }} />
+                </IconButton>
+                <IconButton onClick={handleClickOpenImageDialog}>
+                  <AttachFileIcon
+                    sx={{ color: "black", transform: "rotate(45deg)" }}
+                  />
+                </IconButton>
+              </Box>
+            )}
+
             <RecorderDialog
               openRecorder={openRecorder}
               setOpenRecorder={setOpenRecorder}

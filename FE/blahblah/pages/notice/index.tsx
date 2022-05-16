@@ -15,17 +15,21 @@ export default function Notice() {
   const [notices, setNotices]: any = useState();
   const [total, setTotal] = useState(1);
   const [page, setPage] = useState(1);
+  const [myWidth, setMyWidth] = useState(84);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
   useEffect(() => {
     allAxios
-      .get(`notice?size=5?`, {
-        headers: setToken(),
-      })
+      .get(`notice?size=5?`)
       .then((res) => {
         setNotices(res.data.noticeListRes);
         setTotal(res.data.totalPages);
+        if (res.data.totalPages <= 6) {
+          setMyWidth(252 - (7 - res.data.totalPages) * 28);
+        } else if (res.data.totalPages > 7) {
+          setMyWidth(252);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -38,10 +42,10 @@ export default function Notice() {
       <Grid item xs={8}>
         <Image
           priority
-          src="/images/notice2.PNG"
+          src="/images/notice2.png"
           alt="notice image"
           width="200"
-          height="40"
+          height="30"
           layout="responsive"
         />
         <br></br>
@@ -52,15 +56,20 @@ export default function Notice() {
             item
             xs={2}
             className="text-bold"
-            style={{ margin: "0 0 0 40px" }}
+            style={{ margin: "0 0 0 20px" }}
           >
-            <p>번호</p>
+            <p>Number</p>
           </Grid>
           <Grid item xs={7} className="text-center text-bold">
-            <p>제목</p>
+            <p>Title</p>
           </Grid>
-          <Grid item xs={2} className="text-center text-bold">
-            <p>등록일</p>
+          <Grid
+            item
+            xs={2}
+            className="text-center text-bold"
+            style={{ marginLeft: "30px" }}
+          >
+            <p>Date</p>
           </Grid>
         </Grid>
         <Grid container spacing={3}>
@@ -85,12 +94,15 @@ export default function Notice() {
               >
                 <Grid item xs={2}>
                   <Button
-                    style={{ width: 100 }}
+                    style={{
+                      backgroundColor: "#00ccb1",
+                      width: 100,
+                    }}
                     variant="contained"
                     color="primary"
                     size="small"
                   >
-                    공지
+                    Notice
                   </Button>
                 </Grid>
                 <Grid item xs={7}>
@@ -107,6 +119,8 @@ export default function Notice() {
 
         <div className="m" style={{ width: "250px" }}>
           <Pagination
+            style={{ width: `${myWidth}px`, margin: "auto" }}
+            size="small"
             count={total}
             variant="outlined"
             shape="rounded"

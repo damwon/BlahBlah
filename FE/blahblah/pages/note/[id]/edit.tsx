@@ -28,7 +28,7 @@ export default function Edit() {
           if (tmpContent != null) {
             setContent(tmpContent);
           } else {
-            setContent("내용을 작성해주세요");
+            setContent("Write your memo");
           }
         })
         .catch((err) => {
@@ -117,17 +117,22 @@ export default function Edit() {
           <Grid item xs={5} />
           <Grid item xs={4}>
             <Button
-              className="mar"
               variant="contained"
               color="error"
               onClick={() => {
                 router.push(`/note/${id}`);
               }}
             >
-              취소
-            </Button>
-            <Button className="mar" variant="contained" onClick={edit}>
-              수정 완료
+              cancle
+            </Button>{" "}
+            <Button
+              style={{
+                backgroundColor: "#00ccb1",
+              }}
+              variant="contained"
+              onClick={edit}
+            >
+              Save
             </Button>
           </Grid>
         </Grid>
