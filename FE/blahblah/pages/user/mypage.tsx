@@ -223,6 +223,7 @@ export default function Mypage() {
                 : <>Man</>
               }</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Age</div>{profile.age}</ListGroup.Item>
+              <ListGroup.Item><div className="fw-bold">Rating</div>{profile.rating}</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Description</div>{profile.description}</ListGroup.Item>
               <Button onClick={() => {
                 router.push('/user/langupdate')
