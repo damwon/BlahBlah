@@ -10,7 +10,9 @@ export default function CorrectMessage(props: any) {
     setFixedMessage(e.target.value);
   };
   return (
-    <Box sx={{ display: "flex", justifyContent: "center" }}>
+    <Box
+      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+    >
       <Typography>{props.correctMessage}</Typography>
       <ArrowForwardIcon />
       <TextField
@@ -18,13 +20,12 @@ export default function CorrectMessage(props: any) {
         onChange={handleFixMessage}
         defaultValue={props.correctMessage}
       />
-      <Typography>{fixedMessage}</Typography>
       <IconButton
         onClick={() => {
           props.sendCorrectMsg("comment", props.correctMessage, fixedMessage);
         }}
       >
-        <SendIcon />
+        <SendIcon color="primary" />
       </IconButton>
       <IconButton
         onClick={() => {

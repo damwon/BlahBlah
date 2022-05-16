@@ -104,11 +104,11 @@ export default function ChatBoxOfOther(props: any) {
           }}
         >
           <Typography sx={{ borderBottom: "1px solid black", opacity: 0.5 }}>
-            기존: {props.message}
+            {props.message}
           </Typography>
           <Box sx={{ display: "flex" }}>
             <ArrowForwardIcon />
-            <Typography>코멘트: {props.item.comment}</Typography>
+            <Typography>{props.item.comment}</Typography>
           </Box>
         </Stack>
       )}
