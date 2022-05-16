@@ -84,14 +84,14 @@ export default function Login() {
 
         <Row>
           <Col></Col>
-          <Col><h1>로그인</h1>
+          <Col><h1>Login</h1>
             {/* {email}
             {password} */}
             <div className='logdiv'>
             
               <Form id='formtest'>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
-                  <Form.Label>이메일주소</Form.Label>
+                  <Form.Label>Email</Form.Label>
                   <Form.Control 
                   className="formct"
                   // style={{borderColor:'red'}}
@@ -102,22 +102,22 @@ export default function Login() {
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formBasicPassword">
-                  <Form.Label>패스워드</Form.Label>
+                  <Form.Label>Password</Form.Label>
                   <Form.Control className="formct" onKeyUp={handleKeyPress} type="password" placeholder="Password" onChange={handlePassword} />
                 </Form.Group>
                 {/* <Form.Group className="mb-3" controlId="formBasicCheckbox">
                   <Form.Check type="checkbox" label="Check me out" />
                 </Form.Group> */}
                 <Button onClick={onClickLogin} className="btncs" 
-                   variant="outline-secondary">로그인</Button>
+                   variant="outline-secondary">Login</Button>
                 <Button className="btncs" onClick={() => {
                   router.push('/user/email')
                 }}
-                   variant="outline-secondary">회원가입</Button>
+                   variant="outline-secondary">Sign Up</Button>
                 <Button  onClick={() => {
                   router.push('/user/pass')
                 }}
-                   variant="outline-secondary">비밀번호찾기</Button>
+                   variant="outline-secondary">Find Password</Button>
                   {/* <Button className="btnc" id="btbt">커스텀 연습</Button> */}
                 {/* <button type="submit" onClick={onClickLogin}>
                   로그인

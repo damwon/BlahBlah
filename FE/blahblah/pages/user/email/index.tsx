@@ -66,13 +66,13 @@ export default function Regist() {
     })
     .then((result)=>{
     console.log('이메일보내기 요청성공')
-    alert('이메일을 확인해줘')
+    alert('Please Check Your Email')
     console.log(result)
  
   })
     .catch((error)=>{
     console.log('이메일보내기 요청실패')
-    alert('실패했어')
+    alert('Fail')
     console.log(error)  
   })
   };
@@ -88,16 +88,16 @@ export default function Regist() {
         
           </Col>
           <Col>
-          <h1>회원가입 이메일인증</h1>
+          <h1>Sign Up Email Check </h1>
           <Form.Group className="mb-3" controlId="formBasicEmail">
                 {/* <Form.Label>이메일주소 {inputEmail}</Form.Label> */}
                 <Form.Control className="formct" type="email" placeholder="Enter email" onChange={handleEmail} />
                 <Button onClick={onClickEmailCheck} className="btncs"
-                   variant="outline-dark">이메일 중복체크</Button>
+                   variant="outline-dark">Email Check</Button>
                
                 {EmailCheck === true
                   ? <><Button onClick = {onSendEmail}
-                    style={{ marginTop: '5px' }} variant="outline-secondary">이메일 인증</Button>
+                    style={{ marginTop: '5px' }} variant="outline-secondary">Email Message Check</Button>
                   </>
                   : null
                 }

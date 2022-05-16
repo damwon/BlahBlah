@@ -1,4 +1,4 @@
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav,Button } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -38,30 +38,32 @@ export default function userNav() {
         </div>
         <div className="navright">
           <Link href="/main">
-            <a className="navmenu">블라 메이트 찾기</a>
+            <a className="navmenu">Find Blah Mate</a>
           </Link>
           <Link href="/feed">
-            <a className="navmenu">피드</a>
+            <a className="navmenu">Feed</a>
           </Link>
           <Link href="/chat">
-            <a className="navmenu">채팅</a>
+            <a className="navmenu">Chat</a>
           </Link>
           <Link href="/study">
-            <a className="navmenu">스터디</a>
+            <a className="navmenu">Study</a>
           </Link>
           <Link href="/qna">
             <a className="navmenu">QnA</a>
           </Link>
           <Link href="/notice">
-            <a className="navmenu">공지</a>
+            <a className="navmenu">Notice</a>
           </Link>
           {isLogin === false ? (
             <>
               <Link href="/user/login">
-                <a className="navmenu">로그인</a>
+                <a className="navmenu">Login</a>
               </Link>
               <Link href="/user/email">
-                <a className="navmenu">가입</a>
+              <Button className="btncs" 
+                   variant="outline-secondary">Sign Up</Button>
+                {/* <a className="navmenu">Sign Up</a> */}
               </Link>
               {/* <Link href="/user/signup2">
                 <a className="navmenu">가입(됨)</a>
@@ -69,12 +71,15 @@ export default function userNav() {
             </>
           ) : (
             <>
-              <Link href="/user/mypage">
-                <a className="navmenu">마이페이지</a>
-              </Link>
-              <a className="navmenu" onClick={onLogout}>
-                로그아웃
+            <a className="navmenu" onClick={onLogout}>
+                Logout
               </a>
+              <Link href="/user/mypage">
+              <Button className="btncs" 
+                   variant="outline-secondary">Mypage</Button>
+                {/* <a className="navmenu">Mypage</a> */}
+              </Link>
+              
             </>
           )}
         </div>
