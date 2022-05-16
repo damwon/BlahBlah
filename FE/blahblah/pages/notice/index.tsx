@@ -21,9 +21,7 @@ export default function Notice() {
   };
   useEffect(() => {
     allAxios
-      .get(`notice?size=5?`, {
-        headers: setToken(),
-      })
+      .get(`notice?size=5?`)
       .then((res) => {
         setNotices(res.data.noticeListRes);
         setTotal(res.data.totalPages);
@@ -42,14 +40,14 @@ export default function Notice() {
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
-        <Image
+        {/* <Image
           priority
           src="/images/notice2.PNG"
           alt="notice image"
           width="200"
           height="40"
           layout="responsive"
-        />
+        /> */}
         <br></br>
         <br></br>
         <Grid container spacing={3}>
@@ -58,15 +56,20 @@ export default function Notice() {
             item
             xs={2}
             className="text-bold"
-            style={{ margin: "0 0 0 40px" }}
+            style={{ margin: "0 0 0 20px" }}
           >
-            <p>번호</p>
+            <p>Number</p>
           </Grid>
           <Grid item xs={7} className="text-center text-bold">
-            <p>제목</p>
+            <p>Title</p>
           </Grid>
-          <Grid item xs={2} className="text-center text-bold">
-            <p>등록일</p>
+          <Grid
+            item
+            xs={2}
+            className="text-center text-bold"
+            style={{ marginLeft: "30px" }}
+          >
+            <p>Date</p>
           </Grid>
         </Grid>
         <Grid container spacing={3}>
@@ -91,12 +94,15 @@ export default function Notice() {
               >
                 <Grid item xs={2}>
                   <Button
-                    style={{ width: 100 }}
+                    style={{
+                      backgroundColor: "#00ccb1",
+                      width: 100,
+                    }}
                     variant="contained"
                     color="primary"
                     size="small"
                   >
-                    공지
+                    Notice
                   </Button>
                 </Grid>
                 <Grid item xs={7}>

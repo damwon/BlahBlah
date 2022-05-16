@@ -7,11 +7,11 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 export default function QnaInfo() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("잘못된 접근입니다..");
+      alert("Wrong approach.");
       router.push(`/`);
     }
   });
-  
+
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {
@@ -53,7 +53,7 @@ export default function QnaInfo() {
     allAxios
       .delete(`/qna/${id}`, { headers: setToken() })
       .then((res) => {
-        alert("문의글이 삭제되었습니다.");
+        alert("The question is deleted.");
         router.push(`/qna`);
       })
       .catch((err) => {
@@ -64,14 +64,14 @@ export default function QnaInfo() {
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
-        <Image
+        {/* <Image
           priority
           src="/images/notice.PNG"
           alt="notice2 image"
           width="200"
           height="40"
           layout="responsive"
-        />
+        /> */}
         <br></br>
         <br></br>
         <Grid container spacing={3}>
@@ -82,18 +82,21 @@ export default function QnaInfo() {
             }}
           ></hr>
         </Grid>
-        <Grid container spacing={3} style={{marginBottom: '40px'}}>
+        <Grid container spacing={3} style={{ marginBottom: "40px" }}>
           <Grid item xs={2}>
             <Button
-              style={{ width: 100 }}
+              style={
+                ans === 0
+                  ? { width: 150, backgroundColor: "grey" }
+                  : { width: 150, backgroundColor: "#00ccb1" }
+              }
               variant="contained"
-              color={ans === 0 ? "error" : "primary"}
             >
-              {ans === 0 ? "답변 대기" : "답변 완료"}
+              {ans === 0 ? "no answered" : "answered"}
             </Button>
           </Grid>
           <Grid item xs={7}>
-            <h5>문의 제목: {title}</h5>
+            <h5>Title: {title}</h5>
           </Grid>
           <Grid item xs={3} style={{ textAlign: "center" }}>
             {time}
@@ -101,54 +104,54 @@ export default function QnaInfo() {
           <hr style={{ width: "100vw" }}></hr>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
-            문의 내용: {content}
+            Content: {content}
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>
         {ans === 0
           ? [0].map((d: any, i: number) => {
-            return (
-              <div key={i} style={{
-                backgroundColor: "rgb(216, 216, 216)",
-                paddingBottom: '20px'
-              }}>
-              <Grid
-                container
-                spacing={3}
-              >
-                <Grid item xs={2}>
-                  <div style={{ width: "5px", marginLeft: "auto" }}>
-                    <BorderColorIcon color="primary"></BorderColorIcon>
-                  </div>
-                </Grid>
-                <Grid item xs={8}>
-                  답변 대기중입니다.
-                </Grid>
-                <Grid item xs={2} />
-              </Grid>
-              </div>
-            );
-          })
+              return (
+                <div
+                  key={i}
+                  style={{
+                    backgroundColor: "rgb(216, 216, 216)",
+                    paddingBottom: "20px",
+                  }}
+                >
+                  <Grid container spacing={3}>
+                    <Grid item xs={2}>
+                      <div style={{ width: "5px", marginLeft: "auto" }}>
+                        <BorderColorIcon color="primary"></BorderColorIcon>
+                      </div>
+                    </Grid>
+                    <Grid item xs={8}>
+                      Waiting for answer
+                    </Grid>
+                    <Grid item xs={2} />
+                  </Grid>
+                </div>
+              );
+            })
           : [0].map((d: any, i: number) => {
               return (
-                <div key={i} style={{
-                  backgroundColor: "rgb(216, 216, 216)",
-                  paddingBottom: '20px'
-                }}>
-                <Grid
-                  container
-                  spacing={3}
+                <div
+                  key={i}
+                  style={{
+                    backgroundColor: "rgb(216, 216, 216)",
+                    paddingBottom: "20px",
+                  }}
                 >
-                  <Grid item xs={2}>
-                    <div style={{ width: "5px", marginLeft: "auto" }}>
-                      <BorderColorIcon color="primary"></BorderColorIcon>
-                    </div>
+                  <Grid container spacing={3}>
+                    <Grid item xs={2}>
+                      <div style={{ width: "5px", marginLeft: "auto" }}>
+                        <BorderColorIcon color="primary"></BorderColorIcon>
+                      </div>
+                    </Grid>
+                    <Grid item xs={8}>
+                      Answer: {ansContent}
+                    </Grid>
+                    <Grid item xs={2} />
                   </Grid>
-                  <Grid item xs={8}>
-                    답변 내용: {ansContent}
-                  </Grid>
-                  <Grid item xs={2} />
-                </Grid>
                 </div>
               );
             })}
@@ -157,17 +160,17 @@ export default function QnaInfo() {
         <div className="m">
           <Button
             style={{
-              backgroundColor: "#00ccb1",
-          }}
+              backgroundColor: "grey",
+            }}
             variant="contained"
             onClick={() => {
               router.push(`/qna`);
             }}
           >
-            목록
+            Back
           </Button>{" "}
           <Button variant="contained" color="error" onClick={qnaDelete}>
-            삭제
+            delete
           </Button>{" "}
         </div>
         <Grid item xs={2} />
