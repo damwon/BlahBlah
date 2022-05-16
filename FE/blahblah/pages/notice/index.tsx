@@ -15,6 +15,7 @@ export default function Notice() {
   const [notices, setNotices]: any = useState();
   const [total, setTotal] = useState(1);
   const [page, setPage] = useState(1);
+  const [myWidth, setMyWidth] = useState(84);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
@@ -26,6 +27,11 @@ export default function Notice() {
       .then((res) => {
         setNotices(res.data.noticeListRes);
         setTotal(res.data.totalPages);
+        if (res.data.totalPages <= 6) {
+          setMyWidth(252 - (7 - res.data.totalPages) * 28);
+        } else if (res.data.totalPages > 7) {
+          setMyWidth(252);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -107,6 +113,8 @@ export default function Notice() {
 
         <div className="m" style={{ width: "250px" }}>
           <Pagination
+            style={{ width: `${myWidth}px`, margin: "auto" }}
+            size="small"
             count={total}
             variant="outlined"
             shape="rounded"

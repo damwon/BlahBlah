@@ -94,7 +94,6 @@ export default function WordNote() {
             <Grid container spacing={4}>
               {audios &&
                 audios.map((d: any, i: number) => {
-                  console.log(d);
                   return (
                     <div key={i}>
                       <audio

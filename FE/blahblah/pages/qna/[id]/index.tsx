@@ -5,6 +5,13 @@ import allAxios from "../../../lib/allAxios";
 import { useRouter } from "next/router";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 export default function QnaInfo() {
+  useEffect(() => {
+    if (localStorage.getItem("jwt") === null) {
+      alert("잘못된 접근입니다..");
+      router.push(`/`);
+    }
+  });
+  
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {
@@ -75,7 +82,7 @@ export default function QnaInfo() {
             }}
           ></hr>
         </Grid>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} style={{marginBottom: '40px'}}>
           <Grid item xs={2}>
             <Button
               style={{ width: 100 }}
@@ -86,7 +93,7 @@ export default function QnaInfo() {
             </Button>
           </Grid>
           <Grid item xs={7}>
-            <h5>{title}</h5>
+            <h5>문의 제목: {title}</h5>
           </Grid>
           <Grid item xs={3} style={{ textAlign: "center" }}>
             {time}
@@ -94,40 +101,64 @@ export default function QnaInfo() {
           <hr style={{ width: "100vw" }}></hr>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
-            {content}
+            문의 내용: {content}
           </Grid>
           <Grid item xs={2}></Grid>
         </Grid>
         {ans === 0
-          ? null
+          ? [0].map((d: any, i: number) => {
+            return (
+              <div key={i} style={{
+                backgroundColor: "rgb(216, 216, 216)",
+                paddingBottom: '20px'
+              }}>
+              <Grid
+                container
+                spacing={3}
+              >
+                <Grid item xs={2}>
+                  <div style={{ width: "5px", marginLeft: "auto" }}>
+                    <BorderColorIcon color="primary"></BorderColorIcon>
+                  </div>
+                </Grid>
+                <Grid item xs={8}>
+                  답변 대기중입니다.
+                </Grid>
+                <Grid item xs={2} />
+              </Grid>
+              </div>
+            );
+          })
           : [0].map((d: any, i: number) => {
               return (
+                <div key={i} style={{
+                  backgroundColor: "rgb(216, 216, 216)",
+                  paddingBottom: '20px'
+                }}>
                 <Grid
                   container
                   spacing={3}
-                  key={i}
-                  style={{
-                    marginTop: "2px",
-                    backgroundColor: "rgb(216, 216, 216)",
-                  }}
                 >
-                  <hr style={{ width: "100vw" }}></hr>
                   <Grid item xs={2}>
                     <div style={{ width: "5px", marginLeft: "auto" }}>
                       <BorderColorIcon color="primary"></BorderColorIcon>
                     </div>
                   </Grid>
                   <Grid item xs={8}>
-                    {ansContent}
+                    답변 내용: {ansContent}
                   </Grid>
                   <Grid item xs={2} />
                 </Grid>
+                </div>
               );
             })}
         <br></br>
         <br></br>
         <div className="m">
           <Button
+            style={{
+              backgroundColor: "#00ccb1",
+          }}
             variant="contained"
             onClick={() => {
               router.push(`/qna`);
