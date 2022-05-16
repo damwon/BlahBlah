@@ -6,9 +6,9 @@ export default function Footer() {
       style={{
         textAlign: "center",
         marginTop: "auto",
-        backgroundColor: "#00CCB1",
-        color: "white",
-        padding: "8px 8px 8px 8px",
+        backgroundColor: "rgb(0,204,177, .3)",
+        color: "black",
+        padding: "20px",
       }}
     >
       <Typography>Copyright ⓒ2022 BlahBlah. All rights reserved.</Typography>

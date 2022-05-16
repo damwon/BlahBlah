@@ -655,7 +655,6 @@ export default function Chat() {
     <>
       <Box
         style={{
-          // height: "89vh",
           marginTop: "20px",
           marginBottom: "20px",
           display: "flex",
@@ -667,7 +666,7 @@ export default function Chat() {
             sx={{
               width: "20%",
               display: callState ? "none" : "block",
-              border: "1px solid gray",
+              border: "1px solid #b5b5b5",
             }}
           >
             <ChatList
@@ -736,8 +735,8 @@ export default function Chat() {
         <Box
           sx={{
             display: "flex",
-            borderTop: "1px solid gray",
-            borderBottom: "1px solid gray",
+            borderTop: "1px solid #b5b5b5",
+            borderBottom: "1px solid #b5b5b5",
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "center",
@@ -750,23 +749,14 @@ export default function Chat() {
               display: "flex",
               alignItems: "center",
               padding: 3,
-              borderBottom: "1px solid gray",
+              borderBottom: "1px solid #b5b5b5",
               justifyContent: "space-between",
             }}
           >
-            <Typography>{chatname}</Typography>
-            <Box>
-              <IconButton onClick={videoCall}>
-                <VideocamIcon sx={{ color: "black" }} />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  alert("신고 버튼 눌림");
-                }}
-              >
-                <ReportIcon color="warning" />
-              </IconButton>
-            </Box>
+            <Typography sx={{ fontSize: "30px" }}>{chatname}</Typography>
+            <IconButton onClick={videoCall}>
+              <VideocamIcon sx={{ color: "black" }} />
+            </IconButton>
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
             {userData &&
@@ -906,14 +896,16 @@ export default function Chat() {
                       fontWeight: "700",
                     }}
                   >
-                    Start Chatting!
+                    {chatname === "No one..."
+                      ? "Choose one on your left!"
+                      : "Start Chatting!"}
                   </Typography>
                 </Box>
               ))}
           </ChatBox>
           <Box
             sx={{
-              borderTop: "1px solid gray",
+              borderTop: "1px solid #b5b5b5",
               width: "100%",
               height: "15%",
               display: "flex",
