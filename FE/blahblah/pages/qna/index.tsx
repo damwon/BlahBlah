@@ -6,7 +6,7 @@ import allAxios from "../../lib/allAxios";
 export default function QnA() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("로그인 후 사용해주세요.");
+      alert("you need to login first.");
       router.push(`/user/login`);
     }
   });
@@ -47,14 +47,14 @@ export default function QnA() {
       <Grid container spacing={3}>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <Image
+          {/* <Image
             priority
             src="/images/notice.PNG"
             alt="notice2 image"
             width="200"
             height="40"
             layout="responsive"
-          />
+          /> */}
           <br></br>
           <br></br>
           <Grid container spacing={3}>
@@ -79,11 +79,14 @@ export default function QnA() {
                 >
                   <Grid item xs={2}>
                     <Button
-                      style={{ width: 100 }}
+                      style={
+                        d.ansCheck === 0
+                          ? { width: 150, backgroundColor: "grey" }
+                          : { width: 150, backgroundColor: "#00ccb1" }
+                      }
                       variant="contained"
-                      color={d.ansCheck === 0 ? "error" : "primary"}
                     >
-                      {d.ansCheck === 0 ? "답변 대기" : "답변 완료"}
+                      {d.ansCheck === 0 ? "no answered" : "answered"}
                     </Button>
                   </Grid>
                   <Grid item xs={7}>
@@ -99,8 +102,8 @@ export default function QnA() {
 
           <div>
             <Pagination
-            style={{ width: `${myWidth}px`, margin: "auto" }}
-            size="small"
+              style={{ width: `${myWidth}px`, margin: "auto" }}
+              size="small"
               count={total}
               variant="outlined"
               shape="rounded"
@@ -108,17 +111,17 @@ export default function QnA() {
               onChange={handleChange}
             />
           </div>
-          <div style={{ width: "90px", margin: "20px auto" }}>
-        <Button
-        style={{
-          backgroundColor: "#00ccb1",
-      }}
+          <div style={{ width: "155px", margin: "20px auto" }}>
+            <Button
+              style={{
+                backgroundColor: "#00ccb1",
+              }}
               variant="contained"
               onClick={() => {
                 router.push(`/qna/write`);
               }}
             >
-              문의하기
+              ask a question
             </Button>
           </div>
           <Grid item xs={2} />

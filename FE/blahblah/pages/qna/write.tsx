@@ -6,11 +6,11 @@ import allAxios from "../../lib/allAxios";
 export default function QnaWrite() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("잘못된 접근입니다..");
+      alert("Wrong approach");
       router.push(`/`);
     }
   });
-  const router = useRouter()
+  const router = useRouter();
   const setToken = () => {
     const token = localStorage.getItem("jwt");
     const config = {
@@ -44,24 +44,24 @@ export default function QnaWrite() {
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
-        <Image
+        {/* <Image
           priority
           src="/images/notice.PNG"
           alt="notice2 image"
           width="200"
           height="40"
           layout="responsive"
-        />
+        /> */}
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <h3 className="text-center">제목</h3>
+            <h3 className="text-center">Title</h3>
           </Grid>
           <Grid item xs={9}>
             <textarea
               onChange={(e: any) => {
                 setTitle(e.target.value);
               }}
-              placeholder="제목을 입력해주세요."
+              placeholder="Write the title."
               style={{ width: "80%" }}
             />
           </Grid>
@@ -69,14 +69,14 @@ export default function QnaWrite() {
         <br></br>
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <h3 className="text-center">문의 내용</h3>
+            <h3 className="text-center">Content</h3>
           </Grid>
           <Grid item xs={9}>
             <textarea
               onChange={(e: any) => {
                 setContent(e.target.value);
               }}
-              placeholder="문의 내용을 작성해주세요"
+              placeholder="Write the content"
               style={{ minHeight: 300, width: "80%" }}
             />
           </Grid>
@@ -84,14 +84,23 @@ export default function QnaWrite() {
         <br></br>
         <br></br>
         <div className="m">
-          <Button color="error" variant="contained" onClick={() => {router.push(`/qna`)}}>
-            취소
+          <Button
+            color="error"
+            variant="contained"
+            onClick={() => {
+              router.push(`/qna`);
+            }}
+          >
+            cancle
           </Button>{" "}
-          <Button 
+          <Button
             style={{
               backgroundColor: "#00ccb1",
-          }} variant="contained" onClick={write}>
-            작성
+            }}
+            variant="contained"
+            onClick={write}
+          >
+            write
           </Button>
         </div>
         <Grid item xs={2} />
