@@ -28,8 +28,8 @@ export default function User() {
       
       {
     isLogin===true
-    ?<>로그인성공</>
-    :<>비로그인상태</>
+    ?<>Success Login</>
+    :<>Fail</>
   }
   {/* {
     isLogin===true

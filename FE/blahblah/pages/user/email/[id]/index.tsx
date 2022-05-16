@@ -53,7 +53,7 @@ export default function EmailCheck() {
           {/* <button onClick={onEmailCheck}>체크해바</button> */}
           {
             isCheck
-            ?<>이메일인증 요청성공
+            ?<>Email Check Success!
             {/* <button onClick={()=>{
               router.push(
                 {
@@ -74,9 +74,9 @@ export default function EmailCheck() {
                 },
                 `/user/signupm`)
             }}
-                    className="btncs" variant="outline-secondary">회원가입넘어가기</Button>
+                    className="btncs" variant="outline-secondary">Go to Sign Up</Button>
             </>
-            :<>이메일인증 요청실패</>
+            :<>Email Check Fail </>
           }
                
             </Col>

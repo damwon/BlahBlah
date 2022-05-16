@@ -61,7 +61,7 @@ export default function Login() {
       })
       .catch((err) => {
         console.log(err)
-        alert('제대로 입력해')
+        alert('Fail')
         // alert 오류출력
 
       });
@@ -74,7 +74,7 @@ export default function Login() {
     // console.log(localStorage.getItem("jwt"))
     if (token) {
       setIslogin(true)
-      router.push("/user")
+      router.push("/")
     }
   }, []);
   return (

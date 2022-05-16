@@ -48,7 +48,7 @@ export default function Signup() {
     var ob: any = [...firstob]
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 1 && ob.length <= 1&&
-    e.currentTarget.value!=='언어선택') {
+    e.currentTarget.value!=='Language') {
       array.push(e.currentTarget.value)
       // let key = e.currentTarget.value
       let key = e.currentTarget.value
@@ -86,7 +86,7 @@ export default function Signup() {
     var ob: any = [...secondob]
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 2 && ob.length <= 2
-    &&e.currentTarget.value!=='언어선택') {
+    &&e.currentTarget.value!=='Language') {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 4 })
@@ -123,7 +123,7 @@ export default function Signup() {
     var ob: any = [...thirdob]
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3
-    &&e.currentTarget.value!=='언어선택') {
+    &&e.currentTarget.value!=='Language') {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 5 })
@@ -153,9 +153,9 @@ export default function Signup() {
   }
   // 성별
   const [gen, setGen] = useState<any>()
-  const gens = ['남자', '여자']
+  const gens = ['Man', 'Woman']
   const onGenHanlder = (e: any) => {
-    if (e.currentTarget.value === '남자') {
+    if (e.currentTarget.value === 'Man') {
       setGen(0)
     } else {
       setGen(1)
@@ -231,7 +231,8 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      "email": query.email,
+      "email":'23test2233@test.com',
+      // "email": query.email,
       "name": name,
       "gender": gen,
       "age": age,
@@ -244,23 +245,30 @@ export default function Signup() {
     formData.append('file', file)
     formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))
     console.log(formData)
-    axios({
-      url: `https://blahblah.community:8443/api/user/signup`,
-      method: "post",
-      data: formData,
-    })
-      .then((res) => {
-        console.log(res)
-        console.log('가입성공')
-        // console.log(formData)
-        Router.push({
-          pathname: "/",
-        });
+    if(name.length>=1&&age>=1&&profile.length>=1&&password.length>=6&&Object(newarr).length>=1&&(gen===1||gen===0)){
+      axios({
+        url: `https://blahblah.community:8443/api/user/signup`,
+        method: "post",
+        data: formData,
       })
-      .catch((err) => {
-        console.log(err);
-        console.log('가입실패')
-      });
+        .then((res) => {
+          console.log(res)
+          alert('Success')
+          console.log('가입성공')
+          // console.log(formData)
+          Router.push({
+            pathname: "/",
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          alert('Fail')
+          console.log('가입실패')
+        });
+    }else{
+      alert('Please Check Your Info')
+    }
+    
 
   }
   useEffect(()=>{
@@ -276,9 +284,9 @@ export default function Signup() {
       <Container>
         <Row>
           <Col></Col>
-          <Col><h1>회원가입 </h1>
+          <Col><h1>Sign Up </h1>
             {email
-            ?<>사용할 아이디는 {email} 입니다.</>
+            ?<>{email} is your Email</>
             :null
             }
             {/* 이거 이메일 빈녀석이면 예외처리 */}
@@ -287,34 +295,34 @@ export default function Signup() {
               page1
               ?<div className='logdiv'>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>이름</Form.Label>
-                <Form.Control className="formct" type="text" placeholder="이름을입력하세요" onChange={handleName} maxLength={20} />
+                <Form.Label>Name</Form.Label>
+                <Form.Control className="formct" type="text" placeholder="Name" onChange={handleName} maxLength={20} />
 
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>패스워드</Form.Label>
-                <Form.Control className="formct" type="password" placeholder="6자이상 입력해주세요" onChange={handlePassword} maxLength={10} />
+                <Form.Label>PassWord</Form.Label>
+                <Form.Control className="formct" type="password" placeholder="More than 6 letters" onChange={handlePassword} maxLength={10} />
               </Form.Group>
               <Form.Group  className="mb-3" controlId="formBasicPassword">
-                <Form.Label>패스워드확인 -
+                <Form.Label>PassWord Check -
                   {
                     password === pwcheck && password.length >= 6
-                      ? <> 비밀번호가 같습니다.</>
-                      : <> 비밀번호가 다릅니다.</>
+                      ? <> Same Password</>
+                      : <> Different Password</>
                   }
 
                 </Form.Label>
-                <Form.Control className="formct" type="password" placeholder="6자이상 입력해주세요" onChange={handlePwcheck} maxLength={10} />
+                <Form.Control className="formct" type="password" placeholder="More than 6 letters" onChange={handlePwcheck} maxLength={10} />
               </Form.Group>
 
-              <Form.Label>- 추가정보 -</Form.Label>
+              <Form.Label>- Additional Info -</Form.Label>
 
               {/* {gen} */}
 
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={onGenHanlder} >
-                <option>성별 </option>
+                <option>Sex </option>
                 {gens.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
@@ -323,7 +331,7 @@ export default function Signup() {
               {/* {age} */}
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={onAgeHanlder} >
-                <option>나이 </option>
+                <option>Age </option>
                 {ages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
@@ -335,12 +343,12 @@ export default function Signup() {
               
 
               <Form.Group controlId="formFileSm" className="mb-3">
-              <Form.Label>프로필 이미지를 업로드 해주세요</Form.Label>
+              <Form.Label>Upload Your Profile Image</Form.Label>
               <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
 
               
-              <Form.Label>자기소개 {profile}</Form.Label>
+              <Form.Label>Description {profile}</Form.Label>
               <InputGroup>
                 {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
                 <FormControl className="formct" placeholder='10자이상 입력해주세요' as="textarea"
@@ -352,7 +360,7 @@ export default function Signup() {
 
             </div>
             :<>
-            <Form.Label>모국어(2개까지)
+            <Form.Label>Native Language(Up to 2)
                 {
                   first
                   ?<>
@@ -372,14 +380,14 @@ export default function Signup() {
               </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleFirst} >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
 
               <hr />
-              <Form.Label>구사언어(3개까지)
+              <Form.Label>Second language(Up to 3)
               {
                   second
                   ?<>
@@ -398,13 +406,13 @@ export default function Signup() {
               </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={handleSecond} >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
               <hr />
-              <Form.Label>학습언어(4개까지) 
+              <Form.Label>Study Language(Up to 4) 
               {
                   third
                   ?<>
@@ -424,12 +432,12 @@ export default function Signup() {
                 onChange={handleThird}
 
               >
-                <option>언어선택 </option>
+                <option>Language </option>
                 {languages.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
-              <Button onClick={() => {
+              {/* <Button onClick={() => {
                 // console.log(first)
                 // console.log(firstob)
                 // console.log(second)
@@ -444,13 +452,13 @@ export default function Signup() {
                 console.log(newarr)
 
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
               <Button onClick={onSubmit} className="btncs" 
                    variant="outline-secondary"
-                style={{ marginTop: '3px',marginRight:'5px' }} >가입</Button>
+                style={{ marginTop: '3px',marginRight:'5px' }} >Sign Up</Button>
                 <Button style={{marginTop:'3px'}} variant="outline-secondary" onClick={()=>{
                 setPage1(!page1)
-              }}>이전페이지</Button>
+              }}>Prev Page</Button>
                 
                 
             </>
@@ -459,7 +467,7 @@ export default function Signup() {
               page1
               ?<Button style={{marginTop:'5px'}} variant="outline-secondary" onClick={()=>{
                 setPage1(!page1)
-              }}>다음페이지</Button>
+              }}>Next Page</Button>
               :null
             }
             
