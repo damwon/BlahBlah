@@ -59,7 +59,7 @@ export default function Regist() {
         
           </Col>
           <Col>
-          <h1>비밀번호 찾기</h1>
+          <h1>Find Password</h1>
           <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>
                   {/* 이메일주소  */}
@@ -67,7 +67,7 @@ export default function Regist() {
                   </Form.Label>
                 <Form.Control type="email" placeholder="Enter email" onChange={handleEmail} />
                 <Button onClick={onClickEmailCheck} 
-                  className="btncs" variant="outline-secondary">이메일 보내기</Button>
+                  className="btncs" variant="outline-secondary">Send Email</Button>
                
           
 

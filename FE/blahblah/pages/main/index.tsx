@@ -3,15 +3,21 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
-import { useRouter } from 'next/router'
 import Mate from '../../component/main/Mate'
+import { useRouter } from "next/router";
+
+// import '../../styles/bg.css'
 
 
-export default function Index() {
+export default function Index(props:any) {
+  const router = useRouter()
+
 
   const [mate,setMate] = useState<any>()
   const [following,setFollowing] = useState<any>()
   const [rateList,setRateList] = useState<any>()
+  const [islogin, setIslogin] = useState<any>(false)
+
 
   // 팔로잉 목록, 이걸로 follow버튼 처음에 활성, 비활성화
   const setToken = () => {
@@ -76,11 +82,59 @@ export default function Index() {
     findMate()
     getFollowing()
     getRateList()
+    props.setBg(false)
+  }, []);
+  useEffect(() => {
+    console.log("컴포넌트 나타남");
+    return () => {
+      console.log("cleanUp 함수");
+      props.setBg(true)
+    };
+  },[]);
+  // 뎁스 빈배열해야 사라질때만 실행됨
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      setIslogin(true)
+    } else {
+      router.push('/user/login')
+      alert('Please login')
+      
+    }
   }, []);
   return (
     <>
+{/* {props.test} */}
     <Container>
+      <Row>
+        <Col sm={2} xs={2}></Col>
+        <Col>
+        {
+        mate
+        ?<>{
+          mate.map(function(a:any,i:any){
+            return (
+              <div  key = {i} className="matebox">
+                <Mate user={a} findMate={findMate} following={following} rateList={rateList}/>
+              </div>
+             
+              
+
+              
+            )
+          })
+        }
+        </>
+        :null
+      }
+        </Col>
+        <Col sm={2} xs={2}></Col>
+      </Row>
+    </Container>
+
+    {/* <Container >
     <Row>
+
       <Col>
       {
         mate
@@ -90,37 +144,36 @@ export default function Index() {
               <div className="matebox" key = {i}>
                 <Mate user={a} findMate={findMate} following={following} rateList={rateList}/>
               </div>
+             
               
 
               
             )
-            // <>
-            // <Mate user={a} key={i}/>
-            // </>
-            // 프래그먼트에는 key가안먹는다
           })
         }
-        {/* {mate[0].email} */}
         </>
         :null
       }
-      {/* <button type="submit" onClick={findMate}>
-                  메이트찾기
-                </button> */}
+
                 </Col>
+
     </Row>
-    <Row>
-      <Col>
-      {/* <Mate user={mate}></Mate> */}
-      </Col>
-    </Row>
-  </Container>
+
+  </Container> */}
   <style jsx>{`
+          body {
+            background:grey;
+          }
         .matebox{
-          // border-radius: 15px;
-          // background-color:white;
+          // border:solid 3px grey;
+          border-radius: 15px;
+          background-color:white;
+          // // background:grey;
+          // witdh:700px;
+          margin-top:30px;
           
         }
+
        
         
 

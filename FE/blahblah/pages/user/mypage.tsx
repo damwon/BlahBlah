@@ -91,38 +91,65 @@ export default function Mypage() {
     }
   },[lang])
 
+  // 팔로잉
+  const [following,setFollowing] = useState<any>()
+  // 팔로워
+  const [follower,setFollower] = useState<any>()
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      setIslogin(true)
+    } else {
+      alert('로그인상태가아냐!')
+      router.push('/')
+    }
+  }, []);
+  // 팔로잉가져오기
+  const getFollowing = () => {
+    axios({
+      url: "https://blahblah.community:8443/api/follow/following",
+      method: "get",
+      headers: setToken(),
+    }).then((res) => {
+      console.log('팔로잉 목록 요청성공')
+      // console.log(res)
+      console.log(res.data)
+      setFollowing(res.data)
+    }).catch((err)=>{
+      console.log('팔로잉 목록 요청실패')
+      console.log(err)
+    });
+  };
+  // 팔로워가져오기
+  const getFollower = () => {
+    axios({
+      url: "https://blahblah.community:8443/api/follow/follower",
+      method: "get",
+      headers: setToken(),
+    }).then((res) => {
+      console.log('팔로워 목록 요청성공')
+      console.log(res.data)
+      setFollower(res.data)
+    }).catch((err)=>{
+      console.log('팔로워 목록 요청실패')
+      console.log(err)
+    });
+  };
+
+  useEffect(() => {
+    if (islogin) {
+      getFollowing();
+      getFollower();
+    }
+  }, [islogin]);
+
   return (
     <>
 
       <Container>
         <Row>
-          <Col sm={3} sx={3}>
-            <Card style={{ width: '16rem', margin: '20px' }}>
-              <Card.Body>
-                <Card.Title>친구목록</Card.Title>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>최근친구1</ListGroup.Item>
-                  <ListGroup.Item>최근친구2</ListGroup.Item>
-                  <ListGroup.Item>최근친구3</ListGroup.Item>
-                </ListGroup>
-                <a className="linkmenu" onClick={() => {
-                  router.push('/user/friends')
-                }}>팔로잉, 팔로워</a>
-              </Card.Body>
-            </Card>
-
-            <Card style={{ width: '16rem', margin: '20px' }}>
-              <Card.Body>
-                <Card.Title>내가 작성한 피드</Card.Title>
-                <ListGroup variant="flush">
-                  <ListGroup.Item>최근작성글</ListGroup.Item>
-                  <ListGroup.Item>최근작성글</ListGroup.Item>
-                  <ListGroup.Item>최근작성글</ListGroup.Item>
-                </ListGroup>
-                <a className="linkmenu">전체목록 보러가기</a>
-              </Card.Body>
-            </Card>
-          </Col>
+        <Col sm={2} sx={2}></Col>
           <Col sm={6} sx={6}>
             <div className="mypage">
             <Avatar
@@ -140,9 +167,9 @@ export default function Mypage() {
               </Figure> */}
             </div>
             <ListGroup variant="flush">
-              <ListGroup.Item>이름:{profile.name}</ListGroup.Item>
-              <ListGroup.Item>이메일주소:{profile.email}</ListGroup.Item>
-              <ListGroup.Item>모국어:{
+              <ListGroup.Item><div className="fw-bold">Name</div>{profile.name}</ListGroup.Item>
+              <ListGroup.Item><div className="fw-bold">Email</div>{profile.email}</ListGroup.Item>
+              <ListGroup.Item><div className="fw-bold">Native Language</div>{
           langc
           ?<>
           {
@@ -157,7 +184,7 @@ export default function Mypage() {
           </>        
           :null
         }</ListGroup.Item>
-              <ListGroup.Item>구사언어:{
+              <ListGroup.Item><div className="fw-bold">Second Language</div>{
           langb
           ?<span>
           {
@@ -174,7 +201,7 @@ export default function Mypage() {
           </span>
           :null
         }</ListGroup.Item>
-              <ListGroup.Item>학습언어:{
+              <ListGroup.Item><div className="fw-bold">Study Language</div>{
           langa
           ?<span>
           {
@@ -191,49 +218,95 @@ export default function Mypage() {
           </span>
           :null
         }</ListGroup.Item>
-              <ListGroup.Item>성별:{profile.gender === 1
-                ? <>여자</>
-                : <>남자</>
+              <ListGroup.Item><div className="fw-bold">Sex</div>{profile.gender === 1
+                ? <>Woman</>
+                : <>Man</>
               }</ListGroup.Item>
-              <ListGroup.Item>나이:{profile.age}</ListGroup.Item>
-              <ListGroup.Item>자기소개:{profile.description}</ListGroup.Item>
+              <ListGroup.Item><div className="fw-bold">Age</div>{profile.age}</ListGroup.Item>
+              <ListGroup.Item><div className="fw-bold">Description</div>{profile.description}</ListGroup.Item>
               <Button onClick={() => {
                 router.push('/user/langupdate')
               }} style={{margin:'5px'}}
-              className="btncs" variant="outline-secondary">언어수정</Button>
+              className="btncs" variant="outline-secondary">Language Edit</Button>
               <Button onClick={() => {
                 router.push('/user/profileupdate')
               }} style={{margin:'5px'}}
-              className="btncs" variant="outline-secondary">프로필수정</Button>
+              className="btncs" variant="outline-secondary">Profile Edit</Button>
               <Button onClick={() => {
                 router.push('/user/passupdate') 
               }} style={{margin:'5px'}}
-              className="btncs" variant="outline-secondary">비밀번호수정</Button>
+              className="btncs" variant="outline-secondary">Password Edit</Button>
             </ListGroup>
           </Col>
           <Col sm={3} sx={3}>
-            <Card style={{ width: '16rem', margin: '20px' }}>
+          <Card style={{ width: '16rem', margin: '20px' }}>
               <Card.Body>
-                <Card.Title>단어장</Card.Title>
+                <Card.Title>Following</Card.Title>
                 <ListGroup variant="flush">
-                  <ListGroup.Item>최근추가한 단어1</ListGroup.Item>
-                  <ListGroup.Item>최근추가한 단어2</ListGroup.Item>
-                  <ListGroup.Item>최근추가한 단어3</ListGroup.Item>
+                {
+          following
+          ?<>{following.map((a:any,i:any)=>{
+            return <ListGroup.Item key={i} >
+              <a className="linkmenu" onClick={()=>{
+              router.push(
+                {
+                  pathname: `/user/detail/`,
+                  query: {
+                    email:a.email,
+                  },
+                },
+                `/user/detail/`
+                )
+            }}>{a.name}</a>
+              
+              </ListGroup.Item>
+            
+          })}
+            </>
+          :<></>
+        }
                 </ListGroup>
-                <a className="linkmenu">전체단어 보러가기</a>
+                {/* <a className="linkmenu" onClick={() => {
+                  router.push('/user/friends')
+                }}>팔로잉, 팔로워</a> */}
               </Card.Body>
             </Card>
             <Card style={{ width: '16rem', margin: '20px' }}>
               <Card.Body>
-                <Card.Title>문의내역</Card.Title>
+                <Card.Title>Follower</Card.Title>
                 <ListGroup variant="flush">
-                  <ListGroup.Item>최근 문의 내역1</ListGroup.Item>
-                  <ListGroup.Item>최근 문의 내역2</ListGroup.Item>
-                  <ListGroup.Item>최근 문의 내역3</ListGroup.Item>
+                {
+          follower
+          ?<>{follower.map((a:any,i:any)=>{
+            return <ListGroup.Item key={i} >
+            <a className="linkmenu" onClick={()=>{
+            router.push(
+              {
+                pathname: `/user/detail/`,
+                query: {
+                  email:a.email,
+                },
+              },
+              `/user/detail/`
+              )
+          }}>{a.name}</a>
+            
+            </ListGroup.Item>
+          })}
+            </>
+          :<></>
+        }
                 </ListGroup>
-                <a className="linkmenu">전체문의 보러가기</a>
+                {/* <a className="linkmenu" onClick={() => {
+                  router.push('/user/friends')
+                }}>팔로잉, 팔로워</a> */}
               </Card.Body>
             </Card>
+            
+          </Col>
+          <Col sm={2} sx={2}>
+
+            
           </Col>
         </Row>
 
@@ -251,7 +324,7 @@ export default function Mypage() {
             text-decoration-line: none;
             display: inline;
             align-items:center;
-            font-weight:bold;
+            // font-weight:bold;
             font-size: 14px;
             margin-bottom:0;
             cursor: pointer;

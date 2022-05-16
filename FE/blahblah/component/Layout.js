@@ -13,9 +13,12 @@ export default function Layout({ children }) {
           </Col>
         </Row>
       </Container>
+      <hr style={{marginTop:'0px',color:'#b5b5b5'}}></hr>
       {/* <hr></hr> */}
       <div>{children}</div>
       <Footer />
     </div>
   );
+  
+
 }
