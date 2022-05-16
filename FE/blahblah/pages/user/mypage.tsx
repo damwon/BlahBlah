@@ -219,8 +219,8 @@ export default function Mypage() {
           :null
         }</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Sex</div>{profile.gender === 1
-                ? <>여자</>
-                : <>남자</>
+                ? <>Woman</>
+                : <>Man</>
               }</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Age</div>{profile.age}</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Description</div>{profile.description}</ListGroup.Item>

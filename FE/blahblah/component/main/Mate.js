@@ -57,7 +57,7 @@ export default function Mate(props) {
     return config;
   };
 
-  // 팔로우요청(언팔)
+  // 팔로우요청,언팔로우요청
   const userFollow = (event) => {
     event.preventDefault();
     setFollowBtn(!followBtn)
