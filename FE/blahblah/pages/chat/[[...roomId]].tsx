@@ -17,7 +17,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 // icons
-import ReportIcon from "@mui/icons-material/Report";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import SendIcon from "@mui/icons-material/Send";
 import MicIcon from "@mui/icons-material/Mic";
@@ -189,6 +188,11 @@ export default function Chat() {
     if (userData) {
       connect(chatRoomData);
     }
+    // router.events.on("routeChangeStart", function () {
+    //   if (stompClient) {
+    //     stompClient.disconnect();
+    //   }
+    // });
     return () => {
       if (stompClient) {
         stompClient.disconnect();
@@ -432,6 +436,9 @@ export default function Chat() {
         console.info("받은 메시지: " + message.data);
         switch (parsedMessage.id) {
           case "registerResponse":
+            if (parsedMessage.response.includes("already registered")) {
+              alert("이미 등록되었습니다. 새로고침 해주세요.");
+            }
             console.log(parsedMessage);
             break;
           case "callResponse":
@@ -655,7 +662,6 @@ export default function Chat() {
     <>
       <Box
         style={{
-          marginTop: "20px",
           marginBottom: "20px",
           display: "flex",
           justifyContent: "space-between",
@@ -667,6 +673,7 @@ export default function Chat() {
               width: "20%",
               display: callState ? "none" : "block",
               border: "1px solid #b5b5b5",
+              borderRightStyle: "none",
             }}
           >
             <ChatList
@@ -737,6 +744,7 @@ export default function Chat() {
             display: "flex",
             borderTop: "1px solid #b5b5b5",
             borderBottom: "1px solid #b5b5b5",
+            borderLeft: "1px solid #b5b5b5",
             flexDirection: "column",
             justifyContent: "space-between",
             alignItems: "center",
@@ -755,7 +763,7 @@ export default function Chat() {
           >
             <Typography sx={{ fontSize: "30px" }}>{chatname}</Typography>
             <IconButton onClick={videoCall}>
-              <VideocamIcon sx={{ color: "black" }} />
+              <VideocamIcon fontSize="large" sx={{ color: "black" }} />
             </IconButton>
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
@@ -928,10 +936,8 @@ export default function Chat() {
                   alignItems: "center",
                 }}
               >
-                <Typography sx={{ marginRight: "10px" }}>
-                  {translateMessage}
-                </Typography>
-                <Box sx={{ minWidth: 120 }}>
+                <Typography sx={{ mr: 3 }}>{translateMessage}</Typography>
+                <Box sx={{ minWidth: 120, mr: 3 }}>
                   <FormControl fullWidth>
                     <InputLabel>Language</InputLabel>
                     <Select
@@ -952,7 +958,7 @@ export default function Chat() {
                 <Button onClick={handleTranslate}>Translate!</Button>
                 {translatedMessage && (
                   <>
-                    <ArrowForwardIcon />
+                    <ArrowForwardIcon sx={{ mr: 3 }} />
                     <Typography>{translatedMessage}</Typography>
                   </>
                 )}
@@ -966,31 +972,41 @@ export default function Chat() {
                 </IconButton>
               </Box>
             )}
-            <Box>
-              <TextField
-                sx={{ width: "30vw" }}
-                value={message}
-                placeholder="Type your message."
-                onChange={handleMessage}
-                onKeyPress={(e: any) => {
-                  if (e.key === "Enter") {
-                    handleMessageList();
-                  }
+            {chatname === "No one..." ? null : (
+              <Box
+                sx={{
+                  display:
+                    translateMessage || correctMessage ? "none" : "block",
                 }}
-                variant="standard"
-              />
-              <IconButton onClick={handleMessageList}>
-                <SendIcon color="primary" />
-              </IconButton>
-              <IconButton onClick={handleClickOpenRecorder}>
-                <MicIcon sx={{ color: "black" }} />
-              </IconButton>
-              <IconButton onClick={handleClickOpenImageDialog}>
-                <AttachFileIcon
-                  sx={{ color: "black", transform: "rotate(45deg)" }}
+              >
+                <TextField
+                  sx={{
+                    width: "30vw",
+                  }}
+                  value={message}
+                  placeholder="Type your message."
+                  onChange={handleMessage}
+                  onKeyPress={(e: any) => {
+                    if (e.key === "Enter") {
+                      handleMessageList();
+                    }
+                  }}
+                  variant="standard"
                 />
-              </IconButton>
-            </Box>
+                <IconButton onClick={handleMessageList}>
+                  <SendIcon color="primary" />
+                </IconButton>
+                <IconButton onClick={handleClickOpenRecorder}>
+                  <MicIcon sx={{ color: "black" }} />
+                </IconButton>
+                <IconButton onClick={handleClickOpenImageDialog}>
+                  <AttachFileIcon
+                    sx={{ color: "black", transform: "rotate(45deg)" }}
+                  />
+                </IconButton>
+              </Box>
+            )}
+
             <RecorderDialog
               openRecorder={openRecorder}
               setOpenRecorder={setOpenRecorder}

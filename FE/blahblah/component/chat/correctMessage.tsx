@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Box, Typography, IconButton, TextField } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from "@mui/icons-material/Send";
@@ -11,18 +11,29 @@ export default function CorrectMessage(props: any) {
   };
   return (
     <Box
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      sx={{
+        display: "flex",
+        alignItems: "center",
+      }}
     >
-      <Typography>{props.correctMessage}</Typography>
-      <ArrowForwardIcon />
+      <Typography sx={{ mr: 3 }}>{props.correctMessage}</Typography>
+      <ArrowForwardIcon sx={{ mr: 3 }} />
       <TextField
+        sx={{ width: "20vw" }}
         variant="standard"
         onChange={handleFixMessage}
         defaultValue={props.correctMessage}
+        onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+          if (e.key === "Enter") {
+            props.sendCorrectMsg("comment", props.correctMessage, fixedMessage);
+            props.setCorrectMessage("");
+          }
+        }}
       />
       <IconButton
         onClick={() => {
           props.sendCorrectMsg("comment", props.correctMessage, fixedMessage);
+          props.setCorrectMessage("");
         }}
       >
         <SendIcon color="primary" />
