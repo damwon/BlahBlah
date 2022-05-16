@@ -14,7 +14,6 @@ export default function Home() {
     </Row>
     <Row>
       <div className="ex">
-      <h1>여기 디자인은 뭐 컨텐츠가 있어야 할듯</h1>
       </div>
     {/* <div className="carddiv">
     <CardComponent></CardComponent>
