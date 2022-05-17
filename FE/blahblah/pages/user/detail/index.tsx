@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Container, Row, Col, ListGroup, Button,FormControl,InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button,FormControl,InputGroup,Badge } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
@@ -28,6 +28,8 @@ export default function UserDetail() {
   const [user,setUser] = useState<any>()
   const [userRating,setUserRating] = useState<any>()
   const [lang,setLang] = useState<any>([])
+  const [langLv,setLangLv] = useState<any>([])
+
   // 유저 코멘트
   const [comment,setComment] = useState('')
   const [cmtarr,setCmtarr] = useState<any>()
@@ -189,6 +191,7 @@ export default function UserDetail() {
       var newarra:any = [...langa]
       var newarrb:any  = [...langb]
       var newarrc:any  = [...langc]
+      var arrLv:any = []
 
 
       for(let i=0;i<Object.keys(lang).length;i++){
@@ -196,6 +199,7 @@ export default function UserDetail() {
         if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
           // var newarr:any = [...langa]
           newarra.push(lang[i]['langId'])
+          arrLv.push(lang[i]['level'])
           setLangA(newarra)
         }else if(lang[i]['level']===4){
           newarrb.push(lang[i]['langId'])
@@ -208,6 +212,7 @@ export default function UserDetail() {
         }
       }
     }
+    setLangLv(arrLv)
   },[lang])
 
     // 유저 좋아요 버튼
@@ -427,6 +432,7 @@ export default function UserDetail() {
            {larr[a-1]} 
                       <img style={{margin:'5px'}}
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
+             <Badge bg="secondary" style={{margin:'5px'}}>{langLv[i]}</Badge>
 
               </span>
             })

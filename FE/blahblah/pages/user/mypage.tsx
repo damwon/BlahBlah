@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Container, Row, Col, ListGroup, Figure, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Card, Button,Badge } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -19,6 +19,7 @@ export default function Mypage() {
   const lImg:any = langIMG
   // 학습언어
   const [langa,setLangA] = useState([])
+  const [langLv,setLangLv] = useState<any>([])
   // 구사언어
   const [langb,setLangB] = useState([])
   // 모국어
@@ -70,6 +71,8 @@ export default function Mypage() {
       var newarra:any = [...langa]
       var newarrb:any  = [...langb]
       var newarrc:any  = [...langc]
+      var arrLv:any = []
+
 
 
       for(let i=0;i<Object.keys(lang).length;i++){
@@ -77,6 +80,7 @@ export default function Mypage() {
         if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
           // var newarr:any = [...langa]
           newarra.push(lang[i]['langId'])
+          arrLv.push(lang[i]['level'])
           setLangA(newarra)
         }else if(lang[i]['level']===4){
           newarrb.push(lang[i]['langId'])
@@ -89,6 +93,7 @@ export default function Mypage() {
         }
       }
     }
+    setLangLv(arrLv)
   },[lang])
 
   // 팔로잉
@@ -211,6 +216,7 @@ export default function Mypage() {
            {larr[a-1]} 
                       <img style={{margin:'5px'}}
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
+             <Badge bg="secondary" style={{margin:'5px'}}>{langLv[i]}</Badge>
 
               </span>
             })
