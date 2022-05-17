@@ -666,7 +666,7 @@ export default function Index() {
             color="error"
             onClick={handleClose}
           >
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -713,7 +713,7 @@ export default function Index() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose2}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button variant="contained" onClick={modifyFeed}>

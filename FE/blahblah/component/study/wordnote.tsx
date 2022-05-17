@@ -241,7 +241,7 @@ export default function Wordnote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -273,7 +273,7 @@ export default function Wordnote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={changeClose}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button

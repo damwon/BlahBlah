@@ -148,9 +148,16 @@ export default function WordLstChat(props: any) {
                     }
                   >
                     <ListItemAvatar>
-                      <Avatar>
-                        <LibraryBooks />
-                      </Avatar>
+                      <div title="Copy">
+                        <Avatar>
+                          <LibraryBooks
+                            style={{ cursor: "pointer" }}
+                            onClick={() =>
+                              navigator.clipboard.writeText(d.word)
+                            }
+                          />
+                        </Avatar>
+                      </div>
                     </ListItemAvatar>
                     <ListItemText primary={d.word} secondary={d.meaning} />
                   </ListItem>
@@ -243,7 +250,7 @@ export default function WordLstChat(props: any) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            cancle
+            cancel
           </Button>
           <Button
             style={{

@@ -97,7 +97,7 @@ export default function QnaWrite() {
               router.push(`/qna`);
             }}
           >
-            cancle
+            cancel
           </Button>{" "}
           <Button
             style={{
