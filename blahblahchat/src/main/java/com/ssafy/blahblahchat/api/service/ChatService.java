@@ -41,7 +41,7 @@ public class ChatService {
     public String findChatRoom(long userId, long opponentId){
         return chatRepository.findChat(userId,opponentId);
     }
-
+    
     public List<ChatMeta> findChatListByUserId(long userId){
 
         List<ChatMeta> list =chatRepository.findChatListByUserId(userId);

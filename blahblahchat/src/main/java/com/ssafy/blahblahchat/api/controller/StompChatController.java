@@ -45,7 +45,7 @@ public class StompChatController {
         log.debug("senderId: {} receiverId:{}",userId,messageDTO.getReceiverId());
 
         Message saveMessage=messageService.saveMessage(messageDTO);
-
+        saveMessage.setContent(messageDTO.getContent());
         //채팅이 오가면 MySql에 저장된 채팅 리스트 메타 정보를 바꿔줘야함
         chatService.updateList(Long.parseLong(messageDTO.getSenderId()),Long.parseLong(opponentId),messageDTO.getReceiverName(),saveMessage);
         chatService.updateList(Long.parseLong(opponentId),Long.parseLong(messageDTO.getSenderId()),messageDTO.getSenderName(),saveMessage);
@@ -56,6 +56,7 @@ public class StompChatController {
     public void sendToMe(@Header(name="Authorization", required=false) String token,MessageDTO messageDTO) throws Exception {
         Long userId = getUserIdByToken(token);
         template.convertAndSend("/topic/"+userId, messageDTO);
+
     }
 
     @MessageMapping("/read/{opponentId}")

@@ -3,6 +3,7 @@ package com.ssafy.blahblahchat.api.service;
 
 import com.ssafy.blahblahchat.api.dto.MessageDTO;
 import com.ssafy.blahblahchat.api.entity.Message;
+import com.ssafy.blahblahchat.common.encryption.Seed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,6 +18,7 @@ import java.util.List;
 public class MessageService {
 
     private final MongoTemplate mongoTemplate;
+    private final Seed seed;
 
 
     public Message saveMessage(MessageDTO messageDTO){
@@ -31,7 +33,14 @@ public class MessageService {
         Criteria criteria = new Criteria("roomId");
         criteria.is(roomId);
         Query query=new Query(criteria);
-        return mongoTemplate.find(query,Message.class,"message");
+        List<Message> list = mongoTemplate.find(query,Message.class,"message");
+        for(Message message:list){
+            if(message.getContent()!=null)
+                message.setContent(seed.decrypt(message.getContent()));
+            if(message.getComment()!=null)
+                message.setComment(seed.decrypt(message.getComment()));
+        }
+        return list;
     }
 
 //    //유저 아이디로 보내거나 받은 메시지를 모두 찾음
@@ -50,9 +59,14 @@ public class MessageService {
         message.setSenderName(messageDTO.getSenderName());
         message.setReceiverId(messageDTO.getReceiverId());
         message.setReceiverName(messageDTO.getReceiverName());
-        message.setContent(messageDTO.getContent());
+        if(messageDTO.getContent()!=null) {
+            message.setContent(seed.encrypt(messageDTO.getContent()));//암호화
+
+        }
+        if(messageDTO.getComment()!=null) {
+            message.setComment(seed.encrypt(messageDTO.getComment())); //암호화
+        }
         message.setRoomId(messageDTO.getRoomId());
-        message.setComment(messageDTO.getComment());
         message.setCreatedAt(LocalDateTime.now());
         return message;
     }

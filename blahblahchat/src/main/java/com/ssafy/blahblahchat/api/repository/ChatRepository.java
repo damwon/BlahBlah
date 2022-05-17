@@ -3,10 +3,10 @@ package com.ssafy.blahblahchat.api.repository;
 
 import com.ssafy.blahblahchat.api.entity.ChatMeta;
 import com.ssafy.blahblahchat.api.entity.Message;
-import com.ssafy.blahblahchat.db.entity.User;
 import lombok.extern.log4j.Log4j2;
+import com.ssafy.blahblahchat.common.encryption.Seed;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -15,10 +15,13 @@ import java.util.*;
 
 @Repository
 @Log4j2
+@RequiredArgsConstructor
 public class ChatRepository {
 
     @PersistenceContext
     EntityManager em;
+
+      private final Seed seed;
 
     public String createChat(ChatMeta chatMeta){
         em.persist(chatMeta);
