@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Form } from "react-bootstrap";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function VoiceSaveDialog(props: any) {
   const [voiceTitle, setVoiceTitle] = useState("");
@@ -44,7 +45,11 @@ export default function VoiceSaveDialog(props: any) {
 
   const saveVoiceMsg = (recordbookId: number) => {
     if (!voiceTitle) {
-      alert("Please write the title of the voice message.");
+      Swal.fire({
+        title: "Please write the title of the voice message.",
+        confirmButtonColor: "#00ccb1",
+        position: "top",
+      });
     } else {
       axios({
         url: `https://blahblah.community:8443/api/record/${recordbookId}`,
@@ -57,7 +62,10 @@ export default function VoiceSaveDialog(props: any) {
       })
         .then((res) => {
           console.log(res);
-          alert("The voice message was successfully saved.");
+          Swal.fire({
+            title: "The voice message was successfully saved.",
+            confirmButtonColor: "#00ccb1",
+          });
           props.handleCloseVoiceSave();
         })
         .catch((err) => {
@@ -67,7 +75,11 @@ export default function VoiceSaveDialog(props: any) {
   };
 
   return (
-    <Dialog open={props.openVoiceSave} onClose={props.handleCloseVoiceSave}>
+    <Dialog
+      open={props.openVoiceSave}
+      onClose={props.handleCloseVoiceSave}
+      sx={{ zIndex: 100 }}
+    >
       <DialogTitle>Save voice messages</DialogTitle>
       <DialogContent>
         <DialogContentText sx={{ mb: 3 }}>
@@ -100,7 +112,13 @@ export default function VoiceSaveDialog(props: any) {
         </List>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleCloseVoiceSave}>Cancel</Button>
+        <Button
+          color="error"
+          variant="contained"
+          onClick={props.handleCloseVoiceSave}
+        >
+          Cancel
+        </Button>
       </DialogActions>
     </Dialog>
   );

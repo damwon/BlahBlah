@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Form } from "react-bootstrap";
 import Image from "next/image";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function ImageDialog(props: any) {
   const [imageData, setImageData] = useState<any>();
@@ -34,12 +35,19 @@ export default function ImageDialog(props: any) {
       setImageData(null);
       props.handleCloseImageDialog();
     } else {
-      alert("Please select your image.");
+      Swal.fire({
+        title: "Please select your image.",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
 
   return (
-    <Dialog open={props.openImageDialog} onClose={props.handleCloseImageDialog}>
+    <Dialog
+      open={props.openImageDialog}
+      onClose={props.handleCloseImageDialog}
+      sx={{ zIndex: 100 }}
+    >
       <DialogTitle>Send Image</DialogTitle>
       {imageData && (
         <DialogContent sx={{ textAlign: "center" }}>
@@ -63,6 +71,8 @@ export default function ImageDialog(props: any) {
       </DialogContent>
       <DialogActions>
         <Button
+          color="error"
+          variant="contained"
           onClick={() => {
             props.handleCloseImageDialog();
             setImageData(null);
@@ -71,6 +81,10 @@ export default function ImageDialog(props: any) {
           Cancel
         </Button>
         <Button
+          sx={{
+            backgroundColor: "#00ccb1",
+          }}
+          variant="contained"
           onClick={() => {
             handleSubmitImage();
           }}
