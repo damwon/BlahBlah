@@ -4,6 +4,7 @@ import com.ssafy.blahblah.api.request.review.ReviewPostReq;
 import com.ssafy.blahblah.api.service.member.ReviewService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
+import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.db.entity.Review;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,11 @@ public class ReviewController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         Long reviewUserId = userDetails.getUser().getId();
         Long userId = userService.getUserByEmail(email).getId();
+
+        Optional<Review> isReview = reviewService.isReview(reviewUserId,userId);
+        if (isReview.isPresent()) {
+            return ResponseEntity.status(409).body(BaseResponseBody.of(404, "duplicatedReview"));
+        }
         reviewService.reviewToUser(reviewUserId, userId, reviewPostReq.getReviewTxt());
 
         Optional<Review> review = reviewService.isReview(reviewUserId,userId);
