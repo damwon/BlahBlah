@@ -228,13 +228,15 @@ public class UserController {
 		String imgString = user.getProfileImg();
 		if(userEditPutReq.getImgState() == 1) {
 			if(multipartFile == null) {
-				imgString = "profile_default.png";
-				awsS3Service.deleteImage(user.getProfileImg(),"profile");
-			} else {
-				imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
 				if(!imgString.equals("profile_default.png")) {
 					awsS3Service.deleteImage(user.getProfileImg(),"profile");
 				}
+				imgString = "profile_default.png";
+			} else {
+				if(!imgString.equals("profile_default.png")) {
+					awsS3Service.deleteImage(user.getProfileImg(),"profile");
+				}
+				imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
 			}
 		}
 		user.setProfileImg(imgString);

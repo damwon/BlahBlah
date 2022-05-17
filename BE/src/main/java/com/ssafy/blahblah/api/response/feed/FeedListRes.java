@@ -26,6 +26,7 @@ public class FeedListRes {
     private String imgUrl;
     private String userName;
     private Long userId;
+    private String email;
     private String userProfile;
     private Boolean open;
     private Boolean isLike;
@@ -60,6 +61,7 @@ public class FeedListRes {
                 .open(feed.getOpen())
                 .userName(feed.getUser().getName())
                 .userId(feed.getUser().getId())
+                .email(feed.getUser().getEmail())
                 .likeCount(feed.getLikeCount())
                 .isLike(isLike)
                 .createdAt(feed.getCreatedAt())
