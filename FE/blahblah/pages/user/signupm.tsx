@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import lang2 from '../../component/user/Lang'
 import langImg2 from '../../component/user/LangImg'
 // import langkey from '../../component/user/Langarr'
+import Swal from "sweetalert2";
+
 
 export default function Signup() {
   const lang: any = lang2
@@ -260,7 +262,11 @@ export default function Signup() {
       })
         .then((res) => {
           console.log(res)
-          alert('Success')
+          // alert('Success')
+          Swal.fire({
+            title: "Success",
+            confirmButtonColor: "#00ccb1",
+          });
           console.log('가입성공')
           // console.log(formData)
           Router.push({
@@ -269,11 +275,19 @@ export default function Signup() {
         })
         .catch((err) => {
           console.log(err);
-          alert('Fail')
+          // alert('Fail')
+          Swal.fire({
+            title: "Fail",
+            confirmButtonColor: "#00ccb1",
+          });
           console.log('가입실패')
         });
     }else{
-      alert('Please Check Your Info')
+      // alert('Please Check Your Info')
+      Swal.fire({
+        title: "Please Check Your Info",
+        confirmButtonColor: "#00ccb1",
+      });
     }
     
 

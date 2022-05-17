@@ -3,6 +3,8 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+
 export default function Findpass() {
   const router = useRouter()
 
@@ -22,11 +24,19 @@ export default function Findpass() {
     })
       .then(() => {
         setEmail("");
-        alert("Check your Email Message");
+        // alert("Check your Email Message");
+        Swal.fire({
+          title: "Check your Email Message",
+          confirmButtonColor: "#00ccb1",
+        });
       })
       .catch((err) => {
         console.log(err);
-        alert('Enter Correctly')
+        // alert('Enter Correctly')
+        Swal.fire({
+          title: "Enter Correctly",
+          confirmButtonColor: "#00ccb1",
+        });
       });
   };
   return (

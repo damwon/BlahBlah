@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
+import Swal from "sweetalert2";
 // import '../../styles/test.css'
 export default function Login() {
   const router = useRouter()
@@ -38,7 +39,11 @@ export default function Login() {
         .catch((err) => {
           console.log(err)
           // 여기 에러중에 403이면 body값 출력하기
-          alert('Fail')
+          // alert('Fail')
+          Swal.fire({
+            title: "Fail",
+            confirmButtonColor: "#00ccb1",
+          });
           // alert 오류출력
 
         });
@@ -61,7 +66,11 @@ export default function Login() {
       })
       .catch((err) => {
         console.log(err)
-        alert('Fail')
+        // alert('Fail')
+        Swal.fire({
+          title: "Fail",
+          confirmButtonColor: "#00ccb1",
+        });
         // alert 오류출력
 
       });

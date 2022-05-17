@@ -9,6 +9,8 @@ import Avatar from '@mui/material/Avatar';
 import langarr from '../../component/user/Langarr'
 import langkey from '../../component/user/Lang'
 import langIMG from '../../component/user/LangImg'
+import Swal from "sweetalert2";
+
 
 
 export default function Mypage() {
@@ -31,7 +33,11 @@ export default function Mypage() {
     if (token) {
       setIslogin(true)
     } else {
-      alert('로그인상태가아냐!')
+      // alert('로그인상태가아냐!')
+      Swal.fire({
+        title: "Please Login",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push('/')
     }
   }, []);
@@ -106,7 +112,11 @@ export default function Mypage() {
     if (token) {
       setIslogin(true)
     } else {
-      alert('로그인상태가아냐!')
+      // alert('로그인상태가아냐!')
+      Swal.fire({
+        title: "Please Login",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push('/')
     }
   }, []);
