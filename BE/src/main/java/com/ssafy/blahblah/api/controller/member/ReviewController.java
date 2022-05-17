@@ -1,7 +1,7 @@
 package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.request.member.UserLangPostReq;
-import com.ssafy.blahblah.api.request.review.ReviewPostReq;
+import com.ssafy.blahblah.api.request.member.ReviewPostReq;
 import com.ssafy.blahblah.api.response.member.ReviewListRes;
 import com.ssafy.blahblah.api.service.member.ReviewService;
 import com.ssafy.blahblah.api.service.member.UserService;
@@ -85,7 +85,7 @@ public class ReviewController {
         List<ReviewListRes> reviewList = new ArrayList<ReviewListRes>();
         for(Review item: reviews) {
             ReviewListRes reviewListRes = new ReviewListRes(item);
-            Optional<User> user = userService.getUserById(item.getUserId());
+            Optional<User> user = userService.getUserById(item.getReviewUserId());
             reviewListRes.setName(user.get().getName());
             reviewListRes.setEmail(user.get().getEmail());
             reviewList.add(reviewListRes);
