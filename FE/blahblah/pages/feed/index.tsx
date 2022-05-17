@@ -14,6 +14,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CreateIcon from "@mui/icons-material/Create";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -379,7 +380,33 @@ export default function Index() {
                       <div style={{ width: "100%" }}>
                         <Grid container spacing={2}>
                           <Grid item xs={6}>
-                            <h5>{d.userName}</h5>
+                            <span
+                              style={{ fontSize: "20px", marginRight: "10px" }}
+                            >
+                              {d.userName}
+                            </span>
+                            <Button
+                              onClick={() => {
+                                router.push(
+                                  {
+                                    pathname: "/chat",
+                                    query: {
+                                      name: d.userName,
+                                      userId: d.userId,
+                                    },
+                                  },
+                                  `/chat`
+                                );
+                              }}
+                              size="small"
+                              style={{ backgroundColor: "#00ccb1" }}
+                              variant="contained"
+                            >
+                              <ChatBubbleOutlineIcon
+                                style={{ margin: "0 5px", display: "inline" }}
+                              ></ChatBubbleOutlineIcon>
+                              Chat
+                            </Button>
                           </Grid>
                           <Grid item xs={6}>
                             <h6 style={{ textAlign: "right" }}>
@@ -389,13 +416,16 @@ export default function Index() {
                         </Grid>
 
                         {d.imgUrl ? (
-                          <Image
-                            className="profile"
-                            src={d.imgUrl}
-                            alt="finger image"
-                            width="70%"
-                            height="70%"
-                          ></Image>
+                          <div>
+                            <br></br>
+                            <Image
+                              className="profile"
+                              src={d.imgUrl}
+                              alt="finger image"
+                              width="70%"
+                              height="70%"
+                            ></Image>
+                          </div>
                         ) : null}
 
                         <h6 style={{ margin: "20px 0px", width: "70%" }}>
