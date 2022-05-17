@@ -232,7 +232,9 @@ public class UserController {
 				awsS3Service.deleteImage(user.getProfileImg(),"profile");
 			} else {
 				imgString = awsS3Service.uploadImage(multipartFile, "profile").get(0);
-				awsS3Service.deleteImage(user.getProfileImg(),"profile");
+				if(!imgString.equals("profile_default.png")) {
+					awsS3Service.deleteImage(user.getProfileImg(),"profile");
+				}
 			}
 		}
 		user.setProfileImg(imgString);
