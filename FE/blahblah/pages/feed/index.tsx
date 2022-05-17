@@ -44,7 +44,6 @@ export default function Index() {
     allAxios
       .get(`/feed`, { headers: setToken() })
       .then((res) => {
-        console.log(res.data);
         setFeeds(res.data);
         return res;
       })
@@ -63,7 +62,6 @@ export default function Index() {
     allAxios
       .get(`/feed/friends`, { headers: setToken() })
       .then((res) => {
-        console.log(res.data);
         setFriendFeeds(res.data);
         return res;
       })
