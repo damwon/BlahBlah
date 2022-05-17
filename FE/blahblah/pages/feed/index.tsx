@@ -10,6 +10,7 @@ import {
   ListItemText,
   Checkbox,
 } from "@mui/material";
+import Swal from "sweetalert2";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CreateIcon from "@mui/icons-material/Create";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
@@ -35,7 +36,10 @@ export default function Index() {
 
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("you need to login first.");
+      Swal.fire({
+        title: "you need to login first.",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push(`/user/login`);
     }
   });
@@ -156,7 +160,10 @@ export default function Index() {
     allAxios
       .put(`/feed/${changeIdx}`, formData, { headers: setToken() })
       .then(() => {
-        alert("the feed is modified.");
+        Swal.fire({
+          title: "the feed is modified",
+          confirmButtonColor: "#00ccb1",
+        });
         window.location.reload();
       })
       .catch((err) => {
@@ -196,7 +203,10 @@ export default function Index() {
           console.log(err);
         });
     } else {
-      alert("please write contents");
+      Swal.fire({
+        title: "please write contents",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
 
@@ -225,7 +235,10 @@ export default function Index() {
       allAxios
         .delete(`comment/${id}`, { headers: setToken() })
         .then(() => {
-          alert("the comment is deleted.");
+          Swal.fire({
+            title: "the comment is deleted",
+            confirmButtonColor: "#00ccb1",
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -238,7 +251,10 @@ export default function Index() {
       allAxios
         .delete(`feed/${id}`, { headers: setToken() })
         .then(() => {
-          alert("the feed is deleted.");
+          Swal.fire({
+            title: "the feed is deleted",
+            confirmButtonColor: "#00ccb1",
+          });
           window.location.reload();
         })
         .catch((err) => {
@@ -276,7 +292,10 @@ export default function Index() {
           console.log(err);
         });
     } else {
-      alert("please write contents.");
+      Swal.fire({
+        title: "please write contents",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
 

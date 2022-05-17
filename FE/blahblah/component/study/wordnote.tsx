@@ -15,6 +15,7 @@ import { Modal, Card } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 
 export default function Wordnote() {
   const router = useRouter();
@@ -39,7 +40,10 @@ export default function Wordnote() {
 
   const writeWordTitle = () => {
     if (wordTitle === "") {
-      alert("please write the title");
+      Swal.fire({
+        title: "please write the title",
+        confirmButtonColor: "#00ccb1",
+      });
     } else {
       allAxios
         .post(
@@ -86,8 +90,11 @@ export default function Wordnote() {
   const lstDelete = (num: number, title: string) => {
     allAxios
       .delete(`/wordbook/${num}`, { headers: setToken() })
-      .then((res) => {
-        alert("The " + title + " is deleted.");
+      .then(() => {
+        Swal.fire({
+          title: "The " + title + " is deleted",
+          confirmButtonColor: "#00ccb1",
+        });
         window.location.reload();
       })
       .catch((err) => {
@@ -111,7 +118,10 @@ export default function Wordnote() {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("please write the title");
+      Swal.fire({
+        title: "please write the title",
+        confirmButtonColor: "#00ccb1",
+      });
     } else {
       allAxios
         .put(

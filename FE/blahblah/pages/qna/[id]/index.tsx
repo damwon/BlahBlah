@@ -4,10 +4,14 @@ import { useEffect, useState } from "react";
 import allAxios from "../../../lib/allAxios";
 import { useRouter } from "next/router";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import Swal from "sweetalert2";
 export default function QnaInfo() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("Wrong approach.");
+      Swal.fire({
+        title: "Wrong approach",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push(`/`);
     }
   });
@@ -53,7 +57,10 @@ export default function QnaInfo() {
     allAxios
       .delete(`/qna/${id}`, { headers: setToken() })
       .then((res) => {
-        alert("The question is deleted.");
+        Swal.fire({
+          title: "The question is deleted",
+          confirmButtonColor: "#00ccb1",
+        });
         router.push(`/qna`);
       })
       .catch((err) => {

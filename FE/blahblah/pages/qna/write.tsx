@@ -3,10 +3,14 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
+import Swal from "sweetalert2";
 export default function QnaWrite() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("Wrong approach");
+      Swal.fire({
+        title: "Wrong approach",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push(`/`);
     }
   });

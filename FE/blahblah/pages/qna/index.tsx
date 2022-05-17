@@ -3,10 +3,14 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
+import Swal from "sweetalert2";
 export default function QnA() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("you need to login first.");
+      Swal.fire({
+        title: "please login",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push(`/user/login`);
     }
   });
