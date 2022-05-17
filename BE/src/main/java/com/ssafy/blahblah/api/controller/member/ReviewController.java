@@ -68,11 +68,9 @@ public class ReviewController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("reviewlist")
-    public ResponseEntity getReviewList(Authentication authentication) {
-        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-        Long userId = userDetails.getUser().getId();
-
+    @GetMapping("/{email}")
+    public ResponseEntity getReviewList(@PathVariable String email) {
+        Long userId = userService.getUserByEmail(email).getId();
         List<Review> reviewList = reviewService.getReviewList(userId);
         return new ResponseEntity(reviewList,HttpStatus.OK);
     }
