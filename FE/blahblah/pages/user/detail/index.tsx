@@ -12,6 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import User from '..';
 import Avatar from '@mui/material/Avatar';
+import DeleteForeverRoundedIcon  from '@mui/icons-material/DeleteOutlined';
 
 
 export default function UserDetail() {
@@ -481,10 +482,11 @@ export default function UserDetail() {
                   {':'}{a.reviewTxt}
                 {
                   a.reviewUserId === me.id
-                  ?<><Button onClick={DeleteComment}
-                  // className="btncs" 
+                  ?<><DeleteForeverRoundedIcon  onClick={DeleteComment} style={{cursor:"pointer"}}/>
+                  {/* <Button onClick={DeleteComment}
+                  className="btncs" 
                            variant="outline-secondary"
-                           >X</Button>
+                           >X</Button> */}
                   {/* <button onClick={DeleteComment}>{'x'}</button> */}
                   </>
                   :<></>
