@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Container, Row, Col, ListGroup, Button,FormControl,InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button,FormControl,InputGroup,Badge } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
@@ -12,6 +12,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import User from '..';
 import Avatar from '@mui/material/Avatar';
+import DeleteForeverRoundedIcon  from '@mui/icons-material/DeleteOutlined';
 
 
 export default function UserDetail() {
@@ -25,7 +26,10 @@ export default function UserDetail() {
   // },[])
   // const [email,setEmail] = useState<any>(router.query)
   const [user,setUser] = useState<any>()
+  const [userRating,setUserRating] = useState<any>()
   const [lang,setLang] = useState<any>([])
+  const [langLv,setLangLv] = useState<any>([])
+
   // 유저 코멘트
   const [comment,setComment] = useState('')
   const [cmtarr,setCmtarr] = useState<any>()
@@ -163,6 +167,7 @@ export default function UserDetail() {
      console.log('이메일로정보 요청성공')
      console.log(result.data)
      setUser(result.data)
+     setUserRating(result.data['rating'])
      setLang(result.data['langInfos'])
      console.log(result.data['langInfos'])
   })
@@ -186,6 +191,7 @@ export default function UserDetail() {
       var newarra:any = [...langa]
       var newarrb:any  = [...langb]
       var newarrc:any  = [...langc]
+      var arrLv:any = []
 
 
       for(let i=0;i<Object.keys(lang).length;i++){
@@ -193,6 +199,7 @@ export default function UserDetail() {
         if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
           // var newarr:any = [...langa]
           newarra.push(lang[i]['langId'])
+          arrLv.push(lang[i]['level'])
           setLangA(newarra)
         }else if(lang[i]['level']===4){
           newarrb.push(lang[i]['langId'])
@@ -205,6 +212,7 @@ export default function UserDetail() {
         }
       }
     }
+    setLangLv(arrLv)
   },[lang])
 
     // 유저 좋아요 버튼
@@ -247,6 +255,14 @@ export default function UserDetail() {
   const userLike = (event:any) => {
     event.preventDefault();
     setLikeBtn(!likeBtn)
+    // 임시로 보여주는 좋아요 갱신
+    if(likeBtn===false){
+      setUserRating(userRating-1)
+    }else{
+      setUserRating(userRating+1)
+
+    }
+    // onEmailCheck()
     axios({
       method:'post',
       url:`https://blahblah.community:8443/api/rate/${remail}`,
@@ -307,15 +323,7 @@ export default function UserDetail() {
       console.log(err)
     });
   };
-
-  useEffect(() => {
-    getFollowing()
-    getRateList()
-  }, [remail]);
-  // useEffect(()=>{
-  //   getRateList()
-  // },[cmtarr])
-
+  // useEffect실행순서 바텀->탑
   useEffect(()=>{
     console.log('챙겨오기~')
     console.log(following)
@@ -333,7 +341,17 @@ export default function UserDetail() {
         }
       }
     }
-  },[following,remail])
+  },[rateList,following,remail])
+
+  useEffect(() => {
+    getFollowing()
+    getRateList()
+  }, [remail]);
+  // useEffect(()=>{
+  //   getRateList()
+  // },[cmtarr])
+
+
 
 
 
@@ -414,6 +432,7 @@ export default function UserDetail() {
            {larr[a-1]} 
                       <img style={{margin:'5px'}}
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
+             <Badge bg="secondary" style={{margin:'5px'}}>{langLv[i]}</Badge>
 
               </span>
             })
@@ -426,7 +445,7 @@ export default function UserDetail() {
               : <>Man</>
             }</ListGroup.Item>
             <ListGroup.Item><div className="fw-bold">Age</div>{user.age}</ListGroup.Item>
-            <ListGroup.Item><div className="fw-bold">Rating</div>{user.rating}</ListGroup.Item>
+            <ListGroup.Item><div className="fw-bold">Rating</div>{userRating}</ListGroup.Item>
             <ListGroup.Item><div className="fw-bold">Description</div>{user.description}</ListGroup.Item>
           </ListGroup>
             </>
@@ -469,10 +488,11 @@ export default function UserDetail() {
                   {':'}{a.reviewTxt}
                 {
                   a.reviewUserId === me.id
-                  ?<><Button onClick={DeleteComment}
-                  // className="btncs" 
+                  ?<><DeleteForeverRoundedIcon  onClick={DeleteComment} style={{cursor:"pointer"}}/>
+                  {/* <Button onClick={DeleteComment}
+                  className="btncs" 
                            variant="outline-secondary"
-                           >X</Button>
+                           >X</Button> */}
                   {/* <button onClick={DeleteComment}>{'x'}</button> */}
                   </>
                   :<></>

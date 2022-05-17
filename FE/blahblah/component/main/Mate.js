@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Container,Row,Col,Card,Button,ListGroup } from 'react-bootstrap';
+import { Container,Row,Col,Card,Button,ListGroup,Badge } from 'react-bootstrap';
 import * as React from 'react';
 import Stack from '@mui/material/Stack';
 import List from '@mui/material/List';
@@ -25,6 +25,7 @@ export default function Mate(props) {
   const lImg = langImg
   // 학습언어
   const [langa,setLangA] = useState([])
+  const [langLv,setLangLv] = useState([])
   // 구사언어
   const [langb,setLangB] = useState([])
   // 모국어
@@ -172,6 +173,8 @@ export default function Mate(props) {
     // console.log('각유저별언어 반복문')/
     if(lang.length!==0){
       // 이걸 for문 밖에 써줘야했네...헠..쓰
+      var newLevel = [...langLv]
+      // setLangLv
       var newarra = [...langa]
         var newarrb  = [...langb]
         var newarrc  = [...langc]
@@ -183,6 +186,7 @@ export default function Mate(props) {
         if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
           // newarr.push(lang[i]['lang_id'])
           newarra.push(lang[i]['langId'])
+          newLevel.push(lang[i]['level'])
           // newarr.push(3)
           setLangA(newarra)
         }else if(lang[i]['level']===4){
@@ -195,6 +199,9 @@ export default function Mate(props) {
         }
       }
     }
+    console.log('레벨출력')
+    console.log(newLevel)
+    setLangLv(newLevel)
     
   }, [lang]);
 
@@ -263,6 +270,7 @@ export default function Mate(props) {
                   {larr[a-1]}
                   <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}
                   style={{margin:'5px'}}></img>
+                  {' '}
               </span>
             })
           }
@@ -336,7 +344,7 @@ export default function Mate(props) {
                       {larr[a-1]} 
                       <img style={{margin:'5px'}}
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
-
+  {' '}
               </span>
             })
           }
@@ -358,10 +366,13 @@ export default function Mate(props) {
               // src="/user/young-man.png"
               sx={{ width: 25, height: 25 }}
             /> */}
-           {larr[a-1]} 
+           {larr[a-1]}
+           {/* {'-Lv'} */}
+           {/* {langLv[i]} */}
                       <img style={{margin:'5px'}}
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
-
+           {/* <Badge bg="secondary" style={{margin:'5px'}}>{langLv[i]}</Badge> */}
+            {' '}
               </span>
             })
           }

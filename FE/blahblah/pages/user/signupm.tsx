@@ -46,9 +46,12 @@ export default function Signup() {
 
     var array: any = [...first]
     var ob: any = [...firstob]
+    var array2: any = [...second]
+    var array3: any = [...third]
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 1 && ob.length <= 1&&
-    e.currentTarget.value!=='Language') {
+    e.currentTarget.value!=='Language'&&array3.includes(e.currentTarget.value)===false
+    &&array2.includes(e.currentTarget.value)===false) {
       array.push(e.currentTarget.value)
       // let key = e.currentTarget.value
       let key = e.currentTarget.value
@@ -84,9 +87,11 @@ export default function Signup() {
   const handleSecond = (e: any) => {
     var array: any = [...second]
     var ob: any = [...secondob]
+    var array2: any = [...first]
+    var array3: any = [...third]
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 2 && ob.length <= 2
-    &&e.currentTarget.value!=='Language') {
+    &&e.currentTarget.value!=='Language'&&array2.includes(e.currentTarget.value)===false&&array3.includes(e.currentTarget.value)===false) {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 4 })
@@ -121,9 +126,11 @@ export default function Signup() {
   const handleThird = (e: any) => {
     var array: any = [...third]
     var ob: any = [...thirdob]
+    var array2: any = [...first]
+    var array3: any = [...second]
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3
-    &&e.currentTarget.value!=='Language') {
+    &&e.currentTarget.value!=='Language'&&array2.includes(e.currentTarget.value)===false&&array3.includes(e.currentTarget.value)===false) {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 5 })
