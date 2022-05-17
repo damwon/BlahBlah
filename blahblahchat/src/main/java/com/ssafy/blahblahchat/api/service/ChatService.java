@@ -4,14 +4,13 @@ package com.ssafy.blahblahchat.api.service;
 import com.ssafy.blahblahchat.api.entity.ChatMeta;
 import com.ssafy.blahblahchat.api.entity.Message;
 import com.ssafy.blahblahchat.api.repository.ChatRepository;
+import com.ssafy.blahblahchat.api.service.member.UserService;
+import com.ssafy.blahblahchat.db.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Transactional
@@ -23,7 +22,7 @@ public class ChatService {
     private final ChatRepository chatRepository;
     private final ConcurrentHashMap<Long,String> connectedUserByUserId=new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String,Long> connectedUserBySessionId=new ConcurrentHashMap<>();
-
+    private final UserService userService;
     public String createChatRoom(Long userId,Long opponentId, String opponentName){
         String roomId=findChatRoom(userId, opponentId);
         if("No Result".equals(roomId)){
@@ -44,7 +43,14 @@ public class ChatService {
     }
 
     public List<ChatMeta> findChatListByUserId(long userId){
-        return chatRepository.findChatListByUserId(userId);
+
+        List<ChatMeta> list =chatRepository.findChatListByUserId(userId);
+        for(ChatMeta chatMeta:list){
+            Optional<User> user = userService.getUserById(chatMeta.getOpponentId());
+            String profileImg = user.get().getProfileImg();
+        }
+        return list;
+
     }
 
     public void updateList(long userId,long opponentId,String opponentName, Message message) {

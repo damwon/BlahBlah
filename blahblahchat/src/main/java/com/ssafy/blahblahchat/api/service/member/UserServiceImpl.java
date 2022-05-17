@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 
 /**
@@ -26,5 +27,10 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByEmail(email).get();
 		return user;
 	}
+	@Override
+	public Optional<User> getUserById(Long userId){
+		return userRepository.findById(userId);
+	}
+
 
 }

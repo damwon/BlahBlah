@@ -3,6 +3,7 @@ package com.ssafy.blahblahchat.api.repository;
 
 import com.ssafy.blahblahchat.api.entity.ChatMeta;
 import com.ssafy.blahblahchat.api.entity.Message;
+import com.ssafy.blahblahchat.db.entity.User;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
@@ -20,13 +21,11 @@ public class ChatRepository {
     EntityManager em;
 
     public String createChat(ChatMeta chatMeta){
-        log.info("ChatRoomRepository.createChat");
         em.persist(chatMeta);
         return chatMeta.getRoomId();
     }
 
     public String findChat(long userId, long opponentId){
-        log.info("ChatRepository.findChat");
         try {
             ChatMeta chat = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatMeta.class)
                     .setParameter("userId", userId)
@@ -39,7 +38,6 @@ public class ChatRepository {
     }
 
     public String updateChatList(long userId, long opponentId, Message message){
-        System.out.println("ChatRepository.updateChatList");
         try {
             ChatMeta target = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatMeta.class)
                     .setParameter("userId", userId)
@@ -63,7 +61,6 @@ public class ChatRepository {
     }
 
     public String updateLastRead(long userId, long opponentId){
-        System.out.println("ChatRepository.updateLastRead");
         try {
             ChatMeta target = em.createQuery("select c from chat_list c where c.userId=:userId and c.opponentId=:opponentId", ChatMeta.class)
                     .setParameter("userId", userId)
@@ -79,7 +76,6 @@ public class ChatRepository {
 
 
     public List<ChatMeta> findChatListByUserId(long userId){
-        System.out.println("ChatRepository.findChatListByUserId");
         try {
             List<ChatMeta> chatList = em.createQuery("select c from chat_list c where c.userId=:userId order by c.lastMsgDate DESC", ChatMeta.class)
                     .setParameter("userId", userId)

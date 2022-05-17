@@ -29,7 +29,6 @@ public class TransLanguageRepository {
     Translate translate = TranslateOptions.getDefaultInstance().getService();
 
     public List<SupportedLanguageTrans> findSupportedLanguageByTargetLanguage(String targetLanguageCode){
-        System.out.println("TransLanguageRepository.findSupportedLanguageByTargetLanguage");
         try {
             List<SupportedLanguageTrans> langList = em.createQuery("select t from trans_supportedlanguage t where t.targetLanguageCode=:targetLanguageCode ", SupportedLanguageTrans.class)
                     .setParameter("targetLanguageCode", targetLanguageCode)
