@@ -2,7 +2,6 @@ package com.ssafy.blahblah.api.controller.member;
 
 import com.ssafy.blahblah.api.request.member.*;
 import com.ssafy.blahblah.api.response.member.UserInfoRes;
-//import com.ssafy.blahblah.api.response.member.UserLangInfoRes;
 import com.ssafy.blahblah.api.service.language.LangInfoService;
 import com.ssafy.blahblah.api.service.language.LanguageService;
 import com.ssafy.blahblah.api.service.member.EmailService;
@@ -12,6 +11,7 @@ import com.ssafy.blahblah.api.service.s3.AwsS3Service;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.common.util.RedisUtil;
+import com.ssafy.blahblah.db.entity.LangInfo;
 import com.ssafy.blahblah.db.entity.User;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
@@ -82,6 +82,58 @@ public class UserController {
 		return new ResponseEntity(userInfoRes,HttpStatus.OK);
 	}
 
+	@GetMapping("/match")
+	@ApiOperation(value = "로그인한 유저와 매칭되는 유저 테이블", notes = "매칭 유저 정보를 리스트로 반환한다")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity getMatchingUser(@ApiIgnore Authentication authentication) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String email = userDetails.getUsername();
+		Long userId = userService.getUserByEmail(email).getId();
+		List<LangInfo> langInfos = langInfoService.getLangInfoListByUserId(userId);
+
+		List<User> users = userService.getUserTable();
+		List<UserInfoRes> userInfoRes = new ArrayList<UserInfoRes>();
+		users.forEach(user -> {
+			userInfoRes.add(new UserInfoRes(user));
+		});
+		userInfoRes.forEach(user -> {
+			user.setLangInfos(langInfoService.getLangInfoListByUserId(user.getId()));
+			user.setRating(ratingService.countRating(user.getId()));
+		});
+
+		List<UserInfoRes> matchingUserInfoRes = new ArrayList<UserInfoRes>();
+		userInfoRes.forEach(user -> {
+			boolean isMatch = false;
+			for (LangInfo langInfo : langInfos) {
+				if(langInfo.getLevel() == 5 || langInfo.getLevel() == 4){
+					long langId = langInfo.getLangId();
+					for (LangInfo matchLangInfo : user.getLangInfos()) {
+						if((matchLangInfo.getLevel()>0 && matchLangInfo.getLevel()<4) && langId == matchLangInfo.getLangId() ) {
+							isMatch = true;
+							break;
+						}
+					}
+				}
+			}
+			if (isMatch) {
+				for (LangInfo langInfo : langInfos) {
+					if (langInfo.getLevel() > 0 && langInfo.getLevel() < 4) {
+						long langId = langInfo.getLangId();
+						for (LangInfo matchLangInfo : user.getLangInfos()) {
+							if ((matchLangInfo.getLevel() == 5 || matchLangInfo.getLevel() == 4) && langId == matchLangInfo.getLangId()) {
+								matchingUserInfoRes.add(user);
+								break;
+							}
+						}
+					}
+				}
+			}
+		});
+		return new ResponseEntity(matchingUserInfoRes,HttpStatus.OK);
+	}
 
 	@PostMapping("/signup")
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
@@ -122,12 +174,9 @@ public class UserController {
 		} else {
 			long userId = user.getId();
 
-//			UserLangPostReq userLangPostReq = new UserLangPostReq();
-
 			for(UserLangPostReq item: registerInfo.getList()) {
 				long langId = languageService.getLanguageByCode(item.getCode()).getId();
 				Integer level = item.getLevel();
-//				userLangPostReq.setLevel(item.getLevel());
 				langInfoService.createLangInfo(userId, langId, level);
 			}
 		}
