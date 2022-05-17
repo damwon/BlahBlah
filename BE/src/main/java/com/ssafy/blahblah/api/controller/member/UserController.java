@@ -266,6 +266,21 @@ public class UserController {
 		return new ResponseEntity(HttpStatus.OK);
 	}
 
+	@GetMapping("profileImg/{userId}")
+	@ApiOperation(value = "단일 회원 정보 조회", notes = "단일 회원 정보를 응답한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "엑세스 토큰의 값이 틀림"),
+			@ApiResponse(code = 403, message = "엑세스 토큰이 없이 요청"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity getProfileById(@ApiIgnore @PathVariable Long userId) {
+
+		Optional<User> user = userService.getUserById(userId);
+		String profileImg = user.get().getProfileImg();
+		return new ResponseEntity<>(profileImg,HttpStatus.OK);
+	}
+
 	@ApiOperation(value = "비밀번호 수정", notes = "로그인한 회원 본인의 정보 중 비밀번호를 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
