@@ -17,6 +17,13 @@ import Avatar from '@mui/material/Avatar';
 export default function UserDetail() {
   const router = useRouter();
   const {email} = router.query
+  // 아..! 이메일이라는 변수로 넘어오잖아. 헠..! 그래서 이변수 그대로써야함
+  const [remail,setRemail] = useState<any>(email)
+  // const [email,setEmail] = useState<any>(email2)
+  // useEffect(()=>{
+  //   setEmail(email2)
+  // },[])
+  // const [email,setEmail] = useState<any>(router.query)
   const [user,setUser] = useState<any>()
   const [lang,setLang] = useState<any>([])
   // 유저 코멘트
@@ -39,7 +46,7 @@ export default function UserDetail() {
   // 코멘트
   const getComment = () => {
     axios({
-      url: `https://blahblah.community:8443/api/review/${email}`,
+      url: `https://blahblah.community:8443/api/review/${remail}`,
       method: "get",
     }).then((res) => {
       console.log('댓글 목록 요청성공')
@@ -56,7 +63,7 @@ export default function UserDetail() {
   };
   useEffect(()=>{
     getComment()
-  },[])
+  },[remail])
 
   // const onWriteComment = ()=>{
   //   console.log(comment)
@@ -64,9 +71,10 @@ export default function UserDetail() {
   const WriteComment = (event:any) => {
     event.preventDefault();
     setCmtChange(!cmtChange)
+    // setComment()
     axios({
       method:'post',
-      url:`https://blahblah.community:8443/api/review/${email}`,
+      url:`https://blahblah.community:8443/api/review/${remail}`,
       headers: setToken(),
       data: {
         'reviewTxt':comment
@@ -88,9 +96,10 @@ export default function UserDetail() {
   const UpdateComment = (event:any) => {
     event.preventDefault();
     setCmtChange(!cmtChange)
+    // setComment()
     axios({
       method:'put',
-      url:`https://blahblah.community:8443/api/review/${email}`,
+      url:`https://blahblah.community:8443/api/review/${remail}`,
       headers: setToken(),
       data: {
         'reviewTxt':comment
@@ -113,7 +122,7 @@ export default function UserDetail() {
     event.preventDefault();
     axios({
       method:'delete',
-      url:`https://blahblah.community:8443/api/review/${email}`,
+      url:`https://blahblah.community:8443/api/review/${remail}`,
       headers: setToken(),
     })
     .then((result)=>{
@@ -148,7 +157,7 @@ export default function UserDetail() {
   const onEmailCheck = () => {
     axios({
       method:'get',
-      url:`https://blahblah.community:8443/api/user/${email}`,
+      url:`https://blahblah.community:8443/api/user/${remail}`,
     })
     .then((result)=>{
      console.log('이메일로정보 요청성공')
@@ -168,7 +177,7 @@ export default function UserDetail() {
     onEmailCheck()
     getProfile()
     // getComment()
-  }, []);
+  }, [remail]);
 
   useEffect(()=>{
     if(lang.length!==0){
@@ -202,6 +211,7 @@ export default function UserDetail() {
     const [likeBtn,setLikeBtn] = useState(true)
     // 유저 팔로우 버튼
     const [followBtn,setFollowBtn] = useState(true)
+    
 
   const setToken = () => {
     const token = localStorage.getItem("jwt");
@@ -239,10 +249,10 @@ export default function UserDetail() {
     setLikeBtn(!likeBtn)
     axios({
       method:'post',
-      url:`https://blahblah.community:8443/api/rate/${email}`,
+      url:`https://blahblah.community:8443/api/rate/${remail}`,
       headers: setToken(),
       data: {
-        'email':email
+        'email':remail
       },
     })
     .then((result)=>{
@@ -301,7 +311,7 @@ export default function UserDetail() {
   useEffect(() => {
     getFollowing()
     getRateList()
-  }, []);
+  }, [remail]);
   // useEffect(()=>{
   //   getRateList()
   // },[cmtarr])
@@ -323,7 +333,7 @@ export default function UserDetail() {
         }
       }
     }
-  },[following])
+  },[following,remail])
 
 
 
@@ -436,7 +446,27 @@ export default function UserDetail() {
               cmtarr&&me
               // 내 데이터랑, 전체 데이터 다 있을 때만
               ?<>{cmtarr.map((a:any,i:any)=>{
-                return <ListGroup.Item key={i}>{a.name}{':'}{a.reviewTxt}
+                return <ListGroup.Item key={i}>
+                  <span style={{cursor:'cursor'}} onClick={()=>{
+                    setRemail(a.email)
+                    setLangA([])
+                    setLangB([])
+                    setLangC([])
+                    setLikeBtn(true)
+                    setFollowBtn(true)
+                    // email = a.email
+              // router.push('/')
+              // router.push(
+              //   {
+              //     pathname: `/user/detail/`,
+              //     query: {
+              //       email:a.email,
+              //     },
+              //   },
+              //   `/user/detail/`
+              //   )
+            }}>{a.name}</span>
+                  {':'}{a.reviewTxt}
                 {
                   a.reviewUserId === me.id
                   ?<><Button onClick={DeleteComment}
