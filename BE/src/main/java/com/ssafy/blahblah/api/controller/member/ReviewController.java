@@ -1,17 +1,21 @@
 package com.ssafy.blahblah.api.controller.member;
 
+import com.ssafy.blahblah.api.request.member.UserLangPostReq;
 import com.ssafy.blahblah.api.request.review.ReviewPostReq;
+import com.ssafy.blahblah.api.response.member.ReviewListRes;
 import com.ssafy.blahblah.api.service.member.ReviewService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.common.model.response.BaseResponseBody;
 import com.ssafy.blahblah.db.entity.Review;
+import com.ssafy.blahblah.db.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +81,15 @@ public class ReviewController {
     @GetMapping("/{email}")
     public ResponseEntity getReviewList(@PathVariable String email) {
         Long userId = userService.getUserByEmail(email).getId();
-        List<Review> reviewList = reviewService.getReviewList(userId);
+        List<Review> reviews = reviewService.getReviewList(userId);
+        List<ReviewListRes> reviewList = new ArrayList<ReviewListRes>();
+        for(Review item: reviews) {
+            ReviewListRes reviewListRes = new ReviewListRes(item);
+            Optional<User> user = userService.getUserById(item.getUserId());
+            reviewListRes.setName(user.get().getName());
+            reviewListRes.setEmail(user.get().getEmail());
+            reviewList.add(reviewListRes);
+        }
         return new ResponseEntity(reviewList,HttpStatus.OK);
     }
 
