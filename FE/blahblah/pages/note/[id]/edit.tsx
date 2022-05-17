@@ -120,7 +120,7 @@ export default function Edit() {
               router.push(`/note/${id}`);
             }}
           >
-            cancle
+            cancel
           </Button>{" "}
           <Button
             style={{

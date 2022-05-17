@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import allAxios from "../../../lib/allAxios";
+import Swal from "sweetalert2";
 export default function WordNote() {
   const [show, setShow] = useState(false);
 
@@ -57,7 +58,10 @@ export default function WordNote() {
         headers: setToken(),
       })
       .then(() => {
-        alert("The record file is deleted.");
+        Swal.fire({
+          title: "The record file is deleted.",
+          confirmButtonColor: "#00ccb1",
+        });
         window.location.reload();
       })
 
