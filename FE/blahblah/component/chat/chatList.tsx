@@ -20,16 +20,6 @@ export default function ChatList(props: any) {
     props.setSelectedIndex(index);
   };
 
-  const getProfileImage = (userId: number) => {
-    axios({
-      url: `https://blahblah.community:8443/api/user/profileImg/${userId}`,
-      method: "get",
-    }).then((res) => {
-      console.log(res.data);
-      return res.data;
-    });
-  };
-
   return (
     <List sx={{ bgcolor: "background.paper", overflowY: "auto" }}>
       <ListSubheader sx={{ textAlign: "center", fontSize: "20px" }}>
@@ -51,9 +41,7 @@ export default function ChatList(props: any) {
                 >
                   <ListItemAvatar>
                     <Avatar
-                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${getProfileImage(
-                        item.opponentId
-                      )}`}
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${item.profile}`}
                       alt=""
                     />
                   </ListItemAvatar>
