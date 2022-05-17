@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button,Badge } from 'react-bootstrap';
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
@@ -263,7 +263,7 @@ export default function LangUpdate() {
     <>
       <Container>
         <Row>
-          <Col></Col>
+          <Col sm={3} xs={3}></Col>
           <Col>
             <h1>Language Update</h1>
             <Form.Label>Native Language(two)
@@ -328,8 +328,11 @@ export default function LangUpdate() {
                       <img style={{margin:'5px'}}
                     src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${langImg[a]}.png`} width={25}></img>
                     {a} <span style={{fontSize:'16px',color:'grey',cursor:'pointer'}}
-                    onClick={()=>{handleFirstDel(a)}}>x</span>
-                    <span>{' '}Level - {firstob[i].level}</span>
+                    onClick={()=>{handleFirstDel(a)}}>x </span>
+                    {' '}
+                     <Badge bg="secondary" style={{margin:'5px'}}>Level {firstob[i].level}</Badge>
+                    {/* <span>{' '}Level - {firstob[i].level}</span> */}
+                    
                     
                     {/* <span style={{cursor:'pointer'}} onClick={()=>{
                       console.log(firstob)
@@ -348,6 +351,10 @@ export default function LangUpdate() {
                     
 
                     <Button style={{display:'none'}}></Button>
+                    {/* <Button onClick={onEdit} className="btncs" 
+                   variant="outline-secondary"
+                style={{ margin: '5px' }} >Lv3</Button> */}
+                    
                     {/* 더미용 버튼.. 뭐지 대체 왜 클릭되는거지 맨앞에거 */}
                       <Button style={{margin:'3px'}} onClick={()=>{
                       console.log(firstob)
@@ -437,7 +444,7 @@ export default function LangUpdate() {
             }}
             style={{ margin: '5px' }} variant="outline-secondary">Back to Mypage</Button>
           </Col>
-          <Col></Col>
+          <Col sm={4} xs={4}></Col>
         </Row>
 
       </Container>
