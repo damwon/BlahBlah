@@ -76,7 +76,7 @@ export default function Mypage() {
 
 
       for(let i=0;i<Object.keys(lang).length;i++){
-
+        // console.log(lang[i]['langId'])
         if(lang[i]['level']===1 ||lang[i]['level']===2 || lang[i]['level']===3){
           // var newarr:any = [...langa]
           newarra.push(lang[i]['langId'])
