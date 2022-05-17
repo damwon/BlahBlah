@@ -44,6 +44,7 @@ export default function Index() {
     allAxios
       .get(`/feed`, { headers: setToken() })
       .then((res) => {
+        console.log(res.data);
         setFeeds(res.data);
         return res;
       })
@@ -62,6 +63,7 @@ export default function Index() {
     allAxios
       .get(`/feed/friends`, { headers: setToken() })
       .then((res) => {
+        console.log(res.data);
         setFriendFeeds(res.data);
         return res;
       })
@@ -315,7 +317,8 @@ export default function Index() {
             >
               <CreateIcon style={{ marginRight: "10px" }}></CreateIcon>
               Write Feed
-            </Button>{" "}
+            </Button>
+            <span style={{ margin: "10px" }}></span>
             <Button
               style={{
                 backgroundColor: "#00ccb1",
@@ -332,6 +335,7 @@ export default function Index() {
               {btnName}
             </Button>
           </div>
+          <br></br>
           <List dense={dense}>
             {showFeeds &&
               showFeeds.map((d: any, i: any) => {
@@ -345,7 +349,21 @@ export default function Index() {
                       <ListItemAvatar
                         style={{ marginTop: "30px", marginBottom: "auto" }}
                       >
-                        <div className="container">
+                        <div
+                          className="container"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            router.push(
+                              {
+                                pathname: `/user/detail/`,
+                                query: {
+                                  email: d.email,
+                                },
+                              },
+                              `/user/detail/`
+                            );
+                          }}
+                        >
                           <div className="outer">
                             <Image
                               className="profile"
@@ -420,10 +438,8 @@ export default function Index() {
                           ? d.comments.map((d1: any, i1: number) => {
                               if (i1 < 3) {
                                 return (
-                                  <div key={i1}>
-                                    <span>
-                                      {d1.userName}: {d1.content}
-                                    </span>
+                                  <div key={i1} style={{ marginTop: "5px" }}>
+                                    {d1.userName}: {d1.content}
                                     {d1.userId === userId ? (
                                       <DeleteIcon
                                         color="error"
@@ -471,6 +487,7 @@ export default function Index() {
                                   <Button
                                     style={{
                                       backgroundColor: "#00ccb1",
+                                      margin: "10px 0",
                                     }}
                                     variant="contained"
                                     onClick={() => {
@@ -491,6 +508,7 @@ export default function Index() {
                                   key={i2}
                                   style={{
                                     backgroundColor: "#00ccb1",
+                                    margin: "10px 0",
                                   }}
                                   variant="contained"
                                   onClick={() => {
@@ -510,6 +528,7 @@ export default function Index() {
                           <Button
                             style={{
                               backgroundColor: "#00ccb1",
+                              margin: "10px 0",
                             }}
                             variant="contained"
                             onClick={() => {
