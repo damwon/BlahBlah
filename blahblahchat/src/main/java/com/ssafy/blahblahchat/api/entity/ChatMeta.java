@@ -46,6 +46,8 @@ public class ChatMeta {
     @Column
     private int unread;
 
+    private boolean online;
+
     private String profile;
 
 }

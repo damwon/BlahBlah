@@ -48,6 +48,8 @@ public class ChatService {
         for(ChatMeta chatMeta:list){
             Optional<User> user = userService.getUserById(chatMeta.getOpponentId());
             String profileImg = user.get().getProfileImg();
+            chatMeta.setProfile(profileImg);
+            chatMeta.setOnline(isConnected(chatMeta.getOpponentId()));
         }
         return list;
 
