@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ListSubheader,
   ListItemAvatar,
@@ -10,7 +10,7 @@ import {
   Avatar,
   Typography,
 } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import axios from "axios";
 
 export default function ChatList(props: any) {
   const handleListItemClick = (
@@ -19,6 +19,17 @@ export default function ChatList(props: any) {
   ) => {
     props.setSelectedIndex(index);
   };
+
+  const getProfileImage = (userId: number) => {
+    axios({
+      url: `https://blahblah.community:8443/api/user/profileImg/${userId}`,
+      method: "get",
+    }).then((res) => {
+      console.log(res.data);
+      return res.data;
+    });
+  };
+
   return (
     <List sx={{ bgcolor: "background.paper", overflowY: "auto" }}>
       <ListSubheader sx={{ textAlign: "center", fontSize: "20px" }}>
@@ -28,11 +39,8 @@ export default function ChatList(props: any) {
       {props.chattingList.length > 0 ? (
         props.chattingList.map((item: any, index: any) => {
           return (
-            <>
-              <ListItem
-                selected={props.chatRoomData.roomId === item.roomId}
-                key={index}
-              >
+            <div key={index}>
+              <ListItem selected={props.chatRoomData.roomId === item.roomId}>
                 <ListItemButton
                   onClick={(e) => {
                     props.readMsg(item.opponentId);
@@ -42,7 +50,12 @@ export default function ChatList(props: any) {
                   }}
                 >
                   <ListItemAvatar>
-                    <AccountCircleIcon fontSize="large" />
+                    <Avatar
+                      src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${getProfileImage(
+                        item.opponentId
+                      )}`}
+                      alt=""
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     primary={item.roomName}
@@ -69,7 +82,7 @@ export default function ChatList(props: any) {
                 </ListItemButton>
               </ListItem>
               <Divider />
-            </>
+            </div>
           );
         })
       ) : (

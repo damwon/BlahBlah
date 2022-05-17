@@ -87,7 +87,6 @@ export default function Edit() {
             ></input>
           </div>
         </div>
-
         <div className="lb-wrap">
           <div className="lb-image">
             <Image
@@ -113,29 +112,26 @@ export default function Edit() {
             ></textarea>
           </div>
         </div>
-        <Grid container spacing={3}>
-          <Grid item xs={5} />
-          <Grid item xs={4}>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                router.push(`/note/${id}`);
-              }}
-            >
-              cancle
-            </Button>{" "}
-            <Button
-              style={{
-                backgroundColor: "#00ccb1",
-              }}
-              variant="contained"
-              onClick={edit}
-            >
-              Save
-            </Button>
-          </Grid>
-        </Grid>
+        <div style={{ width: "165px", margin: "auto" }}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              router.push(`/note/${id}`);
+            }}
+          >
+            cancle
+          </Button>{" "}
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={edit}
+          >
+            Save
+          </Button>
+        </div>
         <Grid item xs={2} />
       </Grid>
 

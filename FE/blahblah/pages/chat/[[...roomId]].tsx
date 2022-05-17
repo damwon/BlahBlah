@@ -436,9 +436,9 @@ export default function Chat() {
         console.info("받은 메시지: " + message.data);
         switch (parsedMessage.id) {
           case "registerResponse":
-            if (parsedMessage.response.includes("already registered")) {
-              alert("이미 등록되었습니다. 새로고침 해주세요.");
-            }
+            // if (parsedMessage.response.includes("already registered")) {
+            //   alert("이미 등록되었습니다. 새로고침 해주세요.");
+            // }
             console.log(parsedMessage);
             break;
           case "callResponse":
@@ -478,6 +478,17 @@ export default function Chat() {
     if (userData) {
       getAccessToken();
     }
+    window.addEventListener("beforeunload", () => {
+      console.log("ws닫힘1");
+      ws.close();
+    });
+
+    return () => {
+      if (ws) {
+        console.log("ws 닫힘2");
+        ws.close();
+      }
+    };
   }, [userData]);
 
   function startCommunication(message: any) {

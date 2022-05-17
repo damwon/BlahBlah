@@ -37,7 +37,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
 
   const writeNoteTitle = () => {
     if (noteTitle === "") {
-      alert("메모장 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .post(
@@ -84,7 +84,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
     allAxios
       .delete(`/memo/${num}`, { headers: setToken() })
       .then((res) => {
-        alert("메모장 " + title + " 삭제되었습니다.");
+        alert("The " + title + " is deleted.");
         window.location.reload();
       })
       .catch((err) => {
@@ -107,7 +107,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("메모장 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .put(
@@ -185,7 +185,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
         </div>
       </div>
       <br></br>
-      <div className="mar-btn">
+      <div style={{ width: "113px", margin: "auto" }}>
         <Button
           style={{
             backgroundColor: "#00ccb1",
@@ -196,18 +196,18 @@ export default function NoteFolderLstChat({ handleTF }: any) {
             setNoteTitle("");
           }}
         >
-          메모장 추가
+          add memo
         </Button>
       </div>
       {/* modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>메모장 제목을 입력해주세요.</Modal.Title>
+          <Modal.Title>Please write title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input
@@ -220,7 +220,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -230,19 +230,19 @@ export default function NoteFolderLstChat({ handleTF }: any) {
             variant="contained"
             onClick={writeNoteTitle}
           >
-            저장
+            save
           </Button>
         </Modal.Footer>
       </Modal>
       {/* 메모장 이름 변경 modal */}
       <Modal show={changeShow} onHide={changeClose}>
         <Modal.Header closeButton>
-          <Modal.Title>메모장 제목을 수정해주세요.</Modal.Title>
+          <Modal.Title>Please rewrite title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input value={title} onChange={titleChange}></input>
@@ -251,7 +251,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={changeClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -261,7 +261,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
             variant="contained"
             onClick={titleChangeClick}
           >
-            수정
+            save
           </Button>
         </Modal.Footer>
       </Modal>

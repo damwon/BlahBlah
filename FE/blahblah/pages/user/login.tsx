@@ -38,7 +38,7 @@ export default function Login() {
         .catch((err) => {
           console.log(err)
           // 여기 에러중에 403이면 body값 출력하기
-          alert('제대로 입력해')
+          alert('Fail')
           // alert 오류출력
 
         });
