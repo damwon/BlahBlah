@@ -39,7 +39,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
 
   const writeWordTitle = () => {
     if (wordTitle === "") {
-      alert("단어장 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .post(
@@ -87,7 +87,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
     allAxios
       .delete(`/wordbook/${num}`, { headers: setToken() })
       .then((res) => {
-        alert("단어장 " + title + " 삭제되었습니다.");
+        alert("The " + title + " is deleted.");
         window.location.reload();
       })
       .catch((err) => {
@@ -111,7 +111,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("단어장 제목을 입력해주세요");
+      alert("please write the title");
     } else {
       allAxios
         .put(
@@ -191,7 +191,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
         </div>
       </div>
       <br></br>
-      <div className="mar-btn">
+      <div style={{ width: "154px", margin: "auto" }}>
         <Button
           style={{
             backgroundColor: "#00ccb1",
@@ -202,19 +202,19 @@ export default function WordFolderLstChat({ handleTF }: any) {
             setWordTitle("");
           }}
         >
-          단어장 추가
+          Add WordNote
         </Button>
       </div>
 
       {/* 단어장 추가 modal */}
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>단어장 제목을 입력해주세요.</Modal.Title>
+          <Modal.Title>Please write title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input
@@ -227,7 +227,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -237,7 +237,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
             variant="contained"
             onClick={writeWordTitle}
           >
-            저장
+            save
           </Button>
         </Modal.Footer>
       </Modal>
@@ -245,12 +245,12 @@ export default function WordFolderLstChat({ handleTF }: any) {
       {/* 단어장 이름 변경 modal */}
       <Modal show={changeShow} onHide={changeClose}>
         <Modal.Header closeButton>
-          <Modal.Title>단어장 제목을 수정해주세요.</Modal.Title>
+          <Modal.Title>Please rewrite title.</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid spacing={2} container>
             <Grid item xs={2}>
-              <h4>제목</h4>
+              <h4>Title</h4>
             </Grid>
             <Grid item xs={10}>
               <input value={title} onChange={titleChange}></input>
@@ -259,7 +259,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={changeClose}>
-            취소
+            cancle
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -269,7 +269,7 @@ export default function WordFolderLstChat({ handleTF }: any) {
             variant="contained"
             onClick={titleChangeClick}
           >
-            수정
+            save
           </Button>
         </Modal.Footer>
       </Modal>

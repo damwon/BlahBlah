@@ -14,6 +14,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CreateIcon from "@mui/icons-material/Create";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { Modal } from "react-bootstrap";
 import { Image } from "react-bootstrap";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -315,7 +316,8 @@ export default function Index() {
             >
               <CreateIcon style={{ marginRight: "10px" }}></CreateIcon>
               Write Feed
-            </Button>{" "}
+            </Button>
+            <span style={{ margin: "10px" }}></span>
             <Button
               style={{
                 backgroundColor: "#00ccb1",
@@ -332,6 +334,7 @@ export default function Index() {
               {btnName}
             </Button>
           </div>
+          <br></br>
           <List dense={dense}>
             {showFeeds &&
               showFeeds.map((d: any, i: any) => {
@@ -345,7 +348,21 @@ export default function Index() {
                       <ListItemAvatar
                         style={{ marginTop: "30px", marginBottom: "auto" }}
                       >
-                        <div className="container">
+                        <div
+                          className="container"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            router.push(
+                              {
+                                pathname: `/user/detail/`,
+                                query: {
+                                  email: d.email,
+                                },
+                              },
+                              `/user/detail/`
+                            );
+                          }}
+                        >
                           <div className="outer">
                             <Image
                               className="profile"
@@ -363,7 +380,33 @@ export default function Index() {
                       <div style={{ width: "100%" }}>
                         <Grid container spacing={2}>
                           <Grid item xs={6}>
-                            <h5>{d.userName}</h5>
+                            <span
+                              style={{ fontSize: "20px", marginRight: "10px" }}
+                            >
+                              {d.userName}
+                            </span>
+                            <Button
+                              onClick={() => {
+                                router.push(
+                                  {
+                                    pathname: "/chat",
+                                    query: {
+                                      name: d.userName,
+                                      userId: d.userId,
+                                    },
+                                  },
+                                  `/chat`
+                                );
+                              }}
+                              size="small"
+                              style={{ backgroundColor: "#00ccb1" }}
+                              variant="contained"
+                            >
+                              <ChatBubbleOutlineIcon
+                                style={{ margin: "0 5px", display: "inline" }}
+                              ></ChatBubbleOutlineIcon>
+                              Chat
+                            </Button>
                           </Grid>
                           <Grid item xs={6}>
                             <h6 style={{ textAlign: "right" }}>
@@ -373,13 +416,16 @@ export default function Index() {
                         </Grid>
 
                         {d.imgUrl ? (
-                          <Image
-                            className="profile"
-                            src={d.imgUrl}
-                            alt="finger image"
-                            width="70%"
-                            height="70%"
-                          ></Image>
+                          <div>
+                            <br></br>
+                            <Image
+                              className="profile"
+                              src={d.imgUrl}
+                              alt="finger image"
+                              width="70%"
+                              height="70%"
+                            ></Image>
+                          </div>
                         ) : null}
 
                         <h6 style={{ margin: "20px 0px", width: "70%" }}>
@@ -420,10 +466,8 @@ export default function Index() {
                           ? d.comments.map((d1: any, i1: number) => {
                               if (i1 < 3) {
                                 return (
-                                  <div key={i1}>
-                                    <span>
-                                      {d1.userName}: {d1.content}
-                                    </span>
+                                  <div key={i1} style={{ marginTop: "5px" }}>
+                                    {d1.userName}: {d1.content}
                                     {d1.userId === userId ? (
                                       <DeleteIcon
                                         color="error"
@@ -471,6 +515,7 @@ export default function Index() {
                                   <Button
                                     style={{
                                       backgroundColor: "#00ccb1",
+                                      margin: "10px 0",
                                     }}
                                     variant="contained"
                                     onClick={() => {
@@ -491,6 +536,7 @@ export default function Index() {
                                   key={i2}
                                   style={{
                                     backgroundColor: "#00ccb1",
+                                    margin: "10px 0",
                                   }}
                                   variant="contained"
                                   onClick={() => {
@@ -510,6 +556,7 @@ export default function Index() {
                           <Button
                             style={{
                               backgroundColor: "#00ccb1",
+                              margin: "10px 0",
                             }}
                             variant="contained"
                             onClick={() => {

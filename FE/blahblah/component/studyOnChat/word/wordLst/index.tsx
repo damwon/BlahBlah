@@ -7,10 +7,11 @@ import {
   ListItemAvatar,
   ListItemText,
   Avatar,
+  Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LibraryBooks from "@mui/icons-material/LibraryBooks";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -19,9 +20,9 @@ export default function WordLstChat(props: any) {
   const [show, setShow] = useState(false);
   const write = () => {
     if (word === "") {
-      alert("단어를 입력해주세요");
+      alert("please write word");
     } else if (mean === "") {
-      alert("뜻을 입력해주세요");
+      alert("please write meaning");
     } else {
       allAxios
         .post(
@@ -71,6 +72,8 @@ export default function WordLstChat(props: any) {
 
   const [total, setTotal] = useState(1);
   const [words, setWords]: any = useState();
+  const [title, setTitle] = useState();
+  const [myWidth, setMyWidth] = useState(84);
   useEffect(() => {
     if (String(id) != "NaN") {
       allAxios
@@ -78,9 +81,14 @@ export default function WordLstChat(props: any) {
           headers: setToken(),
         })
         .then((res) => {
-          console.log(res);
+          setTitle(res.data.wordBookTitle);
           setWords(res.data.wordListRes);
           setTotal(res.data.totalPages);
+          if (res.data.totalPages <= 6) {
+            setMyWidth(252 - (7 - res.data.totalPages) * 28);
+          } else if (res.data.totalPages > 7) {
+            setMyWidth(252);
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -98,7 +106,7 @@ export default function WordLstChat(props: any) {
         headers: setToken(),
       })
       .then((res) => {
-        alert("단어가 삭제되었습니다.");
+        alert("the word is deleted.");
         window.location.reload();
       })
 
@@ -108,7 +116,7 @@ export default function WordLstChat(props: any) {
   };
   return (
     <>
-      <h1 className="cent">Title:</h1>
+      <h1 className="cent">{title}</h1>
       <List dense={dense}>
         <Grid container spacing={2}>
           {words &&
@@ -146,23 +154,35 @@ export default function WordLstChat(props: any) {
         [0].map((d: any, i: number) => {
           return (
             <h1 key={i} style={{ width: "500px", margin: "auto" }}>
-              새 단어를 입력해주세요!
+              please write the first word!
             </h1>
           );
         })}
 
       <br></br>
-      <div className="m" style={{ width: "300px" }}>
-        <Button variant="secondary" onClick={() => props.handleTF(true, "1")}>
-          뒤로
+      <div className="m" style={{ width: "192px" }}>
+        <Button
+          variant="contained"
+          onClick={() => props.handleTF(true, "1")}
+          style={{ backgroundColor: "grey" }}
+        >
+          Back
         </Button>{" "}
-        <Button variant="primary" onClick={handleShow}>
-          단어 추가하기
+        <Button
+          style={{
+            backgroundColor: "#00ccb1",
+          }}
+          variant="contained"
+          onClick={handleShow}
+        >
+          Add word
         </Button>
       </div>
       <br></br>
       <div className="m" style={{ width: "400px" }}>
         <Pagination
+          style={{ width: `${myWidth}px`, margin: "auto" }}
+          size="small"
           count={total}
           variant="outlined"
           shape="rounded"
@@ -173,7 +193,7 @@ export default function WordLstChat(props: any) {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>추가할 단어를 입력해보세요!</Modal.Title>
+          <Modal.Title>Write your new word!</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Grid container spacing={3}>
@@ -212,11 +232,17 @@ export default function WordLstChat(props: any) {
           </Grid>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            취소
+          <Button variant="contained" color="error" onClick={handleClose}>
+            cancle
           </Button>
-          <Button variant="primary" onClick={write}>
-            저장
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={write}
+          >
+            save
           </Button>
         </Modal.Footer>
       </Modal>

@@ -30,7 +30,7 @@ export default function NoteLstChat(props: any) {
           if (tmpContent != null) {
             setContent(tmpContent);
           } else {
-            setContent("내용을 작성해주세요");
+            setContent("Write your memo");
           }
         })
         .catch((err) => {
@@ -39,58 +39,56 @@ export default function NoteLstChat(props: any) {
     }
   }, [id]);
   return (
-    <Grid container spacing={3}>
-      <Grid item xs={2} />
-      <Grid item xs={8}>
-        <div className="lb-wrap">
-          <div className="lb-image">
-            <Image
-              priority
-              src="/images/noteTitle.png"
-              alt="noteTitle image"
-              width="200"
-              height="40"
-              layout="responsive"
-            />
-          </div>
-          <div className="lb-text">
-            <h2>{title}</h2>
-          </div>
+    <>
+      <div className="lb-wrap">
+        <div className="lb-image">
+          <Image
+            priority
+            src="/images/noteTitle.png"
+            alt="noteTitle image"
+            width="200"
+            height="40"
+            layout="responsive"
+          />
         </div>
+        <div className="lb-text">
+          <h2>{title}</h2>
+        </div>
+      </div>
 
-        <div className="lb-wrap">
-          <div className="lb-image">
-            <Image
-              priority
-              src="/images/note.jpg"
-              alt="note image"
-              width="80"
-              height="100"
-              layout="responsive"
-            />
-          </div>
-          <div className="lb-text">
-            <h3>{content}</h3>
-          </div>
+      <div className="lb-wrap">
+        <div className="lb-image">
+          <Image
+            priority
+            src="/images/note.jpg"
+            alt="note image"
+            width="200vw"
+            height="200vh"
+            layout="responsive"
+          />
         </div>
-        <div className="m">
-          <Button
-            className="mar"
-            variant="contained"
-            color="error"
-            onClick={() => props.handleTF(1, "1")}
-          >
-            목록
-          </Button>{" "}
-          <Button
-            className="mar"
-            variant="contained"
-            onClick={() => props.handleTF(3, id)}
-          >
-            수정
-          </Button>
+        <div className="lb-text">
+          <h3>{content}</h3>
         </div>
-      </Grid>
+      </div>
+      <div style={{ width: "145px", margin: "auto" }}>
+        <Button
+          variant="contained"
+          style={{ backgroundColor: "grey" }}
+          onClick={() => props.handleTF(1, "1")}
+        >
+          Back
+        </Button>{" "}
+        <Button
+          variant="contained"
+          style={{
+            backgroundColor: "#00ccb1",
+          }}
+          onClick={() => props.handleTF(3, id)}
+        >
+          edit
+        </Button>
+      </div>
 
       <style jsx>
         {`
@@ -99,7 +97,7 @@ export default function NoteLstChat(props: any) {
             margin: 0 auto;
           }
           .lb-wrap {
-            width: 40%;
+            width: 100%;
             margin: 10px auto;
             position: relative;
           }
@@ -128,6 +126,6 @@ export default function NoteLstChat(props: any) {
           }
         `}
       </style>
-    </Grid>
+    </>
   );
 }
