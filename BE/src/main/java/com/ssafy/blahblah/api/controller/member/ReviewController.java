@@ -1,5 +1,6 @@
 package com.ssafy.blahblah.api.controller.member;
 
+import com.ssafy.blahblah.api.request.review.ReviewPostReq;
 import com.ssafy.blahblah.api.service.member.ReviewService;
 import com.ssafy.blahblah.api.service.member.UserService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
@@ -24,23 +25,46 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/{email}")
-    public ResponseEntity rate(Authentication authentication, @PathVariable String email) {
+    public ResponseEntity postReview(Authentication authentication, @PathVariable String email, @RequestBody ReviewPostReq reviewPostReq){
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-        Long upUserId = userDetails.getUser().getId();
+        Long reviewUserId = userDetails.getUser().getId();
         Long userId = userService.getUserByEmail(email).getId();
-        String reviewTxt = email;
-        if (upUserId == userId) {
-            return new ResponseEntity<>("can not rate self",HttpStatus.NOT_FOUND);
+        reviewService.reviewToUser(reviewUserId, userId, reviewPostReq.getReviewTxt());
+
+        Optional<Review> review = reviewService.isReview(reviewUserId,userId);
+        if (review.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
 
-        Optional<Review> isReview = reviewService.isReview(upUserId, userId);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 
-        if (isReview.isEmpty()) { // 코멘트를 남긴적이 있다면
-            reviewService.reviewToUser(upUserId, userId, reviewTxt);
+
+    @PutMapping("/{email}")
+    public ResponseEntity updateReview(Authentication authentication, @PathVariable String email, @RequestBody ReviewPostReq reviewPostReq) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        Long reviewUserId = userDetails.getUser().getId();
+        Long userId = userService.getUserByEmail(email).getId();
+
+        Optional<Review> review = reviewService.isReview(reviewUserId,userId);
+        if (review.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        else { // 인기도를 누른 적이 있으면
-            reviewService.updateReview(upUserId, userId, reviewTxt);
+        reviewService.updateReview(reviewUserId, userId, reviewPostReq.getReviewTxt());
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{email}")
+    public ResponseEntity deleteReview(Authentication authentication, @PathVariable String email) {
+        SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+        Long reviewUserId = userDetails.getUser().getId();
+        Long userId = userService.getUserByEmail(email).getId();
+
+        Optional<Review> review = reviewService.isReview(reviewUserId,userId);
+        if (review.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        reviewService.deleteReview(reviewUserId, userId);
         return new ResponseEntity(HttpStatus.OK);
     }
 
