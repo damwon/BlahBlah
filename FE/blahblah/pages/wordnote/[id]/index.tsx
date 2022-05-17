@@ -15,14 +15,21 @@ import { Modal } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import Swal from "sweetalert2";
 import allAxios from "../../../lib/allAxios";
 export default function WordNote() {
   const [show, setShow] = useState(false);
   const write = () => {
     if (word === "") {
-      alert("please write word");
+      Swal.fire({
+        title: "please write word",
+        confirmButtonColor: "#00ccb1",
+      });
     } else if (mean === "") {
-      alert("please write meaning");
+      Swal.fire({
+        title: "please write meaning",
+        confirmButtonColor: "#00ccb1",
+      });
     } else {
       allAxios
         .post(
@@ -106,7 +113,10 @@ export default function WordNote() {
         headers: setToken(),
       })
       .then((res) => {
-        alert("the word is deleted.");
+        Swal.fire({
+          title: "the word is deleted",
+          confirmButtonColor: "#00ccb1",
+        });
         window.location.reload();
       })
 
@@ -155,9 +165,16 @@ export default function WordNote() {
                         }
                       >
                         <ListItemAvatar>
-                          <Avatar>
-                            <LibraryBooks />
-                          </Avatar>
+                          <div title="Copy">
+                            <Avatar>
+                              <LibraryBooks
+                                style={{ cursor: "pointer" }}
+                                onClick={() =>
+                                  navigator.clipboard.writeText(d.word)
+                                }
+                              />
+                            </Avatar>
+                          </div>
                         </ListItemAvatar>
                         <ListItemText primary={d.word} secondary={d.meaning} />
                       </ListItem>
@@ -257,7 +274,7 @@ export default function WordNote() {
         </Modal.Body>
         <Modal.Footer>
           <Button color="error" variant="contained" onClick={handleClose}>
-            cancle
+            cancel
           </Button>
           <Button
             style={{

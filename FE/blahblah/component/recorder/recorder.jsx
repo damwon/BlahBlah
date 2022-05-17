@@ -96,7 +96,13 @@ function VoiceRecorder(props) {
           controlsList="nodownload"
         />
       )}
-      <Button onClick={onRec ? onRecAudio : offRecAudio}>
+      <Button
+        sx={{
+          backgroundColor: "#00ccb1",
+        }}
+        variant="contained"
+        onClick={onRec ? onRecAudio : offRecAudio}
+      >
         {onRec ? "Start" : "Stop"}
       </Button>
     </Box>

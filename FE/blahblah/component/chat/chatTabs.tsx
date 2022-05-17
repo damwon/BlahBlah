@@ -52,8 +52,8 @@ export default function ChatTabs() {
     <Box sx={{ width: "30%", border: "1px solid #b5b5b5" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={value} onChange={handleChange} centered>
-          <Tab label="Vocabulary" {...a11yProps(0)} />
-          <Tab label="Memo" {...a11yProps(1)} />
+          <Tab sx={{ height: "70px" }} label="Vocabulary" {...a11yProps(0)} />
+          <Tab sx={{ height: "70px" }} label="Memo" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>

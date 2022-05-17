@@ -14,6 +14,7 @@ import FolderIcon from "@mui/icons-material/Folder";
 import { Modal, Card } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
+import Swal from "sweetalert2";
 import { useRouter } from "next/router";
 export default function Recordnote() {
   const router = useRouter();
@@ -37,7 +38,10 @@ export default function Recordnote() {
 
   const writeRecordTitle = () => {
     if (recordTitle === "") {
-      alert("please write the title");
+      Swal.fire({
+        title: "please write the title",
+        confirmButtonColor: "#00ccb1",
+      });
     } else {
       allAxios
         .post(
@@ -85,7 +89,10 @@ export default function Recordnote() {
     allAxios
       .delete(`/recordbook/${num}`, { headers: setToken() })
       .then((res) => {
-        alert("The " + title + " is deleted.");
+        Swal.fire({
+          title: "The " + title + " is deleted",
+          confirmButtonColor: "#00ccb1",
+        });
         window.location.reload();
       })
       .catch((err) => {
@@ -109,7 +116,10 @@ export default function Recordnote() {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("please write the title");
+      Swal.fire({
+        title: "please write the title",
+        confirmButtonColor: "#00ccb1",
+      });
     } else {
       allAxios
         .put(
@@ -226,7 +236,7 @@ export default function Recordnote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -257,7 +267,7 @@ export default function Recordnote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={changeClose}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button

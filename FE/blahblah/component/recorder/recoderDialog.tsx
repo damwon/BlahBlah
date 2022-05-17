@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import VoiceRecorder from "./recorder";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 export default function RecorderDialog(props: any) {
   const [voiceUrl, setVoiceUrl] = useState<any>();
@@ -36,18 +37,30 @@ export default function RecorderDialog(props: any) {
       setVoiceUrl(null);
       props.handleCloseRecorder();
     } else {
-      alert("Please record your voice.");
+      Swal.fire({
+        title: "Please record your voice.",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
   return (
-    <Dialog open={props.openRecorder} onClose={props.handleCloseRecorder}>
+    <Dialog
+      fullWidth
+      open={props.openRecorder}
+      onClose={props.handleCloseRecorder}
+      sx={{ zIndex: 100 }}
+    >
       <DialogTitle>Voice Recorder</DialogTitle>
       <DialogContent>
-        <DialogContentText>Please press Start Button.</DialogContentText>
+        <DialogContentText sx={{ mb: 3 }}>
+          Please press Start Button.
+        </DialogContentText>
         <VoiceRecorder setVoiceUrl={setVoiceUrl} />
       </DialogContent>
       <DialogActions>
         <Button
+          color="error"
+          variant="contained"
           onClick={() => {
             setVoiceUrl(null);
             props.handleCloseRecorder();
@@ -56,6 +69,10 @@ export default function RecorderDialog(props: any) {
           Cancel
         </Button>
         <Button
+          sx={{
+            backgroundColor: "#00ccb1",
+          }}
+          variant="contained"
           onClick={() => {
             handleSubmitVoiceRecord();
           }}

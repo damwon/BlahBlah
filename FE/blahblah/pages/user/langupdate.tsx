@@ -65,13 +65,19 @@ export default function LangUpdate() {
       var ob2: any = [...secondob]
       var array3: any = [...third]
       var ob3: any = [...thirdob]
+
       for(let i=0;i<Object(myLang).length;i++){
         console.log(myLang[i])
+        // console.log(myLang[i])
+        // console.log('--------랭아이디포함---------')
+        // console.log(array.includes)
+          // console.log(newarrb.includes(lang[i]['langId']))
 
         if(myLang[i].level===1||myLang[i].level===2||myLang[i].level===3){
           console.log('----코드용-0---')
           // console.log(lang[langId[myLang[i].langId-1]])
-          console.log('----코드용-0---')
+          // console.log('----코드용-0---')
+          
           ob.push({ "code": lang[langId[myLang[i].langId-1]], "level": myLang[i].level })
           console.log(langId[myLang[i].langId-1])
           array.push(langId[myLang[i].langId-1])
@@ -110,9 +116,20 @@ export default function LangUpdate() {
 
     var array: any = [...first]
     var ob: any = [...firstob]
+    var array2: any = [...second]
+    var array3: any = [...third]
 
-    if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3&&
-    e.currentTarget.value!=='언어선택') {
+    // console.log('--------핸들--------')
+    // console.log(array.includes(e.currentTarget.value))
+    // console.log(array2.includes(e.currentTarget.value))
+    // console.log(array3.includes(e.currentTarget.value))
+
+        // console.log('--------랭아이디포함---------')
+        // console.log(array.includes)
+          // console.log(newarrb.includes(lang[i]['langId']))
+    if (array.includes(e.currentTarget.value) === false && array.length <= 3 && ob.length <= 3&&array3.includes(e.currentTarget.value)===false
+    &&array2.includes(e.currentTarget.value)===false&&
+    e.currentTarget.value!=='Language') {
       array.push(e.currentTarget.value)
       // let key = e.currentTarget.value
       let key = e.currentTarget.value
@@ -148,9 +165,16 @@ export default function LangUpdate() {
   const handleSecond = (e: any) => {
     var array: any = [...second]
     var ob: any = [...secondob]
+    var array2: any = [...first]
+    var array3: any = [...third]
+
+    // console.log('--------핸들--------')
+    // console.log(array.includes(e.currentTarget.value))
+    // console.log(array2.includes(e.currentTarget.value))
+    // console.log(array3.includes(e.currentTarget.value))
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 2 && ob.length <= 2
-    &&e.currentTarget.value!=='언어선택') {
+    &&e.currentTarget.value!=='Language'&&array2.includes(e.currentTarget.value)===false&&array3.includes(e.currentTarget.value)===false) {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 4 })
@@ -186,9 +210,16 @@ export default function LangUpdate() {
   const handleThird = (e: any) => {
     var array: any = [...third]
     var ob: any = [...thirdob]
+    var array2: any = [...first]
+    var array3: any = [...second]
+
+    // console.log('--------핸들--------')
+    // console.log(array.includes(e.currentTarget.value))
+    // console.log(array2.includes(e.currentTarget.value))
+    // console.log(array3.includes(e.currentTarget.value))
 
     if (array.includes(e.currentTarget.value) === false && array.length <= 1 && ob.length <= 1
-    &&e.currentTarget.value!=='언어선택') {
+    &&e.currentTarget.value!=='Language'&&array2.includes(e.currentTarget.value)===false&&array3.includes(e.currentTarget.value)===false) {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
       ob.push({ "code": lang[key], "level": 5 })

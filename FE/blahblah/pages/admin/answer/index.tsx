@@ -20,9 +20,9 @@ export default function Answer() {
   const [qna, setQna]: any = useState();
   useEffect(() => {
     allAxios
-      .get(`qna/admin?size=5&page=${page}`, { headers: setToken() })
+      // .get(`qna/admin?size=5&page=${page}`, { headers: setToken() })
+      .get(`qna/admin?size=20&page=${page}`, { headers: setToken() })
       .then((res) => {
-        console.log(res);
         setQna(res.data.myQnaListRes);
         setTotal(res.data.totalPages);
       })

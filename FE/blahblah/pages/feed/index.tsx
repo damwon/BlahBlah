@@ -10,6 +10,7 @@ import {
   ListItemText,
   Checkbox,
 } from "@mui/material";
+import Swal from "sweetalert2";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import CreateIcon from "@mui/icons-material/Create";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
@@ -35,7 +36,10 @@ export default function Index() {
 
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("you need to login first.");
+      Swal.fire({
+        title: "you need to login first.",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push(`/user/login`);
     }
   });
@@ -156,7 +160,10 @@ export default function Index() {
     allAxios
       .put(`/feed/${changeIdx}`, formData, { headers: setToken() })
       .then(() => {
-        alert("the feed is modified.");
+        Swal.fire({
+          title: "the feed is modified",
+          confirmButtonColor: "#00ccb1",
+        });
         window.location.reload();
       })
       .catch((err) => {
@@ -196,7 +203,10 @@ export default function Index() {
           console.log(err);
         });
     } else {
-      alert("please write contents");
+      Swal.fire({
+        title: "please write contents",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
 
@@ -225,7 +235,10 @@ export default function Index() {
       allAxios
         .delete(`comment/${id}`, { headers: setToken() })
         .then(() => {
-          alert("the comment is deleted.");
+          Swal.fire({
+            title: "the comment is deleted",
+            confirmButtonColor: "#00ccb1",
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -238,7 +251,10 @@ export default function Index() {
       allAxios
         .delete(`feed/${id}`, { headers: setToken() })
         .then(() => {
-          alert("the feed is deleted.");
+          Swal.fire({
+            title: "the feed is deleted",
+            confirmButtonColor: "#00ccb1",
+          });
           window.location.reload();
         })
         .catch((err) => {
@@ -276,7 +292,10 @@ export default function Index() {
           console.log(err);
         });
     } else {
-      alert("please write contents.");
+      Swal.fire({
+        title: "please write contents",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
 
@@ -365,14 +384,11 @@ export default function Index() {
                         >
                           <div className="outer">
                             <Image
-                              className="profile"
                               src={d.userProfile}
                               alt=" "
                               width="100%"
                               height="100%"
                             ></Image>
-
-                            <div className="innerRB"></div>
                           </div>
                         </div>
                       </ListItemAvatar>
@@ -421,7 +437,6 @@ export default function Index() {
                           <div>
                             <br></br>
                             <Image
-                              className="profile"
                               src={d.imgUrl}
                               alt="finger image"
                               width="70%"
@@ -466,42 +481,110 @@ export default function Index() {
 
                         {d.comments.length > 0 && myStyle
                           ? d.comments.map((d1: any, i1: number) => {
+                              console.log(d1);
                               if (i1 < 3) {
                                 return (
-                                  <div key={i1} style={{ marginTop: "5px" }}>
-                                    {d1.userName}: {d1.content}
-                                    {d1.userId === userId ? (
-                                      <DeleteIcon
-                                        color="error"
-                                        style={{
-                                          margin: "5px",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() => {
-                                          commentDelete(d1.id, d1.userId);
-                                        }}
-                                      />
-                                    ) : null}
+                                  <div
+                                    key={i1}
+                                    style={{
+                                      marginTop: "5px",
+                                    }}
+                                  >
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={1}>
+                                        <div
+                                          className="miniouter"
+                                          onClick={() => {
+                                            router.push(
+                                              {
+                                                pathname: `/user/detail/`,
+                                                query: {
+                                                  email: d1.email,
+                                                },
+                                              },
+                                              `/user/detail/`
+                                            );
+                                          }}
+                                        >
+                                          <Image
+                                            style={{
+                                              cursor: "pointer",
+                                            }}
+                                            src={d1.userProfile}
+                                            alt=" "
+                                            width="30px"
+                                            height="30px"
+                                          ></Image>
+                                        </div>
+                                      </Grid>
+                                      <Grid item xs={11}>
+                                        {d1.userName}: {d1.content}
+                                        {d1.userId === userId ? (
+                                          <DeleteIcon
+                                            color="error"
+                                            style={{
+                                              margin: "5px",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() => {
+                                              commentDelete(d1.id, d1.userId);
+                                            }}
+                                          />
+                                        ) : null}
+                                      </Grid>
+                                    </Grid>
+                                    <div style={{ display: "inline" }}></div>
                                   </div>
                                 );
                               } else {
                                 return (
                                   <div style={myStyle[i]} key={i1}>
-                                    <span>
-                                      {d1.userName}: {d1.content}
-                                    </span>
-                                    {d1.userId === userId ? (
-                                      <DeleteIcon
-                                        color="error"
-                                        style={{
-                                          margin: "5px",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() => {
-                                          commentDelete(d1.id, d1.userId);
-                                        }}
-                                      />
-                                    ) : null}
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={1}>
+                                        <div
+                                          className="miniouter"
+                                          style={{
+                                            marginTop: "5px",
+                                          }}
+                                          onClick={() => {
+                                            router.push(
+                                              {
+                                                pathname: `/user/detail/`,
+                                                query: {
+                                                  email: d1.email,
+                                                },
+                                              },
+                                              `/user/detail/`
+                                            );
+                                          }}
+                                        >
+                                          <Image
+                                            style={{
+                                              cursor: "pointer",
+                                            }}
+                                            src={d1.userProfile}
+                                            alt=" "
+                                            width="30px"
+                                            height="30px"
+                                          ></Image>
+                                        </div>
+                                      </Grid>
+                                      <Grid item xs={11}>
+                                        {d1.userName}: {d1.content}
+                                        {d1.userId === userId ? (
+                                          <DeleteIcon
+                                            color="error"
+                                            style={{
+                                              margin: "5px",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() => {
+                                              commentDelete(d1.id, d1.userId);
+                                            }}
+                                          />
+                                        ) : null}
+                                      </Grid>
+                                    </Grid>
                                   </div>
                                 );
                               }
@@ -647,7 +730,7 @@ export default function Index() {
             color="error"
             onClick={handleClose}
           >
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -694,7 +777,7 @@ export default function Index() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose2}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button variant="contained" onClick={modifyFeed}>
@@ -717,20 +800,20 @@ export default function Index() {
             max-width: 150px !important; /* any size */
             max-height: 150px !important; /* any size */
             margin: auto;
-            background-color: #6eafd4;
             border-radius: 50%;
             position: relative;
             overflow: hidden;
           }
-          }
-          .innerRB {
-            background-color: rgb(130, 219, 78);
-            width: 30px;
-            height: 30px;
+          .miniouter {
+            width: 30px !important;
+            height: 30px !important;
+            max-width: 50px !important; /* any size */
+            max-height: 50px !important; /* any size */
+            margin: auto;
             border-radius: 50%;
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
+            position: relative;
+            overflow: hidden;
+          }
           }
 
           .inner:hover {

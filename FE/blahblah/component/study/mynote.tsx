@@ -15,6 +15,7 @@ import { Modal, Card } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 export default function Mynote() {
   const router = useRouter();
   const [show, setShow] = useState(false);
@@ -37,7 +38,10 @@ export default function Mynote() {
 
   const writeNoteTitle = () => {
     if (noteTitle === "") {
-      alert("please write the title");
+      Swal.fire({
+        title: "please write the title",
+        confirmButtonColor: "#00ccb1",
+      });
     } else {
       allAxios
         .post(
@@ -84,7 +88,10 @@ export default function Mynote() {
     allAxios
       .delete(`/memo/${num}`, { headers: setToken() })
       .then((res) => {
-        alert("The " + title + " is deleted.");
+        Swal.fire({
+          title: "The " + title + " is deleted.",
+          confirmButtonColor: "#00ccb1",
+        });
         window.location.reload();
       })
       .catch((err) => {
@@ -107,8 +114,10 @@ export default function Mynote() {
   };
   const titleChangeClick = () => {
     if (title === "") {
-      alert("please write the title");
-    } else {
+      Swal.fire({
+        title: "please write the title",
+        confirmButtonColor: "#00ccb1",
+      });
       allAxios
         .put(
           `/memo/${changeIdx}`,
@@ -226,7 +235,7 @@ export default function Mynote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={handleClose}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button
@@ -257,7 +266,7 @@ export default function Mynote() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="contained" color="error" onClick={changeClose}>
-            cancle
+            cancel
           </Button>
           <div style={{ width: "10px" }}></div>
           <Button

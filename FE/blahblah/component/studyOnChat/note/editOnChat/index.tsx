@@ -117,7 +117,7 @@ export default function EditOnChat(props: any) {
           color="error"
           onClick={() => props.handleTF(2, id)}
         >
-          cancle
+          cancel
         </Button>{" "}
         <Button
           style={{

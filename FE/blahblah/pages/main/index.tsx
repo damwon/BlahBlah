@@ -66,7 +66,8 @@ export default function Index(props:any) {
     // event.preventDefault();
     axios({
       method:'get',
-      url:`https://blahblah.community:8443/api/user/`,
+      url:`https://blahblah.community:8443/api/user/match`,
+      headers: setToken(),
     })
     .then((result)=>{
      console.log('get요청성공')
@@ -78,6 +79,7 @@ export default function Index(props:any) {
     console.log(error)  
   })
   };
+
   useEffect(() => {
     findMate()
     getFollowing()
@@ -102,6 +104,8 @@ export default function Index(props:any) {
       
     }
   }, []);
+
+  
   return (
     <>
 {/* {props.test} */}
@@ -172,6 +176,7 @@ export default function Index(props:any) {
           // witdh:700px;
           margin-top:30px;
           margin-bottom:30px;
+          height:350px;
           
         }
 

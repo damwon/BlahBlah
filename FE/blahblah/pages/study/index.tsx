@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import Image from "next/image";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
 // components
 import Wordnote from "../../component/study/wordnote";
 import Mynote from "../../component/study/mynote";
@@ -10,7 +11,10 @@ export default function Study() {
   const router = useRouter();
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
-      alert("로그인 후 사용해주세요.");
+      Swal.fire({
+        title: "please login",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push(`/user/login`);
     }
   });
