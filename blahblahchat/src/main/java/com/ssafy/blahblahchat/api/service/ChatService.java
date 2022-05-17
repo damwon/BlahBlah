@@ -49,8 +49,6 @@ public class ChatService {
 
     public void updateList(long userId,long opponentId,String opponentName, Message message) {
 
-        log.info("ChatService.updateList");
-
         if("No Result".equals(findChatRoom(userId, opponentId))){
 
             String roomId=findChatRoom(opponentId,userId);
@@ -71,7 +69,6 @@ public class ChatService {
     }
 
     public void updateLastRead(long userId,long opponentId) {
-        log.info("ChatService.updateLastRead");
         chatRepository.updateLastRead(userId,opponentId);
     }
 

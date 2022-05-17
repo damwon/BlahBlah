@@ -26,24 +26,22 @@ public class WebSocketEventListener {
 
     @EventListener
     public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        System.out.println("WebSocketEventListener.handleWebSocketConnectListener");
         MessageHeaderAccessor accessor = NativeMessageHeaderAccessor.getAccessor(event.getMessage(), SimpMessageHeaderAccessor.class);
         GenericMessage generic = (GenericMessage) accessor.getHeader("simpConnectMessage");
         Map nativeHeaders = (Map) generic.getHeaders().get("nativeHeaders");
         String userId = (String)((List) nativeHeaders.get("userId")).get(0);
         String sessionId = (String) generic.getHeaders().get("simpSessionId");
 
-        log.info("[Connected] userId : {} | websocket session id : {}", userId, sessionId);
+        log.debug("[Connected] userId : {} | websocket session id : {}", userId, sessionId);
         chatService.addUser(Long.parseLong(userId), sessionId);
     }
 
     @EventListener
     public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-        System.out.println("WebSocketEventListener.handleWebSocketDisconnectListener");
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
 
-        log.info("[Disconnected] websocket session id : {}", sessionId);
+        log.debug("[Disconnected] websocket session id : {}", sessionId);
         chatService.removeUser(sessionId);
     }
 }
