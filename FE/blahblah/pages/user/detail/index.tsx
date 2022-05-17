@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Container, Row, Col, ListGroup, Figure, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup, Button,FormControl,InputGroup } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
@@ -17,8 +17,19 @@ import Avatar from '@mui/material/Avatar';
 export default function UserDetail() {
   const router = useRouter();
   const {email} = router.query
+  // 아..! 이메일이라는 변수로 넘어오잖아. 헠..! 그래서 이변수 그대로써야함
+  const [remail,setRemail] = useState<any>(email)
+  // const [email,setEmail] = useState<any>(email2)
+  // useEffect(()=>{
+  //   setEmail(email2)
+  // },[])
+  // const [email,setEmail] = useState<any>(router.query)
   const [user,setUser] = useState<any>()
   const [lang,setLang] = useState<any>([])
+  // 유저 코멘트
+  const [comment,setComment] = useState('')
+  const [cmtarr,setCmtarr] = useState<any>()
+  const [cmtChange,setCmtChange] = useState(false)
 
   // 기억하자..배열 사용할때 any!
   const larr:any = langarr
@@ -31,12 +42,122 @@ export default function UserDetail() {
   const [langb,setLangB] = useState([])
   // 모국어
   const [langc,setLangC] = useState([])
+
+  // 코멘트
+  const getComment = () => {
+    axios({
+      url: `https://blahblah.community:8443/api/review/${remail}`,
+      method: "get",
+    }).then((res) => {
+      console.log('댓글 목록 요청성공')
+      console.log(res.data)
+      setCmtarr(res.data)
+    }).catch((err)=>{
+      console.log('댓글 목록 요청실패')
+      console.log(err)
+    });
+  };
+  const handleComment = (event: any) => {
+    //event.preventDefault();
+    setComment(event.target.value);
+  };
+  useEffect(()=>{
+    getComment()
+  },[remail])
+
+  // const onWriteComment = ()=>{
+  //   console.log(comment)
+  // }
+  const WriteComment = (event:any) => {
+    event.preventDefault();
+    setCmtChange(!cmtChange)
+    // setComment()
+    axios({
+      method:'post',
+      url:`https://blahblah.community:8443/api/review/${remail}`,
+      headers: setToken(),
+      data: {
+        'reviewTxt':comment
+      },
+    })
+    .then((result)=>{
+    console.log('댓글 요청성공')
+    console.log(result)
+    getComment()
+    // 실시간 갱신위함
+ 
+  })
+    .catch((error)=>{
+      console.log('댓글 요청실패')
+      console.log(error)  
+  })
+  };
+
+  const UpdateComment = (event:any) => {
+    event.preventDefault();
+    setCmtChange(!cmtChange)
+    // setComment()
+    axios({
+      method:'put',
+      url:`https://blahblah.community:8443/api/review/${remail}`,
+      headers: setToken(),
+      data: {
+        'reviewTxt':comment
+      },
+    })
+    .then((result)=>{
+    console.log('댓글 수정요청성공')
+    console.log(result)
+    getComment()
+    // 실시간 갱신 위함
+ 
+  })
+    .catch((error)=>{
+      console.log('댓글 수정요청실패')
+      console.log(error)  
+  })
+  };
+
+  const DeleteComment = (event:any) => {
+    event.preventDefault();
+    axios({
+      method:'delete',
+      url:`https://blahblah.community:8443/api/review/${remail}`,
+      headers: setToken(),
+    })
+    .then((result)=>{
+    console.log('댓글 삭제요청성공')
+    console.log(result)
+    getComment()
+    // 실시간 갱신위함
+ 
+  })
+    .catch((error)=>{
+      console.log('댓글 삭제요청실패')
+      console.log(error)  
+  })
+  };
+
+  // 로그인한 사용자 정보
+  const [me,setMe] = useState<any>()
+  const getProfile = () => {
+    axios({
+      url: "https://blahblah.community:8443/api/user/me",
+      method: "get",
+      headers: setToken(),
+    }).then((res) => {
+      // console.log(res)
+      // console.log(res.body)
+      console.log(res.data)
+      setMe(res.data)
+    });
+  };
   
 
   const onEmailCheck = () => {
     axios({
       method:'get',
-      url:`https://blahblah.community:8443/api/user/${email}`,
+      url:`https://blahblah.community:8443/api/user/${remail}`,
     })
     .then((result)=>{
      console.log('이메일로정보 요청성공')
@@ -54,7 +175,10 @@ export default function UserDetail() {
   // 페이지 넘어오자마자 이메일 인증체크!
   useEffect(() => {
     onEmailCheck()
-  }, []);
+    getProfile()
+    // getComment()
+  }, [remail]);
+
   useEffect(()=>{
     if(lang.length!==0){
       console.log('됫다!')
@@ -87,6 +211,7 @@ export default function UserDetail() {
     const [likeBtn,setLikeBtn] = useState(true)
     // 유저 팔로우 버튼
     const [followBtn,setFollowBtn] = useState(true)
+    
 
   const setToken = () => {
     const token = localStorage.getItem("jwt");
@@ -124,10 +249,10 @@ export default function UserDetail() {
     setLikeBtn(!likeBtn)
     axios({
       method:'post',
-      url:`https://blahblah.community:8443/api/rate/${email}`,
+      url:`https://blahblah.community:8443/api/rate/${remail}`,
       headers: setToken(),
       data: {
-        'email':email
+        'email':remail
       },
     })
     .then((result)=>{
@@ -186,7 +311,10 @@ export default function UserDetail() {
   useEffect(() => {
     getFollowing()
     getRateList()
-  }, []);
+  }, [remail]);
+  // useEffect(()=>{
+  //   getRateList()
+  // },[cmtarr])
 
   useEffect(()=>{
     console.log('챙겨오기~')
@@ -205,7 +333,7 @@ export default function UserDetail() {
         }
       }
     }
-  },[following])
+  },[following,remail])
 
 
 
@@ -214,8 +342,8 @@ export default function UserDetail() {
     <>
       <Container>
         <Row>
-          <Col></Col>
-          <Col>
+          <Col sm={2} xs={2}></Col>
+          <Col sm={4} xs={4}>
           
           {
             user
@@ -312,7 +440,69 @@ export default function UserDetail() {
             
          
           </Col>
-          <Col></Col>
+          <Col sm={6} xs={6}><h1>User Comment</h1>
+          <ListGroup variant="flush" style={{width:"300px"}}>
+            {
+              cmtarr&&me
+              // 내 데이터랑, 전체 데이터 다 있을 때만
+              ?<>{cmtarr.map((a:any,i:any)=>{
+                return <ListGroup.Item key={i}>
+                  <span style={{cursor:'cursor'}} onClick={()=>{
+                    setRemail(a.email)
+                    setLangA([])
+                    setLangB([])
+                    setLangC([])
+                    setLikeBtn(true)
+                    setFollowBtn(true)
+                    // email = a.email
+              // router.push('/')
+              // router.push(
+              //   {
+              //     pathname: `/user/detail/`,
+              //     query: {
+              //       email:a.email,
+              //     },
+              //   },
+              //   `/user/detail/`
+              //   )
+            }}>{a.name}</span>
+                  {':'}{a.reviewTxt}
+                {
+                  a.reviewUserId === me.id
+                  ?<><Button onClick={DeleteComment}
+                  // className="btncs" 
+                           variant="outline-secondary"
+                           >X</Button>
+                  {/* <button onClick={DeleteComment}>{'x'}</button> */}
+                  </>
+                  :<></>
+                }
+                </ListGroup.Item>
+              })
+              }</>
+              :<></>
+            }
+  
+  {/* <ListGroup.Item>Dapibus ac facilisis in</ListGroup.Item>
+  <ListGroup.Item>Morbi leo risus</ListGroup.Item>
+  <ListGroup.Item>Porta ac consectetur ac</ListGroup.Item> */}
+</ListGroup>
+{/* {comment} */}
+          <FormControl onChange={handleComment} maxLength={25}
+          aria-label="Small" aria-describedby="inputGroup-sizing-sm" style={{width:"350px",display:'inline'}} className="formct"/>
+
+          <Button onClick={WriteComment}
+          className="btncs" 
+                   variant="outline-secondary"
+                   style={{marginBottom:'5px'}} >Write</Button>
+                   <Button onClick={UpdateComment}
+          className="btncs" 
+                   variant="outline-secondary"
+                   style={{marginBottom:'5px'}} >Update</Button>
+                   
+                
+          </Col>
+          
 
         </Row>
       </Container>

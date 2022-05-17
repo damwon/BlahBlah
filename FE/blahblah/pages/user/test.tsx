@@ -25,6 +25,29 @@ export default function Login() {
     }
   }
 
+  const loginTest = (event: any) => {
+    event.preventDefault();
+    axios
+      .post(`https://blahblah.community:8443/api/auth/login`, {
+        'email': 'flykimjiwon@kakao.com',
+        'password': '123123',
+      })
+      .then((res) => {
+        localStorage.setItem("jwt", res.data.accessToken);
+        console.log(res)
+        location.reload()
+        // router.replace('/user')
+        // router.push("/user")
+        // 리다이렉트를하자
+      })
+      .catch((err) => {
+        console.log(err)
+        alert('Fail')
+        // alert 오류출력
+
+      });
+  };
+
   const onClickLogin = (event: any) => {
     event.preventDefault();
     axios({
@@ -164,6 +187,7 @@ export default function Login() {
     
           </Col>
           <Col>
+          <button onClick={loginTest}>로그인테스트 20220517</button>
                 <button type="submit" onClick={onClickLogin}>
                   테스트get
                 </button>

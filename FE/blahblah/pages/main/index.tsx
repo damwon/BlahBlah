@@ -171,6 +171,7 @@ export default function Index(props:any) {
           // // background:grey;
           // witdh:700px;
           margin-top:30px;
+          margin-bottom:30px;
           
         }
 
