@@ -481,26 +481,35 @@ export default function Index() {
 
                         {d.comments.length > 0 && myStyle
                           ? d.comments.map((d1: any, i1: number) => {
+                              console.log(d1);
                               if (i1 < 3) {
                                 return (
-                                  <div key={i1} style={{ marginTop: "5px" }}>
+                                  <div
+                                    key={i1}
+                                    style={{
+                                      marginTop: "5px",
+                                    }}
+                                  >
                                     <Grid container spacing={2}>
                                       <Grid item xs={1}>
                                         <div
                                           className="miniouter"
-                                          // onClick={() => {
-                                          //   router.push(
-                                          //     {
-                                          //       pathname: `/user/detail/`,
-                                          //       query: {
-                                          //         email: d.email,
-                                          //       },
-                                          //     },
-                                          //     `/user/detail/`
-                                          //   );
-                                          // }}
+                                          onClick={() => {
+                                            router.push(
+                                              {
+                                                pathname: `/user/detail/`,
+                                                query: {
+                                                  email: d1.email,
+                                                },
+                                              },
+                                              `/user/detail/`
+                                            );
+                                          }}
                                         >
                                           <Image
+                                            style={{
+                                              cursor: "pointer",
+                                            }}
                                             src={d1.userProfile}
                                             alt=" "
                                             width="30px"
@@ -534,9 +543,25 @@ export default function Index() {
                                       <Grid item xs={1}>
                                         <div
                                           className="miniouter"
-                                          style={{ marginTop: "5px" }}
+                                          style={{
+                                            marginTop: "5px",
+                                          }}
+                                          onClick={() => {
+                                            router.push(
+                                              {
+                                                pathname: `/user/detail/`,
+                                                query: {
+                                                  email: d1.email,
+                                                },
+                                              },
+                                              `/user/detail/`
+                                            );
+                                          }}
                                         >
                                           <Image
+                                            style={{
+                                              cursor: "pointer",
+                                            }}
                                             src={d1.userProfile}
                                             alt=" "
                                             width="30px"
@@ -785,7 +810,6 @@ export default function Index() {
             max-width: 50px !important; /* any size */
             max-height: 50px !important; /* any size */
             margin: auto;
-            background-color: #6eafd4;
             border-radius: 50%;
             position: relative;
             overflow: hidden;
