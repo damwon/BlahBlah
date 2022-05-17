@@ -16,6 +16,7 @@ public class CommentListRes {
     LocalDateTime createdAt;
     String content;
     Long userId;
+    String email;
     String userName;
     String userProfile;
 
@@ -34,6 +35,7 @@ public class CommentListRes {
                 .id(comment.getId())
                 .createdAt(comment.getCreatedAt())
                 .content(comment.getContent())
+                .email(comment.getUser().getEmail())
                 .userName(comment.getUser().getName())
                 .userId(comment.getUser().getId())
                 .userProfile(profileImg)
