@@ -384,14 +384,11 @@ export default function Index() {
                         >
                           <div className="outer">
                             <Image
-                              className="profile"
                               src={d.userProfile}
                               alt=" "
                               width="100%"
                               height="100%"
                             ></Image>
-
-                            <div className="innerRB"></div>
                           </div>
                         </div>
                       </ListItemAvatar>
@@ -440,7 +437,6 @@ export default function Index() {
                           <div>
                             <br></br>
                             <Image
-                              className="profile"
                               src={d.imgUrl}
                               alt="finger image"
                               width="70%"
@@ -488,39 +484,82 @@ export default function Index() {
                               if (i1 < 3) {
                                 return (
                                   <div key={i1} style={{ marginTop: "5px" }}>
-                                    {d1.userName}: {d1.content}
-                                    {d1.userId === userId ? (
-                                      <DeleteIcon
-                                        color="error"
-                                        style={{
-                                          margin: "5px",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() => {
-                                          commentDelete(d1.id, d1.userId);
-                                        }}
-                                      />
-                                    ) : null}
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={1}>
+                                        <div
+                                          className="miniouter"
+                                          // onClick={() => {
+                                          //   router.push(
+                                          //     {
+                                          //       pathname: `/user/detail/`,
+                                          //       query: {
+                                          //         email: d.email,
+                                          //       },
+                                          //     },
+                                          //     `/user/detail/`
+                                          //   );
+                                          // }}
+                                        >
+                                          <Image
+                                            src={d1.userProfile}
+                                            alt=" "
+                                            width="30px"
+                                            height="30px"
+                                          ></Image>
+                                        </div>
+                                      </Grid>
+                                      <Grid item xs={11}>
+                                        {d1.userName}: {d1.content}
+                                        {d1.userId === userId ? (
+                                          <DeleteIcon
+                                            color="error"
+                                            style={{
+                                              margin: "5px",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() => {
+                                              commentDelete(d1.id, d1.userId);
+                                            }}
+                                          />
+                                        ) : null}
+                                      </Grid>
+                                    </Grid>
+                                    <div style={{ display: "inline" }}></div>
                                   </div>
                                 );
                               } else {
                                 return (
                                   <div style={myStyle[i]} key={i1}>
-                                    <span>
-                                      {d1.userName}: {d1.content}
-                                    </span>
-                                    {d1.userId === userId ? (
-                                      <DeleteIcon
-                                        color="error"
-                                        style={{
-                                          margin: "5px",
-                                          cursor: "pointer",
-                                        }}
-                                        onClick={() => {
-                                          commentDelete(d1.id, d1.userId);
-                                        }}
-                                      />
-                                    ) : null}
+                                    <Grid container spacing={2}>
+                                      <Grid item xs={1}>
+                                        <div
+                                          className="miniouter"
+                                          style={{ marginTop: "5px" }}
+                                        >
+                                          <Image
+                                            src={d1.userProfile}
+                                            alt=" "
+                                            width="30px"
+                                            height="30px"
+                                          ></Image>
+                                        </div>
+                                      </Grid>
+                                      <Grid item xs={11}>
+                                        {d1.userName}: {d1.content}
+                                        {d1.userId === userId ? (
+                                          <DeleteIcon
+                                            color="error"
+                                            style={{
+                                              margin: "5px",
+                                              cursor: "pointer",
+                                            }}
+                                            onClick={() => {
+                                              commentDelete(d1.id, d1.userId);
+                                            }}
+                                          />
+                                        ) : null}
+                                      </Grid>
+                                    </Grid>
                                   </div>
                                 );
                               }
@@ -736,20 +775,21 @@ export default function Index() {
             max-width: 150px !important; /* any size */
             max-height: 150px !important; /* any size */
             margin: auto;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+          }
+          .miniouter {
+            width: 30px !important;
+            height: 30px !important;
+            max-width: 50px !important; /* any size */
+            max-height: 50px !important; /* any size */
+            margin: auto;
             background-color: #6eafd4;
             border-radius: 50%;
             position: relative;
             overflow: hidden;
           }
-          }
-          .innerRB {
-            background-color: rgb(130, 219, 78);
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
           }
 
           .inner:hover {
