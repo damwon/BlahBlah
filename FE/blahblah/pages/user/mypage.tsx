@@ -234,9 +234,9 @@ export default function Mypage() {
           </span>
           :null
         }</ListGroup.Item>
-              <ListGroup.Item><div className="fw-bold">Sex</div>{profile.gender === 1
-                ? <>Woman</>
-                : <>Man</>
+              <ListGroup.Item><div className="fw-bold">Gender</div>{profile.gender === 1
+                ? <>Female</>
+                : <>Male</>
               }</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Age</div>{profile.age}</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Rating</div>{profile.rating}</ListGroup.Item>

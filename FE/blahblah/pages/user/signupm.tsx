@@ -162,9 +162,9 @@ export default function Signup() {
   }
   // 성별
   const [gen, setGen] = useState<any>()
-  const gens = ['Man', 'Woman']
+  const gens = ['Male', 'Female']
   const onGenHanlder = (e: any) => {
-    if (e.currentTarget.value === 'Man') {
+    if (e.currentTarget.value === 'Male') {
       setGen(0)
     } else {
       setGen(1)
@@ -343,7 +343,7 @@ export default function Signup() {
 
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={onGenHanlder} >
-                <option>Sex </option>
+                <option>Gender </option>
                 {gens.map((item, index) => (
                   <option key={index} value={item}>{item}</option>
                 ))}

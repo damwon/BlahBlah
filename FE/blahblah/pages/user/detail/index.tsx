@@ -440,9 +440,9 @@ export default function UserDetail() {
           </span>
           :null
         }</ListGroup.Item>
-            <ListGroup.Item><div className="fw-bold">Sex</div>{user.gender === 1
-              ? <>Woman</>
-              : <>Man</>
+            <ListGroup.Item><div className="fw-bold">Gender</div>{user.gender === 1
+              ? <>Female</>
+              : <>Male</>
             }</ListGroup.Item>
             <ListGroup.Item><div className="fw-bold">Age</div>{user.age}</ListGroup.Item>
             <ListGroup.Item><div className="fw-bold">Rating</div>{userRating}</ListGroup.Item>

@@ -229,8 +229,8 @@ export default function Mate(props) {
       </div>
       <div className='box'>
       <ListItemText primary={`${props.user.name}(${props.user.age})`} secondary={props.user.gender ===0
-  ?<>남자</>
-  :<>여자</>
+  ?<>Male</>
+  :<>Female</>
   }/>
   {
     followBtn
@@ -328,7 +328,7 @@ export default function Mate(props) {
       }}
     >
       <ListItem>
-        <ListItemText primary="SecondLanguage" secondary={
+        <ListItemText primary="Second Language" secondary={
           langb
           ?<span>
           {
