@@ -258,7 +258,7 @@ export default function Mypage() {
                 },
                 `/user/detail/`
                 )
-            }}>{a.name}</a>
+            }}>{'-'}{a.name}</a>
               
               </ListGroup.Item>
             
@@ -290,7 +290,7 @@ export default function Mypage() {
               },
               `/user/detail/`
               )
-          }}>{a.name}</a>
+          }}>{'-'}{a.name}</a>
             
             </ListGroup.Item>
           })}

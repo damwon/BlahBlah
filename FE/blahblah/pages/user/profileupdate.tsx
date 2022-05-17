@@ -74,6 +74,10 @@ export default function ProfileUpdate() {
   //   setProimg(e.currentTarget.value)
   // }
   // 프로필 업데이트
+  // 기본 default파일일때 예외처리체크, 그 때 null넣어주기
+  // default.png 이런 이름으로 가져오면, 그거 setFilfe(null) 처리
+  // 그냥 아예 'file',null 이래도됨
+  // 다필요업슨게 기본 초기값이 기본이미지, 그리고null이라 절대 default.png를 다시보낼 일이 없다.
   const onEdit = (event: any) => {
     const formData = new FormData();
     const info: any = {    
