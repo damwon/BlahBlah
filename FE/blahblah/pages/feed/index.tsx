@@ -385,28 +385,30 @@ export default function Index() {
                             >
                               {d.userName}
                             </span>
-                            <Button
-                              onClick={() => {
-                                router.push(
-                                  {
-                                    pathname: "/chat",
-                                    query: {
-                                      name: d.userName,
-                                      userId: d.userId,
+                            {d.userId !== userId ? (
+                              <Button
+                                onClick={() => {
+                                  router.push(
+                                    {
+                                      pathname: "/chat",
+                                      query: {
+                                        name: d.userName,
+                                        userId: d.userId,
+                                      },
                                     },
-                                  },
-                                  `/chat`
-                                );
-                              }}
-                              size="small"
-                              style={{ backgroundColor: "#00ccb1" }}
-                              variant="contained"
-                            >
-                              <ChatBubbleOutlineIcon
-                                style={{ margin: "0 5px", display: "inline" }}
-                              ></ChatBubbleOutlineIcon>
-                              Chat
-                            </Button>
+                                    `/chat`
+                                  );
+                                }}
+                                size="small"
+                                style={{ backgroundColor: "#00ccb1" }}
+                                variant="contained"
+                              >
+                                <ChatBubbleOutlineIcon
+                                  style={{ margin: "0 5px", display: "inline" }}
+                                ></ChatBubbleOutlineIcon>
+                                Chat
+                              </Button>
+                            ) : null}
                           </Grid>
                           <Grid item xs={6}>
                             <h6 style={{ textAlign: "right" }}>
