@@ -9,15 +9,45 @@ export default function Home() {
   <Container>
     <Row>
       <Col>
-      <Carou></Carou>
+      <div style={{marginBottom:'30px'}}>      <Carou></Carou>
+</div>
       </Col>
     </Row>
     <Row>
-      <div className="ex">
-      </div>
-    {/* <div className="carddiv">
-    <CardComponent></CardComponent>
-    </div> */}
+<Col><Card style={{ width: '24rem' }}>
+  {/* <Card.Img variant="top" src="main/frd.png" /> */}
+  <Card.Body>
+    <Card.Title>Foreign Friend</Card.Title>
+    <Card.Text>
+    Find a friend that fits the language I want to learn and the language I can teach.
+    Our site automatically matches Partner!
+    </Card.Text>
+    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px'}}>Find Blah Mate →</Button>
+  </Card.Body>
+</Card></Col>
+<Col>
+<Card style={{ width: '24rem' }}>
+  {/* <Card.Img variant="top" src="main/feed.png" /> */}
+  <Card.Body>
+    <Card.Title>Community</Card.Title>
+    <Card.Text>
+    Talk to members in an open space, if you're not satisfied with matching, find a new friend here.
+    </Card.Text>
+    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px'}}>Feed →</Button>
+  </Card.Body>
+</Card>
+</Col>
+<Col><Card style={{ width: '24rem' }}>
+  {/* <Card.Img variant="top" src="main/register.png" /> */}
+  <Card.Body>
+    <Card.Title>Be our Member</Card.Title>
+    <Card.Text>
+    To use all the features on our site, sign up now! Currently, all features are free.
+    Press the button below to sign up.
+    </Card.Text>
+    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px'}}>Sign Up →</Button>
+  </Card.Body>
+</Card></Col>
     </Row>
     
   </Container>
