@@ -22,7 +22,11 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import User from "..";
 import Avatar from "@mui/material/Avatar";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteOutlined";
-
+import { Image } from "react-bootstrap";
+import allAxios from "../../../lib/allAxios";
+import Swal from "sweetalert2";
+import { Grid } from "@mui/material";
+import { Modal } from "react-bootstrap";
 export default function UserDetail() {
   const router = useRouter();
   const { email } = router.query;
@@ -358,6 +362,38 @@ export default function UserDetail() {
   //   getRateList()
   // },[cmtarr])
 
+  const report = () => {
+    if (title === "") {
+      Swal.fire({
+        title: "please write the title",
+        confirmButtonColor: "#00ccb1",
+      });
+    } else if (content === "") {
+      Swal.fire({
+        title: "please write the reason",
+        confirmButtonColor: "#00ccb1",
+      });
+    } else {
+      // allAxios
+      //   .post(`/report/${id}`)
+      //   .then((res) => {
+      //     Swal.fire({
+      //       title: "A report has been received.",
+      //       confirmButtonColor: "#00ccb1",
+      //     });
+      //     console.log(res);
+      //   })
+      //   .then((err) => {
+      //     console.log(err);
+      //   });
+    }
+  };
+
+  const [title, setTitle]: any = useState();
+  const [content, setContent]: any = useState();
+  const [show, setShow]: any = useState(false);
+  const handleClose = () => setShow(false);
+
   return (
     <>
       <Container>
@@ -410,6 +446,22 @@ export default function UserDetail() {
                         style={{ cursor: "pointer" }}
                       ></FavoriteIcon>
                     )}
+                    <div
+                      style={{ cursor: "pointer", display: "inline" }}
+                      onClick={() => {
+                        setTitle("");
+                        setContent("");
+                        setShow(true);
+                      }}
+                    >
+                      <Image
+                        src="/images/siren.png"
+                        alt="qna image"
+                        width="30px"
+                        height="30px"
+                        style={{ marginBottom: "10px" }}
+                      />
+                    </div>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <div className="fw-bold">Email</div>
@@ -603,6 +655,54 @@ export default function UserDetail() {
           </Col>
         </Row>
       </Container>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Report</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Grid spacing={2} container>
+            <Grid item xs={2} style={{ marginBottom: "20px" }}>
+              <h6>Title</h6>
+            </Grid>
+            <Grid item xs={10}>
+              <input
+                onChange={(e: any) => {
+                  setTitle(e.target.value);
+                }}
+              ></input>
+            </Grid>
+          </Grid>
+          <Grid spacing={2} container>
+            <Grid item xs={2}>
+              <h6>Reason for report</h6>
+            </Grid>
+            <Grid item xs={10}>
+              <textarea
+                style={{ width: "250px", height: "200px" }}
+                onChange={(e: any) => {
+                  setContent(e.target.value);
+                }}
+              ></textarea>
+            </Grid>
+          </Grid>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="contained" color="grey" onClick={handleClose}>
+            cancel
+          </Button>
+          <div style={{ width: "10px" }}></div>
+          <Button
+            className="btncs"
+            variant="outline-secondary"
+            onClick={() => {
+              report();
+            }}
+          >
+            save
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <style jsx>{`
         .logdiv {
