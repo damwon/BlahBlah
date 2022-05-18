@@ -161,7 +161,7 @@ export default function Signup() {
 
   }
   // 성별
-  const [gen, setGen] = useState<any>()
+  const [gen, setGen] = useState<any>(3)
   const gens = ['Male', 'Female']
   const onGenHanlder = (e: any) => {
     if (e.currentTarget.value === 'Male') {
@@ -240,8 +240,8 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      // "email":'23test2233@test.com',
-      "email": query.email,
+      "email":'flykimsh22@test.com',
+      // "email": query.email,
       "name": name,
       "gender": gen,
       "age": age,
@@ -254,7 +254,8 @@ export default function Signup() {
     formData.append('file', file)
     formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))
     console.log(formData)
-    if(name.length>=1&&age>=1&&profile.length>=1&&password.length>=6&&Object(newarr).length>=1&&(gen===1||gen===0)){
+    if(name.length>=1&&age>=1&&profile.length>=1&&password.length>=6&&Object(newarr).length>=1&&(gen!==3)&&
+    Object(firstob).length>=1&&Object(thirdob).length>=1){
       axios({
         url: `https://blahblah.community:8443/api/user/signup`,
         method: "post",
@@ -321,13 +322,27 @@ export default function Signup() {
           
               <div className='logdiv'>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Name</Form.Label>
+                <Form.Label>Name {' '}
+                  {name
+                  ?<></>
+                  :<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
+                    
+                  }
+                </Form.Label>
                 <Form.Control className="formct" type="text" placeholder="Name" onChange={handleName} maxLength={20} />
 
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>PassWord</Form.Label>
+                <Form.Label>Password {' '}
+                  {
+                    password
+                    ?<></>
+                    :<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
+                  }
+                 
+
+                </Form.Label>
                 <Form.Control className="formct" type="password" placeholder="More than 6 letters" onChange={handlePassword} maxLength={10} />
               </Form.Group>
               <Form.Group  className="mb-3" controlId="formBasicPassword">
@@ -342,10 +357,17 @@ export default function Signup() {
                 <Form.Control className="formct" type="password" placeholder="More than 6 letters" onChange={handlePwcheck} maxLength={10} />
               </Form.Group>
 
-              <Form.Label>- Additional Info -</Form.Label>
+        
 
               {/* {gen} */}
+              <Form.Label>Gender{' '}
+                {
+                  gen===3
+                  ?<span style={{color:'#FA5936'}}>{'- (Required)'}</span>
+                  :<></>
+                }
 
+              </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={onGenHanlder} >
                 <option>Gender </option>
@@ -355,6 +377,12 @@ export default function Signup() {
               </Form.Select>
 
               {/* {age} */}
+              <Form.Label>Age{' '}
+                {
+                age
+                ?<></>
+                :<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
+}</Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={onAgeHanlder} >
                 <option>Age </option>
@@ -373,8 +401,14 @@ export default function Signup() {
               <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
 
-              
-              <Form.Label>Description {profile}</Form.Label>
+            {/* {profile} */}
+              <Form.Label>Description {' '}
+                {
+                  profile
+                  ?<></>
+                  :<span style={{color:'#FA5936'}}>{'- (Required)'}</span>
+                }
+                 </Form.Label>
               <InputGroup>
                 {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
                 <FormControl className="formct" placeholder='More than 10 Letters' as="textarea"
@@ -390,7 +424,12 @@ export default function Signup() {
 
             <Col>
            <div className="logdiv">
-           <Form.Label>Native Language(Up to 2)
+           <Form.Label>Native Language(Up to 2){' '}
+             {
+               first.length===0
+               ?<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
+               :<></>
+             }
                 {
                   first
                   ?<>
@@ -442,7 +481,12 @@ export default function Signup() {
                 ))}
               </Form.Select>
               <hr />
-              <Form.Label>Study Language(Up to 4) 
+              <Form.Label>Study Language(Up to 4){' '}
+                {
+                  third.length===0
+                  ?<span style={{color:'#FA5936'}}>{'- (Required)'}</span>
+                  :<></>
+                }
               {
                   third
                   ?<>
