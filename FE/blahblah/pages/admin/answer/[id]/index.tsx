@@ -55,8 +55,8 @@ export default function AnswerDetail() {
             headers: setToken(),
           }
         )
-        .then((res) => {
-          console.log(res);
+        .then(() => {
+          router.push(`/admin/answer`);
         })
         .catch((err) => {
           console.log(err);

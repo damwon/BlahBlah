@@ -403,7 +403,7 @@ export default function Index() {
                       <ListItemText style={{ margin: "30px" }} />
                       <div style={{ width: "100%" }}>
                         <Grid container spacing={2}>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <span
                               style={{ fontSize: "20px", marginRight: "10px" }}
                             >
@@ -437,7 +437,7 @@ export default function Index() {
                               </Button>
                             ) : null}
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <h6 style={{ textAlign: "right" }}>
                               {d.createdAt.substr(0, 10)}
                             </h6>
