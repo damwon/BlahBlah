@@ -12,7 +12,7 @@ export default function Study() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
       Swal.fire({
-        title: "please login",
+        title: "Please login",
         confirmButtonColor: "#00ccb1",
       });
       router.push(`/user/login`);

@@ -42,7 +42,7 @@ export default function Notice() {
       <Grid item xs={8}>
         <Image
           priority
-          src="/images/notice2.png"
+          src="/images/notice2.PNG"
           alt="notice image"
           width="200"
           height="30"

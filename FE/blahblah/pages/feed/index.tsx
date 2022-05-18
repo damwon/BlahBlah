@@ -37,7 +37,7 @@ export default function Index() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
       Swal.fire({
-        title: "you need to login first.",
+        title: "Please login.",
         confirmButtonColor: "#00ccb1",
       });
       router.push(`/user/login`);
@@ -384,7 +384,7 @@ export default function Index() {
                                 pathname: `/user/detail/`,
                                 query: {
                                   email: d.email,
-                                  userId: d.userId
+                                  userId: d.userId,
                                 },
                               },
                               `/user/detail/`
