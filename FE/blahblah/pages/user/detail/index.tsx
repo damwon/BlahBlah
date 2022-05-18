@@ -380,13 +380,40 @@ export default function UserDetail() {
         confirmButtonColor: "#00ccb1",
       });
     } else {
+      const formData = new FormData();
+      // formData.append('content', content)
+      // formData.append('title', title)
+      // formData.append('type', '신고')
+      // formData.append(
+      //   "content",
+      //   new Blob([JSON.stringify('sdfsdf')], { type: "application/json" })
+      // );
+      // formData.append(
+      //   "title",
+      //   new Blob([JSON.stringify('elkfelkjfeflkj')], { type: "application/json" })
+      // );
+      // formData.append(
+      //   "type",
+      //   new Blob([JSON.stringify('신고')], { type: "application/json" })
+      // );
+
+
+      console.log(title,content)
+      const reportPostReq: any = {    
+        "content": content,
+        "title":title,
+        "type":'신고',
+      }
+      // formData.append('image', null)
+      formData.append('reportPostReq', new Blob([JSON.stringify(reportPostReq)], { type: "application/json" }))
+
       axios({
         method: "post",
         url: `https://blahblah.community:8443/api/report/${reId}`,
         headers: setToken(),
+        data: formData,
       })
         .then((result) => {
-          // console.log("댓글 요청성공");
           console.log(result);
           Swal.fire({
             title: "A report has been received.",
