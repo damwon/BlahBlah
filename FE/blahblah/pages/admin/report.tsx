@@ -10,23 +10,45 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
+import allAxios from "../../lib/allAxios";
 
 export default function Report() {
+  const setToken = () => {
+    const token = localStorage.getItem("jwt");
+    const config = {
+      Authorization: `Bearer ${token}`,
+    };
+    return config;
+  };
+
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [userLst, setUserLst]: any = useState();
 
-  const userList = [
-    { userMail: "ljj9316@naver.com", name: "종준" },
-    { userMail: "jodie9596@gmail.com", name: "승환" },
-    { userMail: "qs2720@naver.com", name: "성건" },
-    { userMail: "flykimjiwon@kakao.com", name: "지원" },
-    { userMail: "joali9807@naver.com", name: "재현" },
-    { userMail: "dsw00513@naver.com", name: "근태" },
-  ];
+  useEffect(() => {
+    allAxios
+      .get(`/user`)
+      .then((res) => {
+        setUserLst(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
+  useEffect(() => {
+    allAxios
+      .get(`/report`, { headers: setToken() })
+      .then((res) => {
+        console.log("here!!!", res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
   // Modal
   const [punish, setPunish] = useState("");
 
@@ -46,19 +68,12 @@ export default function Report() {
         <Grid item xs={8}>
           <Stack spacing={2} sx={{ width: 300 }}>
             <Autocomplete
-              options={userList.map((option) => option.userMail)}
+              options={userLst && userLst.map((option: any) => option.email)}
               renderInput={(params) => (
                 <TextField {...params} label="user-Email" />
               )}
             />
           </Stack>
-          <Image
-            src="/images/accuse.PNG"
-            alt="report image"
-            width="200"
-            height="40"
-            layout="responsive"
-          />
 
           <Button variant="primary" onClick={handleShow} className="mar-auto">
             신고 접수

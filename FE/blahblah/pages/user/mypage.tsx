@@ -9,6 +9,8 @@ import Avatar from '@mui/material/Avatar';
 import langarr from '../../component/user/Langarr'
 import langkey from '../../component/user/Lang'
 import langIMG from '../../component/user/LangImg'
+import Swal from "sweetalert2";
+
 
 
 export default function Mypage() {
@@ -31,7 +33,11 @@ export default function Mypage() {
     if (token) {
       setIslogin(true)
     } else {
-      alert('로그인상태가아냐!')
+      // alert('로그인상태가아냐!')
+      Swal.fire({
+        title: "Please Login",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push('/')
     }
   }, []);
@@ -106,7 +112,11 @@ export default function Mypage() {
     if (token) {
       setIslogin(true)
     } else {
-      alert('로그인상태가아냐!')
+      // alert('로그인상태가아냐!')
+      Swal.fire({
+        title: "Please Login",
+        confirmButtonColor: "#00ccb1",
+      });
       router.push('/')
     }
   }, []);
@@ -224,9 +234,9 @@ export default function Mypage() {
           </span>
           :null
         }</ListGroup.Item>
-              <ListGroup.Item><div className="fw-bold">Sex</div>{profile.gender === 1
-                ? <>Woman</>
-                : <>Man</>
+              <ListGroup.Item><div className="fw-bold">Gender</div>{profile.gender === 1
+                ? <>Female</>
+                : <>Male</>
               }</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Age</div>{profile.age}</ListGroup.Item>
               <ListGroup.Item><div className="fw-bold">Rating</div>{profile.rating}</ListGroup.Item>
@@ -260,6 +270,7 @@ export default function Mypage() {
                   pathname: `/user/detail/`,
                   query: {
                     email:a.email,
+                    userId: a.id
                   },
                 },
                 `/user/detail/`
@@ -292,6 +303,7 @@ export default function Mypage() {
                 pathname: `/user/detail/`,
                 query: {
                   email:a.email,
+                  userId: a.id
                 },
               },
               `/user/detail/`

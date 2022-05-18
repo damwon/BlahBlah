@@ -69,7 +69,7 @@ export default function Login() {
     
     axios({
       method:'post',
-      url:'https://blahblah.community:8443/api/user/checkemail',
+      url:'https://blahblah.community:8443/api/report/36',
       data: {
         'email':'flykimjiwon22@gmail.com'
       },

@@ -18,18 +18,24 @@ export default function Answer() {
   };
   const [total, setTotal] = useState(1);
   const [qna, setQna]: any = useState();
+  const [myWidth, setMyWidth] = useState(84);
   useEffect(() => {
     allAxios
-      // .get(`qna/admin?size=5&page=${page}`, { headers: setToken() })
-      .get(`qna/admin?size=20&page=${page}`, { headers: setToken() })
+      .get(`qna/admin?size=5&page=${page}`, { headers: setToken() })
+
       .then((res) => {
+        if (res.data.totalPages <= 6) {
+          setMyWidth(252 - (7 - res.data.totalPages) * 28);
+        } else if (res.data.totalPages > 7) {
+          setMyWidth(252);
+        }
         setQna(res.data.myQnaListRes);
         setTotal(res.data.totalPages);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [page]);
 
   return (
     <>
@@ -37,10 +43,10 @@ export default function Answer() {
         <Grid item xs={2} />
         <Grid item xs={8}>
           <Image
-            src="/images/qnaAnswer.PNG"
+            src="/images/qna2.PNG"
             alt="qnaAnswer image"
             width="200"
-            height="40"
+            height="30"
             layout="responsive"
             priority
           />
@@ -68,7 +74,11 @@ export default function Answer() {
                 >
                   <Grid item xs={2}>
                     <Button
-                      style={{ width: 100 }}
+                      style={
+                        d.ansCheck === 0
+                          ? { width: 100, backgroundColor: "grey" }
+                          : { width: 100, backgroundColor: "#00ccb1" }
+                      }
                       variant="contained"
                       color={d.ansCheck === 0 ? "error" : "primary"}
                     >
@@ -88,6 +98,8 @@ export default function Answer() {
 
           <div className="m" style={{ width: 400 }}>
             <Pagination
+              style={{ width: `${myWidth}px`, margin: "auto" }}
+              size="small"
               count={total}
               variant="outlined"
               shape="rounded"
