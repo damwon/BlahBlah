@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import lang2 from '../../component/user/Lang'
 import langImg2 from '../../component/user/LangImg'
 import LangId from '../../component/user/Langarr'
-
+import Swal from "sweetalert2";
 
 
 export default function LangUpdate() {
@@ -266,28 +266,36 @@ export default function LangUpdate() {
     // console.log(test)
     formData.append('langList', new Blob([JSON.stringify(newarr)], { type: "application/json" }))
     // formData.append('langList', test)
-    
-    axios({
-      url: `https://blahblah.community:8443/api/user/edit-lang`,
-      method: "put",
-      headers: setToken(),
-      data: formData
-      // {'langList':test,
-      //   // "langList": newarr,
-      //   // "langList" : [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}],
-
-      // },
-    })
-      .then((res) => {
-        console.log(res)
-        console.log('잘수정됫엉')
-        router.push('/user/mypage')
-        // router.push('/user/mypage')/
+    if(Object(firstob).length>=1 && Object(thirdob).length>=1){
+      axios({
+        url: `https://blahblah.community:8443/api/user/edit-lang`,
+        method: "put",
+        headers: setToken(),
+        data: formData
+        // {'langList':test,
+        //   // "langList": newarr,
+        //   // "langList" : [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}],
+  
+        // },
       })
-      .catch((err) => {
-        console.log(err);
-        console.log('수정실패했엉')
+        .then((res) => {
+          console.log(res)
+          console.log('잘수정됫엉')
+          router.push('/user/mypage')
+          // router.push('/user/mypage')/
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log('수정실패했엉')
+        });
+    }else{
+      Swal.fire({
+        title: "Please choose more than one Native and Study Language",
+        confirmButtonColor: "#00ccb1",
       });
+      // alert('Please choose more than one Native and Study Language')
+    }
+    
   };
 
   return (

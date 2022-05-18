@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
+import {Figure} from "react-bootstrap";
 export default function Notice() {
   const setToken = () => {
     const token = localStorage.getItem("jwt");
@@ -40,14 +41,23 @@ export default function Notice() {
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
-        <Image
+        {/* <Image
           priority
           src="/images/notice2.PNG"
           alt="notice image"
           width="200"
           height="30"
           layout="responsive"
-        />
+        /> */}
+         <Figure>
+  <Figure.Image
+    // width={1940}
+    height={300}
+    alt="qna image"
+    src="/images/notice2.PNG"
+    // src="main/m2.png"
+  />
+</Figure>
         <br></br>
         <br></br>
         <Grid container spacing={3}>

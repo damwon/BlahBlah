@@ -11,7 +11,7 @@ import { useEffect,useState } from "react";
 import langarr from '../../component/user/Langarr'
 import langkey from '../../component/user/Lang'
 import langImg from '../../component/user/LangImg'
-
+import {Typography,IconButton} from "@mui/material";
 import axios from "axios";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -303,8 +303,28 @@ export default function Mate(props) {
         
         {
           likeBtn
-          ?<FavoriteBorderIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteBorderIcon>
-          :<FavoriteIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteIcon>
+          ?<IconButton onClick={userLike}
+                      
+          sx={{ display: "inline", flexDirection: "column" }}
+        >
+          <FavoriteBorderIcon
+          // onClick={userLike}
+          // style={{ cursor: "pointer" }}
+        ></FavoriteBorderIcon>
+        <Typography sx={{ fontSize: "4px" }}>Like</Typography>
+        </IconButton>
+          :<IconButton onClick={userLike}
+                      
+          sx={{ display: "inline", flexDirection: "column" }}
+        >
+          <FavoriteIcon
+          // onClick={userLike}
+          // style={{ cursor: "pointer" }}
+        ></FavoriteIcon>
+        <Typography sx={{ fontSize: "4px" }}>Like</Typography>
+        </IconButton>
+          // ?<FavoriteBorderIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteBorderIcon>
+          // :<FavoriteIcon onClick={userLike} style={{cursor:'pointer'}}></FavoriteIcon>
         }
         {/* props.user.rating를 useState로 하면 한턴 늦게불러오네 */}
         {/* <button onClick={userLike}>클릭</button> */}

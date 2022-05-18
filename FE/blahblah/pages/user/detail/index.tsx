@@ -9,6 +9,7 @@ import {
   InputGroup,
   Badge,
 } from "react-bootstrap";
+import {Typography,IconButton} from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -494,15 +495,29 @@ export default function UserDetail() {
                       </>
                     )}{" "}
                     {likeBtn ? (
+                      <><IconButton onClick={userLike}
+                      
+                      sx={{ display: "inline", flexDirection: "column" }}
+                    >
                       <FavoriteBorderIcon
-                        onClick={userLike}
-                        style={{ cursor: "pointer" }}
-                      ></FavoriteBorderIcon>
+                      // onClick={userLike}
+                      // style={{ cursor: "pointer" }}
+                    ></FavoriteBorderIcon>
+                    <Typography sx={{ fontSize: "4px" }}>Like</Typography>
+                    </IconButton>
+                      </>
                     ) : (
+                      <><IconButton onClick={userLike}
+                      
+                      sx={{ display: "inline", flexDirection: "column" }}
+                    >
                       <FavoriteIcon
-                        onClick={userLike}
-                        style={{ cursor: "pointer" }}
-                      ></FavoriteIcon>
+                      // onClick={userLike}
+                      // style={{ cursor: "pointer" }}
+                    ></FavoriteIcon>
+                    <Typography sx={{ fontSize: "4px" }}>Like</Typography>
+                    </IconButton>
+                      </>
                     )}
                     <div
                       style={{ cursor: "pointer", display: "inline" }}
@@ -512,13 +527,21 @@ export default function UserDetail() {
                         setShow(true);
                       }}
                     >
+                       <><IconButton
+                      
+                      sx={{ display: "inline", flexDirection: "column" }}
+                    >
                       <Image
                         src="/images/siren.png"
                         alt="qna image"
                         width="30px"
                         height="30px"
-                        style={{ marginBottom: "10px" }}
+                        
                       />
+                    <Typography sx={{ fontSize: "4px" }}>Report</Typography>
+                    </IconButton>
+                      </>
+                      
                     </div>
                   </ListGroup.Item>
                   <ListGroup.Item>
@@ -540,6 +563,8 @@ export default function UserDetail() {
                                 width={25}
                                 style={{ margin: "5px" }}
                               ></img>
+                                                            <br></br>
+
                             </span>
                           );
                         })}
@@ -561,6 +586,7 @@ export default function UserDetail() {
                                 }.png`}
                                 width={25}
                               ></img>
+                              <br></br>
                             </span>
                           );
                         })}
@@ -585,6 +611,8 @@ export default function UserDetail() {
                               <Badge bg="secondary" style={{ margin: "5px" }}>
                                 {langLv[i]}
                               </Badge>
+                              <br></br>
+
                             </span>
                           );
                         })}
@@ -592,8 +620,8 @@ export default function UserDetail() {
                     ) : null}
                   </ListGroup.Item>
                   <ListGroup.Item>
-                    <div className="fw-bold">Sex</div>
-                    {user.gender === 1 ? <>Woman</> : <>Man</>}
+                    <div className="fw-bold">Gender</div>
+                    {user.gender === 1 ? <>Female</> : <>Male</>}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <div className="fw-bold">Age</div>
