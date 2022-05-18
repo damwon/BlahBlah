@@ -270,6 +270,7 @@ export default function Mypage() {
                   pathname: `/user/detail/`,
                   query: {
                     email:a.email,
+                    userId: a.id
                   },
                 },
                 `/user/detail/`
@@ -302,6 +303,7 @@ export default function Mypage() {
                 pathname: `/user/detail/`,
                 query: {
                   email:a.email,
+                  userId: a.id
                 },
               },
               `/user/detail/`
