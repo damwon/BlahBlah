@@ -384,6 +384,7 @@ export default function Index() {
                                 pathname: `/user/detail/`,
                                 query: {
                                   email: d.email,
+                                  userId: d.userId
                                 },
                               },
                               `/user/detail/`
