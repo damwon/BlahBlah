@@ -240,8 +240,8 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      // "email":'flykimsh22@test.com',
-      "email": query.email,
+      "email":'flygt@test.com',
+      // "email": query.email,
       "name": name,
       "gender": gen,
       "age": age,
