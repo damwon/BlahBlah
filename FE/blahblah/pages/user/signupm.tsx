@@ -240,8 +240,8 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      "email":'flykimsh22@test.com',
-      // "email": query.email,
+      // "email":'kimji@test.com',
+      "email": query.email,
       "name": name,
       "gender": gen,
       "age": age,
@@ -515,7 +515,7 @@ export default function Signup() {
                    variant="outline-secondary"
                 style={{ marginTop: '3px',marginRight:'5px' }} >Sign Up</Button>
            </div>
-           <Button onClick={() => {
+           {/* <Button onClick={() => {
                 // console.log(first)
                 // console.log(firstob)
                 // console.log(second)
@@ -530,7 +530,7 @@ export default function Signup() {
                 console.log(newarr)
 
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
             </Col>
             <Col></Col>
         </Row>
