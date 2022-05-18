@@ -17,10 +17,10 @@ export default function Home() {
 <Col><Card style={{ width: '24rem' }}>
   {/* <Card.Img variant="top" src="main/frd.png" /> */}
   <Card.Body>
-    <Card.Title>Foreign Friend</Card.Title>
+    <Card.Title>{`Foreign Friend`}</Card.Title>
     <Card.Text>
-    Find a friend that fits the language I want to learn and the language I can teach.
-    Our site automatically matches Partner!
+    {`Find a friend that fits the language I want to learn and the language I can teach.
+    Our site automatically matches Partner!`}
     </Card.Text>
     <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Find Blah Mate →</Button>
   </Card.Body>
@@ -29,9 +29,9 @@ export default function Home() {
 <Card style={{ width: '24rem' }}>
   {/* <Card.Img variant="top" src="main/feed.png" /> */}
   <Card.Body>
-    <Card.Title>Community</Card.Title>
+    <Card.Title>{`Community`}</Card.Title>
     <Card.Text>
-    Talk to members in an open space, if you're not satisfied with matching, find a new friend here.
+    {`Talk to members in an open space, if you're not satisfied with matching, find a new friend here.`}
     </Card.Text>
     <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Feed →</Button>
   </Card.Body>
@@ -40,10 +40,10 @@ export default function Home() {
 <Col><Card style={{ width: '24rem' }}>
   {/* <Card.Img variant="top" src="main/register.png" /> */}
   <Card.Body>
-    <Card.Title>Be our Member</Card.Title>
+    <Card.Title>{`Be our Member`}</Card.Title>
     <Card.Text>
-    To use all the features on our site, sign up now! Currently, all features are free.
-    Press the button below to sign up.
+    {`To use all the features on our site, sign up now! Currently, all features are free.
+    Press the button below to sign up.`}
     </Card.Text>
     <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Sign Up →</Button>
   </Card.Body>
