@@ -9,7 +9,7 @@ export default function Home() {
   <Container>
     <Row>
       <Col>
-      <div style={{marginBottom:'30px'}}>      <Carou></Carou>
+      <div style={{marginBottom:'40px'}}>      <Carou></Carou>
 </div>
       </Col>
     </Row>
@@ -22,7 +22,7 @@ export default function Home() {
     Find a friend that fits the language I want to learn and the language I can teach.
     Our site automatically matches Partner!
     </Card.Text>
-    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px'}}>Find Blah Mate →</Button>
+    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Find Blah Mate →</Button>
   </Card.Body>
 </Card></Col>
 <Col>
@@ -33,7 +33,7 @@ export default function Home() {
     <Card.Text>
     Talk to members in an open space, if you're not satisfied with matching, find a new friend here.
     </Card.Text>
-    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px'}}>Feed →</Button>
+    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Feed →</Button>
   </Card.Body>
 </Card>
 </Col>
@@ -45,7 +45,7 @@ export default function Home() {
     To use all the features on our site, sign up now! Currently, all features are free.
     Press the button below to sign up.
     </Card.Text>
-    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px'}}>Sign Up →</Button>
+    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Sign Up →</Button>
   </Card.Body>
 </Card></Col>
     </Row>
