@@ -10,7 +10,7 @@ import {
   Avatar,
   Typography,
 } from "@mui/material";
-import axios from "axios";
+import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 
 export default function ChatList(props: any) {
   const handleListItemClick = (
@@ -22,9 +22,16 @@ export default function ChatList(props: any) {
 
   return (
     <List sx={{ bgcolor: "background.paper", overflowY: "auto" }}>
-      <ListSubheader sx={{ textAlign: "center", fontSize: "20px" }}>
+      <ListSubheader
+        sx={{
+          textAlign: "center",
+          fontSize: "20px",
+          height: "70px",
+        }}
+      >
         Chatting List
       </ListSubheader>
+
       <Divider />
       {props.chattingList.length > 0 ? (
         props.chattingList.map((item: any, index: any) => {
@@ -33,16 +40,28 @@ export default function ChatList(props: any) {
               <ListItem selected={props.chatRoomData.roomId === item.roomId}>
                 <ListItemButton
                   onClick={(e) => {
+                    props.setIsOnline(item.online);
                     props.readMsg(item.opponentId);
                     props.setChatRoomData(item);
                     props.setChatname(item.roomName);
                     handleListItemClick(e, index);
                   }}
                 >
-                  <ListItemAvatar>
+                  <ListItemAvatar sx={{ position: "relative" }}>
                     <Avatar
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/profile/${item.profile}`}
                       alt=""
+                    />
+                    <CircleRoundedIcon
+                      sx={{
+                        fontSize: "14px",
+                        position: "absolute",
+                        right: "13px",
+                        top: "25px",
+                        backgroundColor: "white",
+                        borderRadius: "50%",
+                      }}
+                      color={item.online ? "warning" : "disabled"}
                     />
                   </ListItemAvatar>
                   <ListItemText
@@ -62,7 +81,13 @@ export default function ChatList(props: any) {
                   />
                   {item.unread === 0 ? null : (
                     <ListItemAvatar>
-                      <Avatar sx={{ backgroundColor: "#00CCB1" }}>
+                      <Avatar
+                        sx={{
+                          backgroundColor: "#00CCB1",
+                          height: "24px",
+                          width: "24px",
+                        }}
+                      >
                         <Typography>{item.unread}</Typography>
                       </Avatar>
                     </ListItemAvatar>
