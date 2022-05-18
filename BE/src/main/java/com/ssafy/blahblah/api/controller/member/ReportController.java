@@ -54,7 +54,7 @@ public class ReportController {
 
 
         String img;
-        if (multipartFile.get(0).getSize() < 11) {
+        if (multipartFile == null) {
             img = null;
         }
         else {
