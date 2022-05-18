@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import Swal from "sweetalert2";
-import {Figure,Carousel} from "react-bootstrap";
+import {Figure} from "react-bootstrap";
 export default function QnA() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
