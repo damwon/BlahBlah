@@ -3,6 +3,8 @@ import { Container, Row, Col, Form, Button, ListGroup } from 'react-bootstrap';
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
+import Swal from "sweetalert2";
+
 
 
 export default function PassUpdate() {
@@ -45,7 +47,12 @@ export default function PassUpdate() {
           console.log(err);
         });
     } else {
-      alert('비밀번호 6자이상써줘!')
+      // alert('비밀번호 6자이상써줘!')
+      Swal.fire({
+        title: "Please Over 6 letter",
+        confirmButtonColor: "#00ccb1",
+      });
+      
     }
   };
 

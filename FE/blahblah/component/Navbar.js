@@ -111,6 +111,7 @@ export default function userNav(props) {
           font-size: 16px;
           // font-weight:bold;
           margin: 10px;
+          cursor:pointer;
         }
         .navmenu:hover {
           color: #00ccb1;

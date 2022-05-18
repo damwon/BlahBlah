@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useState, useRef, useEffect } from "react";
-import Image from "react-bootstrap/Image";
+import { Image, Form, InputGroup } from "react-bootstrap";
 import {
   styled,
   TextField,
@@ -8,11 +8,7 @@ import {
   Box,
   Typography,
   Button,
-  FormControl,
-  InputLabel,
-  Select,
   SelectChangeEvent,
-  MenuItem,
   Stack,
   CircularProgress,
 } from "@mui/material";
@@ -26,6 +22,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DownloadIcon from "@mui/icons-material/Download";
 import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
+import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 // components
 import ChatList from "../../component/chat/chatList";
 import ChatTabs from "../../component/chat/chatTabs";
@@ -34,6 +31,7 @@ import ImageDialog from "../../component/imageModal/imageDialog";
 import ChatBoxOfOther from "../../component/chat/chatBoxOfOther";
 import CorrectMessage from "../../component/chat/correctMessage";
 import VoiceSaveDialog from "../../component/chat/voiceSaveDialog";
+import GameDialog from "../../component/game/gameDialog";
 // chat websocket
 import { Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
@@ -53,11 +51,13 @@ const ChatTypographyByMe = styled(Typography)({
   backgroundColor: "#00CCB1",
   color: "white",
   fontWeight: 500,
+  maxWidth: "500px",
+  wordBreak: "break-all",
 });
 
 const ChatBox = styled(Box)({
   overflowY: "auto",
-  height: "75vh",
+  height: "630px",
   width: "100%",
   display: "flex",
   flexDirection: "column",
@@ -145,7 +145,6 @@ export default function Chat() {
       headers: setToken(),
     })
       .then((res) => {
-        console.log(res.data);
         setUserData(res.data);
       })
       .catch((err) => {
@@ -180,21 +179,17 @@ export default function Chat() {
       stompClient.subscribe("/topic/" + userData.id, function (msg: any) {
         let tmpChat = JSON.parse(msg.body);
         console.log(tmpChat);
-        console.log("채팅먼저");
 
         if (tmpChat.roomId === chatRoomData.roomId) {
-          console.log(true);
           readMsg(chatRoomData.opponentId);
           addMsg(tmpChat);
         }
-        // updateLastRead();
         list();
       });
       // 채팅 목록 가져오기
       stompClient.subscribe("/topic/list/" + userData.id, function (msg: any) {
         let tmpMsg = JSON.parse(msg.body);
         console.log(tmpMsg);
-        console.log("목록 나중");
         setChattingList(tmpMsg);
       });
       list();
@@ -205,11 +200,6 @@ export default function Chat() {
     if (userData) {
       connect(chatRoomData);
     }
-    // router.events.on("routeChangeStart", function () {
-    //   if (stompClient) {
-    //     stompClient.disconnect();
-    //   }
-    // });
     return () => {
       if (stompClient) {
         stompClient.disconnect();
@@ -393,7 +383,6 @@ export default function Chat() {
       },
     })
       .then((res) => {
-        console.log(res.data);
         setTranslatedMessage(res.data);
       })
       .catch((err) => {
@@ -496,13 +485,11 @@ export default function Chat() {
       getAccessToken();
     }
     window.addEventListener("beforeunload", () => {
-      console.log("ws닫힘1");
       ws.close();
     });
 
     return () => {
       if (ws) {
-        console.log("ws 닫힘2");
         ws.close();
       }
     };
@@ -548,6 +535,15 @@ export default function Chat() {
   }
 
   function incomingCall(message: any) {
+    if (callState) {
+      var response = {
+        id: "incomingCallResponse",
+        from: message.from,
+        callResponse: "reject",
+        message: "bussy",
+      };
+      return sendMessage(response);
+    }
     if (confirm("Call from " + message.from + ". Do you want to receive?")) {
       from = message.from;
       let options = {
@@ -564,7 +560,6 @@ export default function Chat() {
           if (error) {
             return console.error(error);
           }
-          console.log("옵션: " + constraints.audio + "/" + constraints.video);
           webRtcPeer.generateOffer(onOfferIncomingCall);
         }
       );
@@ -687,6 +682,15 @@ export default function Chat() {
 
   const handleCloseVoiceSave = () => {
     setOpenVoiceSave(false);
+  };
+
+  // 간단한 게임
+  const [openGame, setOpenGame] = useState(false);
+  const handleClickOpenGameDialog = () => {
+    setOpenGame(true);
+  };
+  const handleCloseGame = () => {
+    setOpenGame(false);
   };
 
   return (
@@ -816,8 +820,16 @@ export default function Chat() {
                 <Typography>{isOnline ? "online" : "offline"}</Typography>
               </Box>
             </Box>
-            <IconButton onClick={videoCall}>
+            <IconButton
+              onClick={videoCall}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+              }}
+            >
               <VideocamIcon fontSize="large" sx={{ color: "black" }} />
+              <Typography sx={{ fontSize: "5px" }}>Call</Typography>
             </IconButton>
           </Box>
           <ChatBox ref={chatRef} className="chatbox-scroll">
@@ -864,7 +876,8 @@ export default function Chat() {
                             padding: 2,
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "end",
+                            justifyContent:
+                              item.type === "topic" ? "center" : "end",
                           }}
                           key={index}
                         >
@@ -880,6 +893,52 @@ export default function Chat() {
                             <ChatTypographyByMe>
                               {item.content}
                             </ChatTypographyByMe>
+                          )}
+                          {item.type === "topic" && (
+                            <Stack
+                              direction="row"
+                              sx={{ display: "flex", alignItems: "center" }}
+                            >
+                              <Typography
+                                sx={{
+                                  padding: "15px 20px",
+                                  borderRadius: "20px",
+                                  backgroundColor: "white",
+                                  color: "black",
+                                  border: "1px solid #b5b5b5",
+                                  maxWidth: "400px",
+                                  wordBreak: "break-all",
+                                }}
+                              >
+                                {item.content.split(" VS ")[0]}
+                              </Typography>
+                              <Box>
+                                <Typography
+                                  sx={{
+                                    color: "black",
+                                    marginX: 1,
+                                  }}
+                                >
+                                  VS
+                                </Typography>
+                              </Box>
+
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  padding: "15px 20px",
+                                  borderRadius: "20px",
+                                  backgroundColor: "skyblue",
+                                  color: "white",
+                                  maxWidth: "400px",
+                                  wordBreak: "break-all",
+                                }}
+                              >
+                                <Typography>
+                                  {item.content.split(" VS ")[1]}
+                                </Typography>
+                              </Box>
+                            </Stack>
                           )}
                           {item.type === "audio" && (
                             <>
@@ -900,7 +959,7 @@ export default function Chat() {
                           {item.type === "image" && (
                             <Image
                               src={item.content}
-                              style={{ width: "200px", height: "200px" }}
+                              style={{ width: "300px", height: "300px" }}
                             />
                           )}
                           {item.type === "comment" && (
@@ -913,6 +972,8 @@ export default function Chat() {
                                   backgroundColor: "white",
                                   color: "black",
                                   border: "1px solid #b5b5b5",
+                                  maxWidth: "500px",
+                                  wordBreak: "break-all",
                                 }}
                               >
                                 {item.content}
@@ -927,6 +988,8 @@ export default function Chat() {
                                   border: "1px solid #b5b5b5",
                                   borderTopStyle: "none",
                                   color: "white",
+                                  maxWidth: "500px",
+                                  wordBreak: "break-all",
                                 }}
                               >
                                 <ArrowForwardIcon sx={{ mr: 1 }} />
@@ -976,7 +1039,7 @@ export default function Chat() {
             sx={{
               borderTop: "1px solid #b5b5b5",
               width: "100%",
-              height: "15%",
+              height: "100px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -998,24 +1061,18 @@ export default function Chat() {
                 }}
               >
                 <Typography sx={{ mr: 3 }}>{translateMessage}</Typography>
-                <Box sx={{ minWidth: 120, mr: 3 }}>
-                  <FormControl fullWidth>
-                    <InputLabel>Language</InputLabel>
-                    <Select
-                      label="Language"
-                      onChange={handleSelectLanguage}
-                      value={targetLanguage}
-                    >
-                      {languageList.map((item: any, index) => {
-                        return (
-                          <MenuItem key={index} value={item.code}>
-                            {item.label}
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </Box>
+                <Form.Select
+                  style={{ width: "160px" }}
+                  onChange={(e: any) => handleSelectLanguage(e)}
+                >
+                  {languageList.map((item: any, index) => {
+                    return (
+                      <option key={index} value={item.code}>
+                        {item.label}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
                 <Button onClick={handleTranslate}>Translate!</Button>
                 {translatedMessage && (
                   <>
@@ -1036,34 +1093,56 @@ export default function Chat() {
             {chatname === "No one..." ? null : (
               <Box
                 sx={{
-                  display:
-                    translateMessage || correctMessage ? "none" : "block",
+                  display: translateMessage || correctMessage ? "none" : "flex",
                 }}
               >
-                <TextField
-                  sx={{
-                    width: "30vw",
-                  }}
-                  value={message}
-                  placeholder="Type your message."
-                  onChange={handleMessage}
-                  onKeyPress={(e: any) => {
-                    if (e.key === "Enter") {
-                      handleMessageList();
-                    }
-                  }}
-                  variant="standard"
-                />
-                <IconButton onClick={handleMessageList}>
-                  <SendIcon color="primary" />
+                <InputGroup>
+                  <Form.Control
+                    style={{ width: "33vw" }}
+                    size="lg"
+                    type="text"
+                    placeholder="Write down your messages."
+                    value={message}
+                    onChange={handleMessage}
+                    onKeyPress={(e: any) => {
+                      if (e.key === "Enter") {
+                        handleMessageList();
+                      }
+                    }}
+                  />
+                  <IconButton
+                    sx={{
+                      border: "1px solid rgb(0,204,177, .5)",
+                      borderLeftStyle: "none",
+                    }}
+                    onClick={handleMessageList}
+                  >
+                    <SendIcon sx={{ color: "skyblue" }} />
+                  </IconButton>
+                </InputGroup>
+
+                <IconButton
+                  onClick={handleClickOpenRecorder}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
+                  <MicIcon sx={{ color: "#e86cab" }} />
+                  <Typography sx={{ fontSize: "4px" }}>Record</Typography>
                 </IconButton>
-                <IconButton onClick={handleClickOpenRecorder}>
-                  <MicIcon sx={{ color: "black" }} />
-                </IconButton>
-                <IconButton onClick={handleClickOpenImageDialog}>
+                <IconButton
+                  onClick={handleClickOpenImageDialog}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
                   <AttachFileIcon
                     sx={{ color: "black", transform: "rotate(45deg)" }}
                   />
+                  <Typography sx={{ fontSize: "4px" }}>Image</Typography>
+                </IconButton>
+                <IconButton
+                  onClick={handleClickOpenGameDialog}
+                  sx={{ display: "flex", flexDirection: "column" }}
+                >
+                  <SportsEsportsIcon sx={{ color: "#00CCB1" }} />
+                  <Typography sx={{ fontSize: "4px" }}>Game</Typography>
                 </IconButton>
               </Box>
             )}
@@ -1078,6 +1157,11 @@ export default function Chat() {
               openImageDialog={openImageDialog}
               setOpenImageDialog={setOpenImageDialog}
               handleCloseImageDialog={handleCloseImageDialog}
+              sendMsg={sendMsg}
+            />
+            <GameDialog
+              openGame={openGame}
+              handleCloseGame={handleCloseGame}
               sendMsg={sendMsg}
             />
             {voiceMsgUrl && (

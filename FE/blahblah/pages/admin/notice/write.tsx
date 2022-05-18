@@ -45,10 +45,10 @@ export default function Write() {
       <Grid item xs={8}>
         <Image
           priority
-          src="/images/writeNotice.PNG"
+          src="/images/notice2.PNG"
           alt="writeNotice image"
-          width="220"
-          height="40"
+          width="200"
+          height="30"
           layout="responsive"
         />
         <br></br>
@@ -93,7 +93,13 @@ export default function Write() {
           >
             취소
           </Button>{" "}
-          <Button variant="contained" onClick={write}>
+          <Button
+            style={{
+              backgroundColor: "#00ccb1",
+            }}
+            variant="contained"
+            onClick={write}
+          >
             작성
           </Button>
         </div>

@@ -3,6 +3,8 @@ import { Container,Row,Col,ListGroup } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Swal from "sweetalert2";
+
 
 export default function Friends() {
   const router = useRouter()
@@ -18,7 +20,12 @@ export default function Friends() {
     if (token) {
       setIslogin(true)
     } else {
-      alert('로그인상태가아냐!')
+      // alert('로그인상태가아냐!')
+      Swal.fire({
+        title: "Please Login",
+        confirmButtonColor: "#00ccb1",
+      });
+      
       router.push('/')
     }
   }, []);

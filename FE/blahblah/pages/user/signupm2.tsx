@@ -18,8 +18,8 @@ export default function Signup() {
   const [email, setEmail] = useState(query.email)
   
   // 가입절차
-  // const [page1,setPage1] = useState(true)
-  // const [page2,setPage2] = useState(false)
+  const [page1,setPage1] = useState(true)
+  const [page2,setPage2] = useState(false)
 
 
   // 가입결과 테스트
@@ -161,7 +161,7 @@ export default function Signup() {
 
   }
   // 성별
-  const [gen, setGen] = useState<any>(3)
+  const [gen, setGen] = useState<any>()
   const gens = ['Male', 'Female']
   const onGenHanlder = (e: any) => {
     if (e.currentTarget.value === 'Male') {
@@ -240,8 +240,8 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      "email":'flykimsh22@test.com',
-      // "email": query.email,
+      // "email":'23test2233@test.com',
+      "email": query.email,
       "name": name,
       "gender": gen,
       "age": age,
@@ -254,8 +254,7 @@ export default function Signup() {
     formData.append('file', file)
     formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))
     console.log(formData)
-    if(name.length>=1&&age>=1&&profile.length>=1&&password.length>=6&&Object(newarr).length>=1&&(gen!==3)&&
-    Object(firstob).length>=1&&Object(thirdob).length>=1){
+    if(name.length>=1&&age>=1&&profile.length>=1&&password.length>=6&&Object(newarr).length>=1&&(gen===1||gen===0)){
       axios({
         url: `https://blahblah.community:8443/api/user/signup`,
         method: "post",
@@ -304,45 +303,26 @@ export default function Signup() {
   return (
     <>
       <Container>
-<Row>
-  <Col sm={5} xs={5}></Col>
-  <Col>      <h1>Sign Up </h1>
-      {email
+        <Row>
+          <Col></Col>
+          <Col><h1>Sign Up </h1>
+            {email
             ?<>{email} is your Email</>
             :null
-            }</Col>
-            <Col></Col>
-</Row>
-        <Row>
-          
-          <Col></Col>
-          <Col>
-            
-
-          
-              <div className='logdiv'>
+            }
+            {/* 이거 이메일 빈녀석이면 예외처리 */}
+            {/* const [result,setResult] = useState(false) */}
+            {
+              page1
+              ?<div className='logdiv'>
               <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Name {' '}
-                  {name
-                  ?<></>
-                  :<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
-                    
-                  }
-                </Form.Label>
+                <Form.Label>Name</Form.Label>
                 <Form.Control className="formct" type="text" placeholder="Name" onChange={handleName} maxLength={20} />
 
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password {' '}
-                  {
-                    password
-                    ?<></>
-                    :<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
-                  }
-                 
-
-                </Form.Label>
+                <Form.Label>PassWord</Form.Label>
                 <Form.Control className="formct" type="password" placeholder="More than 6 letters" onChange={handlePassword} maxLength={10} />
               </Form.Group>
               <Form.Group  className="mb-3" controlId="formBasicPassword">
@@ -357,17 +337,10 @@ export default function Signup() {
                 <Form.Control className="formct" type="password" placeholder="More than 6 letters" onChange={handlePwcheck} maxLength={10} />
               </Form.Group>
 
-        
+              <Form.Label>- Additional Info -</Form.Label>
 
               {/* {gen} */}
-              <Form.Label>Gender{' '}
-                {
-                  gen===3
-                  ?<span style={{color:'#FA5936'}}>{'- (Required)'}</span>
-                  :<></>
-                }
 
-              </Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={onGenHanlder} >
                 <option>Gender </option>
@@ -377,12 +350,6 @@ export default function Signup() {
               </Form.Select>
 
               {/* {age} */}
-              <Form.Label>Age{' '}
-                {
-                age
-                ?<></>
-                :<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
-}</Form.Label>
               <Form.Select className="formct" aria-label="Default select example"
                 onChange={onAgeHanlder} >
                 <option>Age </option>
@@ -401,17 +368,11 @@ export default function Signup() {
               <Form.Control className="formct" type="file" accept="image/*" size="sm" onChange={onChangeImg}/>
             </Form.Group>
 
-            {/* {profile} */}
-              <Form.Label>Description {' '}
-                {
-                  profile
-                  ?<></>
-                  :<span style={{color:'#FA5936'}}>{'- (Required)'}</span>
-                }
-                 </Form.Label>
+              
+              <Form.Label>Description {profile}</Form.Label>
               <InputGroup>
                 {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
-                <FormControl className="formct" placeholder='More than 10 Letters' as="textarea"
+                <FormControl className="formct" placeholder='10자이상 입력해주세요' as="textarea"
                   aria-label="With textarea" onChange={handleProfile} />
               </InputGroup>
 
@@ -419,17 +380,8 @@ export default function Signup() {
 
 
             </div>
-  
-            </Col>
-
-            <Col>
-           <div className="logdiv">
-           <Form.Label>Native Language(Up to 2){' '}
-             {
-               first.length===0
-               ?<><span style={{color:'#FA5936'}}>{'- (Required)'}</span></>
-               :<></>
-             }
+            :<>
+            <Form.Label>Native Language(Up to 2)
                 {
                   first
                   ?<>
@@ -481,12 +433,7 @@ export default function Signup() {
                 ))}
               </Form.Select>
               <hr />
-              <Form.Label>Study Language(Up to 4){' '}
-                {
-                  third.length===0
-                  ?<span style={{color:'#FA5936'}}>{'- (Required)'}</span>
-                  :<></>
-                }
+              <Form.Label>Study Language(Up to 4) 
               {
                   third
                   ?<>
@@ -511,12 +458,45 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
+              {/* <Button onClick={() => {
+                // console.log(first)
+                // console.log(firstob)
+                // console.log(second)
+                // console.log(secondob)
+                // console.log(third)
+                // console.log(thirdob)
+                const newarr = [
+                  ...firstob,
+                  ...secondob,
+                  ...thirdob
+                ]
+                console.log(newarr)
+
+              }}
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
               <Button onClick={onSubmit} className="btncs" 
                    variant="outline-secondary"
                 style={{ marginTop: '3px',marginRight:'5px' }} >Sign Up</Button>
-           </div>
+                <Button style={{marginTop:'3px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>Prev Page</Button>
+                
+                
+            </>
+            }
+            {
+              page1
+              ?<Button style={{marginTop:'5px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>Next Page</Button>
+              :null
+            }
+            
             </Col>
-            <Col></Col>
+
+            <Col>
+            
+            </Col>
         </Row>
       </Container>
 
@@ -524,7 +504,7 @@ export default function Signup() {
         
         .logdiv {
           width:300px;
-          margin:30px;
+          margin-top:50px;
         }
 
       `}</style>

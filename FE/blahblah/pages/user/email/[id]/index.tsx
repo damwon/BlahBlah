@@ -5,6 +5,8 @@ import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
 import { Email } from '@mui/icons-material';
+import Swal from "sweetalert2";
+
 
 export default function EmailCheck() {
   const router = useRouter();
@@ -18,14 +20,22 @@ export default function EmailCheck() {
       url:`https://blahblah.community:8443/api/user/authemail/${id}`,
     })
     .then((result)=>{
-     console.log('이메일인증 요청성공')
+    //  console.log('이메일인증 요청성공')
+     Swal.fire({
+      title: "Success",
+      confirmButtonColor: "#00ccb1",
+    });
      setIsCheck(true)
      console.log(result)
      console.log(result.data)
      setKey(result.data)
   })
     .catch((error)=>{
-      console.log('이메일인증 요청실패')
+      // console.log('이메일인증 요청실패')
+      Swal.fire({
+        title: "Fail",
+        confirmButtonColor: "#00ccb1",
+      });
     console.log(error)  
   })
   };
@@ -48,8 +58,8 @@ export default function EmailCheck() {
         
           </Col>
           <Col>
-          <h1>넘어온 키값 {id}</h1>
-          {key}
+          {/* <h1>넘어온 키값 {id}</h1> */}
+          {/* {key} */}
           {/* <button onClick={onEmailCheck}>체크해바</button> */}
           {
             isCheck

@@ -49,7 +49,7 @@ export default function Index() {
     allAxios
       .get(`/feed`, { headers: setToken() })
       .then((res) => {
-        setFeeds(res.data);
+        setFeeds(res.data.reverse());
         return res;
       })
       .then((res) => {
@@ -67,7 +67,7 @@ export default function Index() {
     allAxios
       .get(`/feed/friends`, { headers: setToken() })
       .then((res) => {
-        setFriendFeeds(res.data);
+        setFriendFeeds(res.data.reverse());
         return res;
       })
       .then((res) => {
@@ -88,7 +88,7 @@ export default function Index() {
     allAxios
       .get(`/feed`, { headers: setToken() })
       .then((res) => {
-        setShowFeeds(res.data);
+        setShowFeeds(res.data.reverse());
         const tmpArr: any = [];
         for (let i = 0; i < res.data.length; i++) {
           tmpArr.push({ display: "none" });
@@ -358,7 +358,15 @@ export default function Index() {
             {showFeeds &&
               showFeeds.map((d: any, i: any) => {
                 return (
-                  <div key={i}>
+                  <div
+                    key={i}
+                    style={{
+                      marginTop: "20px",
+                      paddingTop: "15px",
+                      backgroundColor: "#EDF7F6",
+                      borderRadius: "50px",
+                    }}
+                  >
                     <ListItem
                       secondaryAction={
                         <IconButton edge="end" aria-label="delete"></IconButton>
@@ -376,6 +384,7 @@ export default function Index() {
                                 pathname: `/user/detail/`,
                                 query: {
                                   email: d.email,
+                                  userId: d.userId
                                 },
                               },
                               `/user/detail/`
@@ -395,7 +404,7 @@ export default function Index() {
                       <ListItemText style={{ margin: "30px" }} />
                       <div style={{ width: "100%" }}>
                         <Grid container spacing={2}>
-                          <Grid item xs={6}>
+                          <Grid item xs={8}>
                             <span
                               style={{ fontSize: "20px", marginRight: "10px" }}
                             >
@@ -416,7 +425,10 @@ export default function Index() {
                                   );
                                 }}
                                 size="small"
-                                style={{ backgroundColor: "#00ccb1" }}
+                                style={{
+                                  color: "black",
+                                  backgroundColor: "white",
+                                }}
                                 variant="contained"
                               >
                                 <ChatBubbleOutlineIcon
@@ -426,7 +438,7 @@ export default function Index() {
                               </Button>
                             ) : null}
                           </Grid>
-                          <Grid item xs={6}>
+                          <Grid item xs={4}>
                             <h6 style={{ textAlign: "right" }}>
                               {d.createdAt.substr(0, 10)}
                             </h6>
@@ -481,7 +493,6 @@ export default function Index() {
 
                         {d.comments.length > 0 && myStyle
                           ? d.comments.map((d1: any, i1: number) => {
-                              console.log(d1);
                               if (i1 < 3) {
                                 return (
                                   <div
@@ -599,7 +610,8 @@ export default function Index() {
                                 <div key={i2}>
                                   <Button
                                     style={{
-                                      backgroundColor: "#00ccb1",
+                                      color: "black",
+                                      backgroundColor: "white",
                                       margin: "10px 0",
                                     }}
                                     variant="contained"
@@ -620,7 +632,8 @@ export default function Index() {
                                 <Button
                                   key={i2}
                                   style={{
-                                    backgroundColor: "#00ccb1",
+                                    color: "black",
+                                    backgroundColor: "white",
                                     margin: "10px 0",
                                   }}
                                   variant="contained"
@@ -640,7 +653,8 @@ export default function Index() {
                         ) : (
                           <Button
                             style={{
-                              backgroundColor: "#00ccb1",
+                              color: "black",
+                              backgroundColor: "white",
                               margin: "10px 0",
                             }}
                             variant="contained"
@@ -682,8 +696,6 @@ export default function Index() {
                         </div>
                       </div>
                     </ListItem>
-
-                    <hr></hr>
                   </div>
                 );
               })}

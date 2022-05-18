@@ -18,6 +18,8 @@ const ChatTypographyByOther = styled(Typography)({
   padding: "10px 20px",
   backgroundColor: "beige",
   fontWeight: 500,
+  maxWidth: "500px",
+  wordBreak: "break-all",
 });
 
 export default function ChatBoxOfOther(props: any) {
@@ -37,7 +39,7 @@ export default function ChatBoxOfOther(props: any) {
         padding: 2,
         display: "flex",
         alignItems: "center",
-        justifyContent: "start",
+        justifyContent: props.item.type === "topic" ? "center" : "start",
       }}
     >
       {props.type === "text" && (
@@ -68,6 +70,46 @@ export default function ChatBoxOfOther(props: any) {
           </Menu>
         </>
       )}
+      {props.type === "topic" && (
+        <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
+          <Typography
+            sx={{
+              padding: "15px 20px",
+              borderRadius: "20px",
+              backgroundColor: "white",
+              color: "black",
+              border: "1px solid #b5b5b5",
+              maxWidth: "400px",
+              wordBreak: "break-all",
+            }}
+          >
+            {props.item.content.split(" VS ")[0]}
+          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                color: "black",
+                marginX: 1,
+              }}
+            >
+              VS
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              padding: "15px 20px",
+              borderRadius: "20px",
+              backgroundColor: "skyblue",
+              color: "white",
+              maxWidth: "400px",
+              wordBreak: "break-all",
+            }}
+          >
+            <Typography>{props.item.content.split(" VS ")[1]}</Typography>
+          </Box>
+        </Stack>
+      )}
       {props.type === "audio" && (
         <>
           <audio src={props.message} controls controlsList="nodownload" />
@@ -84,7 +126,7 @@ export default function ChatBoxOfOther(props: any) {
         <Image
           src={props.message}
           alt="image"
-          style={{ width: "200px", height: "200px" }}
+          style={{ width: "300px", height: "300px" }}
         />
       )}
       {props.type === "comment" && (
@@ -97,6 +139,8 @@ export default function ChatBoxOfOther(props: any) {
               backgroundColor: "white",
               color: "black",
               border: "1px solid #b5b5b5",
+              maxWidth: "500px",
+              wordBreak: "break-all",
             }}
           >
             {props.message}
@@ -110,6 +154,8 @@ export default function ChatBoxOfOther(props: any) {
               backgroundColor: "beige",
               border: "1px solid #b5b5b5",
               borderTopStyle: "none",
+              maxWidth: "500px",
+              wordBreak: "break-all",
             }}
           >
             <ArrowForwardIcon sx={{ mr: 1 }} />

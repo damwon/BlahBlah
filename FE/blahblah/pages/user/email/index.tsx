@@ -4,6 +4,8 @@ import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
+import Swal from "sweetalert2";
+
 
 export default function Regist() {
 
@@ -45,12 +47,21 @@ export default function Regist() {
         .catch(function (error) {
           console.log('이메일중복에러')
           console.log(error)
-          alert("이미 사용중인 이메일입니다.");
+          // alert("already ");
+          Swal.fire({
+            title: "Email Already In Use",
+            confirmButtonColor: "#00ccb1",
+          });
+          
           setIsEmailOnly((prevState) => false);
         });
       // 이메일 형식 X, 다시 중복검사 + 알림(메일 형식 아님)
     } else {
-      alert("이메일 형식이 아닙니다.");
+      // alert("이메일 형식이 아닙니다.");
+      Swal.fire({
+        title: "Not Email Type",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
 
@@ -66,13 +77,21 @@ export default function Regist() {
     })
     .then((result)=>{
     console.log('이메일보내기 요청성공')
-    alert('Please Check Your Email')
+    // alert('Please Check Your Email')
+    Swal.fire({
+      title: "Please Check Your Email",
+      confirmButtonColor: "#00ccb1",
+    });
     console.log(result)
  
   })
     .catch((error)=>{
     console.log('이메일보내기 요청실패')
-    alert('Fail')
+    // alert('Fail')
+    Swal.fire({
+      title: "Fail",
+      confirmButtonColor: "#00ccb1",
+    });
     console.log(error)  
   })
   };
