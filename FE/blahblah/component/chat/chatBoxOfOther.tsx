@@ -24,8 +24,10 @@ const ChatTypographyByOther = styled(Typography)({
 
 export default function ChatBoxOfOther(props: any) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [topicText, setTopicText] = useState("");
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: any) => {
+    setTopicText(event.target.innerText);
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -71,44 +73,68 @@ export default function ChatBoxOfOther(props: any) {
         </>
       )}
       {props.type === "topic" && (
-        <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
-          <Typography
-            sx={{
-              padding: "15px 20px",
-              borderRadius: "20px",
-              backgroundColor: "white",
-              color: "black",
-              border: "1px solid #b5b5b5",
-              maxWidth: "400px",
-              wordBreak: "break-all",
-            }}
-          >
-            {props.item.content.split(" VS ")[0]}
-          </Typography>
-          <Box>
+        <>
+          <Stack direction="row" sx={{ display: "flex", alignItems: "center" }}>
             <Typography
               sx={{
+                padding: "15px 20px",
+                borderRadius: "20px",
+                backgroundColor: "white",
                 color: "black",
-                marginX: 1,
+                border: "1px solid #b5b5b5",
+                maxWidth: "400px",
+                wordBreak: "break-all",
+                cursor: "pointer",
+              }}
+              onClick={handleClick}
+            >
+              {props.item.content.split(" VS ")[0]}
+            </Typography>
+            <Box>
+              <Typography
+                sx={{
+                  color: "black",
+                  marginX: 1,
+                }}
+              >
+                VS
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                padding: "15px 20px",
+                borderRadius: "20px",
+                backgroundColor: "skyblue",
+                color: "white",
+                maxWidth: "400px",
+                wordBreak: "break-all",
               }}
             >
-              VS
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              padding: "15px 20px",
-              borderRadius: "20px",
-              backgroundColor: "skyblue",
-              color: "white",
-              maxWidth: "400px",
-              wordBreak: "break-all",
-            }}
-          >
-            <Typography>{props.item.content.split(" VS ")[1]}</Typography>
-          </Box>
-        </Stack>
+              <Typography onClick={handleClick} sx={{ cursor: "pointer" }}>
+                {props.item.content.split(" VS ")[1]}
+              </Typography>
+            </Box>
+          </Stack>
+          <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                props.setCorrectMessage(topicText);
+              }}
+            >
+              Comment
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleClose();
+                props.setTranslateMessage(topicText);
+              }}
+            >
+              Translate
+            </MenuItem>
+          </Menu>
+        </>
       )}
       {props.type === "audio" && (
         <>

@@ -3,7 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { Image, Form, InputGroup } from "react-bootstrap";
 import {
   styled,
-  TextField,
+  Menu,
+  MenuItem,
   IconButton,
   Box,
   Typography,
@@ -713,6 +714,18 @@ export default function Chat() {
     }
   };
 
+  // 게임 번역
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [topicText, setTopicText] = useState("");
+  const open = Boolean(anchorEl);
+  const handleClick = (event: any) => {
+    setTopicText(event.target.innerText);
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
       <Box
@@ -786,14 +799,26 @@ export default function Chat() {
             >
               <CircularProgress />
             </Box>
-            <Box sx={{ textAlign: "center" }}>
-              <IconButton onClick={() => stopCall(false)}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              <IconButton
+                onClick={() => stopCall(false)}
+                sx={{ display: "flex", flexDirection: "column", mr: "6px" }}
+              >
                 <CallEndIcon color="warning" />
+                <Typography sx={{ fontSize: "4px" }}>Stop</Typography>
               </IconButton>
-              <Button onClick={muteAudio}>
+              <Button
+                variant="contained"
+                sx={{ backgroundColor: "#00CCB1", mr: "6px" }}
+                onClick={muteAudio}
+              >
                 {audioMuted ? "Unmute" : "Mute"}
               </Button>
-              <Button onClick={muteVideo}>
+              <Button
+                variant="contained"
+                sx={{ backgroundColor: "#00CCB1" }}
+                onClick={muteVideo}
+              >
                 {videoMuted ? "Video on" : "Video off"}
               </Button>
             </Box>
@@ -920,50 +945,79 @@ export default function Chat() {
                             </ChatTypographyByMe>
                           )}
                           {item.type === "topic" && (
-                            <Stack
-                              direction="row"
-                              sx={{ display: "flex", alignItems: "center" }}
-                            >
-                              <Typography
-                                sx={{
-                                  padding: "15px 20px",
-                                  borderRadius: "20px",
-                                  backgroundColor: "white",
-                                  color: "black",
-                                  border: "1px solid #b5b5b5",
-                                  maxWidth: "400px",
-                                  wordBreak: "break-all",
-                                }}
+                            <>
+                              <Stack
+                                direction="row"
+                                sx={{ display: "flex", alignItems: "center" }}
                               >
-                                {item.content.split(" VS ")[0]}
-                              </Typography>
-                              <Box>
                                 <Typography
                                   sx={{
+                                    padding: "15px 20px",
+                                    borderRadius: "20px",
+                                    backgroundColor: "white",
                                     color: "black",
-                                    marginX: 1,
+                                    border: "1px solid #b5b5b5",
+                                    maxWidth: "400px",
+                                    wordBreak: "break-all",
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={handleClick}
+                                >
+                                  {item.content.split(" VS ")[0]}
+                                </Typography>
+                                <Box>
+                                  <Typography
+                                    sx={{
+                                      color: "black",
+                                      marginX: 1,
+                                    }}
+                                  >
+                                    VS
+                                  </Typography>
+                                </Box>
+
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    padding: "15px 20px",
+                                    borderRadius: "20px",
+                                    backgroundColor: "skyblue",
+                                    color: "white",
+                                    maxWidth: "400px",
+                                    wordBreak: "break-all",
                                   }}
                                 >
-                                  VS
-                                </Typography>
-                              </Box>
-
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  padding: "15px 20px",
-                                  borderRadius: "20px",
-                                  backgroundColor: "skyblue",
-                                  color: "white",
-                                  maxWidth: "400px",
-                                  wordBreak: "break-all",
-                                }}
+                                  <Typography
+                                    onClick={handleClick}
+                                    sx={{ cursor: "pointer" }}
+                                  >
+                                    {item.content.split(" VS ")[1]}
+                                  </Typography>
+                                </Box>
+                              </Stack>
+                              <Menu
+                                anchorEl={anchorEl}
+                                open={open}
+                                onClose={handleClose}
                               >
-                                <Typography>
-                                  {item.content.split(" VS ")[1]}
-                                </Typography>
-                              </Box>
-                            </Stack>
+                                <MenuItem
+                                  onClick={() => {
+                                    handleClose();
+                                    setCorrectMessage(topicText);
+                                  }}
+                                >
+                                  Comment
+                                </MenuItem>
+                                <MenuItem
+                                  onClick={() => {
+                                    handleClose();
+                                    setTranslateMessage(topicText);
+                                  }}
+                                >
+                                  Translate
+                                </MenuItem>
+                              </Menu>
+                            </>
                           )}
                           {item.type === "audio" && (
                             <>
