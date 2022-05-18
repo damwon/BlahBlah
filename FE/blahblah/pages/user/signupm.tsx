@@ -515,7 +515,7 @@ export default function Signup() {
                    variant="outline-secondary"
                 style={{ marginTop: '3px',marginRight:'5px' }} >Sign Up</Button>
            </div>
-           <Button onClick={() => {
+           {/* <Button onClick={() => {
                 // console.log(first)
                 // console.log(firstob)
                 // console.log(second)
@@ -530,7 +530,7 @@ export default function Signup() {
                 console.log(newarr)
 
               }}
-                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button>
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
             </Col>
             <Col></Col>
         </Row>
