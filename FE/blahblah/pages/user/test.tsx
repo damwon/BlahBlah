@@ -4,7 +4,7 @@ import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
 import { useRouter } from 'next/router'
-
+import {Figure} from "react-bootstrap";
 export default function Login() {
   const [file,setFilfe] = useState<any>()
   const onPrint = ()=>{
@@ -173,6 +173,19 @@ export default function Login() {
     <>
       
       <Container>
+        <Row>
+          <Col>
+          
+          <Figure>
+  <Figure.Image
+    // width={1940}
+    height={`300px`}
+    alt="qna image"
+    src="/images/qna2.png"
+  />
+</Figure>
+          </Col>
+        </Row>
 
         <Row>
           <Col>

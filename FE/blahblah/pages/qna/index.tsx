@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import Swal from "sweetalert2";
+import {Figure} from "react-bootstrap";
 export default function QnA() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
@@ -51,14 +52,23 @@ export default function QnA() {
       <Grid container spacing={3}>
         <Grid item xs={2} />
         <Grid item xs={8}>
-          <Image
+          {/* <Image
             priority
             src="/images/qna2.png"
             alt="qna image"
             width="200"
             height="30"
             layout="responsive"
-          />
+          /> */}
+          <Figure>
+  <Figure.Image
+    // width={1940}
+    // height={180}
+    alt="qna image"
+    src="/images/qna2.png"
+  />
+</Figure>
+
           <br></br>
           <br></br>
           <Grid container spacing={3}>
