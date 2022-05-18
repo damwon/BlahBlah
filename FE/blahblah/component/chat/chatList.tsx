@@ -68,7 +68,7 @@ export default function ChatList(props: any) {
                     primary={item.roomName}
                     sx={{ cursor: "pointer" }}
                     secondary={
-                      item.type === "text"
+                      item.type === "text" || "topic"
                         ? item.lastMsg
                         : item.type === "image"
                         ? "Image"
