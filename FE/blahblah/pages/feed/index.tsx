@@ -451,8 +451,8 @@ export default function Index() {
                             <Image
                               src={d.imgUrl}
                               alt="finger image"
-                              width="70%"
-                              height="70%"
+                              width="40%"
+                              height="40%"
                             ></Image>
                           </div>
                         ) : null}
