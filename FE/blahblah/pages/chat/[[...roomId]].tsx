@@ -693,6 +693,26 @@ export default function Chat() {
     setOpenGame(false);
   };
 
+  const goToUserDetail = async () => {
+    if (chatname !== "No one...") {
+      const response = await axios({
+        method: "get",
+        url: `https://blahblah.community:8443/api/user/useremail/${chatRoomData.opponentId}`,
+      });
+      const opponentEmail = response.data;
+      router.push(
+        {
+          pathname: `/user/detail/`,
+          query: {
+            email: opponentEmail,
+            userId: chatRoomData.opponentId,
+          },
+        },
+        `/user/detail/`
+      );
+    }
+  };
+
   return (
     <>
       <Box
@@ -806,7 +826,12 @@ export default function Chat() {
                 textAlign: "center",
               }}
             >
-              <Typography sx={{ fontSize: "30px" }}>{chatname}</Typography>
+              <Typography
+                onClick={goToUserDetail}
+                sx={{ fontSize: "30px", cursor: "pointer" }}
+              >
+                {chatname}
+              </Typography>
               <Box
                 sx={{
                   display: chatname === "No one..." ? "none" : "flex",
