@@ -161,7 +161,7 @@ export default function Chat() {
     const token = localStorage.getItem("jwt");
     if (!token) {
       Swal.fire({
-        title: "Please login first!",
+        title: "Please login.",
         confirmButtonColor: "#00ccb1",
       });
       router.push("/user/login");
