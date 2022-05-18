@@ -5,7 +5,7 @@ import { useEffect,useState } from "react";
 import Link from "next/link";
 import Mate from '../../component/main/Mate'
 import { useRouter } from "next/router";
-
+import Swal from "sweetalert2";
 // import '../../styles/bg.css'
 
 
@@ -100,8 +100,11 @@ export default function Index(props:any) {
       setIslogin(true)
     } else {
       router.push('/user/login')
-      alert('Please login')
-      
+      // alert('Please login')
+      Swal.fire({
+        title: "Please login",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   }, []);
 

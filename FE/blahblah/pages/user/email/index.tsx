@@ -3,11 +3,27 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import axios from "axios";
 import { useEffect,useState } from "react";
 import Link from "next/link";
-import { useRouter } from 'next/router'
 import Swal from "sweetalert2";
+import { useRouter } from "next/router";
 
 
 export default function Regist() {
+  const router = useRouter()
+
+  // 로그인상태
+  const [islogin, setIslogin] = useState(false)
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      setIslogin(true)
+      Swal.fire({
+        title: "Alredy Login",
+        confirmButtonColor: "#00ccb1",
+      });
+      router.push('/')
+    }
+    
+  }, []);
 
   // 이메일
   const [inputEmail, setInputEmail] = useState("");
