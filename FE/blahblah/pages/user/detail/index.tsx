@@ -30,8 +30,14 @@ import { Modal } from "react-bootstrap";
 export default function UserDetail() {
   const router = useRouter();
   const { email } = router.query;
+  const { userId } = router.query;
+  // useEffect(()=>{
+  //   console.log('------------쿼리아이디읽음')
+  //   console.log(userId)
+  // },[])
   // 아..! 이메일이라는 변수로 넘어오잖아. 헠..! 그래서 이변수 그대로써야함
   const [remail, setRemail] = useState<any>(email);
+  const [reId,setReId] = useState<any>(userId)
   // const [email,setEmail] = useState<any>(email2)
   // useEffect(()=>{
   //   setEmail(email2)
@@ -374,8 +380,29 @@ export default function UserDetail() {
         confirmButtonColor: "#00ccb1",
       });
     } else {
+      axios({
+        method: "post",
+        url: `https://blahblah.community:8443/api/report/${reId}`,
+        headers: setToken(),
+      })
+        .then((result) => {
+          // console.log("댓글 요청성공");
+          console.log(result);
+          Swal.fire({
+            title: "A report has been received.",
+            confirmButtonColor: "#00ccb1",
+          });
+
+        })
+        .catch((error) => {
+          console.log(error);
+          Swal.fire({
+            title: "Error",
+            confirmButtonColor: "#00ccb1",
+          });
+        });
       // allAxios
-      //   .post(`/report/${id}`)
+      //   .post(`/report/${reId}`)
       //   .then((res) => {
       //     Swal.fire({
       //       title: "A report has been received.",
@@ -383,7 +410,11 @@ export default function UserDetail() {
       //     });
       //     console.log(res);
       //   })
-      //   .then((err) => {
+      //   .catch((err) => {
+      //     Swal.fire({
+      //       title: "Error",
+      //       confirmButtonColor: "#00ccb1",
+      //     });
       //     console.log(err);
       //   });
     }
@@ -577,6 +608,7 @@ export default function UserDetail() {
                           style={{ cursor: "cursor" }}
                           onClick={() => {
                             setRemail(a.email);
+                            setReId(a.reviewUserId)
                             setLangA([]);
                             setLangB([]);
                             setLangC([]);

@@ -18,8 +18,8 @@ export default function Signup() {
   const [email, setEmail] = useState(query.email)
   
   // 가입절차
-  // const [page1,setPage1] = useState(true)
-  // const [page2,setPage2] = useState(false)
+  const [page1,setPage1] = useState(true)
+  const [page2,setPage2] = useState(false)
 
 
   // 가입결과 테스트
@@ -303,23 +303,18 @@ export default function Signup() {
   return (
     <>
       <Container>
-<Row>
-  <Col sm={5} xs={5}></Col>
-  <Col>      <h1>Sign Up </h1>
-      {email
+        <Row>
+          <Col></Col>
+          <Col><h1>Sign Up </h1>
+            {email
             ?<>{email} is your Email</>
             :null
-            }</Col>
-            <Col></Col>
-</Row>
-        <Row>
-          
-          <Col></Col>
-          <Col>
-            
-
-          
-              <div className='logdiv'>
+            }
+            {/* 이거 이메일 빈녀석이면 예외처리 */}
+            {/* const [result,setResult] = useState(false) */}
+            {
+              page1
+              ?<div className='logdiv'>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Name</Form.Label>
                 <Form.Control className="formct" type="text" placeholder="Name" onChange={handleName} maxLength={20} />
@@ -377,7 +372,7 @@ export default function Signup() {
               <Form.Label>Description {profile}</Form.Label>
               <InputGroup>
                 {/* <InputGroup.Text>With textarea</InputGroup.Text> */}
-                <FormControl className="formct" placeholder='More than 10 Letters' as="textarea"
+                <FormControl className="formct" placeholder='10자이상 입력해주세요' as="textarea"
                   aria-label="With textarea" onChange={handleProfile} />
               </InputGroup>
 
@@ -385,12 +380,8 @@ export default function Signup() {
 
 
             </div>
-  
-            </Col>
-
-            <Col>
-           <div className="logdiv">
-           <Form.Label>Native Language(Up to 2)
+            :<>
+            <Form.Label>Native Language(Up to 2)
                 {
                   first
                   ?<>
@@ -467,12 +458,45 @@ export default function Signup() {
                   <option key={index} value={item}>{item}</option>
                 ))}
               </Form.Select>
+              {/* <Button onClick={() => {
+                // console.log(first)
+                // console.log(firstob)
+                // console.log(second)
+                // console.log(secondob)
+                // console.log(third)
+                // console.log(thirdob)
+                const newarr = [
+                  ...firstob,
+                  ...secondob,
+                  ...thirdob
+                ]
+                console.log(newarr)
+
+              }}
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
               <Button onClick={onSubmit} className="btncs" 
                    variant="outline-secondary"
                 style={{ marginTop: '3px',marginRight:'5px' }} >Sign Up</Button>
-           </div>
+                <Button style={{marginTop:'3px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>Prev Page</Button>
+                
+                
+            </>
+            }
+            {
+              page1
+              ?<Button style={{marginTop:'5px'}} variant="outline-secondary" onClick={()=>{
+                setPage1(!page1)
+              }}>Next Page</Button>
+              :null
+            }
+            
             </Col>
-            <Col></Col>
+
+            <Col>
+            
+            </Col>
         </Row>
       </Container>
 
@@ -480,7 +504,7 @@ export default function Signup() {
         
         .logdiv {
           width:300px;
-          margin:30px;
+          margin-top:50px;
         }
 
       `}</style>

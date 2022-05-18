@@ -406,6 +406,8 @@ export default function Mate(props) {
                   pathname: `/user/detail/`,
                   query: {
                     email:props.user.email,
+                    userId:props.user.id
+
                   },
                 },
                 `/user/detail/`
