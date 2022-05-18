@@ -53,21 +53,14 @@ export default function Admin() {
           >
             2. 1:1 문의 확인창
           </p>
-          <p
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              router.push("/admin/answer/write");
-            }}
-          >
-            3. 1:1 문의 답변창
-          </p>
+
           <p
             style={{ cursor: "pointer" }}
             onClick={() => {
               router.push("/notice");
             }}
           >
-            4. 공지사항 리스트
+            3. 공지사항 리스트
           </p>
           <p
             style={{ cursor: "pointer" }}
@@ -75,7 +68,7 @@ export default function Admin() {
               router.push("/admin/notice/write");
             }}
           >
-            5. 공지사항 작성창
+            4. 공지사항 작성창
           </p>
         </Grid>
         <Grid item xs={2} />

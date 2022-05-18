@@ -25,6 +25,7 @@ import CallEndIcon from "@mui/icons-material/CallEnd";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import DownloadIcon from "@mui/icons-material/Download";
+import CircleRoundedIcon from "@mui/icons-material/CircleRounded";
 // components
 import ChatList from "../../component/chat/chatList";
 import ChatTabs from "../../component/chat/chatTabs";
@@ -43,6 +44,8 @@ import { WebRtcPeer } from "kurento-utils";
 // router
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
+// alert ui
+import Swal from "sweetalert2";
 
 const ChatTypographyByMe = styled(Typography)({
   borderRadius: "20px",
@@ -90,6 +93,8 @@ export default function Chat() {
   const [chatname, setChatname] = useState("No one...");
   // 채팅리스트 인덱스
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // 온오프라인 상태
+  const [isOnline, setIsOnline] = useState(false);
 
   // 라우터 쿼리 체크
   useEffect(() => {
@@ -150,6 +155,18 @@ export default function Chat() {
 
   useEffect(() => {
     getProfile();
+  }, []);
+
+  // 로그인 안돼있으면 이동시키기
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+    if (!token) {
+      Swal.fire({
+        title: "Please login first!",
+        confirmButtonColor: "#00ccb1",
+      });
+      router.push("/user/login");
+    }
   }, []);
 
   // 채팅 웹소켓 연결
@@ -342,7 +359,10 @@ export default function Chat() {
       sendMsg("text", message);
       setMessage("");
     } else {
-      alert("메시지를 입력해주세요.");
+      Swal.fire({
+        title: "Please write down your messages.",
+        confirmButtonColor: "#00ccb1",
+      });
     }
   };
 
@@ -436,9 +456,6 @@ export default function Chat() {
         console.info("받은 메시지: " + message.data);
         switch (parsedMessage.id) {
           case "registerResponse":
-            // if (parsedMessage.response.includes("already registered")) {
-            //   alert("이미 등록되었습니다. 새로고침 해주세요.");
-            // }
             console.log(parsedMessage);
             break;
           case "callResponse":
@@ -505,7 +522,10 @@ export default function Chat() {
         ? message.message
         : "Unknown reason for call rejection.";
       console.log(errorMessage);
-      alert("상대방이 통화를 거절했습니다...ㅜㅜ");
+      Swal.fire({
+        title: "Your peer rejected the call...",
+        confirmButtonColor: "#00ccb1",
+      });
       stopCall(false);
       setCalling(true);
     } else {
@@ -528,7 +548,7 @@ export default function Chat() {
   }
 
   function incomingCall(message: any) {
-    if (confirm(message.from + "로부터 영상통화가 왔습니다. 받으시겠습니까?")) {
+    if (confirm("Call from " + message.from + ". Do you want to receive?")) {
       from = message.from;
       let options = {
         localVideo: videoInput,
@@ -688,6 +708,7 @@ export default function Chat() {
             }}
           >
             <ChatList
+              setIsOnline={setIsOnline}
               chatRoomData={chatRoomData}
               selectedIndex={selectedIndex}
               setSelectedIndex={setSelectedIndex}
@@ -708,27 +729,31 @@ export default function Chat() {
         >
           <Box>
             <video
-              style={{ border: "1px solid black" }}
+              style={{
+                borderRadius: "10px",
+                marginBottom: "20px",
+              }}
               autoPlay
               id="videoInput"
-              width="240px"
-              height="180px"
+              width="300px"
+              // height="180px"
             />
 
             <video
               style={{
-                border: "1px solid black",
+                borderRadius: "10px",
+                marginBottom: "20px",
                 display: calling ? "none" : "block",
               }}
               autoPlay
               id="videoOutput"
-              width="240px"
-              height="180px"
+              width="300px"
+              // height="180px"
             />
             <Box
               sx={{
                 border: "1px solid black",
-                width: "240px",
+                width: "300px",
                 height: "180px",
                 display: calling ? "flex" : "none",
                 alignItems: "center",
@@ -737,7 +762,7 @@ export default function Chat() {
             >
               <CircularProgress />
             </Box>
-            <Box>
+            <Box sx={{ textAlign: "center" }}>
               <IconButton onClick={() => stopCall(false)}>
                 <CallEndIcon color="warning" />
               </IconButton>
@@ -772,7 +797,25 @@ export default function Chat() {
               justifyContent: "space-between",
             }}
           >
-            <Typography sx={{ fontSize: "30px" }}>{chatname}</Typography>
+            <Box
+              sx={{
+                textAlign: "center",
+              }}
+            >
+              <Typography sx={{ fontSize: "30px" }}>{chatname}</Typography>
+              <Box
+                sx={{
+                  display: chatname === "No one..." ? "none" : "flex",
+                  alignItems: "center",
+                }}
+              >
+                <CircleRoundedIcon
+                  sx={{ fontSize: "14px", mr: 1 }}
+                  color={isOnline ? "warning" : "disabled"}
+                />
+                <Typography>{isOnline ? "online" : "offline"}</Typography>
+              </Box>
+            </Box>
             <IconButton onClick={videoCall}>
               <VideocamIcon fontSize="large" sx={{ color: "black" }} />
             </IconButton>
@@ -827,7 +870,7 @@ export default function Chat() {
                         >
                           <Typography
                             sx={{
-                              fontSize: "15px",
+                              fontSize: "12px",
                               mr: "10px",
                             }}
                           >
@@ -861,25 +904,32 @@ export default function Chat() {
                             />
                           )}
                           {item.type === "comment" && (
-                            <Stack
-                              sx={{
-                                borderRadius: "20px",
-                                padding: "10px 20px",
-                                backgroundColor: "#00CCB1",
-                                fontWeight: 500,
-                                color: "white",
-                              }}
-                            >
+                            <Stack>
                               <Typography
                                 sx={{
-                                  borderBottom: "1px solid white",
-                                  opacity: 0.5,
+                                  padding: "10px 20px",
+                                  borderTopLeftRadius: "20px",
+                                  borderTopRightRadius: "20px",
+                                  backgroundColor: "white",
+                                  color: "black",
+                                  border: "1px solid #b5b5b5",
                                 }}
                               >
                                 {item.content}
                               </Typography>
-                              <Box sx={{ display: "flex" }}>
-                                <ArrowForwardIcon />
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  padding: "10px 20px",
+                                  borderBottomRightRadius: "20px",
+                                  borderBottomLeftRadius: "20px",
+                                  backgroundColor: "#00CCB1",
+                                  border: "1px solid #b5b5b5",
+                                  borderTopStyle: "none",
+                                  color: "white",
+                                }}
+                              >
+                                <ArrowForwardIcon sx={{ mr: 1 }} />
                                 <Typography>{item.comment}</Typography>
                               </Box>
                             </Stack>

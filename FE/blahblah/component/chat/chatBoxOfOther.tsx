@@ -10,7 +10,6 @@ import {
 import React, { useState } from "react";
 import Image from "react-bootstrap/Image";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import DownloadIcon from "@mui/icons-material/Download";
 import dayjs from "dayjs";
 
@@ -19,14 +18,6 @@ const ChatTypographyByOther = styled(Typography)({
   padding: "10px 20px",
   backgroundColor: "beige",
   fontWeight: 500,
-});
-
-const ChatIconButton = styled(IconButton)({
-  opacity: 0,
-  transition: "300ms linear",
-  "&:hover": {
-    opacity: 1,
-  },
 });
 
 export default function ChatBoxOfOther(props: any) {
@@ -51,10 +42,12 @@ export default function ChatBoxOfOther(props: any) {
     >
       {props.type === "text" && (
         <>
-          <ChatTypographyByOther>{props.message}</ChatTypographyByOther>
-          <ChatIconButton onClick={handleClick}>
-            <MoreHorizIcon />
-          </ChatIconButton>
+          <ChatTypographyByOther
+            sx={{ cursor: "pointer" }}
+            onClick={handleClick}
+          >
+            {props.message}
+          </ChatTypographyByOther>
           <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
             <MenuItem
               onClick={() => {
@@ -95,24 +88,36 @@ export default function ChatBoxOfOther(props: any) {
         />
       )}
       {props.type === "comment" && (
-        <Stack
-          sx={{
-            borderRadius: "20px",
-            padding: "10px 20px",
-            backgroundColor: "beige",
-            fontWeight: 500,
-          }}
-        >
-          <Typography sx={{ borderBottom: "1px solid black", opacity: 0.5 }}>
+        <Stack>
+          <Typography
+            sx={{
+              padding: "10px 20px",
+              borderTopLeftRadius: "20px",
+              borderTopRightRadius: "20px",
+              backgroundColor: "white",
+              color: "black",
+              border: "1px solid #b5b5b5",
+            }}
+          >
             {props.message}
           </Typography>
-          <Box sx={{ display: "flex" }}>
-            <ArrowForwardIcon />
+          <Box
+            sx={{
+              display: "flex",
+              padding: "10px 20px",
+              borderBottomRightRadius: "20px",
+              borderBottomLeftRadius: "20px",
+              backgroundColor: "beige",
+              border: "1px solid #b5b5b5",
+              borderTopStyle: "none",
+            }}
+          >
+            <ArrowForwardIcon sx={{ mr: 1 }} />
             <Typography>{props.item.comment}</Typography>
           </Box>
         </Stack>
       )}
-      <Typography sx={{ fontSize: "15px" }}>
+      <Typography sx={{ fontSize: "12px", ml: "10px" }}>
         {dayjs(props.item.createdAt).format("HH:mm")}
       </Typography>
     </Box>
