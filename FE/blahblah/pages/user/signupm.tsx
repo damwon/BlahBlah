@@ -57,7 +57,7 @@ export default function Signup() {
       array.push(e.currentTarget.value)
       // let key = e.currentTarget.value
       let key = e.currentTarget.value
-      ob.push({ "code": lang[key], "level": 1 })
+      ob.push({ "code": lang[key], "level": 5 })
       // console.log(lname)
       setFirstob(ob)
       setFirst(array);
@@ -135,7 +135,7 @@ export default function Signup() {
     &&e.currentTarget.value!=='Language'&&array2.includes(e.currentTarget.value)===false&&array3.includes(e.currentTarget.value)===false) {
       array.push(e.currentTarget.value)
       let key = e.currentTarget.value
-      ob.push({ "code": lang[key], "level": 5 })
+      ob.push({ "code": lang[key], "level": 1 })
       setThird(array);
       setThirdob(ob)
       console.log(third)
@@ -240,7 +240,7 @@ export default function Signup() {
     ]
     // let test = [{ "code": "kor", "level": 3 }, { "code": "eng", "level": 4 }, { "code": "chi", "level": 5 }]
     const info: any = {
-      // "email":'flygt@test.com',
+      // "email":'kimji@test.com',
       "email": query.email,
       "name": name,
       "gender": gen,
@@ -308,7 +308,7 @@ export default function Signup() {
   <Col sm={5} xs={5}></Col>
   <Col>      <h1>Sign Up </h1>
       {email
-            ?<>{email}</>
+            ?<>{email} is your Email</>
             :null
             }</Col>
             <Col></Col>
@@ -515,6 +515,22 @@ export default function Signup() {
                    variant="outline-secondary"
                 style={{ marginTop: '3px',marginRight:'5px' }} >Sign Up</Button>
            </div>
+           {/* <Button onClick={() => {
+                // console.log(first)
+                // console.log(firstob)
+                // console.log(second)
+                // console.log(secondob)
+                // console.log(third)
+                // console.log(thirdob)
+                const newarr = [
+                  ...firstob,
+                  ...secondob,
+                  ...thirdob
+                ]
+                console.log(newarr)
+
+              }}
+                style={{ marginTop: '5px' }} variant="outline-dark">언어출력</Button> */}
             </Col>
             <Col></Col>
         </Row>

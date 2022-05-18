@@ -1,7 +1,11 @@
 import { Container, Row, Col, Carousel, Card, Button } from "react-bootstrap";
 import Carou from "../component/main/Carou";
 import CardComponent from "../component/main/CardComponent";
+import { useRouter } from "next/router";
+
 export default function Home() {
+  const router = useRouter();
+
   return (
     <>
   <Container>
@@ -20,7 +24,9 @@ export default function Home() {
     {`Find a friend that fits the language I want to learn and the language I can teach.
     Our site automatically matches Partner!`}
     </Card.Text>
-    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Find Blah Mate →</Button>
+    <Button onClick={()=>{
+      router.push("/main");
+    }} className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Find Blah Mate →</Button>
   </Card.Body>
 </Card></Col>
 <Col>
@@ -31,7 +37,9 @@ export default function Home() {
     <Card.Text>
     {`Talk to members in an open space, if you're not satisfied with matching, find a new friend here.`}
     </Card.Text>
-    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Feed →</Button>
+    <Button onClick={()=>{
+      router.push("/feed");
+    }} className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Feed →</Button>
   </Card.Body>
 </Card>
 </Col>
@@ -43,7 +51,9 @@ export default function Home() {
     {`To use all the features on our site, sign up now! Currently, all features are free.
     Press the button below to sign up.`}
     </Card.Text>
-    <Button className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Sign Up →</Button>
+    <Button onClick={()=>{
+      router.push("/user/email");
+    }} className="btncs" variant="outline-secondary" style={{borderRadius:'30px',marginTop:'50px',marginBottom:'30px'}}>Sign Up →</Button>
   </Card.Body>
 </Card></Col>
     </Row>
