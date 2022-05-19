@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
+import { Figure } from "react-bootstrap";
 export default function Notice() {
   const setToken = () => {
     const token = localStorage.getItem("jwt");
@@ -19,11 +20,24 @@ export default function Notice() {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => {
+    allAxios
+      .get(`/user/check-authority`, { headers: setToken() })
+      .then((res) => {
+        if (res.data === "admin") {
+          setAdmin(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   useEffect(() => {
     allAxios
       .get(`notice?size=5?`)
       .then((res) => {
-        setNotices(res.data.noticeListRes);
+        setNotices(res.data.noticeListRes.reverse());
         setTotal(res.data.totalPages);
         if (res.data.totalPages <= 6) {
           setMyWidth(252 - (7 - res.data.totalPages) * 28);
@@ -36,18 +50,37 @@ export default function Notice() {
       });
   }, []);
 
+  const deleteNotice = (id: number) => {
+    allAxios
+      .delete(`/notice/${id}`, { headers: setToken() })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Grid container spacing={3}>
       <Grid item xs={2} />
       <Grid item xs={8}>
-        <Image
+        {/* <Image
           priority
-          src="/images/notice2.png"
+          src="/images/notice2.PNG"
           alt="notice image"
           width="200"
           height="30"
           layout="responsive"
-        />
+        /> */}
+        <Figure>
+          <Figure.Image
+            // width={1940}
+            height={300}
+            alt="qna image"
+            src="/images/notice2.PNG"
+            // src="main/m2.png"
+          />
+        </Figure>
         <br></br>
         <br></br>
         <Grid container spacing={3}>
@@ -107,6 +140,21 @@ export default function Notice() {
                 </Grid>
                 <Grid item xs={7}>
                   <h5>{d.title}</h5>
+                  {admin ? (
+                    <Button
+                      style={{
+                        width: 100,
+                      }}
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => {
+                        deleteNotice(d.id);
+                      }}
+                    >
+                      delete
+                    </Button>
+                  ) : null}
                 </Grid>
                 <Grid item xs={3} style={{ textAlign: "center" }}>
                   {d.createdAt.substr(0, 10)}

@@ -38,7 +38,7 @@ export default function QnaInfo() {
       <Grid item xs={8}>
         <Image
           priority
-          src="/images/notice2.png"
+          src="/images/notice2.PNG"
           alt="notice image"
           width="200"
           height="30"
@@ -79,7 +79,7 @@ export default function QnaInfo() {
           <hr style={{ width: "100vw" }}></hr>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
-            {content}
+            <div style={{ whiteSpace: "pre" }}>{content}</div>
           </Grid>
           <Grid item xs={2}></Grid>
           <hr style={{ width: "100vw" }}></hr>

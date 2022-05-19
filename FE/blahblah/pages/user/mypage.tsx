@@ -193,6 +193,7 @@ export default function Mypage() {
                   {larr[a-1]}
                   <img src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}
                   style={{margin:'5px'}}></img>
+                  <br></br>
               </span>
             })
           }
@@ -209,7 +210,7 @@ export default function Mypage() {
                       {larr[a-1]} 
                       <img style={{margin:'5px'}}
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
-
+<br></br>
               </span>
             })
           }
@@ -227,6 +228,7 @@ export default function Mypage() {
                       <img style={{margin:'5px'}}
                       src={`https://blahblah-ssafy.s3.ap-northeast-2.amazonaws.com/language/${lImg[larr[a-1]]}.png`} width={25}></img>
              <Badge bg="secondary" style={{margin:'5px'}}>{langLv[i]}</Badge>
+             <br></br>
 
               </span>
             })
