@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import allAxios from "../../lib/allAxios";
 import { useRouter } from "next/router";
-import {Figure} from "react-bootstrap";
+import { Figure } from "react-bootstrap";
 export default function Notice() {
   const setToken = () => {
     const token = localStorage.getItem("jwt");
@@ -24,7 +24,7 @@ export default function Notice() {
     allAxios
       .get(`notice?size=5?`)
       .then((res) => {
-        setNotices(res.data.noticeListRes);
+        setNotices(res.data.noticeListRes.reverse());
         setTotal(res.data.totalPages);
         if (res.data.totalPages <= 6) {
           setMyWidth(252 - (7 - res.data.totalPages) * 28);
@@ -49,15 +49,15 @@ export default function Notice() {
           height="30"
           layout="responsive"
         /> */}
-         <Figure>
-  <Figure.Image
-    // width={1940}
-    height={300}
-    alt="qna image"
-    src="/images/notice2.PNG"
-    // src="main/m2.png"
-  />
-</Figure>
+        <Figure>
+          <Figure.Image
+            // width={1940}
+            height={300}
+            alt="qna image"
+            src="/images/notice2.PNG"
+            // src="main/m2.png"
+          />
+        </Figure>
         <br></br>
         <br></br>
         <Grid container spacing={3}>
