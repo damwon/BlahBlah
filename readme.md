@@ -37,27 +37,27 @@
    
     ![메인화면](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.gif)
     
-2. 그룹 채팅
+2. 1:1 채팅
    
     ![채팅](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EC%B1%84%ED%8C%85.gif)
     
     
     
-2. 라이어게임
+2. Blah 메이트 찾기
    
     ![라이어게임 고프레임](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EB%9D%BC%EC%9D%B4%EC%96%B4%EA%B2%8C%EC%9E%84%20%EA%B3%A0%ED%94%84%EB%A0%88%EC%9E%84.gif)
     
     
     
-4. 스냅샷
+4. 피드
    
     ![스냅샷](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EC%8A%A4%EB%83%85%EC%83%B7.gif)
     
-5. 짠 효과
+5. 학습 기능
 
     ![짠효과저프레임](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EC%A7%A0%ED%9A%A8%EA%B3%BC%EC%A0%80%ED%94%84%EB%A0%88%EC%9E%84.gif)
 
-6. 디바이스 권한 체크
+6. 팔로우 & 좋아요
 
     ![디바이스권한체크](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EA%B6%8C%ED%95%9C%EC%B2%B4%ED%81%AC.gif)
 
@@ -80,11 +80,11 @@
 | Frontend           | Backend                     |
 | ------------------ | --------------------------- |
 | Visual Studio Code | IntelliJ                    |
-| React              | spring boot,Security,socket |
+| React.js           | spring boot,Security,socket |
 | Next.js            | Spring Security             |
 | Material-UI        | Java 11                     |
 | TypeScript         | AWS EC2,S3                  |
-| Redux              | mysql                       |
+| React-Bootstrap    | mysql                       |
 | WebRTC             | redis                       |
 | WebSocket          | mongodb                     |
 
@@ -162,4 +162,4 @@ Remove:  파일 삭제
 | 👻 김승환 | 😺 김지원 | 🧚‍♂️ 이종준 | 🐸 김근태 | 🦖 박성건 | 🌸 고재현 |  |
 | --- | --- | --- | --- | --- | --- | --- |
 | https://github.com/Panseung/ | https://github.com/flykimjiwon | https://github.com/leecoder92 | https://github.com/damwon | https://github.com/rudy0103 | https://github.com/jaehyeon98 |  |
-| Frontend, 팀장 | Frontend | Frontend | Backend, Frontend | Backend | Backend |  |
+| Frontend, 팀장 | Frontend | Frontend | Backend | Backend | Backend |  |
