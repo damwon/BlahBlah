@@ -20,6 +20,19 @@ export default function Notice() {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => {
+    allAxios
+      .get(`/user/check-authority`, { headers: setToken() })
+      .then((res) => {
+        if (res.data === "admin") {
+          setAdmin(true);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   useEffect(() => {
     allAxios
       .get(`notice?size=5?`)
@@ -37,6 +50,16 @@ export default function Notice() {
       });
   }, []);
 
+  const deleteNotice = (id: number) => {
+    allAxios
+      .delete(`/notice/${id}`, { headers: setToken() })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Grid container spacing={3}>
       <Grid item xs={2} />
@@ -117,6 +140,21 @@ export default function Notice() {
                 </Grid>
                 <Grid item xs={7}>
                   <h5>{d.title}</h5>
+                  {admin ? (
+                    <Button
+                      style={{
+                        width: 100,
+                      }}
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => {
+                        deleteNotice(d.id);
+                      }}
+                    >
+                      delete
+                    </Button>
+                  ) : null}
                 </Grid>
                 <Grid item xs={3} style={{ textAlign: "center" }}>
                   {d.createdAt.substr(0, 10)}
