@@ -6,6 +6,15 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 import {Figure} from "react-bootstrap";
 export default function Login() {
+
+  const [test,setTest] = useState<any>(false)
+  useEffect(()=>{
+    console.log('3')
+    return()=>{
+      console.log('5')
+    }
+  },[test])
+
   const [file,setFilfe] = useState<any>()
   const onPrint = ()=>{
     console.log(file)
@@ -171,6 +180,9 @@ export default function Login() {
 
   return (
     <>
+    <button onClick={()=>{
+      setTest(!test)
+    }}>테스트</button>
       
       <Container>
         <Row>
