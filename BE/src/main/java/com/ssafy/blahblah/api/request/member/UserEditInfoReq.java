@@ -15,6 +15,6 @@ public class UserEditInfoReq {
     String name;
     @ApiModelProperty(name="유저 description", example="your_description")
     String description;
-    @ApiModelProperty(name="유저 profileImg", example="your_profileImg")
-    String profileImg;
+    @ApiModelProperty(name="유저 프로필이미지상태값", example="0(변경없음),1(변경있음)")
+    int imgState;
 }
