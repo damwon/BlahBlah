@@ -79,7 +79,7 @@ export default function QnaInfo() {
           <hr style={{ width: "100vw" }}></hr>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
-            {content}
+            <div style={{ whiteSpace: "pre" }}>{content}</div>
           </Grid>
           <Grid item xs={2}></Grid>
           <hr style={{ width: "100vw" }}></hr>
