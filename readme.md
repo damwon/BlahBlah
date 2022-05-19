@@ -157,6 +157,7 @@ Remove:  파일 삭제
 | 8888  | Kurento Media 서버 |
 | 3306 | mySql |
 | 27017 | mongodb |
+| 6380 | redis |
 | 9999 | jenkins |
 
 ## ✅ **팀 소개**
