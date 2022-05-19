@@ -36,15 +36,29 @@ sudo letsencrypt certonly --standalone -d 도메인
 
 ## 1. 프론트엔드 배포
 
-깃을 클론한 후 FE디렉터리로 이동
-
-
+1. 깃을 클론한 후 blahblah 디렉터리로 이동
 
 ```bash
 cd FE
+cd blahblah
 ```
 
 
+
+2. package.json의 의존성 패키지들을 설치
+
+```bash
+npm install
+```
+
+
+
+3. 프로젝트를 빌드한 후 실행
+
+```bash
+npm run build
+npm start
+```
 
 
 
