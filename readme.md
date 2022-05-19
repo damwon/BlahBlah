@@ -35,31 +35,33 @@
 
 1. 메인 화면
    
-    ![메인화면](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EB%A9%94%EC%9D%B8%ED%99%94%EB%A9%B4.gif)
-    
-2. 1:1 채팅
-   
-    ![채팅](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EC%B1%84%ED%8C%85.gif)
-    
-    
-    
+    ![메인화면](image/1.%EB%A9%94%EC%9D%B8%ED%8E%98%EC%9D%B4%EC%A7%80.png)
+
+        
 2. Blah 메이트 찾기
    
-    ![라이어게임 고프레임](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EB%9D%BC%EC%9D%B4%EC%96%B4%EA%B2%8C%EC%9E%84%20%EA%B3%A0%ED%94%84%EB%A0%88%EC%9E%84.gif)
+    ![블라메이트추천](image/2.%EB%B8%94%EB%9D%BC%EB%A9%94%EC%9D%B4%ED%8A%B8%EC%B6%94%EC%B2%9C.png)
     
+    
+3. 1:1 채팅
+   
+    ![채팅](image/3.%EC%B1%84%ED%8C%85.png)
+    
+    
+
     
     
 4. 피드
    
-    ![스냅샷](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EC%8A%A4%EB%83%85%EC%83%B7.gif)
+    ![피드](image/4.%ED%94%BC%EB%93%9C%ED%8E%98%EC%9D%B4%EC%A7%80.png)
     
 5. 학습 기능
 
-    ![짠효과저프레임](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EC%A7%A0%ED%9A%A8%EA%B3%BC%EC%A0%80%ED%94%84%EB%A0%88%EC%9E%84.gif)
+    ![학습페이지](image/5.%ED%95%99%EC%8A%B5%ED%8E%98%EC%9D%B4%EC%A7%80.png)
 
-6. 팔로우 & 좋아요
+6. 마이페이지
 
-    ![디바이스권한체크](https://raw.githubusercontent.com/rudy0103/save-image-repo/master/img/%EB%94%94%EB%B0%94%EC%9D%B4%EC%8A%A4%EA%B6%8C%ED%95%9C%EC%B2%B4%ED%81%AC.gif)
+    ![마이페이지](image/6.%EB%A7%88%EC%9D%B4%ED%8E%98%EC%9D%B4%EC%A7%80.png)
 
     
 
