@@ -73,12 +73,12 @@ export default function UserDetail() {
       method: "get",
     })
       .then((res) => {
-        console.log("댓글 목록 요청성공");
-        console.log(res.data);
+        // console.log("댓글 목록 요청성공");
+        // console.log(res.data);
         setCmtarr(res.data);
       })
       .catch((err) => {
-        console.log("댓글 목록 요청실패");
+        // console.log("댓글 목록 요청실패");
         console.log(err);
       });
   };
@@ -106,13 +106,13 @@ export default function UserDetail() {
       },
     })
       .then((result) => {
-        console.log("댓글 요청성공");
-        console.log(result);
+        // console.log("댓글 요청성공");
+        // console.log(result);
         getComment();
         // 실시간 갱신위함
       })
       .catch((error) => {
-        console.log("댓글 요청실패");
+        // console.log("댓글 요청실패");
         console.log(error);
       });
   };
@@ -130,13 +130,13 @@ export default function UserDetail() {
       },
     })
       .then((result) => {
-        console.log("댓글 수정요청성공");
-        console.log(result);
+        // console.log("댓글 수정요청성공");
+        // console.log(result);
         getComment();
         // 실시간 갱신 위함
       })
       .catch((error) => {
-        console.log("댓글 수정요청실패");
+        // console.log("댓글 수정요청실패");
         console.log(error);
       });
   };
@@ -149,13 +149,13 @@ export default function UserDetail() {
       headers: setToken(),
     })
       .then((result) => {
-        console.log("댓글 삭제요청성공");
-        console.log(result);
+        // console.log("댓글 삭제요청성공");
+        // console.log(result);
         getComment();
         // 실시간 갱신위함
       })
       .catch((error) => {
-        console.log("댓글 삭제요청실패");
+        // console.log("댓글 삭제요청실패");
         console.log(error);
       });
   };
@@ -170,7 +170,7 @@ export default function UserDetail() {
     }).then((res) => {
       // console.log(res)
       // console.log(res.body)
-      console.log(res.data);
+      // console.log(res.data);
       setMe(res.data);
     });
   };
@@ -181,15 +181,15 @@ export default function UserDetail() {
       url: `https://blahblah.community:8443/api/user/${remail}`,
     })
       .then((result) => {
-        console.log("이메일로정보 요청성공");
-        console.log(result.data);
+        // console.log("이메일로정보 요청성공");
+        // console.log(result.data);
         setUser(result.data);
         setUserRating(result.data["rating"]);
         setLang(result.data["langInfos"]);
-        console.log(result.data["langInfos"]);
+        // console.log(result.data["langInfos"]);
       })
       .catch((error) => {
-        console.log("이메일로정보 요청실패");
+        // console.log("이메일로정보 요청실패");
         console.log(error);
       });
   };
@@ -203,7 +203,7 @@ export default function UserDetail() {
 
   useEffect(() => {
     if (lang.length !== 0) {
-      console.log("됫다!");
+      // console.log("됫다!");
       // var newarr:any = [...langa]
       var newarra: any = [...langa];
       var newarrb: any = [...langb];
@@ -258,11 +258,11 @@ export default function UserDetail() {
       // },
     })
       .then((result) => {
-        console.log("팔로우 요청성공");
-        console.log(result);
+        // console.log("팔로우 요청성공");
+        // console.log(result);
       })
       .catch((error) => {
-        console.log("팔로우 요청실패");
+        // console.log("팔로우 요청실패");
         console.log(error);
       });
   };
@@ -291,12 +291,12 @@ export default function UserDetail() {
         // props.findMate()
         // 이걸로 상위 함수 바꿔줘서 좋아요 실시간
         // setLike(props.user.rating)
-        console.log("유저 좋아 요청성공");
-        console.log(result);
+        // console.log("유저 좋아 요청성공");
+        // console.log(result);
       })
       .catch((error) => {
-        console.log("유저 좋아 요청실패");
-        console.log(email);
+        // console.log("유저 좋아 요청실패");
+        // console.log(email);
         console.log(error);
       });
   };
@@ -310,14 +310,14 @@ export default function UserDetail() {
       headers: setToken(),
     })
       .then((res) => {
-        console.log("팔로잉 목록 요청성공");
+        // console.log("팔로잉 목록 요청성공");
         // console.log(res)
-        console.log(res.data);
+        // console.log(res.data);
         setFollowing(res.data);
         // setFollowing(res.data)
       })
       .catch((err) => {
-        console.log("팔로잉 목록 요청실패");
+        // console.log("팔로잉 목록 요청실패");
         console.log(err);
       });
   };
@@ -329,24 +329,24 @@ export default function UserDetail() {
       headers: setToken(),
     })
       .then((res) => {
-        console.log("좋아요 목록 요청성공");
+        // console.log("좋아요 목록 요청성공");
         // console.log(res)
-        console.log(res.data);
+        // console.log(res.data);
         setRateList(res.data);
         // setFollowing(res.data)
         // setFollowing(res.data)
       })
       .catch((err) => {
-        console.log("좋아요 목록 요청실패");
+        // console.log("좋아요 목록 요청실패");
         console.log(err);
       });
   };
   // useEffect실행순서 바텀->탑
   useEffect(() => {
-    console.log("챙겨오기~");
-    console.log(following);
-    console.log("유저출력~");
-    console.log(user);
+    // console.log("챙겨오기~");
+    // console.log(following);
+    // console.log("유저출력~");
+    // console.log(user);
     if (user) {
       for (let i = 0; i < Object(following).length; i++) {
         if (following[i].id === user.id) {
@@ -398,7 +398,7 @@ export default function UserDetail() {
       //   new Blob([JSON.stringify('신고')], { type: "application/json" })
       // );
 
-      console.log(title, content);
+      // console.log(title, content);
       const reportPostReq: any = {
         content: content,
         title: title,
@@ -417,7 +417,7 @@ export default function UserDetail() {
         data: formData,
       })
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           Swal.fire({
             title: "A report has been received.",
             confirmButtonColor: "#00ccb1",

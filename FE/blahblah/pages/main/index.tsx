@@ -33,13 +33,13 @@ export default function Index(props:any) {
       method: "get",
       headers: setToken(),
     }).then((res) => {
-      console.log('팔로잉 목록 요청성공')
+      // console.log('팔로잉 목록 요청성공')
       // console.log(res)
-      console.log(res.data)
+      // console.log(res.data)
       setFollowing(res.data)
       // setFollowing(res.data)
     }).catch((err)=>{
-      console.log('팔로잉 목록 요청실패')
+      // console.log('팔로잉 목록 요청실패')
       console.log(err)
     });
   };
@@ -50,14 +50,14 @@ export default function Index(props:any) {
       method: "get",
       headers: setToken(),
     }).then((res) => {
-      console.log('좋아요 목록 요청성공')
+      // console.log('좋아요 목록 요청성공')
       // console.log(res)
-      console.log(res.data)
+      // console.log(res.data)
       setRateList(res.data)
       // setFollowing(res.data)
       // setFollowing(res.data)
     }).catch((err)=>{
-      console.log('좋아요 목록 요청실패')
+      // console.log('좋아요 목록 요청실패')
       console.log(err)
     });
   };
@@ -70,12 +70,13 @@ export default function Index(props:any) {
       headers: setToken(),
     })
     .then((result)=>{
-     console.log('get요청성공')
-     console.log(result)
-     console.log(result.data)
+    //  console.log('get요청성공')
+    //  console.log(result)
+    //  console.log(result.data)
      setMate(result.data)
   })
-    .catch((error)=>{console.log('요청실패')
+    .catch((error)=>{
+      // console.log('요청실패')
     console.log(error)  
   })
   };
@@ -87,9 +88,9 @@ export default function Index(props:any) {
     props.setBg(false)
   }, []);
   useEffect(() => {
-    console.log("컴포넌트 나타남");
+    // console.log("컴포넌트 나타남");
     return () => {
-      console.log("cleanUp 함수");
+      // console.log("cleanUp 함수");
       props.setBg(true)
     };
   },[]);

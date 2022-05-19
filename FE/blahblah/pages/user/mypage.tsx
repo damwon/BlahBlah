@@ -50,11 +50,11 @@ export default function Mypage() {
       method: "get",
       headers: setToken(),
     }).then((res) => {
-      console.log(res)
+      // console.log(res)
       setProfile(res.data);
       setLang(res.data['langInfos'])
       // console.log(res.body)
-      console.log(res.data)
+      // console.log(res.data)
     });
   };
   const setToken = () => {
@@ -72,7 +72,7 @@ export default function Mypage() {
 
   useEffect(()=>{
     if(lang.length!==0){
-      console.log('됫다!')
+      // console.log('됫다!')
       // var newarr:any = [...langa]
       var newarra:any = [...langa]
       var newarrb:any  = [...langb]
@@ -127,12 +127,12 @@ export default function Mypage() {
       method: "get",
       headers: setToken(),
     }).then((res) => {
-      console.log('팔로잉 목록 요청성공')
+      // console.log('팔로잉 목록 요청성공')
       // console.log(res)
       console.log(res.data)
       setFollowing(res.data)
     }).catch((err)=>{
-      console.log('팔로잉 목록 요청실패')
+      // console.log('팔로잉 목록 요청실패')
       console.log(err)
     });
   };
@@ -143,11 +143,11 @@ export default function Mypage() {
       method: "get",
       headers: setToken(),
     }).then((res) => {
-      console.log('팔로워 목록 요청성공')
-      console.log(res.data)
+      // console.log('팔로워 목록 요청성공')
+      // console.log(res.data)
       setFollower(res.data)
     }).catch((err)=>{
-      console.log('팔로워 목록 요청실패')
+      // console.log('팔로워 목록 요청실패')
       console.log(err)
     });
   };
