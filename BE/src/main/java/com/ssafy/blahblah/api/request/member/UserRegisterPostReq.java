@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,11 +28,9 @@ public class UserRegisterPostReq {
 		Integer age;
 		@ApiModelProperty(name="유저 description", example="your_description")
 		String description;
-		@ApiModelProperty(name="유저 profileImg", example="your_profileImg")
-		String profileImg;
 		@ApiModelProperty(name="유저 Password", example="your_password")
 		String password;
 
 		@ApiModelProperty(name="언어 code & level array", example="\"list\" : [{\"code\":\"kor\", \"level\":3}, {\"code\":\"eng\", \"level\":4}, {\"code\":\"chi\", \"level\":5}]")
-		ArrayList<Object> list;
+		List<UserLangPostReq> list;
 }

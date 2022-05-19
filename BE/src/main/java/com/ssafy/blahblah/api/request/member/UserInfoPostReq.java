@@ -26,4 +26,6 @@ public class UserInfoPostReq {
 	String profileImg;
 	@ApiModelProperty(name="유저 Password", example="your_password")
 	String password;
+
+	Integer reportedCnt;
 }

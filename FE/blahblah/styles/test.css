@@ -1,0 +1,11 @@
+.formct:focus {
+  border-color: #00ccb1;
+  box-shadow: 0px 0px 1px #00ccb1 inset, 0px 0px 4px #00ccb1;
+}
+
+.btncs{
+  margin: 2px;
+  background-color:#00ccb1;
+  color:white;
+  border:none;
+}

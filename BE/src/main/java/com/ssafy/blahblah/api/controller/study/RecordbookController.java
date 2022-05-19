@@ -6,10 +6,9 @@ import com.ssafy.blahblah.api.request.study.RecordbookReq;
 import com.ssafy.blahblah.api.response.study.RecordListPageRes;
 import com.ssafy.blahblah.api.response.study.RecordbookListPageRes;
 import com.ssafy.blahblah.api.service.member.UserService;
+import com.ssafy.blahblah.api.service.study.RecordbookService;
 import com.ssafy.blahblah.common.auth.SsafyUserDetails;
 import com.ssafy.blahblah.db.entity.*;
-import com.ssafy.blahblah.db.repository.RecordRepository;
-import com.ssafy.blahblah.db.repository.RecordbookRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RestController
@@ -32,17 +30,14 @@ public class RecordbookController {
     UserService userService;
 
     @Autowired
-    RecordbookRepository recordbookRepository;
-
-    @Autowired
-    RecordRepository recordRepository;
+    RecordbookService recordbookService;
 
     @GetMapping
     public ResponseEntity list(Authentication authentication, Pageable pageable) {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Page<Recordbook> recordbooks = recordbookRepository.findByUser(user,pageable);
+        Page<Recordbook> recordbooks = recordbookService.list(pageable,user);
         if (recordbooks == null || recordbooks.getContent().size() == 0) {
             return ResponseEntity.status(HttpStatus.OK).body(null);
         }
@@ -55,14 +50,14 @@ public class RecordbookController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Optional<Recordbook> optionalRecordbook = recordbookRepository.findById(recordbookId);
+        Optional<Recordbook> optionalRecordbook = recordbookService.recordlist(recordbookId);
         if(optionalRecordbook.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Recordbook recordbook = optionalRecordbook.get();
-        Page<Record> records = recordRepository.findByRecordbook(recordbook, pageable);
+        Page<Record> records = recordbookService.recordList2(recordbook,pageable);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new RecordListPageRes(records));
+        return ResponseEntity.status(HttpStatus.OK).body(new RecordListPageRes(records,recordbook));
 
 
     }
@@ -72,11 +67,7 @@ public class RecordbookController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        recordbookRepository.save(Recordbook.builder()
-                .title(recordbookReq.getTitle())
-                .createdAt(LocalDateTime.now())
-                .user(user)
-                .build());
+        recordbookService.recordbookPost(user,recordbookReq);
         return new ResponseEntity(HttpStatus.OK);
 
     }
@@ -87,14 +78,17 @@ public class RecordbookController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        Optional<Recordbook> option = recordbookRepository.findById(recordbookId);
+        Optional<Recordbook> option = recordbookService.recordlist(recordbookId);
         if (option.isEmpty()) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         Recordbook recordbook = option.get();
-        recordbook.setTitle(recordbookReq.getTitle());
-        recordbookRepository.save(recordbook);
-        return new ResponseEntity(HttpStatus.OK);
+        if(recordbook.getUser().equals(user)) {
+            recordbookService.recordbookUpdate(recordbook,recordbookReq);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 음성메모장이 아닙니다.");
+
     }
 
 
@@ -104,8 +98,16 @@ public class RecordbookController {
         SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
         String userId = userDetails.getUsername();
         User user = userService.getUserByEmail(userId);
-        recordbookRepository.deleteById(recordbookId);
-        return new ResponseEntity(HttpStatus.OK);
+        Optional<Recordbook> option = recordbookService.recordlist(recordbookId);
+        if (option.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        Recordbook recordbook = option.get();
+        if(recordbook.getUser().equals(user)){
+            recordbookService.recordbookDelete(recordbookId);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("자신이 작성한 음성메모장가 아닙니다.");
     }
 
 
