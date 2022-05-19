@@ -10,7 +10,7 @@ import java.util.Base64;
 public class Seed {
 
     private final Charset UTF_8 = StandardCharsets.UTF_8;
-    private final byte[] pbszUserKey = "testCrypt2020!@#".getBytes();
+    private final byte[] pbszUserKey = "blahCrypt2022!@#".getBytes();
     private final byte[] pbszIV = "1234567890123456".getBytes();
 
 
