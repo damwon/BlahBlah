@@ -54,6 +54,10 @@
  + ### MongoDB
 
    #### -version: 4.4.13
+   
+ + ### Redis-Server
+
+   #### -version: 5.0.7
 
 
 

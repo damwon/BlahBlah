@@ -9,16 +9,11 @@
 
 
 1. [Java 설치](./installation/Java.md):link:
-
 2. [Gradle 설치:link:](./installation/Gradle.md)
-
 3. [NPM, NodeJs 설치:link:](./installation/NPM,NodeJs.md)
-
 4. [MySql 설치](./installation/MySql.md):link:
-
-5. [Docker & Docker-Compose 설치:link:](./installation/Docker%20&%20Docker-Compose.md)
-
-   
+5. [Docker & Docker-Compose 설치:link:](./installation/Docker%20&%20Docker-Compose.md)6.
+6.  [Redis 설치:link:](./installation/Redis.md)
 
 
 
