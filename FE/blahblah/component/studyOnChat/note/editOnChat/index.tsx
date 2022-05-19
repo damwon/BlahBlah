@@ -57,7 +57,7 @@ export default function EditOnChat(props: any) {
         { headers: setToken() }
       )
       .then(() => {
-        router.push(`/note/${id}`);
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   };

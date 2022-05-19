@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import allAxios from "../../lib/allAxios";
 import Swal from "sweetalert2";
-import {Figure} from "react-bootstrap";
+import { Figure } from "react-bootstrap";
 export default function QnA() {
   useEffect(() => {
     if (localStorage.getItem("jwt") === null) {
@@ -34,7 +34,7 @@ export default function QnA() {
     allAxios
       .get(`/qna?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
-        setLst(res.data.myQnaListRes);
+        setLst(res.data.myQnaListRes.reverse());
         setTotal(res.data.totalPages);
         if (res.data.totalPages <= 6) {
           setMyWidth(252 - (7 - res.data.totalPages) * 28);
@@ -61,13 +61,13 @@ export default function QnA() {
             layout="responsive"
           /> */}
           <Figure>
-  <Figure.Image
-    // width={1940}
-    // height={180}
-    alt="qna image"
-    src="/images/qna2.png"
-  />
-</Figure>
+            <Figure.Image
+              // width={1940}
+              // height={180}
+              alt="qna image"
+              src="/images/qna2.png"
+            />
+          </Figure>
 
           <br></br>
           <br></br>
