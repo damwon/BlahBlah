@@ -35,7 +35,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-
+  const [update, setUpdate] = useState(1);
   const writeNoteTitle = () => {
     if (noteTitle === "") {
       Swal.fire({
@@ -55,7 +55,8 @@ export default function NoteFolderLstChat({ handleTF }: any) {
         )
         .then(() => {
           handleClose();
-          window.location.reload();
+          setUpdate(update + 1);
+          // window.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -81,7 +82,7 @@ export default function NoteFolderLstChat({ handleTF }: any) {
       .catch((err) => {
         console.log(err);
       });
-  }, [page]);
+  }, [page, update]);
 
   // wordlist 지우기
   const lstDelete = (num: number, title: string) => {

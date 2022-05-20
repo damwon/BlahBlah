@@ -18,6 +18,7 @@ import Image from "next/image";
 import Swal from "sweetalert2";
 import allAxios from "../../../../lib/allAxios";
 export default function WordLstChat(props: any) {
+  const [update, setUpdate] = useState(1);
   const [show, setShow] = useState(false);
   const write = () => {
     if (word === "") {
@@ -44,7 +45,8 @@ export default function WordLstChat(props: any) {
         )
         .then((res) => {
           setShow(false);
-          window.location.reload();
+          setUpdate(update + 1);
+          // window.location.reload();
         })
         .catch((err) => {
           console.log(err);
@@ -101,7 +103,7 @@ export default function WordLstChat(props: any) {
           console.log(err);
         });
     }
-  }, [id, page]);
+  }, [id, page, update]);
 
   const [word, setWord] = useState("");
   const [mean, setMean] = useState("");

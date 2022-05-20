@@ -11,7 +11,7 @@ export default function EditOnChat(props: any) {
     };
     return config;
   };
-
+  const [update, setUpdate] = useState(1);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const router = useRouter();
@@ -57,7 +57,8 @@ export default function EditOnChat(props: any) {
         { headers: setToken() }
       )
       .then(() => {
-        window.location.reload();
+        props.handleTF(2, id);
+        // window.location.reload();
       })
       .catch((err) => console.log(err));
   };
