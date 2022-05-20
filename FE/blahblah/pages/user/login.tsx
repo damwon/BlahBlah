@@ -30,7 +30,7 @@ export default function Login() {
         })
         .then((res) => {
           localStorage.setItem("jwt", res.data.accessToken);
-          console.log(res)
+          // console.log(res)
           location.reload()
           // router.replace('/user')
           // router.push("/user")
@@ -58,7 +58,7 @@ export default function Login() {
       })
       .then((res) => {
         localStorage.setItem("jwt", res.data.accessToken);
-        console.log(res)
+        // console.log(res)
         location.reload()
         // router.replace('/user')
         // router.push("/user")
@@ -79,7 +79,7 @@ export default function Login() {
   const [isLogin, setIslogin] = useState(false)
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    console.log('로그인후 NavBar에서 jwt읽기')
+    // console.log('로그인후 NavBar에서 jwt읽기')
     // console.log(localStorage.getItem("jwt"))
     if (token) {
       setIslogin(true)

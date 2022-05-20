@@ -17,9 +17,9 @@ export default function ProfileUpdate() {
         method: "get",
         headers: setToken(),
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         setProfile(res.data);
-        console.log(res.data)
+        // console.log(res.data)
       });
     };
   
@@ -61,9 +61,9 @@ export default function ProfileUpdate() {
       const uploadFile = e.target.files[0]
       formData.append('file', uploadFile)
       setFilfe(uploadFile)
-      console.log(uploadFile)
-      console.log('===useState===')
-      console.log(file)
+      // console.log(uploadFile)
+      // console.log('===useState===')
+      // console.log(file)
       setImgState(1)
     }
   }
@@ -101,7 +101,7 @@ export default function ProfileUpdate() {
       // },
     })
       .then((res) => {
-        console.log(res)
+        // console.log(res)
         router.push('/user/mypage')
       })
       .catch((err) => {
