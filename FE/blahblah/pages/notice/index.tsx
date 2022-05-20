@@ -35,7 +35,7 @@ export default function Notice() {
   }, []);
   useEffect(() => {
     allAxios
-      .get(`notice?size=5?`)
+      .get(`notice?size=5&page=${page}`, { headers: setToken() })
       .then((res) => {
         setNotices(res.data.noticeListRes.reverse());
         setTotal(res.data.totalPages);
@@ -48,7 +48,7 @@ export default function Notice() {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [page]);
 
   const deleteNotice = (id: number) => {
     allAxios

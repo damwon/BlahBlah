@@ -235,6 +235,7 @@ export default function Index() {
       allAxios
         .delete(`comment/${id}`, { headers: setToken() })
         .then(() => {
+          setUpdate(update + 1);
           Swal.fire({
             title: "the comment is deleted",
             confirmButtonColor: "#00ccb1",
