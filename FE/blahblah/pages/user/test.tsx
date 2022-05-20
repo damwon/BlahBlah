@@ -6,6 +6,15 @@ import Link from "next/link";
 import { useRouter } from 'next/router'
 import {Figure} from "react-bootstrap";
 export default function Login() {
+
+  const [test,setTest] = useState<any>(false)
+  useEffect(()=>{
+    console.log('3')
+    return()=>{
+      console.log('5')
+    }
+  },[test])
+
   const [file,setFilfe] = useState<any>()
   const onPrint = ()=>{
     console.log(file)
@@ -154,23 +163,26 @@ export default function Login() {
       // },
     })
     .then((result)=>{
-    console.log('가입요청성공')
-    console.log('============')
+    // console.log('가입요청성공')
+    // console.log('============')
     console.log(result)
-    console.log(result.data)
-    console.log('============')
+    // console.log(result.data)
+    // console.log('============')
   })
     .catch((error)=>{
-    console.log('가입요청실패')
-    console.log('============')
+    // console.log('가입요청실패')
+    // console.log('============')
     console.log(error)  
-    console.log('============')
+    // console.log('============')
   })
   };
 
 
   return (
     <>
+    <button onClick={()=>{
+      setTest(!test)
+    }}>테스트</button>
       
       <Container>
         <Row>

@@ -40,7 +40,7 @@ export default function PassUpdate() {
         },
       })
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           router.push('/user/mypage')
         })
         .catch((err) => {

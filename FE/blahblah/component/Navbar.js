@@ -8,7 +8,7 @@ export default function userNav(props) {
   const [isLogin, setIslogin] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("jwt");
-    console.log("로그인후 NavBar에서 jwt읽기");
+    // console.log("로그인후 NavBar에서 jwt읽기");
     // console.log(localStorage.getItem("jwt"))
     if (token) {
       setIslogin(true);

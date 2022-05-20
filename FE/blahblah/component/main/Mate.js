@@ -71,12 +71,12 @@ export default function Mate(props) {
       // },
     })
     .then((result)=>{
-    console.log('팔로우 요청성공')
-    console.log(result)
+    // console.log('팔로우 요청성공')
+    // console.log(result)
  
   })
     .catch((error)=>{
-      console.log('팔로우 요청실패')
+      // console.log('팔로우 요청실패')
       console.log(error)  
   })
   };
@@ -98,13 +98,13 @@ export default function Mate(props) {
       props.findMate()
       // 이걸로 상위 함수 바꿔줘서 좋아요 실시간
       // setLike(props.user.rating)
-      console.log('유저 좋아 요청성공')
-    console.log(result)
+    //   console.log('유저 좋아 요청성공')
+    // console.log(result)
  
   })
     .catch((error)=>{
-      console.log('유저 좋아 요청실패')
-      console.log(email)
+      // console.log('유저 좋아 요청실패')
+      // console.log(email)
     console.log(error)  
   })
   };
@@ -199,8 +199,8 @@ export default function Mate(props) {
         }
       }
     }
-    console.log('레벨출력')
-    console.log(newLevel)
+    // console.log('레벨출력')
+    // console.log(newLevel)
     setLangLv(newLevel)
     
   }, [lang]);

@@ -55,14 +55,14 @@ export default function Regist() {
         // 중복되지 않는 경우, 중복검사 확인
         .then(function (response) {
           if (response.status === 200) {
-            console.log("이메일 중복체크 성공");
+            // console.log("이메일 중복체크 성공");
             setIsEmailOnly((prevState) => true);
             setEmailCheck((prevState) => true);
           }
         })
         // 중복되는 경우, 다시 중복검사 + 알림(이미 사용중인 이메일)
         .catch(function (error) {
-          console.log("이메일중복에러");
+          // console.log("이메일중복에러");
           console.log(error);
           // alert("already ");
           Swal.fire({
@@ -91,16 +91,16 @@ export default function Regist() {
       },
     })
       .then((result) => {
-        console.log("이메일보내기 요청성공");
+        // console.log("이메일보내기 요청성공");
         // alert('Please Check Your Email')
         Swal.fire({
           title: "Please Check Your Email",
           confirmButtonColor: "#00ccb1",
         });
-        console.log(result);
+        // console.log(result);
       })
       .catch((error) => {
-        console.log("이메일보내기 요청실패");
+        // console.log("이메일보내기 요청실패");
         // alert('Fail')
         Swal.fire({
           title: "Fail",

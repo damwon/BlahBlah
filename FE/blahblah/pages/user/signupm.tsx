@@ -99,8 +99,8 @@ export default function Signup() {
       ob.push({ "code": lang[key], "level": 4 })
       setSecond(array);
       setSecondob(ob)
-      console.log(second)
-      console.log(secondob)
+      // console.log(second)
+      // console.log(secondob)
     }
     
   };
@@ -114,7 +114,7 @@ export default function Signup() {
         break
       }
     }
-    console.log(idx)
+    // console.log(idx)
     array.splice(idx,1)
     array2.splice(idx,1)
     setSecond(array)
@@ -138,8 +138,8 @@ export default function Signup() {
       ob.push({ "code": lang[key], "level": 1 })
       setThird(array);
       setThirdob(ob)
-      console.log(third)
-      console.log(thirdob)
+      // console.log(third)
+      // console.log(thirdob)
     }
     
   };
@@ -153,7 +153,7 @@ export default function Signup() {
         break
       }
     }
-    console.log(idx)
+    // console.log(idx)
     array.splice(idx,1)
     array2.splice(idx,1)
     setThird(array)
@@ -222,9 +222,9 @@ export default function Signup() {
       const uploadFile = e.target.files[0]
       formData.append('file', uploadFile)
       setFilfe(uploadFile)
-      console.log(uploadFile)
-      console.log('===useState===')
-      console.log(file)
+      // console.log(uploadFile)
+      // console.log('===useState===')
+      // console.log(file)
     }
   }
 
@@ -253,7 +253,7 @@ export default function Signup() {
     }
     formData.append('file', file)
     formData.append('info', new Blob([JSON.stringify(info)], { type: "application/json" }))
-    console.log(formData)
+    // console.log(formData)
     if(name.length>=1&&age>=1&&profile.length>=1&&password.length>=6&&Object(newarr).length>=1&&(gen!==3)&&
     Object(firstob).length>=1&&Object(thirdob).length>=1){
       axios({
@@ -268,7 +268,7 @@ export default function Signup() {
             title: "Success",
             confirmButtonColor: "#00ccb1",
           });
-          console.log('가입성공')
+          // console.log('가입성공')
           // console.log(formData)
           Router.push({
             pathname: "/",
@@ -281,7 +281,7 @@ export default function Signup() {
             title: "Fail",
             confirmButtonColor: "#00ccb1",
           });
-          console.log('가입실패')
+          // console.log('가입실패')
         });
     }else{
       // alert('Please Check Your Info')
@@ -293,10 +293,10 @@ export default function Signup() {
     
 
   }
-  useEffect(()=>{
-    console.log('----------쿼리이메일---------')
-    console.log(query.email)
-  },[])
+  // useEffect(()=>{
+  //   // console.log('----------쿼리이메일---------')
+  //   // console.log(query.email)
+  // },[])
 
 
 

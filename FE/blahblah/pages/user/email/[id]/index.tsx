@@ -26,8 +26,8 @@ export default function EmailCheck() {
       confirmButtonColor: "#00ccb1",
     });
      setIsCheck(true)
-     console.log(result)
-     console.log(result.data)
+    //  console.log(result)
+    //  console.log(result.data)
      setKey(result.data)
   })
     .catch((error)=>{

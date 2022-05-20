@@ -25,10 +25,10 @@ export default function LangUpdate() {
         method: "get",
         headers: setToken(),
       }).then((res) => {
-        console.log(res)
+        // console.log(res)
         setProfile(res.data);
-        console.log(res.data)
-        console.log(res.data.langInfos)
+        // console.log(res.data)
+        // console.log(res.data.langInfos)
         setMyLang(res.data.langInfos)
         // for(let i=0;i<res.data.langInfos;i++){
         //   if(res.data.langInfos[i].level===1||res.data.langInfos[i].level===2||res.data.langInfos[i].level===3){
@@ -56,9 +56,9 @@ export default function LangUpdate() {
       getProfile();
     }, []);
     useEffect(()=>{
-      console.log('useEffectmyLang')
-      console.log(myLang)
-      console.log(Object(myLang))
+      // console.log('useEffectmyLang')
+      // console.log(myLang)
+      // console.log(Object(myLang))
       var array: any = [...first]
       var ob: any = [...firstob]
       var array2: any = [...second]
@@ -67,19 +67,19 @@ export default function LangUpdate() {
       var ob3: any = [...thirdob]
 
       for(let i=0;i<Object(myLang).length;i++){
-        console.log(myLang[i])
+        // console.log(myLang[i])
         // console.log(myLang[i])
         // console.log('--------랭아이디포함---------')
         // console.log(array.includes)
           // console.log(newarrb.includes(lang[i]['langId']))
 
         if(myLang[i].level===1||myLang[i].level===2||myLang[i].level===3){
-          console.log('----코드용-0---')
+          // console.log('----코드용-0---')
           // console.log(lang[langId[myLang[i].langId-1]])
           // console.log('----코드용-0---')
           
           ob.push({ "code": lang[langId[myLang[i].langId-1]], "level": myLang[i].level })
-          console.log(langId[myLang[i].langId-1])
+          // console.log(langId[myLang[i].langId-1])
           array.push(langId[myLang[i].langId-1])
           setFirst(array)
           setFirstob(ob)
@@ -137,8 +137,8 @@ export default function LangUpdate() {
       // console.log(lname)
       setFirstob(ob)
       setFirst(array);
-      console.log(first)
-      console.log(firstob)
+      // console.log(first)
+      // console.log(firstob)
     }
     
   };
@@ -152,7 +152,7 @@ export default function LangUpdate() {
         break
       }
     }
-    console.log(idx)
+    // console.log(idx)
     array.splice(idx,1)
     array2.splice(idx,1)
     setFirst(array)
@@ -195,7 +195,7 @@ export default function LangUpdate() {
         break
       }
     }
-    console.log(idx)
+    // console.log(idx)
     array.splice(idx,1)
     array2.splice(idx,1)
     setSecond(array)
@@ -225,8 +225,8 @@ export default function LangUpdate() {
       ob.push({ "code": lang[key], "level": 5 })
       setThird(array);
       setThirdob(ob)
-      console.log(third)
-      console.log(thirdob)
+      // console.log(third)
+      // console.log(thirdob)
     }
     
   };
@@ -240,7 +240,7 @@ export default function LangUpdate() {
         break
       }
     }
-    console.log(idx)
+    // console.log(idx)
     array.splice(idx,1)
     array2.splice(idx,1)
     setThird(array)
@@ -260,7 +260,7 @@ export default function LangUpdate() {
       ...thirdob
     ]
 
-    console.log(newarr)
+    // console.log(newarr)
     // var test:any = [{"code":"kor", "level":'3'}, {"code":"en", "level":'4'}, {"code":"chi", "level":'5'}]
     // console.log('test--------')
     // console.log(test)
@@ -279,14 +279,14 @@ export default function LangUpdate() {
         // },
       })
         .then((res) => {
-          console.log(res)
-          console.log('잘수정됫엉')
+          // console.log(res)
+          // console.log('잘수정됫엉')
           router.push('/user/mypage')
           // router.push('/user/mypage')/
         })
         .catch((err) => {
           console.log(err);
-          console.log('수정실패했엉')
+          // console.log('수정실패했엉')
         });
     }else{
       Swal.fire({
