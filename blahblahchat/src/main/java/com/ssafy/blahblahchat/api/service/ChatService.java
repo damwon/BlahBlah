@@ -26,6 +26,11 @@ public class ChatService {
     public String createChatRoom(Long userId,Long opponentId, String opponentName){
         String roomId=findChatRoom(userId, opponentId);
         if("No Result".equals(roomId)){
+            roomId=findChatRoom(opponentId,userId);
+        }else return roomId;
+
+
+        if("No Result".equals(roomId)){
             final ChatMeta chatMeta = ChatMeta.builder()
                     .userId(userId)
                     .opponentId(opponentId)
